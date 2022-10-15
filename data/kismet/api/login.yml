@@ -1,0 +1,54 @@
+-
+  name: "First-time login check"
+  uri: "/session/check-setup-ok"
+  added: "2019-01"
+  methods: ["GET"]
+  types: []
+  roles: ["n/a"]
+  docs: |
+    This API is used by the Kismet web UI, and is available for other alternate full-UI replacements.  It is 
+    used to indicate if Kismet has been configured fully. 
+
+    Kismet does not provide a default username or password; instead, if the user has not configured a static 
+    account in a configuration file, the UI is expected to prompt the user during the first-tine startup. 
+
+    The majority of API endpoints will not be available if the account setup process has not been completed.
+  response: | 
+    Basic document with success state communicated via HTTP error codes.
+  results:
+    - [200, "if the initial login setup has been completed"]
+    - [406, "if the the credentials are hard-coded into a configuration file"]
+    - [-1, "if the initial setup has not been completed and the user must configure a password to continue"]
+  notes: |
+    If the password is set in the Kismet configuration files, this API will not be available 
+    and will return `HTTP 406`
+
+-
+  name: "Set login and password"
+  uri: "/session/set_password"
+  added: "2019-01"
+  methods: ["POST"]
+  types: []
+  roles: ["n/a", "admin"]
+  docs: |
+    Configure the initial login. 
+
+    This causes Kismet to store the initial login in the settings file in the users home directory.
+  response: | 
+    Basic document with success state communicated via HTTP error codes.
+  results:
+    - [200, "if the login configuration succeeds"]
+    - [406, "if the the server password is hard-coded into a configuration file"]
+    - [-1, "if the login information could not be set for some other reason"]
+  notes: |
+    Setting the initial password does not require a login. 
+
+    Subsequent attempts to change the login and password will require a valid login 
+    session.
+
+    Changing the password does not invalidate any current login sessions.  
+
+    If the password is set in the global Kismet configuration files, such as 
+    `kismet_httpd.conf` or `kismet_site.conf`, this API will not be available 
+    and will return `HTTP 406`
+

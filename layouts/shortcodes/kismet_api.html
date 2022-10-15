@@ -1,0 +1,97 @@
+<div>
+    {{ $keyname := .Get 0 }}
+
+    {{ with index $.Site.Data.kismet.api $keyname }}
+    {{ range . }}
+    {{ $apidata := . }}
+
+    <h2 id="{{ .name | urlize }}">{{ .name }} <a href="#{{ .name | urlize }}" class="anchor" aria-hidden="true">#</a></h2> 
+
+    <div style="margin-top: 10px; margin-left: 10px;">
+    {{ .docs | markdownify }}
+    </div>
+
+    <div style="display: flex;">
+        <div style="flex: 2;"> 
+            <div style="margin-top: 10px;"><strong>Roles</strong></div>
+            {{ range .roles }}
+            <div style="margin-left: 10px"><i>{{ . }}</i></div>
+            {{ end }}
+        </div>
+        <div style="flex: 1;">
+            {{ with .added }}
+            <div style="margin-top: 10px"><strong>Added</strong></div> 
+            <div style="margin-left: 10px">API added <code>{{ . }}</code></div>
+            {{ end }}
+        </div> 
+    </div>
+
+    <div style="display: flex;">
+        <div style="flex: 2;"> 
+            <div style="margin-top: 10px;"><strong>URI</strong></div>
+            <div>
+                {{ if eq (len .types) 0 }}
+                <div><code>{{ $apidata.uri }}</code></div>
+                {{end}}
+                {{ range .types }}
+                {{ if (eq . "anyjson") }}
+                <div><code>{{ $apidata.uri }}.json</code></div>
+                <div><code>{{ $apidata.uri }}.ekjson</code></div>
+                <div><code>{{ $apidata.uri }}.prettyjson</code></div>
+                {{ else }}
+                <div><code>{{ $apidata.uri }}.{{.}}</code></div>
+                {{ end }}
+                {{end}}
+            </div>
+        </div>
+
+        <div style="flex: 1;">
+            <div style="margin-top: 10px;"><strong>Methods</strong></div>
+            <div>
+                {{ range .methods  }}
+                <span style="margin-right: 5px;"><code>{{ . }}</code></span>
+                {{end}}
+            </div>
+            
+        </div>
+
+    </div>
+
+
+    {{ if ne (len .results) 0 }}
+    <div style="margin-top: 10px;"><strong>Results</strong></div>
+    <div>
+    <table border="0" style="margin-top: 10px;">
+    {{ range .results }}
+        <tr> 
+            <td width="25%">
+            {{ if eq (index . 0) 0 }}
+            {{ else if eq (index . 0) 200 }}
+                200 OK
+            {{ else if eq (index . 0) 406 }}
+                406 Not Acceptable
+            {{ else if eq (index . 0) -1 }}
+                HTTP ERROR
+            {{ else }}
+                {{ index . 0 }}
+            {{ end }}
+            </td>
+
+            <td>Returned {{ index . 1 }}</td>
+        </tr>
+    {{ end }}
+    </table>
+    </div>
+    {{ end }}
+
+    {{ if ne (len .notes) 0 }}
+    <div style="margin-top: 10px"><strong>Notes</strong></div> 
+    <div style="margin-left: 10px;">
+        {{ .notes | markdownify }}
+    </div>
+    {{ end }}
+
+    {{ end }}
+    {{ end }}
+
+</div>

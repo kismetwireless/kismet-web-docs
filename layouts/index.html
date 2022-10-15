@@ -1,0 +1,136 @@
+{{ define "main" }}
+<section class="section container-fluid mt-n3 pb-3">
+  <div class="row justify-content-center">
+    <div class="col-lg-12 text-center">
+      <img src="/images/kismet-web.svg" style="padding-bottom: 20px;"/>
+      <h1 class="mt-0">{{ .Title }}</h1>
+    </div>
+    <div class="col-lg-9 col-xl-8 text-center">
+      <p class="lead">{{ .Params.lead | safeHTML }}</p>
+      <a class="btn btn-primary btn-lg px-4 mb-2" href="/docs/readme/intro/kismet/" role="button">Get Started</a>
+    </div>
+  </div>
+</section>
+{{ end }}
+
+{{ define "sidebar-prefooter" }}
+<section class="section section-sm">
+  <div class="container">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-5">
+        <h2 class="h4">Multi-platform</h2>
+        <p>Runs on Linux (most compatible), macOS (with native Airport!) and Windows (remote capture via WSL)</p>
+      </div>
+      <div class="col-lg-5">
+        <h2 class="h4">Distributed Capture</h2>
+        <p>Remote capture for all capture types over TCP sockets or websockets.  Spread sensors around a building and collect all the data in one place</p>
+      </div>
+      <div class="col-lg-5">
+        <h2 class="h4">More than Wi-Fi</h2>
+        <p>With proper hardware & driver support collect info about Bluetooth, RF sensors, 802.15.4 Zigbee, ADSB airplane beacons, power meters, water meters, nRF-based keyboards, and more!</p>
+     </div>
+    </div>
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-5">
+        <h2 class="h4">Web-based UI</h2>
+        <p>Modern web-based UI for displaying dense data</p>
+      </div>
+      <div class="col-lg-5">
+        <h2 class="h4">Unified logfile</h2>
+        <p>Unified <a href="/docs/readme/logging/kismetdb/">kismetdb</a> logfile combines packets, devices, location, and runtime data in one file, based on standard sqlite3
+      </div>
+      <div class="col-lg-5">
+        <h2 class="h4">Rest API</h2>
+        <p>Comprehensive REST-based API for scripting against the Kismet server, with <a href="/docs/api/">extensive documentation</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-sm">
+  <div class="container">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-8">
+          <h2>Community</h2>
+          <p>If you’d like to chat with the Kismet community, you can find us:</p>
+          <h4>Discord</h4>
+
+          <p>You can find us at the <a href="https://discord.gg/5N4ME9a">Discord Kismet server</a>.
+
+          <h4>IRC</h4>
+          <p>You can also find us (sometimes) on IRC, on the <code>#kismet</code> channel on <code>libera.chat</code>, however - we're much more active on the Discord server above and you're much more likely to get a response there.  If you’re against installing clients, remember - Discord works from the web, too!
+      </div>
+      <div class="col-lg-8">
+            <script async="" defer="" src="https://buttons.github.io/buttons.js"></script>
+            <style>
+                .pbutton {
+                    font: bold 16px Arial;
+                    text-decoration: none;
+                    background-color: #f4b042;
+                    color: #333333;
+                    margin-left: 20px;
+                    padding: 2px 6px 2px 6px;
+                    border-top: 1px solid #CCCCCC;
+                    border-right: 1px solid #333333;
+                    border-bottom: 1px solid #333333;
+                    border-left: 1px solid #CCCCCC;
+                }
+                
+                .gbutton {
+                    margin-left: 20px;
+                }
+            </style>
+
+            <h2>Sponsoring</h2>
+            <p>Kismet is free, open source, and will remain open source!
+            <p>If you'd like to help contribute to development and hardware and support future development, however, it's always welcome!
+            <p><a href="https://github.com/users/kismetwireless/sponsorship" target="_new">Contribute via the Github Sponsor Program</a>
+            <p><a class="github-button gbutton" href="https://github.com/users/kismetwireless/sponsorship" data-icon="octicon-heart" data-size="large" aria-label="Sponsor @kismetwireless on GitHub">Sponsor</a></p>
+            <p>You can also sponsor Kismet development <a href="https://www.patreon.com/kismetwireless" target="_new">via Patreon</a>:
+            <p><a class="pbutton" href="https://www.patreon.com/bePatron?u=5287757"><img src="https://s3.amazonaws.com/patreon_public_assets/toolbox/patreon_logo_black.png" width="13" height="13" /> Become a Patron</a></p>
+
+            <div class="row justify-content-center text-center">
+                <p>Secret crypto baron and want to help out open source?</p>
+                <div class="col-lg-8">
+                    <img src="/images/btc.png"></img>
+                    <br/>
+                    BTC
+                    <br/>
+                    <font size="-1">35Dh9zhdbKc1hqeSX3d6T3KhgvH9gVqoXd</font>
+                </div>
+                <div class="col-lg-8">
+                    <img src="/images/eth.png"></img>
+                    <br/>
+                    ETH
+                    <br/>
+                    <font size="-1">0xF86041B06e2d2Faad220Aed8f7a8C055AAb653C7</font>
+                </div>
+            </div>
+
+      </div>
+    </div> 
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-8">
+          <h2>Hardware</h2>
+          <p>Need to add some hardware to your setup?</p>
+          <p><a href="/amazon-hardware/">Here are some devices</a> we've had good luck with, plus Amazon gives a small kick-pack if you purchase through the links here.</p>
+      </div> 
+      <div class="col-lg-8">
+          <h2>Development</h2>
+          <p>Kismet is under near-constant development; if you're looking for the absolute bleeding edge, be sure to check out the <a href="/packages/">nightly packages</a> or browse the code <a href="https://github.com/kismetwireless/kismet">on Github</a></p>
+      </div> 
+    </div> 
+  </div> 
+</section> 
+
+{{ end }}
+
+{{ define "sidebar-footer" }}
+<section class="section section-sm container-fluid">
+  <div class="row justify-content-center text-center">
+    <div class="col-lg-9">
+      {{- .Content -}}
+    </div>
+  </div>
+</section>
+{{ end }}

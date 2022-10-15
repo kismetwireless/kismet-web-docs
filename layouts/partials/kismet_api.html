@@ -1,0 +1,25 @@
+<div>
+    <div>
+        <strong>{{ .name }}</strong>
+    </div>
+
+    <div>
+        <span><strong>URI:</strong></span>
+        <span>
+        {{ with .methods }}
+            {{ . }} {{ .uri }}
+        {{ end }}
+        </span>
+    </div> 
+
+    <div>
+        <strong>Role:</strong> {{ .role }}
+    </div> 
+
+    {{ with .added }}
+    <div>
+    <p><i>Added:</i> <code>{{.}}</code></p>
+    </div>
+    {{ end }}
+
+</div>

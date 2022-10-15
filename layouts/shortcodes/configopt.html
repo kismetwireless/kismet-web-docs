@@ -1,0 +1,8 @@
+<div>
+    <p></p>
+    <p><strong>{{ .Get 0 }}</strong>=<i>{ {{ .Get 1 }} }{{ range after 2 .Params}} / { {{.}} }{{end}}</i></p>
+    <div style="padding-left: 20px;">
+        {{ .Inner | markdownify }}
+    </div>
+    <p></p>
+</div>

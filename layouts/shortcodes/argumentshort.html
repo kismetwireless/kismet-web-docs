@@ -1,0 +1,8 @@
+<div>
+    <p></p>
+    <p><strong>-{{ .Get 0 }}</strong> / <strong>--{{ .Get 1 }}</strong>{{ if gt (len .Params) 2 }}=<i>{ {{ .Get 2 }} }{{ range after 3 .Params}} / { {{.}} }{{end}}</i>{{end}}</p>
+    <div style="padding-left: 20px;">
+        {{ .Inner | markdownify }}
+    </div>
+    <p></p>
+</div>

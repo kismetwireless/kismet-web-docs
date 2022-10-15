@@ -1,0 +1,383 @@
+- 
+  name: "ADVCRYPTCHANGE"
+  class: "trend"
+  phy: "dot11"
+  docs: |
+    An advertised SSID has changed the encryption options it is advertised with. 
+
+    This can occur when an access point is reconfigured, or if a managed access point is rebooted with different settings, but can also occur when there is a spoofing attack such as evil twin which did not fully copy the attributes.
+
+-
+  name: "AIRJACKSSID"
+  class: "fingerprint"
+  phy: "dot11"
+  deprecated: true
+  docs: |
+    One of the original 802.11 hacking tools, Airjack, set the initial SSID to `airjack` when loading.  
+
+    This alert is no longer relevant since the Airjack toolset has long been discontinued, and is left for historical reasons.
+
+-
+  name: "APSPOOF"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    A list of valid MAC addresses for a given SSID can be configured via the `apspoof=` configuration option.  
+
+    If a beacon or probe response for that SSID is seen from a MAC address not found in that list, an alert will be raised.  
+
+    This can be used to detect spoofed or evil twin attacks and attacks like Karma, however it will not detect attacks which also spoof the MAC address.
+
+    The `apspoof=` configuration can specify exact string matches for the SSID, regular expressions using PCRE syntax, and single, multiple, or masked MAC addresses:
+
+    ```
+    apspoof=Foo1:ssidregex="(?:foobar)",validmacs=00:11:22:33:44:55
+    apspoof=Foo2:ssid="Foobar",validmacs="00:11:22:33:44:55,AA:BB:CC:DD:EE:FF"
+    ```
+
+    When providing multiple MAC addresses, they must be enclosed in quotes.
+
+    MAC addresses can be *masked*, where they match multiple addresses.  MAC address masking works along the same logic as netmasks, where the common component is compared using the mask.
+
+    To match, for instance, all MAC addresses of the OUI `00:11:22:xx:xx:xx`:
+
+    ```
+    apspoof=Foo3:ssid="Foobar",validmacs="00:11:22:00:00:00/FF:FF:FF:00:00:00"
+    ```
+
+-
+  name: "BEACONRATE" 
+  class: "trend"
+  phy: "dot11"
+  docs: |
+    The advertised beacon rate of a SSID has changed; in a managed enterprise environment this may indicate a normal configuration change, however it may also indicate a spoofing attack such as evil twin which did not properly copy the attributes of the original access point.
+
+-
+  name: "BCOM11KCHAN"
+  class: "trend"
+  phy: "dot11"
+  docs: |
+    The chances of this attack being seen in the wild are quite rare.
+    
+    Invalid channels in 802.11k neighbor report frames can be used to exploit certain Broadcom HardMAC implementations, typically used in mobile devices, as described in [project zero 1289](https://bugs.chromium.org/p/project-zero/issues/detail?id=1289)
+
+-
+  name: "BLEEDINGTOOTH"
+  class: "fingerprint"
+  phy: "bt"
+  docs: |
+    The [Bleedingtooth](https://github.com/google/security-research/security/advisories/GHSA-7mh3-gq28-gfrq) attack exploits vulnerabilities in the Linux Bluetooth stack which could lead to code execution.  It can be detected when using a BTLE-capable capture data source, such as the CC2540, NRF, and similar.  It can not be detected in HCI scan mode or with a Wi-Fi datasource.
+
+-
+  name: "BSSTIMESTAMP"
+  class: "trend"
+  phy: "dot11"
+  docs: |
+    Invalid or out-of-sequence BSS timestamps can indicate AP spoofing.  APs with fluctuating BSS timestamps could be an indication of spoofing or an "evil twin" attack.  Out-of-order packets from multiple datasources and some AP firmware can both lead to false positives.
+
+-
+  name: "CHANCHANGE"
+  class: "trend"
+  phy: "dot11"
+  docs: |
+    A previously known Access Point has changed the advertised channel.  For a managed Access Point or one with automatic channel selection, this may be normal, however it may also indicate a spoofing attempt where an Access Point is cloned to another channel.
+
+-
+  name: "CRYPTODROP"
+  class: "trend"
+  phy: "dot11"
+  docs: |
+    A previously known Access Point has started advertising a less effective security suite.  Generally, an AP should not change encryption settings or downgrade security, and this may indicate an attempt to spoof the AP with a cloned, weaker copy.
+
+-
+  name: "DEAUTHFLOOD / BCASTDISCON"
+  class: "trend"
+  phy: "dot11"
+  docs: |
+    By spoofing disassociate or deauthenticate packets, an attacker may disconnect clients from a network which does not support management frame protection (MFP); This can be used to cause a denial of service or to disconnect clients in an attempt to capture handshakes for attacking WPA.
+    
+    Typically small quantities of deauthenticate or disassociate packets are a normal part of Wi-Fi, but many denial of service tools send floods of these packets to prevent a client from reconnecting.
+    
+    This alert may be impacted by the packet de-duplication feature; setting `packets_dedup_size=0` in the Kismet configuration file may be required to full coverage with this alert.
+
+- 
+  name: "DHCPCLIENTID"
+  class: "fingerprint"
+  phy: "IP"
+  docs: |
+    A client which sends a DHCP DISCOVER packet containing a Client-ID tag (Tag 61) which doesn't match the source MAC of the packet may be doing a DHCP denial-of-service attack to attempt to exhaust the DHCP pool.  
+
+    To detect the DHCP client ID, the network must be unencrypted so that data may be observed.
+
+-
+  name: "DHCPCONFLICT"
+  class: "trend"
+  phy: "IP"
+  docs: |
+    Clients which request a DHCP address and receive a response, but operate on a different IP address, may be misconfigured, or may be spoofed by an attacker trying to gain access by simulating an existing client.
+
+    To detect the DHCP responses, the network must be unencrypted so that the data may be observed.
+
+-
+  name: "DISASSOCTRAFFIC"
+  class: "trend"
+  phy: "dot11"
+  docs: |
+    A client which has been disassociated from a network legitimately should not immediately continue exchanging data, as it needs to reestablish the connection to the AP.  A client behaving oddly can indicate a spoofed client attempting to incorrectly inject data into a network, or a client which is the victim of a denial-of-service attack.
+
+    This alert may trigger a false positive when combined with channel hopping where the re-association is not seen.
+
+-
+  name: "DISCONCODEINVALID"
+  class: "trend"
+  phy: "dot11"
+  docs: |
+    The 802.11 specification defines valid reason codes for disconnect and deauthenticate events.  
+
+    Various clients and access points have been reported to improerly handle invalid/undefined reason codes, and illegal reason codes may be an indicator of a spoofing attack.
+    
+    Some devices have been observed using non-documented reason codes to no ill effect.
+
+-
+  name: "DHCPNAMECHANGE / DHCPOSCHANGE"
+  class: "trend"
+  phy: "IP"
+  docs: |
+    The DHCP configuration protocol allows clients to optionally include the desired hostname and the DHCP client vendor/operating system in the DHCP Discovery packet.  These values should only change if the client has changed drastically (such as a dual-boot system).  As these are typically rare, these values changing can indicate a client spoofing attack.
+    
+    To detect the DHCP responses, the network must be unencrypted so that the data may be observed.
+
+-
+  name: "DOT11D"
+  class: "trend"
+  phy: "dot11"
+  docs: |
+    802.11d country codes have been deprecated by the IEEE and the FCC, but are still broadcast by many devices and processed by many clients. 
+
+    Conflicting 802.11d elements can indicate an AP spoofing attack where the cloned AP is not configured for the same regional restrictions.
+
+-
+  name: "FORMATSTRING"
+  class: "trend"
+  phy: "dot11"
+  added: "2021-07"
+  docs: |
+    While the 802.11 standard doesn't place restrictions on what data can be in a SSID, the percent sign format indicators used by several programming languages have been used to crash devices such as iPhones and macOS systems.
+
+-
+  name: "KARMAOUI"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    Some implementations of the Karma attack, or hardware such as the WiFi Pineapple, use a predictable OUI of 00:13:37:... when spoofing responses.
+
+-
+  name: "LONGSSID"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    The 802.11 specification allows for a maximum of 32 bytes for the SSID.  Over-sized SSIDs are indicative of packet corruption, a significantly malfunctioning device, or of an attack attempting a buffer overflow on the access point or client drivers.
+
+    Modern drivers should be immune to SSID length overflow attacks, but historically it has been used to trigger bugs, crashes, and possible code execution.
+
+-
+  name: "LUCENTTEST"
+  class: "fingerprint"
+  phy: "dot11"
+  deprecated: true
+  docs: |
+    Very old 802.11b Lucent Orinoco cards generated identifiable packets in some scanning test modes.
+
+    These cards are extremely outdated and unlikely to be spotted in the wild at this point, but this alert is left for historical purposes.
+
+-
+  name: "MSFBCOMSSID"
+  class: "fingerprint"
+  phy: "dot11"
+  deprecated: true
+  docs: |
+    Very old versions of the Windows Broadcom drivers cira 2008 did not properly handle SSID fields longer than 32 bytes, leading to code execution. 
+    
+    This vulnerability was implemented in the Metasploit framework.
+    
+    These drivers are now extremely old and were only found on Windows XP systems, but this alert is left for historical purposes.
+
+-
+  name: "MSFDLINKRATE"
+  class: "fingerprint"
+  phy: "dot11"
+  deprecated: true
+  docs: |
+    Very old versions of the Windowd D-Link drivers did not properly handle extremely long 802.11 basic rate fields, leading to code execution.
+    
+    This vulnerability was implemented in the Metasploit framework.
+    
+    These drivers are now extremely old and were only found on Windows XP systems, but this alert is left for historical purposoes.
+
+-
+  name: "MSFNETGEARBEACON"
+  class: "fingerprint"
+  phy: "dot11"
+  deprecated: true
+  docs: |
+    Very old versions of the Windows Netgear drivers did not properly handle unusually large beacon frames, leading to code execution.
+    
+    This vulnerability was implemented in the Metasploit framework. 
+    
+    These drivers are now extremely old and were only found on Windows XP systems, but this alert is left for historical purposes.
+
+-
+  name: "NETSTUMBLER"
+  class: "fingerprint"
+  phy: "dot11"
+  deprecated: "true"
+  docs: |
+    The original Netstumbler tool on Windows could generate, in certain conditions, packets with identifiable content. 
+    
+    This alert only applied to extremely old versions of the tool, and is left for historical purposes.
+
+-
+  name: "NOCLIENTMFP"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    MFP (Management Frame Protection), or 802.11w, is  standard for protecting clients and Access Points from spoofed management frames, such as those used for deauthentication and denial of service attacks.
+    
+    Client MFP support is advertised in request packets as a client joins a network.  When enabled, this alert will warn of clients which do not advertise support for MFP networks, which leaves them open to these attacks.
+    
+    Despite MFP being adopted as part of WPA3 and WiFi 6e, widespread use is still uncommon; until then this alert may generate more noise than signal.
+
+-
+  name: "NONCEDEGRADE"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    A WPA handshake with an empty NONCE was observed; this could indicate a WPA degradation attack such as the [vanhoefm attack against BSD](https://github.com/vanhoefm/blackhat17-pocs/tree/master/openbsd).
+
+-
+  name: "NONCEREUSE"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    A WPA handshake has attempted to re-use a previously seen nonce value; this may indicate an attack against the WPA keystream such as the [vanhoefm KRACK attack](https://www.krackattacks.com/).
+
+
+-
+  name: "NULLPROBERESP"
+  class: "fingerprint"
+  phy: "dot11"
+  deprecated: true
+  docs: |
+    Probe response packets with a SSID element with a length of zero would cause the firmware in extremely old 802.11b network cards (Prism2, Orinoco, and the original Apple Airport) to crash.
+
+    Since then, packets with a zero-length SSID probe response have become common, and a normal part of the protocol.
+
+    This alert is left for historical purposes, but is disabled.
+
+-
+  name: "OVERPOWERED" 
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    This alert is raised if the reported packet signal levels are abnormally high. 
+    
+    This can be caused by using an external amplifier, or by capturing while extremely close to the transmitter.
+    
+    Over-amplified signals can result in distortion and noise, leading to overall fewer packets captured.  In the absolute worst case, using too powerful an amplifier too close to the transmitter may damage your Wi-Fi capture devices.
+    
+    This alert is informational only, and relies on the reported signal levels from the capture layer.
+
+-
+  name: "PROBECHAN"
+  class: "trend"
+  phy: "dot11"
+  docs: |
+    Wi-Fi Access Points advertise a channel in the beacon packet; they may also include a channel in the probe response.  
+    
+    The probe response should match the advertised beacon channel; if it does not, this can indicate a spoofing or 'evil twin' attack, but may also indicate a misconfigured or misbehaving Access Point or repeater.
+
+-
+  name: "PROBENOJOIN"
+  class: "trend"
+  phy: "dot11"
+  deprecated: true 
+  docs: |
+    Active scanning tools constantly send network discovery probes but never join any of the networks which respond.  
+
+    This alert can cause excessive false positives in busy environments, and the general usage of Wi-Fi no longer matches the limited use patterns when this alert was first written, but it remains for historical reasos.
+
+-
+  name: "QCOMEXTENDED"
+  class: "fingerprint"
+  phy: "dot11"
+  added: "2019-08"
+  docs: |
+    Recent vulnerabilities found in the Qualcomm drivers for Android lead to code execution via over-sized IE 127 Extended Capabilities tags (CVE-2019-10539).  
+    
+    This alert detects packets with what appear to be over-sized IE 127 elements, however as the use of this tag evolves the size of the data continues to grow, false positives become more common.
+    
+    This alert is disabled by default.
+
+-
+  name: "RSNLOOP"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    Invalid RSN (802.11i) security tags in a beacon frame can be used to cause loops and denial of service in some versions of the Atheros drivers, as described in CVE-2017-9714 and [pleasestopnamingvulnerabilities.com](https://pleasestopnamingvulnerabilities.com/).
+
+-
+  name: "RTL8195VD1406"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    A series of vulnerabilities in the RTL8195A Wi-Fi drivers can allow code execution without authentication, as described in CVE-2020-9395 and the [VDOO paper here](https://www.vdoo.com/blog/realtek-rtl8195a-vulnerabilities-discovered).  
+
+    Over-sized EAPOL Key packets can be used to trigger overflows in the driver and gain code execution.
+
+-
+  name: "RTLWIFIP2P"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    A vulnerability in the Linux RTLWIFI driver could lead to code execution or a denial of service, as described in CVE-2019-17666 and [the LKML mailing list](https://lkml.org/lkml/2019/10/16/1226).  This attack involves malformed Wi-Fi Direct P2P Notification of Absence frames.
+
+-
+  name: "VDOO202027301"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    A vulnerability discovered by VDOO in the RTL8170C chipset could be used to execute code on the device with over-long key responses in the WPA handshake.  This attack has not been seen in the wild yet, and requires knowledge of the victim devices WPA PSK.  A WPA RSN key response with a total length over 0x101 bytes can be used to overflow a static buffer.  The attack is described in CVE-2020-27301 and the [VDOO report here](https://www.vdoo.com/blog/realtek-wifi-vulnerabilities-zero-day).
+
+- 
+  name: "VDOO202027302"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    A vulnerability discovered by VDOO in the RTL8170C chipset could be used to execute code on the device with over-long key responses in the WPA handshake.  This attack has not been seen in the wild yet, and requires knowledge of the victim devices WPA PSK.  A WPA RSN key response with AES encryption and a length over 0x80 can be used to overflow a static buffer.  The attack is described in CVE-2020-27302 and the [VDOO report here](https://www.vdoo.com/blog/realtek-wifi-vulnerabilities-zero-day).
+
+-
+  name: "WMMOVERFLOW"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    The Wi-Fi standard specifies 24 bytes for WMM IE tags.  Over-sized WMM fields may be an attempt to exploit bugs in Broadcom chipsets, such as the [Broadpwn](https://blog.exodusintel.com/2017/07/26/broadpwn/) attack.
+
+-
+  name: "WPSBRUTE"
+  class: "trend"
+  phy: "dot11"
+  docs: |
+    The WPS protocol has been shown to have numerous vulnerabilities, including errors in how the key exchanged is processed making it much weaker against brute force attacks.
+    
+    Excessive WPS negotiation attempts may indicate a brute force attack such as [Reaver](https://outpost24.com/blog/wps-cracking-with-reaver) against a WPS enabled Access Point.
+
+-
+  name: "WMMTSPEC"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    Too many WMMTSPEC options were seen in a probe response; this may be triggered by CVE-2017-11013 as described at [pleasestopnamingvulnerabilities.com](https://pleasestopnamingvulnerabilities.com/)
+
+
+
+
