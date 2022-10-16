@@ -5,14 +5,16 @@
     {{ range . }}
     {{ $apidata := . }}
 
-    <h2 id="{{ .name | urlize }}">{{ .name }} <a href="#{{ .name | urlize }}" class="anchor" aria-hidden="true">#</a></h2> 
+    <h3 id="{{ .name | urlize }}" style="border-left: 7px solid grey; padding-left: 10px;">{{ .name }} <a href="#{{ .name | urlize }}" class="anchor" aria-hidden="true">#</a></h3> 
+
+    <div style="margin-left: 10px;">
 
     <div style="margin-top: 10px; margin-left: 10px;">
     {{ .docs | markdownify }}
     </div>
 
     <div style="display: flex;">
-        <div style="flex: 2;"> 
+        <div style="flex: 2; border-right: 2px solid gray; margin-right: 10px;"> 
             <div style="margin-top: 10px;"><strong>Roles</strong></div>
             {{ range .roles }}
             <div style="margin-left: 10px"><i>{{ . }}</i></div>
@@ -27,7 +29,7 @@
     </div>
 
     <div style="display: flex;">
-        <div style="flex: 2;"> 
+        <div style="flex: 2; border-right: 2px solid gray; margin-right: 10px;"> 
             <div style="margin-top: 10px;"><strong>URI</strong></div>
             <div>
                 {{ if eq (len .types) 0 }}
@@ -57,40 +59,50 @@
 
     </div>
 
+    {{ with .parameters }}
+    <div style="margin-top: 10px;"><strong>Parameters</strong></div>
+    <div style="display: flex;">
+        <div style="flex: 2; border-right: 2px solid gray; margin-right: 10px;"> 
+            Parameters
+        </div>
+    </div> 
+    {{ end }}
 
     {{ if ne (len .results) 0 }}
     <div style="margin-top: 10px;"><strong>Results</strong></div>
-    <div>
-    <table border="0" style="margin-top: 10px;">
+    <div style="padding-top: 10px;">
     {{ range .results }}
-        <tr> 
-            <td width="25%">
+    <div style="display: flex">
+        <div style="flex: 1; border-bottom: 1px solid gray; padding-right: 10px;">
             {{ if eq (index . 0) 0 }}
             {{ else if eq (index . 0) 200 }}
-                200 OK
+            <span style="color: green;">200</span> OK
             {{ else if eq (index . 0) 406 }}
-                406 Not Acceptable
+            <span style="color: red;">406</span> Not Acceptable
             {{ else if eq (index . 0) -1 }}
-                HTTP ERROR
+            <span style="color: red;">HTTP ERROR</span>
+            {{ else if and (ge (index . 0) 200) (le . 0 299) }}
+                {{ index . 0 }}
             {{ else }}
                 {{ index . 0 }}
             {{ end }}
-            </td>
-
-            <td>Returned {{ index . 1 }}</td>
-        </tr>
+        </div>
+        <div style="flex: 3; padding-left: 10px; border-left: 2px solid gray; border-bottom: 1px solid gray;">
+            Returned {{ index . 1 }}
+        </div>
+    </div>
     {{ end }}
-    </table>
     </div>
     {{ end }}
 
-    {{ if ne (len .notes) 0 }}
+    {{ with .notes }}
     <div style="margin-top: 10px"><strong>Notes</strong></div> 
     <div style="margin-left: 10px;">
-        {{ .notes | markdownify }}
+        {{ . | markdownify }}
     </div>
     {{ end }}
-
+        
+    </div>
     {{ end }}
     {{ end }}
 

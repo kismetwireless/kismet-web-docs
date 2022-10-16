@@ -34,6 +34,9 @@
     Configure the initial login. 
 
     This causes Kismet to store the initial login in the settings file in the users home directory.
+  parameters:
+    - ["username", true, "New username"]
+    - ["password", true, "New password"]
   response: | 
     Basic document with success state communicated via HTTP error codes.
   results:
@@ -52,3 +55,95 @@
     `kismet_httpd.conf` or `kismet_site.conf`, this API will not be available 
     and will return `HTTP 406`
 
+-
+  name: "Checking sessions"
+  uri: "/session/check_session"
+  methods: ["GET"]
+  types: []
+  roles: ["n/a"]
+  docs: |
+    If a UI or script has a saved session, it can use this endpoint to check if the session is still valid and take an 
+    appropriate action (such as using a saved login or prompting the user to log in again) if it is no longer valid. 
+
+    If basic auth data also provided, a new login will be created and returned if the session is no longer valid.
+  results:
+    - [200, "if the session is valid or valid login data is provided"]
+    - [-1, "if the session is not valid and there is no supplied login data or the login data is not valid"]
+
+-
+  name: "Checking login"
+  uri: "/session/check_login"
+  types: []
+  methods: ["GET"]
+  roles: ["n/a"]
+  docs: |
+    A UI or script may need to check for a valid login and prompt the user to take an appropriate action if the login 
+    credentials are not valid. 
+
+    Most likely, the session check API is more appropriate as it will return a valid session simultaneously if the 
+    login is valid. 
+  results:
+    - [200, "if the login is valid"]
+    - [-1, "if the login is invalid"]
+
+-
+  name: "Listing API tokens"
+  uri: "/auth/apikey/list"
+  types: ["anyjson"]
+  added: "2020-11"
+  methods: ["GET"]
+  roles: ["admin"]
+  docs: | 
+    Fetch a list of created API tokens, descriptions, and associated roles. 
+
+    If `httpd_allow_auth_view` is set to `false` in the Kismet configuration, the results *will not include* the API 
+    tokens, and the user must look at the Kismet configuration files to view previously created API keys.
+  results:
+    - [200, "and a JSON array of provisioned API keys"]
+    - [-1, "on failure"]
+
+-
+  name: "Creating API tokens"
+  uri: "/auth/apikey/generate"
+  types: ["cmd"]
+  added: "2020-11" 
+  methods: ["POST"]
+  roles: ["admin"]
+  docs: | 
+    Create a new API token and assign it a role. 
+
+    New API tokens can *only* be generated if the `httpd_allow_auth_creation` option is set to `true` in the 
+    Kismet config.  This is set by default. 
+
+    If `httpd_allow_auth_view` is not set to `true` in the Kismet configuration, API tokens may only be viewed 
+    at the time of creation, or by inspecting the session file in the users Kismet configuration directory.
+  parameters:
+    - ["name", true, "Name of token, must be unique"]
+    - ["role", true, "Role of token"]
+    - ["duration", true, "Duration, in seconds, of token validity.  May be `0` for a permanent token, and currently not enforced."]
+  results: 
+    - [200, "a plain-text response of the newly created token on sucess"]
+    - [-1, "on failure"]
+  notes: |
+    `httpd_allow_auth_creation` must be `true` or this API will return an error condition.
+
+    Users should be prompted to copy the API token at the time of creation.
+
+-
+  name: "Revoking API tokens"
+  uri: "/auth/apikey/revoke"
+  types: ["cmd"]
+  added: "2020-11"
+  methods: ["POST"]
+  roles: ["admin"]
+  docs: |
+    Revoke and delete an API token. 
+
+    All active sessions using the token will be revoked and future sessions prevented.
+
+    If `httpd_allow_auth_creation` is not set in the Kismet configuration, this API will return an error.
+  parameters:
+    - ["name", true, "Name of API token to revoke"]
+  results:
+    - [200, "on success"]
+    - [-1, "on failure"]

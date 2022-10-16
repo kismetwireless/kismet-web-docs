@@ -10,7 +10,7 @@ menu:
     parent: ""
     identifier: "rest_like-5edfafb37ea8541854db41cf9888d6e9"
 weight: 10
-toc: true
+toc: false
 ---
 
 Kismet uses a REST-like interface for the embedded webserver, which provides data and accepts commands.
