@@ -35,8 +35,16 @@
 
     This causes Kismet to store the initial login in the settings file in the users home directory.
   parameters:
-    - ["username", true, "New username"]
-    - ["password", true, "New password"]
+    -
+      name: "username" 
+      type: "string"
+      required: true 
+      description: "Username"
+    -
+      name: "password" 
+      type: "string" 
+      required: true 
+      description: "Password"
   response: | 
     Basic document with success state communicated via HTTP error codes.
   results:
@@ -118,9 +126,21 @@
     If `httpd_allow_auth_view` is not set to `true` in the Kismet configuration, API tokens may only be viewed 
     at the time of creation, or by inspecting the session file in the users Kismet configuration directory.
   parameters:
-    - ["name", true, "Name of token, must be unique"]
-    - ["role", true, "Role of token"]
-    - ["duration", true, "Duration, in seconds, of token validity.  May be `0` for a permanent token, and currently not enforced."]
+    -
+      name: "name"
+      type: "string"
+      required: true
+      description: "Name of API key; each API key must have a unique name."
+    - 
+      name: "role" 
+      type: "string" 
+      required: true 
+      description: "Role of API key; this will restrict what the key is allowed to access."
+    - 
+      name: "duration" 
+      type: "string"
+      required: true 
+      description: "Duration, in seconds, of token validity, from the time of token creation (now).  May be 0 for a permanent token."
   results: 
     - [200, "a plain-text response of the newly created token on sucess"]
     - [-1, "on failure"]
@@ -143,7 +163,11 @@
 
     If `httpd_allow_auth_creation` is not set in the Kismet configuration, this API will return an error.
   parameters:
-    - ["name", true, "Name of API token to revoke"]
+    - 
+      name: "name" 
+      type: "string"
+      required: true 
+      description: "Name of API token to revoke"
   results:
     - [200, "on success"]
     - [-1, "on failure"]
