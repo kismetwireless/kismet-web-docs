@@ -59,80 +59,58 @@
 
     </div>
 
+
     {{ with .parameters }}
     <div style="margin-top: 15px;"><strong>Post Parameters</strong></div>
-    <div style="padding-top: 10px; padding-left: 10px;">
+    <div style="padding-top: 10px; padding-left: 10px; padding-bottom: 20px;">
         {{ range . }}
-
+        <div>
+        <span style="font-weight: 500;">{{ .name }}</span> 
+        {{ with .type }}
+        <span style="font-size: 70%; font-weight: bold;">{{ . }}</span>
         {{ end }}
 
-
-        <div style="display: flex;">
-            <div style="flex: 1; border-bottom: 3px solid gray; padding-right: 10px;">
-                <strong>Parameter</strong>
-            </div>
-            <div style="flex: 1; padding-left: 10px; border-bottom: 3px solid gray;">
-                <strong>Required</strong>
-            </div>
-            <div style="flex: 3; padding-left: 10px; border-bottom: 3px solid gray;">
-                <strong>Description</strong>
-            </div>
-        </div> 
-
-        {{ range . }}
-        <div style="display: flex;">
-            <div style="flex: 1; border-bottom: 1px solid gray; padding-right: 10px;">
-                {{ .name }}
-            </div>
-            <div style="flex: 1; padding-left: 10px; border-left: 2px solid gray; border-bottom: 1px solid gray;">
-                {{ with default true .required }}
-                {{ if eq . true }}
-                Required
-                {{ else }}
-                Optional
-                {{ end }}
-                {{ end }}
-            </div>
-            <div style="flex: 3; padding-left: 10px; border-left: 2px solid gray; border-bottom: 1px solid gray;">
-                {{ .description | markdownify }}
-            </div>
-        </div> 
+        {{ with default true .required }} 
+        {{ if eq . true }} 
+        <span style="color: red; font-size: 60%;">REQUIRED</span> 
+        {{ else }} 
+        <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
+        {{ end }} 
         {{ end }}
+
+        <div style="padding-left: 10px;">
+            {{ .description | markdownify }}
+        </div>
+        </div>
+        {{ end }}
+
     </div>
     {{ end }}
 
-    {{ if ne (len .results) 0 }}
+    {{ with .results }}
     <div style="margin-top: 15px;"><strong>Results</strong></div>
-    <div style="padding-top: 10px; padding-left: 10px;">
-        <div style="display: flex;">
-            <div style="flex: 1; border-bottom: 3px solid gray; padding-right: 10px;">
-                <strong>Code</strong>
-            </div>
-            <div style="flex: 3; padding-left: 10px; border-bottom: 3px solid gray;">
-                <strong>Description</strong>
-            </div>
-        </div> 
-        {{ range .results }}
-        <div style="display: flex">
-            <div style="flex: 1; border-bottom: 1px solid gray; padding-right: 10px;">
-                {{ if eq (index . 0) 0 }}
-                {{ else if eq (index . 0) 200 }}
-                <span style="color: green;">200</span> OK
-                {{ else if eq (index . 0) 406 }}
-                <span style="color: red;">406</span> Not Acceptable
-                {{ else if eq (index . 0) -1 }}
-                <span style="color: red;">HTTP ERROR</span>
-                {{ else if and (ge (index . 0) 200) (le . 0 299) }}
-                {{ index . 0 }}
-                {{ else }}
-                {{ index . 0 }}
-                {{ end }}
-            </div>
-            <div style="flex: 3; padding-left: 10px; border-left: 2px solid gray; border-bottom: 1px solid gray;">
-                Returned {{ index . 1 }}
+    <div style="padding-top: 10px; padding-left: 10px; margin-bottom: 20px;">
+        {{ range . }}
+        <div>
+            {{ if eq (index . 0) 0 }}
+            {{ else if eq (index . 0) 200 }}
+            <span style="color: green;">200</span> OK
+            {{ else if eq (index . 0) 406 }}
+            <span style="color: red;">406</span> Not Acceptable
+            {{ else if eq (index . 0) -1 }}
+            <span style="color: red;">HTTP ERROR (other)</span>
+            {{ else if and (ge (index . 0) 200) (le . 0 299) }}
+            {{ index . 0 }}
+            {{ else }}
+            {{ index . 0 }}
+            {{ end }}
+
+            <div style="padding-left: 10px;">
+                Returned {{ (index . 1) | markdownify }}
             </div>
         </div>
         {{ end }}
+
     </div>
     {{ end }}
 

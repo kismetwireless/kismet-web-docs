@@ -39,12 +39,12 @@
       name: "username" 
       type: "string"
       required: true 
-      description: "Username"
+      description: "Username used for standard web login.  This user will have the `admin` role."
     -
       name: "password" 
       type: "string" 
       required: true 
-      description: "Password"
+      description: "Password string for admin user login."
   response: | 
     Basic document with success state communicated via HTTP error codes.
   results:
