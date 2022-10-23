@@ -3,39 +3,41 @@
 
     {{ with index $.Site.Data.kismet.api $keyname }}
     {{ range . }}
+
     {{ $apidata := . }}
 
-    <h3 id="{{ .name | urlize }}" style="border-left: 7px solid grey; padding-left: 10px;">{{ .name }} <a href="#{{ .name | urlize }}" class="anchor" aria-hidden="true">#</a></h3> 
-
-    <div style="margin-left: 10px;">
-
-    <div style="margin-top: 10px; margin-left: 10px;">
-    {{ .docs | markdownify }}
-    </div>
+    <h3 id="{{ .name | urlize }}">{{ .name }} <a href="#{{ .name | urlize }}" class="anchor" aria-hidden="true">#</a></h3> 
 
     <div style="display: flex;">
-        <div style="flex: 2; border-right: 2px solid gray; margin-right: 10px;"> 
-            <div style="margin-top: 10px;"><strong>Roles</strong></div>
+        <div style="flex: 1; margin-top: 5px; font-size: 60%; color: grey;">DESC</div>
+        <div style="flex: 10; padding-left: 10px;">{{ .docs | markdownify }}</div>
+    </div>
+
+    <div style="display: flex; padding-top: 10px;">
+        <div style="flex: 1; margin-top: 5px; font-size: 60%; color: grey;">ROLES</div>
+        <div style="flex: 10; padding-left: 10px">
             {{ range .roles }}
-            <div style="margin-left: 10px"><i>{{ . }}</i></div>
+            <code style="padding-right: 5px;">{{ . }}</code>
             {{ end }}
         </div>
-        <div style="flex: 1;">
-            {{ with .added }}
-            <div style="margin-top: 10px"><strong>Added</strong></div> 
-            <div style="margin-left: 10px">API added <code>{{ . }}</code></div>
-            {{ end }}
-        </div> 
     </div>
 
-    <div style="display: flex;">
-        <div style="flex: 2; border-right: 2px solid gray; margin-right: 10px;"> 
-            <div style="margin-top: 10px;"><strong>URI</strong></div>
-            <div>
-                {{ if eq (len .types) 0 }}
-                <div><code>{{ $apidata.uri }}</code></div>
-                {{end}}
-                {{ range .types }}
+    {{ with .added }}
+    <div style="display: flex; padding-top: 10px;">
+        <div style="flex: 1; margin-top: 5px; font-size: 60%; color: grey;">ADDED</div>
+        <div style="flex: 10; padding-left: 10px;">
+            API added <span style="font-weight: 500;">{{ . }}</span>
+        </div>
+    </div>
+    {{ end }}
+
+    <div style="display: flex; padding-top: 10px;">
+        <div style="flex: 1; margin-top: 5px; font-size: 60%; color: grey;">URI</div>
+        <div style="flex: 10; padding-left: 10px;">
+            {{ if eq (len .types) 0 }}
+            <div><code>{{ $apidata.uri }}</code></div>
+            {{end}}
+            {{ range .types }}
                 {{ if (eq . "anyjson") }}
                 <div><code>{{ $apidata.uri }}.json</code></div>
                 <div><code>{{ $apidata.uri }}.ekjson</code></div>
@@ -43,85 +45,107 @@
                 {{ else }}
                 <div><code>{{ $apidata.uri }}.{{.}}</code></div>
                 {{ end }}
-                {{end}}
-            </div>
+            {{ end }}
         </div>
-
-        <div style="flex: 1;">
-            <div style="margin-top: 10px;"><strong>Methods</strong></div>
-            <div>
-                {{ range .methods  }}
-                <span style="margin-right: 5px;"><code>{{ . }}</code></span>
-                {{end}}
-            </div>
-            
-        </div>
-
     </div>
 
+    <div style="display: flex; padding-top: 10px;">
+        <div style="flex: 1; margin-top: 5px; font-size: 60%; color: grey;">METHODS</div>
+        <div style="flex: 10; padding-left: 10px;">
+            {{ range .methods  }}
+            <span style="margin-right: 5px;"><code>{{ . }}</code></span>
+            {{ end }}
+        </div>
+    </div>
 
     {{ with .parameters }}
-    <div style="margin-top: 15px;"><strong>Post Parameters</strong></div>
-    <div style="padding-top: 10px; padding-left: 10px; padding-bottom: 20px;">
+    <div style="display: flex; padding-top: 10px;">
+        <div style="flex: 1; margin-top: 5px; font-size: 60%; color: grey;">POST<br/>PARAMETERS</div>
+        <div style="flex: 10; padding-left: 10px;">
+
         {{ range . }}
         <div>
-        <span style="font-weight: 500;">{{ .name }}</span> 
-        {{ with .type }}
-        <span style="font-size: 70%; font-weight: bold;">{{ . }}</span>
-        {{ end }}
+            <span style="font-weight: 500;"><code>{{ .name }}</code></span> 
 
-        {{ with default true .required }} 
-        {{ if eq . true }} 
-        <span style="color: red; font-size: 60%;">REQUIRED</span> 
-        {{ else }} 
-        <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
-        {{ end }} 
-        {{ end }}
+            {{ with .type }}
+            <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">{{ . }}</span>
+            {{ end }}
 
-        <div style="padding-left: 10px;">
-            {{ .description | markdownify }}
-        </div>
-        </div>
-        {{ end }}
-
-    </div>
-    {{ end }}
-
-    {{ with .results }}
-    <div style="margin-top: 15px;"><strong>Results</strong></div>
-    <div style="padding-top: 10px; padding-left: 10px; margin-bottom: 20px;">
-        {{ range . }}
-        <div>
-            {{ if eq (index . 0) 0 }}
-            {{ else if eq (index . 0) 200 }}
-            <span style="color: green;">200</span> OK
-            {{ else if eq (index . 0) 406 }}
-            <span style="color: red;">406</span> Not Acceptable
-            {{ else if eq (index . 0) -1 }}
-            <span style="color: red;">HTTP ERROR (other)</span>
-            {{ else if and (ge (index . 0) 200) (le . 0 299) }}
-            {{ index . 0 }}
-            {{ else }}
-            {{ index . 0 }}
+            {{ with default true .required }} 
+                {{ if eq . true }} 
+                <span style="color: red; font-size: 60%;">REQUIRED</span> 
+                {{ else }} 
+                <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
+                {{ end }} 
             {{ end }}
 
             <div style="padding-left: 10px;">
-                Returned {{ (index . 1) | markdownify }}
+                {{ .description | markdownify }}
             </div>
         </div>
         {{ end }}
 
+        </div>
+    </div>
+    {{ end }}
+
+    {{ with .return }}
+    <div style="display: flex; padding-top: 10px;">
+        <div style="flex: 1; margin-top: 5px; font-size: 60%; color: grey;">RETURN</div>
+        <div style="flex: 10; padding-left: 10px;">
+            {{ . | markdownify }}
+        </div>
+    </div>
+    {{ end }}
+
+    {{ with .responses }}
+    <div style="display: flex; padding-top: 10px;">
+        <div style="flex: 1; margin-top: 5px; font-size: 60%; color: grey;">RESPONSES</div>
+        <div style="flex: 10; padding-left: 10px;">
+            {{ with .success }}
+            <div style="font-weight: 400;">Success</div>
+            {{ range . }}
+                <div style="display: flex; padding-left: 10px;">
+                    <div style="flex: 1; color: green;">
+                        {{ index . 0 }}
+                    </div>
+                    <div style="flex: 8;">
+                        {{ index . 1 }}
+                    </div>
+                </div>
+            {{ end }}
+            {{ end }}
+
+            {{ with .failure }}
+            <div style="font-weight: 400;">Failure</div>
+            {{ range . }}
+                <div style="display: flex; padding-left: 10px;">
+                    <div style="flex: 1; color: red;">
+                        {{ if eq (index . 0) -1 }}
+                        ERROR
+                        {{ else }}
+                        {{ index . 0 }}
+                        {{ end }}
+                    </div>
+                    <div style="flex: 8;">
+                        {{ index . 1 }}
+                    </div>
+                </div>
+            {{ end }}
+            {{ end }}
+        </div>
     </div>
     {{ end }}
 
     {{ with .notes }}
-    <div style="margin-top: 10px"><strong>Notes</strong></div> 
-    <div style="margin-left: 10px;">
-        {{ . | markdownify }}
+    <div style="display: flex; padding-top: 10px;">
+        <div style="flex: 1; margin-top: 5px; font-size: 60%; color: grey;">NOTES</div>
+        <div style="flex: 10; padding-left: 10px;">
+            {{ . | markdownify }}
+        </div>
     </div>
     {{ end }}
         
-    </div>
     {{ end }}
     {{ end }}
 

@@ -13,12 +13,14 @@
     account in a configuration file, the UI is expected to prompt the user during the first-tine startup. 
 
     The majority of API endpoints will not be available if the account setup process has not been completed.
-  response: | 
+  return: | 
     Basic document with success state communicated via HTTP error codes.
-  results:
-    - [200, "if the initial login setup has been completed"]
-    - [406, "if the the credentials are hard-coded into a configuration file"]
-    - [-1, "if the initial setup has not been completed and the user must configure a password to continue"]
+  responses:
+    success:
+      - [200, "If the initial login setup has been completed"]
+    failure:
+      - [406, "If the the credentials are hard-coded into a configuration file"]
+      - [-1, "If the initial setup has not been completed and the user must configure a password to continue"]
   notes: |
     If the password is set in the Kismet configuration files, this API will not be available 
     and will return `HTTP 406`
@@ -45,12 +47,14 @@
       type: "string" 
       required: true 
       description: "Password string for admin user login."
-  response: | 
+  return: | 
     Basic document with success state communicated via HTTP error codes.
-  results:
-    - [200, "if the login configuration succeeds"]
-    - [406, "if the the server password is hard-coded into a configuration file"]
-    - [-1, "if the login information could not be set for some other reason"]
+  responses:
+    success:
+      - [200, "If the login configuration succeeds"]
+    failure:
+      - [406, "If the the server password is hard-coded into a configuration file"]
+      - [-1, "If the login information could not be set for some other reason"]
   notes: |
     Setting the initial password does not require a login. 
 
@@ -74,9 +78,13 @@
     appropriate action (such as using a saved login or prompting the user to log in again) if it is no longer valid. 
 
     If basic auth data also provided, a new login will be created and returned if the session is no longer valid.
-  results:
-    - [200, "if the session is valid or valid login data is provided"]
-    - [-1, "if the session is not valid and there is no supplied login data or the login data is not valid"]
+  return:
+    Empty content, status is communicated via error codes.
+  responses:
+    success:
+      - [200, "If the session is valid or valid login data is provided"]
+    failure:
+      - [-1, "If the session is not valid and there is no supplied login data or the login data is not valid"]
 
 -
   name: "Checking login"
@@ -90,9 +98,13 @@
 
     Most likely, the session check API is more appropriate as it will return a valid session simultaneously if the 
     login is valid. 
-  results:
-    - [200, "if the login is valid"]
-    - [-1, "if the login is invalid"]
+  return: |
+    Empty document, results communicated in status codes.
+  responses:
+    success:
+      - [200, "If the login is valid"]
+    failure:
+      - [-1, "If the login is invalid"]
 
 -
   name: "Listing API tokens"
@@ -106,9 +118,11 @@
 
     If `httpd_allow_auth_view` is set to `false` in the Kismet configuration, the results *will not include* the API 
     tokens, and the user must look at the Kismet configuration files to view previously created API keys.
-  results:
-    - [200, "and a JSON array of provisioned API keys"]
-    - [-1, "on failure"]
+  responses:
+    success:
+      - [200, "JSON array of provisioned API keys"]
+    failure:
+      - [-1, "On failure"]
 
 -
   name: "Creating API tokens"
@@ -141,9 +155,13 @@
       type: "string"
       required: true 
       description: "Duration, in seconds, of token validity, from the time of token creation (now).  May be 0 for a permanent token."
-  results: 
-    - [200, "a plain-text response of the newly created token on sucess"]
-    - [-1, "on failure"]
+  result: |
+    A plain-text response of the newly created token
+  responses: 
+    success:
+      - [200, "On success, a plain-text response of the newly created token"]
+    failure:
+      - [-1, "On failure to create a token due to improper creation data or other issues"]
   notes: |
     `httpd_allow_auth_creation` must be `true` or this API will return an error condition.
 
@@ -168,6 +186,10 @@
       type: "string"
       required: true 
       description: "Name of API token to revoke"
-  results:
-    - [200, "on success"]
-    - [-1, "on failure"]
+  return: |
+    Empty document, success communicated in status codes.
+  responses:
+    success:
+      - [200, "On success"]
+    failure:
+      - [-1, "On failure"]
