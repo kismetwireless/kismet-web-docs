@@ -71,7 +71,7 @@ This will find all the specifics about your system and prepare Kismet for compil
 
 ```bash
 cd kismet
-LDFLAGS=-L$(brew --prefix)/lib CPPFLAGS="-I$(brew --prefix)/include -I$(brew --prefix openssl)/include" ./configure
+LDFLAGS=-L$(brew --prefix)/lib CPPFLAGS="-I$(brew --prefix)/include -I$(brew --prefix openssl)/include" ./configure --with-openssl=$(brew --prefix openssl)
 ```
 
 Pay attention to the summary at the end and look out for any warnings! The summary will show key features and raise warnings for missing dependencies which will drastically affect the compiled Kismet.
