@@ -1,0 +1,100 @@
+
+-
+  name: "System status"
+  uri: "/system/status"
+  methods: ["GET", "POST"]
+  types: ["anyjson"]
+  roles: ["readonly"]
+  docs: |
+    The status endpoint returns almost all data around the current system status, 
+    load, system health, thermal and fan sensors (if any), memory use, battery state,
+    runtime, and more.
+  jsonparameters: 
+    -
+      auto: "fields"
+  return: | 
+    JSON object of system status snapshot.
+  responses:
+    success:
+      - [200, "Basic success and JSON object"]
+    failure:
+      - [-1, "On error (typically for malformed simplification)"]
+
+-
+  name: "Timestamp"
+  uri: "/system/timestamp"
+  methods: ["GET"]
+  types: ["anyjson"]
+  roles: ["readonly"]
+  docs: |
+    Fetch the system timestamp as a second and microsecond; this can be used 
+    to synchronize timestamps with the UI or as a keep-alive check.
+  return: |
+    JSON object of the timestamp as second and microsecond.
+  responses:
+    success:
+      - [200, "JSON object"]
+
+-
+  name: "Tracked fields"
+  uri: "/system/tracked_fields"
+  methods: ["GET"]
+  types: ["html"]
+  roles: ["readonly"]
+  docs: |
+    To aid in development, Kismet maintains a list of all known field names, 
+    data types, and descriptions.
+
+    This endpoint returns a human-readable HTML page of all fields.
+  return: |
+    HTML document
+  responses:
+    success:
+      - [200, "HTML document"]
+
+-
+  name: "Packet statistics"
+  uri: "/packetchain/packet_stats"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  jsonparameters: 
+    -
+      auto: "fields"
+  docs: |
+    Kismet exposes the packet processing statistics as RRD (round robin database) 
+    collections for incoming packet rate, packet proessing rates, data size, 
+    and more.
+
+    The RRD format encodes long-running data as collections of decreasing accuracy, 
+    reporting the past 60 seconds, past hour as 60 second averages, and past 
+    day as 1 hour averages. 
+  return: |
+    JSON object of RRD packet stats.
+  responses:
+    success:
+      - [200, "JSON object"]
+    failure:
+      - [-1, "On error (typically for malformed simplification)"]
+
+-
+  name: "Dynamic Javascript import"
+  uri: "/dynamic"
+  types: ["js"]
+  roles: ["readonly"]
+  docs: |
+    Kismet creates a dynamically generated javascript file for the UI to 
+    load the core system and JS plugin modules into the global JS namespace.
+
+    This endpoint is meant to be used by a web-based UI and included as a 
+    script import, such as:
+
+    ```html 
+    <script src="dynamic.js"></script>
+    ```
+  result: |
+    A Javascript file suitable for import.
+  responses:
+    success:
+      - [200, "Success"]
+  

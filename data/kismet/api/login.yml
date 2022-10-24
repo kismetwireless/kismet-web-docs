@@ -4,7 +4,7 @@
   added: "2019-01"
   methods: ["GET"]
   types: []
-  roles: ["n/a"]
+  roles: ["none"]
   docs: |
     This API is used by the Kismet web UI, and is available for other alternate full-UI replacements.  It is 
     used to indicate if Kismet has been configured fully. 
@@ -31,7 +31,7 @@
   added: "2019-01"
   methods: ["POST"]
   types: []
-  roles: ["n/a", "admin"]
+  roles: ["none", "admin"]
   docs: |
     Configure the initial login. 
 
@@ -72,7 +72,7 @@
   uri: "/session/check_session"
   methods: ["GET"]
   types: []
-  roles: ["n/a"]
+  roles: ["none"]
   docs: |
     If a UI or script has a saved session, it can use this endpoint to check if the session is still valid and take an 
     appropriate action (such as using a saved login or prompting the user to log in again) if it is no longer valid. 
@@ -91,7 +91,7 @@
   uri: "/session/check_login"
   types: []
   methods: ["GET"]
-  roles: ["n/a"]
+  roles: ["none"]
   docs: |
     A UI or script may need to check for a valid login and prompt the user to take an appropriate action if the login 
     credentials are not valid. 

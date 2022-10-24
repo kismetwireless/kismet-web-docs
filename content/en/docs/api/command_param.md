@@ -66,13 +66,13 @@ A relative timestamp is calculated automatically by the Kismet server as relativ
 
 Relative timestamps are useful for fetching events from the past *N* seconds, without needing to know the current timestamp of the server.
 
-## Field Specifications
+## Field simplification
 
-Most Kismet endpoints which return records will also accept a field specification as part of the command dictionary.  Field specifications allow the simplification of the data being returned, analogous to `select a, b, c` instead of `select *` in SQL.
+Most Kismet endpoints which return records will also accept a field simplification as part of the command dictionary.  Field simplifications allow the reduction of the data being returned, analogous to `select a, b, c` instead of `select *` in SQL.
 
 Simplifying fields, especially when performing very large queries, reduces the CPU and memory requiremets of Kismet *and* the client by reducing the amount of data being serialized, transmitted, and deserialized.  Users of the REST API are *strongly* encouraged to make use of field simplification whenever plausible.
 
-Field specification objects take the format of a vector/array containing multiple field definitions:
+Field simplification objects take the format of a vector/array containing multiple field definitions:
 
 ```python
 [
