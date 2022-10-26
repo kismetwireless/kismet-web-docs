@@ -89,6 +89,37 @@
     </div>
     {{ end }}
 
+    {{ with .uriparameters }}
+    <div style="display: flex; padding-top: 10px;">
+        <div style="flex: 1; margin-top: 5px; font-size: 60%; color: grey;">URI<br/>PARAMETERS</div>
+        <div style="flex: 10; padding-left: 10px;">
+
+        {{ range . }}
+        <div>
+            <span style="font-weight: 500;"><code>{{ .name }}</code></span> 
+
+            {{ with .type }}
+            <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">{{ . }}</span>
+            {{ end }}
+
+            {{ with default true .required }} 
+                {{ if eq . true }} 
+                <span style="color: red; font-size: 60%;">REQUIRED</span> 
+                {{ else }} 
+                <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
+                {{ end }} 
+            {{ end }}
+
+            <div style="padding-left: 10px;">
+                {{ .description | markdownify }}
+            </div>
+        </div>
+        {{ end }}
+
+        </div>
+    </div>
+    {{ end }}
+
     {{ with .jsonparameters }}
     <div style="display: flex; padding-top: 10px;">
         <div style="flex: 1; margin-top: 5px; font-size: 60%; color: grey;">JSON<br/>PARAMETERS</div>
@@ -146,6 +177,15 @@
     </div>
     {{ end }}
 
+    {{ with .apinotes }}
+    <div style="display: flex; padding-top: 10px;">
+        <div style="flex: 1; margin-top: 5px; font-size: 60%; color: grey;">API</div>
+        <div style="flex: 10; padding-left: 10px;">
+            {{ . | markdownify }}
+        </div>
+    </div>
+    {{ end }}
+
     {{ with .return }}
     <div style="display: flex; padding-top: 10px;">
         <div style="flex: 1; margin-top: 5px; font-size: 60%; color: grey;">RETURN</div>
@@ -190,6 +230,15 @@
                 </div>
             {{ end }}
             {{ end }}
+        </div>
+    </div>
+    {{ end }}
+
+    {{ with .example }}
+    <div style="display: flex; padding-top: 10px;">
+        <div style="flex: 1; margin-top: 5px; font-size: 60%; color: grey;">EXAMPLE</div>
+        <div style="flex: 10; padding-left: 10px;">
+            {{ . | markdownify }}
         </div>
     </div>
     {{ end }}
