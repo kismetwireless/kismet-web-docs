@@ -82,6 +82,7 @@
   uri: "/dynamic"
   types: ["js"]
   roles: ["readonly"]
+  methods: ["GET"]
   docs: |
     Kismet creates a dynamically generated javascript file for the UI to 
     load the core system and JS plugin modules into the global JS namespace.
