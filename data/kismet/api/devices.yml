@@ -1,10 +1,460 @@
 -
+  name: "Recently active devices"
+  uri: "/devices/last-time/{TIMESTAMP}/devices"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  uriparameters:
+    -
+      auto: "timestamp"
+  jsonparameters:
+    -
+      auto: "fields"
+    -
+      auto: "regex"
+  docs: |
+    Returns devices which have been active (traffic observed from the device address) 
+    since the supplied timestamp.  
+
+    Timestamps can be absolute or relative. 
+
+    This endpoint is most typically used to repeatedly monitor recent devices, but 
+    can be replaced with the more efficient push-style device monitoring websocket below 
+    for many use cases.
+
+-
+  name: "Device by key"
+  uri: "/devices/by-key/{DEVICEKEY}/device.json"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  uriparameters:
+    -
+      name: "DEVICEKEY"
+      type: "string"
+      required: true 
+      description: | 
+        Kismet unique device key for matching 
+  jsonparameters: 
+    - 
+      auto: "fields"
+  docs: |
+    Fetch a complete device record (with optional simplification), indexed by the 
+    device key. 
+
+    Typically a UI would use this endpoint to fetch a full device for displaying device 
+    details.
+  result: |
+    JSON device object, or error.
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [404, "No such device key"]
+      - [-1, "Request error, such as malformed device key"]
+
+- 
+  name: "Devices by MAC address"
+  uri: "/devices/by-mac/{MACADDRESS}/devices.json"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  uriparameters:
+    - 
+      name: "MACADDRESS"
+      type: "string"
+      required: true 
+      description: | 
+        MAC address for device matching 
+  jsonparameters:
+    - 
+      auto: "fields"
+  docs: |
+    Fetch devices which match the supplied MAC address. 
+
+    It is possibkle (though usually not likely) that there may be MAC address collisions 
+    between different PHY types.  This becomes more likely when using either non-Wi-Fi 
+    datasources which synthesize completely artificial MAC addresses for indexing 
+    when no actual MAC address is available (such as RTL-433, ADSB, and other SDR 
+    based datasources), or when capturing two wireless devices from the same 
+    physical component, like a combo Wi-Fi/Bluetooth. 
+
+    This API will always return a *list of devices*, even when only one device 
+    matches the supplied MAC address. 
+  result: |
+    JSON list of device objects, or error. 
+  responses: 
+    success: 
+      - [200, "Success"]
+    failure: 
+      - [404, "No devices for supplied MAC address"]
+      - [-1, "Request error, such as a malformed MAC address"]
+
+- 
+  name: "Multiple devices by MAC addresses"
+  uri: "/devices/multimac/devices"
+  types: ["anyjson"]
+  methods: ["POST"]
+  roles: ["readonly"]
+  jsonparameters:
+    - 
+      auto: "fields"
+    -
+      name: "devices"
+      type: "list of strings"
+      required: true 
+      description: |
+        A list of [MAC addresses](/docs/api/keys_and_macs/#mac-address-masking) to search.
+  docs: | 
+    Fetch devices matching any of multiple MAC address (or [partial MAC address](/docs/api/keys_and_macs/#mac-address-masking)).
+
+    Typically this endpoint would be used to monitor the presence of target devices. 
+
+    This API always returns a list of devices, even if only one device is matched. 
+  results: | 
+    JSON list of device objects, or error. 
+  responses: 
+    success: 
+      - [200, "Success"]
+    failure: 
+      - [-1, "Request error, such as a malformed MAC address"]
+
+- 
+  name: "Multiple devices by key (as list)"
+  uri: "/devices/multikey/devices"
+  types: ["anyjson"]
+  methods: ["POST"]
+  roles: ["readonly"]
+  jsonparameters:
+    - 
+      auto: "fields"
+    -
+      name: "devices"
+      type: "list of strings"
+      required: true 
+      description: |
+        A list of device keys to search 
+  docs: | 
+    Fetch devices matching any of multiple device keys.
+
+    Typically this endpoint would be used to monitor the presence of target devices. 
+
+    This API always returns a list of devices, even if only one device is matched. 
+  results: | 
+    JSON list of device objects, or error. 
+  responses: 
+    success: 
+      - [200, "Success"]
+    failure: 
+      - [-1, "Request error, such as a malformed device key"]
+
+- 
+  name: "Multiple devices by key (as dictionary)"
+  uri: "/devices/multikey/as-object/devices"
+  types: ["anyjson"]
+  methods: ["POST"]
+  roles: ["readonly"]
+  jsonparameters:
+    - 
+      auto: "fields"
+    -
+      name: "devices"
+      type: "list of strings"
+      required: true 
+      description: |
+        A list of device keys to search 
+  docs: | 
+    Fetch devices matching any of multiple device keys.
+
+    Typically this endpoint would be used to monitor the presence of target devices. 
+
+    This API returns a JSON dictionary of devices, indexed by device key.
+  results: | 
+    JSON dictionary of device objects, or error. 
+  responses: 
+    success: 
+      - [200, "Success"]
+    failure: 
+      - [-1, "Request error, such as a malformed device key"]
+
+-
+  name: "Devices by capture source"
+  uri: "/devices/views/seenby-uuid/{UUID}/devices"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  uriparameters:
+    -
+      name: "UUID"
+      type: "string"
+      required: true
+      description: |
+        Data source UUID
+  docs: |
+    A [device view](/docs/api/device_views/) endpoint which automatically sorts devices by datasources.
+
+    For complete documentation, check the [device view api](/docs/api/device_views/) 
+  notes: | 
+    This endpoint uses the [device view](/docs/api/device_views/) API.
+
+-
+  name: "Devices by capture source and timestamp"
+  uri: "/devices/views/seenby-uuid/{UUID}/last-time/{TIMESTAMP}/devices"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  uriparameters:
+    -
+      name: "UUID"
+      type: "string"
+      required: true
+      description: |
+        Data source UUID
+    -
+      auto: "timestamp"
+  docs: |
+    A [device view](/docs/api/device_views/) endpoint which automatically sorts devices by 
+    datasources.
+
+    Devices which have been active since the specified time will be returned.
+
+    For complete documentation, check the [device view api](/docs/api/device_views/) 
+  notes: | 
+    This endpoint uses the [device view](/docs/api/device_views/) API.
+
+-
+  name: "Devices by capture phy"
+  uri: "/devices/views/phy/{PHYNAME}/devices"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  uriparameters:
+    -
+      name: "PHYNAME"
+      type: "string"
+      required: true
+      description: |
+        PHY handler name.  Information about PHY handlers can be found with the 
+        [PHY handler endpoints](/docs/api/phy)
+  docs: |
+    A [device view](/docs/api/device_views/) endpoint which automatically sorts devices by phy 
+    layer type.
+
+    For complete documentation, check the [device view api](/docs/api/device_views/) 
+  notes: | 
+    This endpoint uses the [device view](/docs/api/device_views/) API.
+
+-
+  name: "Devices by capture phy"
+  uri: "/devices/views/phy/{PHYNAME}/last-time/{TIMESTAMP}/devices"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  uriparameters:
+    -
+      name: "PHYNAME"
+      type: "string"
+      required: true
+      description: |
+        PHY handler name.  Information about PHY handlers can be found with the 
+        [PHY handler endpoints](/docs/api/phy)
+    -
+      auto: "timestamp"
+  docs: |
+    A [device view](/docs/api/device_views/) endpoint which automatically sorts devices by phy 
+    layer type.
+
+    Devices which have been active since the specified time will be returned.
+
+    For complete documentation, check the [device view api](/docs/api/device_views/) 
+  notes: | 
+    This endpoint uses the [device view](/docs/api/device_views/) API.
+
+- 
+  name: "Editing device tags"
+  uri: "/devices/by-key/{DEVICEKEY}/set_tag"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin"]
+  uriparameters:
+    -
+      name: "DEVICEKEY"
+      type: "string"
+      required: true 
+      description: |
+        Key of target device 
+  jsonparameters: 
+    - 
+      name: "tagname"
+      type: "string" 
+      required: true 
+      description: |
+        Device tag to set 
+    - 
+      name: "tagvalue"
+      type: "string" 
+      required: true 
+      description: |
+        Tag value to set 
+  docs: |
+    Kismet devices contain a collection of arbitrary tag fields which are held in the 
+    `kismet.device.base.tags` tree. 
+
+    These tags can be used to store persistent notes or other data, either user-supplied or 
+    auto-generated. 
+  return: |
+    Empty document, state communicated via status code.
+  responses: 
+    success: 
+      - [200, "Success"]
+    failure: 
+      - [-1, "Request error, such as a malformed device key"]
+
+- 
+  name: "Device presence alerts (view)"
+  uri: "/devices/alerts/mac/{TYPE}/macs"
+  types: ["anyjson"]
+  methods: ["GET"]
+  roles: ["readonly"]
+  added: "2020-11"
+  uriparameters:
+    - 
+      name: "TYPE"
+      type: "string" 
+      required: true 
+      description: |
+        Alert type to view, must be one of `found` `lost` or `both` 
+  docs: | 
+    Kismet can raise alerts when a device (by MAC address) is seen, or has been seen and is no 
+    longer present.  These alerts are configured by the `kismet_alerts.conf` options `devicefound`
+    and `devicelost`. 
+
+    The list of devices being monitored can be viewed and altered realtime using these APIs. 
+  result: | 
+    Returns a JSON list of MAC addresses being monitored. 
+  responses: 
+    success: 
+      - [200, "Success"]
+    failure: 
+      - [-1, "Request error, such as an unknown alert type"]
+
+- 
+  name: "Device presence alerts (changing)"
+  uri: "/devices/alerts/mac/{TYPE}/{ACTION}"
+  types: ["cmd"]
+  methods: ["POST"]
+  added: "2020-11"
+  roles: ["admin"]
+  uriparameters:
+    - 
+      name: "TYPE"
+      type: "string" 
+      required: true 
+      description: |
+        Alert type to view, must be one of `found` `lost` or `both` 
+    - 
+      name: "ACTION"
+      type: "string" 
+      required: true 
+      description: |
+        Action to perform, must be one of `add` or `remove`
+  jsonparameters: 
+    -
+      name: "mac"
+      type: "string"
+      required: false 
+      description: |
+        A single MAC to add or remove from the monitored list. 
+    - 
+      name: "macs" 
+      type: "string" 
+      required: false 
+      description: |
+        A list of MACs to add or remove from the monitored list. 
+  docs: | 
+    Kismet can raise alerts when a device (by MAC address) is seen, or has been seen and is no 
+    longer present.  These alerts are configured by the `kisemt_alerts.conf` options `devicefound`
+    and `devicelost`. 
+
+    The list of devices being monitored can be viewed and altered realtime using these APIs. 
+  result: | 
+    Returns an empty document, with success of command communicated via HTTP status
+  responses: 
+    success: 
+      - [200, "Success"]
+    failure: 
+      - [-1, "Request error, such as an unknown alert type"]
+
+- 
+  name: "Realtime device monitoring" 
+  url: "/devices/monitor"
+  types: ["ws"]
+  methods: ["WEBSOCKET UPGRADE"]
+  roles: ["readonly"]
+  uriparameters:
+    -
+      name: "user" 
+      type: "string"
+      required: false
+      description: | 
+        User to log in as; websockets do not support standard basic-auth, 
+        cookies, or other header-based login methods.
+
+        You must provide either `user` and `password` parameters, or an 
+        API token or login session token via the `KISMET` paraeter.
+    -
+      name: "password" 
+      type: "string" 
+      required: false
+      description: |
+        Password associated with the login user. 
+
+        You must provide either `user` and `password` parameters, or an 
+        API token or login session token via the `KISMET` parameter.
+    -
+      name: "KISMET"
+      type: "string"
+      required: false
+      description: |
+        Kismet auth token or API key.
+
+        You must provide either `user` and `password` parameters, or an 
+        API token or login session token via the `KISMET` parameter.
+  docs: | 
+    Devices can be monitored in realtime using the device monitor websocket API, which will push device 
+    changes to listeners as they occur. 
+
+    By subscribing to devices, or groups of devices, a client can receive a push event of the device 
+    record.  
+
+    The device data pushed can also be simplified by the standard [field simplification](/docs/api/command_param/#field-simplification). 
+  apinotes: |
+    The device monitoring subscription API accepts JSON objects with a subscription or removal request 
+    for a device or group of devices specified by [key, MAC, or group MAC](/docs/api/keys_and_macs),
+    and optional [field simplification](/docs/api/command_param/#field-simplification). 
+
+    #### Subscription API 
+    {{< kismet_api_param name="monitor" type="string" required="true">}}
+      Device identifier specified by key, MAC, or group of MACs with a masking value, as defined in [Keys and MACs](/docs/api/keys_and_macs)
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="request" type="number" required="true">}}
+      Unique request ID, supplied by the client.  This ID will be used if the client wishes to unsubscribe from events in the future via the cancel API.
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="rate" type="number" required="true">}}
+      Rate limit, in seconds, to push updates.  More frequent device updates are discarded.
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param auto="fields" >}}{{< /kismet_api_param >}}
+
+-
   name: "Legacy device summary"
   uri: "/devices/summary/devices"
   types: ["json"]
   deprecated: |
     While still available for legacy code, this API has been deprecated 
-    in favor of the [device view API](/docs/api/device-view/) `all` view.
+    in favor of the [device view API](/docs/api/device_views/) `all` view.
   methods: ["GET", "POST"]
   roles: ["readonly"]
   docs: |
@@ -110,181 +560,3 @@
     - 
       auto: "regex"
 
--
-  name: "Recently active devices"
-  uri: "/devices/last-time/{TIMESTAMP}/devices"
-  types: ["anyjson"]
-  methods: ["GET", "POST"]
-  roles: ["readonly"]
-  uriparameters:
-    -
-      auto: "timestamp"
-  jsonparameters:
-    -
-      auto: "fields"
-    -
-      auto: "regex"
-  docs: |
-    Returns devices which have been active (traffic observed from the device address) 
-    since the supplied timestamp.  
-
-    Timestamps can be absolute or relative. 
-
-    This endpoint is most typically used to repeatedly monitor recent devices, but 
-    can be replaced with the more efficient push-style [eventbus websocket](/docs/api/eventbus/) 
-    for many use cases.
-
--
-  name: "Device by key"
-  uri: "/devices/by-key/{DEVICEKEY}/device.json"
-  types: ["anyjson"]
-  methods: ["GET", "POST"]
-  roles: ["readonly"]
-  uriparameters:
-    -
-      name: "DEVICEKEY"
-      type: "string"
-      required: true 
-      description: | 
-        Kismet unique device key for matching 
-  jsonparameters: 
-    - 
-      auto: "fields"
-  docs: |
-    Fetch a complete device record (with optional simplification), indexed by the 
-    device key. 
-
-    Typically a UI would use this endpoint to fetch a full device for displaying device 
-    details.
-  result: |
-    JSON device object, or error.
-  responses:
-    success:
-      - [200, "Success"]
-    failure:
-      - [404, "No such device key"]
-      - [-1, "Request error, such as malformed device key"]
-
-- 
-  name: "Devices by MAC address"
-  uri: "/devices/by-mac/{MACADDRESS}/devices.json"
-  types: ["anyjson"]
-  methods: ["GET", "POST"]
-  roles: ["readonly"]
-  uriparameters:
-    - 
-      name: "MACADDRESS"
-      type: "string"
-      required: true 
-      description: | 
-        MAC address for device matching 
-  jsonparameters:
-    - 
-      auto: "fields"
-  docs: |
-    Fetch devices which match the supplied MAC address. 
-
-    It is possibkle (though usually not likely) that there may be MAC address collisions 
-    between different PHY types.  This becomes more likely when using either non-Wi-Fi 
-    datasources which synthesize completely artificial MAC addresses for indexing 
-    when no actual MAC address is available (such as RTL-433, ADSB, and other SDR 
-    based datasources), or when capturing two wireless devices from the same 
-    physical component, like a combo Wi-Fi/Bluetooth. 
-
-    This API will always return a *list of devices*, even when only one device 
-    matches the supplied MAC address. 
-  result: |
-    JSON list of device objects, or error. 
-  responses: 
-    success: 
-      - [200, "Success"]
-    failure: 
-      - [404, "No devices for supplied MAC address"]
-      - [-1, "Request error, such as a malformed MAC address"]
-
-- 
-  name: "Multiple devices by MAC addresses"
-  uri: "/devices/multimac/devices"
-  types: ["anyjson"]
-  methods: ["POST"]
-  roles: ["readonly"]
-  jsonparameters:
-    - 
-      auto: "fields"
-    -
-      name: "devices"
-      type: "list of strings"
-      required: true 
-      description: |
-        A list of MAC addresses to search 
-  docs: | 
-    Fetch devices matching any of multiple MAC address (or [partial MAC address]()).
-
-    Typically this endpoint would be used to monitor the presence of target devices. 
-
-    This API always returns a list of devices, even if only one device is matched. 
-  results: | 
-    JSON list of device objects, or error. 
-  responses: 
-    success: 
-      - [200, "Success"]
-    failure: 
-      - [-1, "Request error, such as a malformed MAC address"]
-
-- 
-  name: "Multiple devices by key (as list)"
-  uri: "/devices/multikey/devices"
-  types: ["anyjson"]
-  methods: ["POST"]
-  roles: ["readonly"]
-  jsonparameters:
-    - 
-      auto: "fields"
-    -
-      name: "devices"
-      type: "list of strings"
-      required: true 
-      description: |
-        A list of device keys to search 
-  docs: | 
-    Fetch devices matching any of multiple device keys.
-
-    Typically this endpoint would be used to monitor the presence of target devices. 
-
-    This API always returns a list of devices, even if only one device is matched. 
-  results: | 
-    JSON list of device objects, or error. 
-  responses: 
-    success: 
-      - [200, "Success"]
-    failure: 
-      - [-1, "Request error, such as a malformed device key"]
-
-- 
-  name: "Multiple devices by key (as dictionary)"
-  uri: "/devices/multikey/as-object/devices"
-  types: ["anyjson"]
-  methods: ["POST"]
-  roles: ["readonly"]
-  jsonparameters:
-    - 
-      auto: "fields"
-    -
-      name: "devices"
-      type: "list of strings"
-      required: true 
-      description: |
-        A list of device keys to search 
-  docs: | 
-    Fetch devices matching any of multiple device keys.
-
-    Typically this endpoint would be used to monitor the presence of target devices. 
-
-    This API returns a JSON dictionary of devices, indexed by device key.
-  results: | 
-    JSON dictionary of device objects, or error. 
-  responses: 
-    success: 
-      - [200, "Success"]
-    failure: 
-      - [-1, "Request error, such as a malformed device key"]

@@ -74,24 +74,30 @@
     restriction, however.
     
     An eventbus JSON command contains:
-    
-    | Key         | Content                                                                                                   |
-    | ---         | -----------                                                                                               |
-    | SUBSCRIBE   | Topic to subscribe to, case sensitive                                                                     |
-    | UNSUBSCRIBE | Topic to unsubscribe from, case sensitive                                                                 |
-    | fields      | If subscribing, a standard [field simplification](/docs/api/command_param/#field-simplification) |
+
+    {{< kismet_api_param name="SUBSCRIBE" type="string" required=false >}}
+      Topic to subscribe to (from the list below), case sensisitive. One of either `SUBSCRIBE` or `UNSUBSCRIBE` is required.
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="UNSUBSCRIBE" type="string" required=false >}}
+      Topic to unsubscribe from, case sensisitive. One of either `SUBSCRIBE` or `UNSUBSCRIBE` is required.
+
+      If the topic has not been subscribed to, this message will be ignored.
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param auto="fields" >}}{{< /kismet_api_param >}}
     
     Either a `SUBSCRIBE` or `UNSUBSCRIBE` must be provided with each command.
     
     Once subscribed to a topic, an eventbus receiver will be sent a websocket text message containing the JSON record for each event which matches that subscription, optionally simplified.
     
-    ## Eventbus topics
+    #### Eventbus topics
     
     Eventbus topics may be dynamically expanded by plugins, external helper tools, and more.  Some topics are used predominately as internal messaging mechanisms between components of Kismet, while others are generated at regular intervals specifically for consumption by external UI and monitoring systems.
     
     Event topics include:
     
-    ### ALERT
+    ##### ALERT
     
     * Content
     
@@ -101,7 +107,7 @@
     
         Published whenever an alert is raised in the Kismet WIDS/Alert system
     
-    ### BATTERY
+    ##### BATTERY
     
     * Content
     
@@ -111,7 +117,7 @@
     
         Published once per second by the Kismet server
     
-    ### DATASOURCE_PAUSED
+    ##### DATASOURCE_PAUSED
     
     * Content
     
@@ -121,7 +127,7 @@
     
         Published when a running datasource is paused
     
-    ### DATASOURCE_RESUMED
+    ##### DATASOURCE_RESUMED
     
     * Content
     
@@ -131,7 +137,7 @@
     
         Published when a paused datasource is resumed
     
-    ### DATASOURCE_ERROR
+    ##### DATASOURCE_ERROR
     
     * Content
     
@@ -141,7 +147,7 @@
     
         Published when a datasource experiences an error
     
-    ### DATASOURCE_OPENED
+    ##### DATASOURCE_OPENED
     
     * Content
     
@@ -151,7 +157,7 @@
     
         Published when a datasource is opened (or re-opened)
     
-    ### DATASOURCE_CLOSED
+    ##### DATASOURCE_CLOSED
     
     * Content
     
@@ -161,7 +167,7 @@
     
         Published when a datasource is closed
     
-    ### DOT11_ADVERTISED_SSID
+    ##### DOT11_ADVERTISED_SSID
     
     * Content
     
@@ -171,7 +177,7 @@
     
         Published when a new advertised (via beacons) SSID is discovered
     
-    ### DOT11_RESPONSE_SSID
+    ##### DOT11_RESPONSE_SSID
     
     * Content
     
@@ -181,7 +187,7 @@
     
         Published when an access point responds to a SSID for the first time (vie probe responses), per BSSID.
     
-    ### DOT11_PROBED_SSID
+    ##### DOT11_PROBED_SSID
     
     * Content
     
@@ -191,7 +197,7 @@
     
         Published when a device probes for a SSID the first time, per device MAC
     
-    ### DOT11_WPA_HANDSHAKE
+    ##### DOT11_WPA_HANDSHAKE
     
     * Content
     
@@ -201,7 +207,7 @@
     
         Published when a complete (or estimated to be complete) WPA handshake is captured
     
-    ### GPS_LOCATION
+    ##### GPS_LOCATION
     
     * Content
     
@@ -211,7 +217,7 @@
     
         Published once per second by the Kismet server
     
-    ### KISMETDB_LOG_OPEN
+    ##### KISMETDB_LOG_OPEN
     
     * Content
     
@@ -221,7 +227,7 @@
     
         Published when the kismetdb log is successfully opened
     
-    ### MESSAGE
+    ##### MESSAGE
     
     * Content
     
@@ -231,7 +237,7 @@
     
         Published when a new message is generated in Kismet
     
-    ### NEW_DATASOURCE
+    ##### NEW_DATASOURCE
     
     * Content
     
@@ -241,7 +247,7 @@
     
         Published when a new datasource is defined
     
-    ### PACKETCHAIN_STATS
+    ##### PACKETCHAIN_STATS
     
     * Content
     
@@ -251,7 +257,7 @@
     
         Published once per second by the Kismet server
     
-    ### TIMESTAMP
+    ##### TIMESTAMP
     
     * Content
     
