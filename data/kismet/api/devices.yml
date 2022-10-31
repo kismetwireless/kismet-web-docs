@@ -44,7 +44,7 @@
 
     Typically a UI would use this endpoint to fetch a full device for displaying device 
     details.
-  result: |
+  return: |
     JSON device object, or error.
   responses:
     success:
@@ -81,7 +81,7 @@
 
     This API will always return a *list of devices*, even when only one device 
     matches the supplied MAC address. 
-  result: |
+  return: |
     JSON list of device objects, or error. 
   responses: 
     success: 
@@ -111,7 +111,7 @@
     Typically this endpoint would be used to monitor the presence of target devices. 
 
     This API always returns a list of devices, even if only one device is matched. 
-  results: | 
+  return: | 
     JSON list of device objects, or error. 
   responses: 
     success: 
@@ -140,7 +140,7 @@
     Typically this endpoint would be used to monitor the presence of target devices. 
 
     This API always returns a list of devices, even if only one device is matched. 
-  results: | 
+  return: | 
     JSON list of device objects, or error. 
   responses: 
     success: 
@@ -169,7 +169,7 @@
     Typically this endpoint would be used to monitor the presence of target devices. 
 
     This API returns a JSON dictionary of devices, indexed by device key.
-  results: | 
+  return: | 
     JSON dictionary of device objects, or error. 
   responses: 
     success: 
@@ -330,7 +330,7 @@
     and `devicelost`. 
 
     The list of devices being monitored can be viewed and altered realtime using these APIs. 
-  result: | 
+  return: | 
     Returns a JSON list of MAC addresses being monitored. 
   responses: 
     success: 
@@ -377,7 +377,7 @@
     and `devicelost`. 
 
     The list of devices being monitored can be viewed and altered realtime using these APIs. 
-  result: | 
+  return: | 
     Returns an empty document, with success of command communicated via HTTP status
   responses: 
     success: 
@@ -387,7 +387,7 @@
 
 - 
   name: "Realtime device monitoring" 
-  url: "/devices/monitor"
+  uri: "/devices/monitor"
   types: ["ws"]
   methods: ["WEBSOCKET UPGRADE"]
   roles: ["readonly"]
@@ -434,8 +434,15 @@
     and optional [field simplification](/docs/api/command_param/#field-simplification). 
 
     #### Subscription API 
+    
+    Multiple subscriptions can be made on a single websocket connection, so long as each subscription 
+    request has a unique ID.  Use of duplicate IDs will automatically unsubscribe the previous 
+    subscription. 
+
     {{< kismet_api_param name="monitor" type="string" required="true">}}
       Device identifier specified by key, MAC, or group of MACs with a masking value, as defined in [Keys and MACs](/docs/api/keys_and_macs)
+
+      The wildcard `*` can be used to monitor *all* devices.
     {{< /kismet_api_param >}}
 
     {{< kismet_api_param name="request" type="number" required="true">}}
@@ -447,6 +454,62 @@
     {{< /kismet_api_param >}}
 
     {{< kismet_api_param auto="fields" >}}{{< /kismet_api_param >}}
+
+    #### Removal API 
+    
+    To cease monitoring a device (or group of devices) without disconnecting the websocket, use 
+    the unsubscribe API.
+
+    {{< kismet_api_param name="cancel" type="number" required="true">}}
+      Stop monitoring reports from the provided id. 
+    {{< /kismet_api_param >}}
+
+  example: |
+    Constructing and connecting a websocket uses the standard Javascript websocket 
+    API, we'll request all devices with the OUI of `AA:BB:CC`, updated at once per second, 
+    fetching the key, last-active time, and last signal level.
+
+    ```javascript 
+    var ws = new Websocket('ws://host:2501/devices/monitor.ws?'
+      'user=username&password=password');
+    ws.onmessage = function(msg) {
+        var json = JSON.parse(msg.data);
+        console.log(json);
+    }
+    ws.onopen = function(event) {
+        var req = {
+            "monitor": "AA:BB:CC:00:00:00/FF:FF:FF:00:00:00",
+            "request": 31337,
+            "rate": 1,
+            "fields": [ 
+              "kismet.device.base.key",
+              "kismet.device.base.last_time",
+              "kismet.device.base.signal/kismet.common.signal.last_signal"
+            ],
+        }
+        ws.send(JSON.stringify(req));
+    }
+    ```
+
+    This would return pushed records like: 
+
+    ```json 
+    {
+      "kismet.common.signal.last_signal": -77,
+      "kismet.device.base.last_time": 1605736428,
+      "kismet.device.base.key": "4202770D00000000_AABBCCDDEEFF"
+    }
+    ```
+    ```json 
+    {
+      "kismet.common.signal.last_signal": -81,
+      "kismet.device.base.last_time": 1605736427,
+      "kismet.device.base.key": "4202770D00000000_001122334455"
+    }
+    ```
+
+    Which would be highly appropriate for monitoring signal levels of a group of devices, for 
+    instance.
 
 -
   name: "Legacy device summary"
@@ -478,7 +541,7 @@
       auto: "regex"
     - 
       name: "colmap" 
-      type: "string"
+      type: "list"
       required: false
       description: |
         Column map information generated by the Kismet UI for mapping 
@@ -528,7 +591,7 @@
       type: "string"
       required: false 
       description: |
-        When in datatabels mode, the sort direction sent by jquery-datatables.
+        When in datatables mode, the sort direction sent by jquery-datatables.
   return: | 
     JSON object of system status snapshot.
   responses:
