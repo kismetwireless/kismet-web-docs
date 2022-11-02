@@ -1,0 +1,9 @@
+- 
+  name: "Channel summary"
+  uri: "/channels/channels"
+  types: ["anyjson"]
+  methods: ["GET"]
+  roles: ["readonly"]
+  docs: |
+    Returns a summary of channels with observed traffic and devices, device counts per channel, 
+    and total channel coverage information.

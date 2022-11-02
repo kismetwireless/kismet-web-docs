@@ -1,0 +1,269 @@
+- 
+  name: "Supported datasource types" 
+  uri: "/datasource/types"
+  methods: ["GET"]
+  types: ["anyjson"]
+  roles: ["readonly"]
+  docs: |
+    Datasource types are defined by the Kismet server code and plugins.  
+
+    Clients can use this API to determine if Kismet has been started with required plugins or to 
+    display all possible datasource types. 
+
+- 
+  name: "Datasource defaults"
+  uri: "/datasource/defaults"
+  types: ["json"]
+  methods: ["GET"]
+  roles: ["readonly"]
+  docs: |
+    Datasource defaults are defined in `kismet.conf`, and include options likw default hopping 
+    behavior, hopping speeds, and other generic settings for all datasources. 
+  return: |
+    JSON object of configured datasource defaults
+
+- 
+  name: "Datasource list"
+  uri: "/datasource/all_sources"
+  types: ["anyjson"]
+  methods: ["GET"]
+  roles: ["readonly"]
+  docs: |
+    Retrive a list of all datasources, current running state, driver and configuration information,
+    packet counts, and historical data. 
+
+- 
+  name: "Datasource details"
+  uri: "/datasource/by-uuid/{UUID}/source"
+  types: ["json"]
+  methods: ["GET"]
+  roles: ["readonly"]
+  uriparameters: 
+    -
+      name: "UUID"
+      type: "string"
+      required: true
+      description: Source UUID 
+  docs: |
+    Returns full information about a datasource, with statistics and current state. 
+
+- 
+  name: "Adding datasources"
+  uri: "/datasource/add_source"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin"]
+  jsonparameters:
+    - 
+      name: "definition"
+      type: "string"
+      required: true 
+      docs: "Source [definition](/docs/readme/datasources/datasources/)"
+  docs: |
+    Dynamically add a new datasource at runtime. 
+
+    New datasources use a complete [source definition](/docs/readme/datasources/datasources/) line, 
+    as if they were defined as a `source=` configuration option.
+  responses: 
+    success:
+      - [200, "Returned when the sources is *added*.  A source may be added which *cannot be opened*"]
+    failure: 
+      - [-1, "Returned if the source can not be added, such as when the definition is invalid."]
+  notes: |
+    This endpoint will block until the source has been added.
+
+    Typically this is instantaneous, but may take several seconds on some configurations.
+
+- 
+  name: "Setting channels"
+  uri: "/datasource/by-uuid/{UUID}/set_channel"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin"]
+  uriparameters:
+    -
+      name: "UUID"
+      type: "string"
+      required: true
+      description: Source UUID 
+  jsonparameters: 
+    - 
+      name: "channel"
+      type: "string"
+      required: false
+      description: "Set a single channel and disable channel hopping."
+    - 
+      name: "rate"
+      type: "number"
+      required: false 
+      description: |
+        Channel hopping speed, as channels per second.  To hop slower than one channel per second, 
+        use the formula `hoprate = 1 / (6 / N)` where N is the number of hops per minute.
+    - 
+      name: "channels"
+      type: "list of strings"
+      required: false 
+      description: "List of channels for hopping"
+    - 
+      name: "shuffle" 
+      type: "number" 
+      required: false 
+      description: "Enable channel list shuffling"
+  responses: 
+    success: 
+      - [200, "Returned when the channel set command succeeds.  When setting multiple channels, individual channels may not succeed."]
+    failure:
+      - [-1, "Returned if the channel set command is not successdul, such as an unknown UUID or malformed channel list."]
+  notes: | 
+    This endpoint will block until the source channel configuration is complete.  
+  example: |
+    To lock a Wi-Fi source to channel 6 with HT40 enabled: 
+
+    ```json 
+    {
+      "channel": "6HT40"
+    }
+    ```
+
+    To set a Wi-Fi source channel hop list, but leave the existing hopping rate:
+
+    ```json 
+    {
+      "channels": ["1", "6", "11", "6HT40"]
+    }
+    ```
+
+    To set a Wi-Fi source channel hop list and change the hop rate:
+
+    ```json 
+    {
+      "channels": ["1", "6", "11", "6HT40"],
+      "hoprate": 5
+    }
+    ```
+
+- 
+  name: "Control channel hopping"
+  uri: "/datasource/by-uuid/{UUID}/set_hop"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin"]
+  uriparameters: 
+    -
+      name: "UUID"
+      type: "string"
+      required: true
+      description: Source UUID 
+  docs: | 
+    Enable hopping on the specified source. 
+
+    Most useful to enable hopping again after locking to a single channel.
+
+- 
+  name: "Close a source"
+  uri: "/datasource/by-uuid/{UUID}/close_source"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin"]
+  uriparameters: 
+    -
+      name: "UUID"
+      type: "string"
+      required: true
+      description: Source UUID 
+  docs: | 
+    Close a source. 
+
+    A source will remain closed until re-opened, unless it is a remote capture source.  Remote capture 
+    sources are re-opened when the remote reconnects. 
+
+    A closed source is not deleted from the sources list, but will no longer generate packets or 
+    consume resources.
+
+- 
+  name: "Re-open a source"
+  uri: "/datasource/by-uuid/{UUID}/open_source"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin"]
+  uriparameters: 
+    -
+      name: "UUID"
+      type: "string"
+      required: true
+      description: Source UUID 
+  docs: | 
+    Re-open a closed source.  
+
+    Re-opening a source uses the existing source definition.
+
+- 
+  name: "Pausing a source"
+  uri: "/datasource/by-uuid/{UUID}/pause_source"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin"]
+  uriparameters: 
+    -
+      name: "UUID"
+      type: "string"
+      required: true
+      description: Source UUID 
+  docs: | 
+    Pause a source. 
+
+    Paused sources are not clsoed, but packets received from them will be discarded. 
+
+- 
+  name: "Resuming a source"
+  uri: "/datasource/by-uuid/{UUID}/resume_source"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin"]
+  uriparameters: 
+    -
+      name: "UUID"
+      type: "string"
+      required: true
+      description: Source UUID 
+  docs: | 
+    Resume a paused source.
+
+    Paused sources are not clsoed, but packets received from them will be discarded. 
+
+- 
+  name: "Interface list"
+  uri: "/datasource/list_interfaces"
+  types: ["anyjson"]
+  methods: ["GET"]
+  roles: ["admin"] 
+  docs: |
+    A *datasource* is a packet source which provides data.  An *interface* is a physical device that 
+    a datasource may capture from, for example `wlan0` for a Wi-Fi interface, or a USB address for a 
+    RTL-SDR device. 
+
+    This endpoint causes Kismet to index available interfaces by calling every datasource helper 
+    with the probe option. 
+
+    The Kismet UI uses this endpoint to provide the runtime list of potential capture devices in the 
+    Datasources panel. 
+
+    This endpoint can be stressful for the Kismet server, depending on the type of hardware Kismet 
+    is runnig on.  It's recommended that a UI call this less frequently - for instance once every 
+    10 or 20 seconds. 
+
+- 
+  name: "Remote capture websocket"
+  uri: "/datasource/remote/remotesource"
+  types: ["ws"]
+  methods: ["WEBSOCKET UPGRADE"]
+  roles: ["datasource"]
+  added: "2020-10"
+  docs: | 
+    Kismet remote capture tools can connect via a legacy TCP connection, or the more modern 
+    websocket implementation. 
+
+    Contained within the websocket is the standard Kismet remote capture protocol. 
+
+    This endpoint is designed for use with Kismet remote capture tools, and uses a binary 
+    message type.

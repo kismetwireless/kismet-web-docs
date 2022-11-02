@@ -1,0 +1,21 @@
+- 
+  name: "All messages"
+  uri: "/messagebus/all_messages"
+  methods: ["GET"]
+  roles: ["readonly"]
+  types: ["anyjson"]
+  docs: | 
+    Fetch the past 50 messages from the messagebus backlog.
+
+- 
+  name: "Recent messages"
+  uri: "/messagebus/last-time/{TIMESTAMP}/messages"
+  methods: ["GET"]
+  roles: ["readonly"]
+  types: ["anyjson"]
+  uriparameters:
+    - {auto: "timestamp"}
+  docs: |
+    Return all messages since `TIMESTAMP`.
+  return: |
+    JSON list of messages since `TIMESTAMP`.

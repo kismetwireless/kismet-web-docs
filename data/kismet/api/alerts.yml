@@ -1,0 +1,59 @@
+- 
+  name: "Alert configuration"
+  uri: "/alerts/definitions"
+  methods: ["GET"]
+  roles: ["readonly"]
+  types: ["anyjson"]
+  docs: | 
+    Ksimet exposes the full alert system configuration, including currently support alert types, 
+    descriptions of alert content, severity of alerts, and time and burst-rate delivery limiting. 
+  return: |
+    JSON list of all alert definition and configuration records.
+
+- 
+  name: "All alerts"
+  uri: "/alerts/all_alerts"
+  methods: ["GET"]
+  roles: ["readonly"]
+  types: ["anyjson"]
+  docs: |
+    Kismet retains the past *N* alerts, as defiend by `alertbacklog` in `kismet_memory.conf`. 
+
+    By default, Kismet retains 50 alert records.
+  return: |
+    JSON list of all currently stored alerts. 
+
+- 
+  name: "Recent alerts" 
+  uri: "/alerts/last-time/{TIMESTAMP}/alerts"
+  methods: ["GET"]
+  roles: ["readonly"]
+  types: ["anyjson"]
+  uriparameters: 
+    - {auto: "timestampms"}
+  docs: |
+    This endpoint returns alerts since the exact timestamp of seconds and milliseconds.
+
+    A more efficient and reliable method is to use the [eventbus websocket](/docs/api/eventbus).
+  return: |
+    JSON list of alerts since `TIMESTAMP.UTIMESTAMP`
+
+- 
+  name: "Recent alerts (wrapped)"
+  uri: "/alerts/wrapped/last-time/{TIMESTAMP}/alerts"
+  methods: ["GET"]
+  roles: ["readonly"]
+  types: ["anyjson"]
+  uriparameters: 
+    - {auto: "timestampms"}
+  docs: |
+    This endpoint functions identically to the recent alerts endpoint, but wraps the return in 
+    a JSON object including the timestamp when the server generated the report.  
+
+    This can be used for polling UI implementations to know the exact time pass in the next 
+    alert query. 
+
+    A more efficient and reliable method is to use the [eventbus websocket](/docs/api/eventbus).
+  return: |
+    JSON object containing a list of alerts since `TIMESTAMP.UTIMESTAMP` and the exact timestamp 
+    of the return generation.

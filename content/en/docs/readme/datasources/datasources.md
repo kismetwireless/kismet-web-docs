@@ -23,7 +23,7 @@ Most datasources can be detected automatically, however some must be manually ad
 
 Sources have any number of options:  per-source tweaks for how that specific source will be configured.
 
-### Source defintiions 
+### Source definitions 
 
 Sources are always defined as:
 

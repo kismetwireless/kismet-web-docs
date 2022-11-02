@@ -76,7 +76,7 @@
             {{ if isset . "auto" }}
                 {{ if eq .auto "timestamp" }}
                 <span style="font-weight: 500;"><code>TIMESTAMP</code></span> 
-                <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">field simplification</span>
+                <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">number</span>
                 <span style="color: red; font-style: italic; font-size: 60%;">REQUIRED</span>
 
                 <div style="padding-left: 10px;">
@@ -87,6 +87,15 @@
                     <p>You can read more about 
                     <a href="/docs/api/command_param/#timestamps" target="_new">timestamp handling</a> 
                     and how to use it <a href="/docs/api/command_param/#timestamps" target="_new">here</a>.
+                </div>
+                {{ else if eq .auto "timestampms" }}
+                <span style="font-weight: 500;"><code>TIMESTAMP</code></span> 
+                <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">number (double)</span>
+                <span style="color: red; font-style: italic; font-size: 60%;">REQUIRED</span>
+
+                <div style="padding-left: 10px;">
+                    A double-precision timestamp of the UNix epochal second *and* a microsecond 
+                    precision sub-second timestamp (such as 1234567.12345)
                 </div>
                 {{ end  }}
             {{ else }}
