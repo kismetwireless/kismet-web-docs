@@ -1,0 +1,210 @@
+- 
+  name: "Available GPS drivers"
+  uri: "/gps/drivers"
+  types: ["anyjson"]
+  roles: ["readonly"]
+  methods: ["GET"]
+  docs: | 
+    Fetch a list of supported GPS driver types 
+
+- 
+  name: "List configured GPS devices"
+  uri: "/gps/all_gps"
+  types: ["anyjson"]
+  roles: ["readonly"]
+  methods: ["GET"]
+  docs: |
+    Fetch a list of all configured GPS devices
+
+- 
+  name: "Add a GPS device"
+  uri: "/gps/add_gps"
+  types: ["cmd"]
+  roles: ["admin"]
+  methods: ["POST"]
+  jsonparameters: 
+    - 
+      name: "definition"
+      type: "string"
+      required: true
+      description: "GPS [configuration](/docs/readme/gps/gps_intro/#configuring-gps-in-kismet) line"
+  docs: |
+    Add a new GPS to Kismet 
+  responses: 
+    success: 
+      - [200, "GPS successfully removed"]
+    failure: 
+      - [-1, "GPS could not be added, for example due to an invalid definition line"]
+
+- 
+  name: "Remove a GPS device"
+  uri: "/gps/by-uuid/{UUID}/remove_gps"
+  types: ["cmd"]
+  roles: ["admin"]
+  methods: ["POST"]
+  uriparameters: 
+    - {name: "UUID", type: "string", description: "UUID of GPS device to be removed"}
+  docs: |
+    Disable and remove a GPS device from the system 
+  responses: 
+    success: 
+      - [200, "GPS successfully removed"]
+    failure: 
+      - [-1, "GPS could not be removed, likely due to an invalid UUID"]
+
+- 
+  name: "Current location"
+  uri: "/gps/location" 
+  types: ["anyjson"]
+  roles: ["readonly"]
+  methods: ["GET", "POST"]
+  jsonparameters:
+    - {auto: "fields"}
+  docs: | 
+    Fetch the current "best" location from all enabled GPS devices.  The "best" location is the most 
+    recent location with the highest precision. 
+
+    Most configurations will have a single GPS so the "best" will always be that device.
+
+    A more efficient approach is to use the [eventbus endpoint](/docs/api/eventbus/) subscribed 
+    to the GPS event.
+
+- 
+  name: "Current location (all GPS devices)"
+  uri: "/gps/all_locations"
+  types: ["anyjson"]
+  roles: ["readonly"]
+  methods: ["GET", "POST"]
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    Fetch the current location from all enabled GPS devices.  
+
+    A more efficient approach is to use the [eventbus endpoint](/docs/api/eventbus/) subscribed 
+    to the GPS event.
+
+- 
+  name: "Per-receiver GPS location"
+  uri: "/gps/by-uuid/{UUID}/location"
+  types: ["anyjson"]
+  roles: ["readonly"]
+  methods: ["GET", "POST"]
+  uriparameters:
+    - {name: "UUID", type: "string", description: "UUID of GPS device"}
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    Fetch the current location of a specific GPS, identified by UUID. 
+
+    A more efficient approach is to use the [eventbus endpoint](/docs/api/eventbus/) subscribed 
+    to the GPS event.
+
+- 
+  name: "Web GPS"
+  uri: "/gps/web/update"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin", "WEBGPS"]
+  jsonparameters:
+    - {name: "lat", type: "number", description: "Latitude in decimal degrees"}
+    - {name: "lon", type: "number", description: "Longitude in decimal degrees"}
+    - {name: "alt", type: "number", required: false, description: "Altitude in meters"}
+    - {name: "spd", type: "number", required: false, description: "Speed, in kilometers per hour"}
+  docs: | 
+    Kismet supports GPS data from a web event.  Typically this data would be provided by the 
+    browser via the location API, but could also be submitted to Kismet from other GPS devices.
+
+- 
+  name: "Web GPS (websocket)"
+  uri: "/gps/web/update"
+  types: ["ws"]
+  methods: ["WEBSOCKET UPGRADE"]
+  roles: ["admin", "WEBGPS"]
+  added: "2021-08"
+  uriparameters:
+    - {auto: "wsuser"}
+    - {auto: "wspassword"}
+    - {auto: "wsapikey"}
+  docs: |
+    Update the web GPS via a persistent websocket.  Updates can be pushed without having to 
+    create a new connection per update.
+  apinotes: |
+    The Web GPS websocket endpoint accepts continual JSON objects updating the GPS location. 
+
+    {{< kismet_api_param name="lat" type="number" required="true">}}
+      Latitude in decimal degrees
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="lon" type="number" required="true">}}
+      Longitude in decimal degrees
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="alt" type="number" required="false">}}
+      Altitude in meters
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="spd" type="number" required="false">}}
+      Speed in kilometers per hour
+    {{< /kismet_api_param >}}
+
+- 
+  name: "Meta GPS"
+  uri: "/gps/meta/{NAME}/update"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin", "WEBGPS"]
+  added: "2022-01-R3"
+  uriparameters:
+    - {name: "NAME", type: "string", description: "Meta GPS device name"}
+  jsonparameters:
+    - {name: "lat", type: "number", description: "Latitude in decimal degrees"}
+    - {name: "lon", type: "number", description: "Longitude in decimal degrees"}
+    - {name: "alt", type: "number", required: false, description: "Altitude in meters"}
+    - {name: "spd", type: "number", required: false, description: "Speed, in kilometers per hour"}
+  docs: | 
+    A meta-GPS device is very similar to a web GPS device, but has no defiend backend driver. 
+
+    A meta-GPS device is linked to a [remote capture instance](/docs/readme/remotecap/remotecap/#remote-capture-and-gps), and is defined by using the 
+    `metagps=...` source option.
+
+    This endpoint allows a GPS tool running alongside remote cap to update the GPS location for 
+    packets from the associated remote.
+
+- 
+  name: "Meta GPS (websocket)"
+  uri: "/gps/meta/{NAME}/update"
+  types: ["ws"]
+  methods: ["WEBSOCKET UPGRADE"]
+  roles: ["admin", "WEBGPS"]
+  added: "2022-01-R3"
+  uriparameters:
+    - {name: "NAME", type: "string", description: "Meta GPS device name"}
+    - {auto: "wsuser"}
+    - {auto: "wspassword"}
+    - {auto: "wsapikey"}
+  docs: |
+    A meta-GPS device is very similar to a web GPS device, but has no defiend backend driver. 
+
+    A meta-GPS device is linked to a [remote capture instance](/docs/readme/remotecap/remotecap/#remote-capture-and-gps), and is defined by using the 
+    `metagps=...` source option.
+
+    This endpoint allows a GPS tool running alongside remote cap to update the GPS location for 
+    packets from the associated remote.
+  apinotes: |
+    The meta-GPS websocket endpoint accepts continual JSON objects updating the GPS location. 
+
+    {{< kismet_api_param name="lat" type="number" required="true">}}
+      Latitude in decimal degrees
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="lon" type="number" required="true">}}
+      Longitude in decimal degrees
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="alt" type="number" required="false">}}
+      Altitude in meters
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="spd" type="number" required="false">}}
+      Speed in kilometers per hour
+    {{< /kismet_api_param >}}

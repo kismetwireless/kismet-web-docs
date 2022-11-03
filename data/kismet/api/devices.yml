@@ -392,34 +392,9 @@
   methods: ["WEBSOCKET UPGRADE"]
   roles: ["readonly"]
   uriparameters:
-    -
-      name: "user" 
-      type: "string"
-      required: false
-      description: | 
-        User to log in as; websockets do not support standard basic-auth, 
-        cookies, or other header-based login methods.
-
-        You must provide either `user` and `password` parameters, or an 
-        API token or login session token via the `KISMET` paraeter.
-    -
-      name: "password" 
-      type: "string" 
-      required: false
-      description: |
-        Password associated with the login user. 
-
-        You must provide either `user` and `password` parameters, or an 
-        API token or login session token via the `KISMET` parameter.
-    -
-      name: "KISMET"
-      type: "string"
-      required: false
-      description: |
-        Kismet auth token or API key.
-
-        You must provide either `user` and `password` parameters, or an 
-        API token or login session token via the `KISMET` parameter.
+    - {auto: "wsuser"}
+    - {auto: "wspassword"}
+    - {auto: "wsapikey"}
   docs: | 
     Devices can be monitored in realtime using the device monitor websocket API, which will push device 
     changes to listeners as they occur. 

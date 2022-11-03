@@ -97,6 +97,39 @@
                     A double-precision timestamp of the UNix epochal second *and* a microsecond 
                     precision sub-second timestamp (such as 1234567.12345)
                 </div>
+                {{ else if eq .auto "wsuser" }}
+                <span style="font-weight: 500;"><code>user</code></span> 
+                <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">string</span>
+                <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
+                <div style="padding-left: 10px;">
+                    <p>Login user ID; most websocket client APIs do not support basic-auth,
+                    cookies, or other header-based login methods.</p>
+
+                    <p>You must provide either <code>user</code> and <code>password</code> 
+                    GET variables, or an API token or logins ession token via the 
+                    <code>KISMET</code> GET variable.</p>
+                </div>
+                {{ else if eq .auto "wspassword" }}
+                <span style="font-weight: 500;"><code>password</code></span> 
+                <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">string</span>
+                <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
+                <div style="padding-left: 10px;">
+                    <p>Password associated with the user.</p>
+                    <p>You must provide either <code>user</code> and <code>password</code> 
+                    GET variables, or an API token or logins ession token via the 
+                    <code>KISMET</code> GET variable.</p>
+                </div>
+                {{ else if eq .auto "wsapikey" }}
+                <span style="font-weight: 500;"><code>KISMET</code></span> 
+                <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">string</span>
+                <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
+                <div style="padding-left: 10px;">
+                    <p>An API key or session token key.</p>
+
+                    <p>You must provide either <code>user</code> and <code>password</code> 
+                    GET variables, or an API token or logins ession token via the 
+                    <code>KISMET</code> GET variable.</p>
+                </div>
                 {{ end  }}
             {{ else }}
                 <span style="font-weight: 500;"><code>{{ .name }}</code></span> 
@@ -245,7 +278,6 @@
         <div style="flex: 1; margin-top: 5px; font-size: 60%; color: grey;">RESPONSES</div>
         <div style="flex: 10; padding-left: 10px;">
             {{ with .success }}
-            <div style="font-weight: 400;">Success</div>
             {{ range . }}
                 <div style="display: flex; padding-left: 10px;">
                     <div style="flex: 1; color: green;">
@@ -259,7 +291,6 @@
             {{ end }}
 
             {{ with .failure }}
-            <div style="font-weight: 400;">Failure</div>
             {{ range . }}
                 <div style="display: flex; padding-left: 10px;">
                     <div style="flex: 1; color: red;">
