@@ -110,6 +110,7 @@
   methods: ["GET", "POST"]
   roles: ["readonly"]
   added: "2019-03"
+  types: ["anyjson"]
   uriparameters:
     - {name: "DEVICEKEY", type: "string", description: "Access point device key"}
   jsonparameters: 
