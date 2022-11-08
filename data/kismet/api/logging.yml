@@ -1,0 +1,54 @@
+- 
+  name: "List available log types"
+  uri: "/logging/drivers"
+  types: ["anyjson"]
+  roles: ["readonly"]
+  methods: ["GET"]
+  docs: |
+    Fetch a list of all available log drivers. 
+
+    Each logging driver handles a log output format. 
+
+- 
+  name: "List active logs"
+  uri: "/logging/active"
+  types: ["anyjson"]
+  roles: ["readonly"]
+  methods: ["GET"]
+  docs: | 
+    List enabled and active logs 
+
+- 
+  name: "Start a log"
+  uri: "/logging/by-class/{LOGCLASS}/start"
+  types: ["cmd"]
+  methods: ["GET", "POST"]
+  uriparameters: 
+    - {name: "LOGCLASS", type: "string", description: "Log class / type to start"}
+  jsonparameters: 
+    - {name: "title", type: "string", required: false, description: "Alternate file name / log title"}
+  docs: | 
+    Open a new log; if the same type of log is closed and opened multiple times in one session, it 
+    will have multipe log instances (such as `Kismet-foo-2022-10-03-1.pcap`, 
+    `kismet-foo-2022-10-03-2.pcap` )
+  notes: | 
+    Some logs, like kismetdb, are only permitted a single logging instance. 
+  return: |
+    Success or failure of log opening.
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [-1, "Request error, such as malformed log class or permissions error"]
+
+- 
+  name: "Stopping a log"
+  uri: "/logging/by-uuid/{UUID}/stop"
+  types: ["cmd"]
+  methods: ["GET"]
+  uriparameters: 
+    - {name: "UUID", type: "string", description: "Log UUID to stop"}
+  docs: | 
+    Stop and close a current log.  
+
+

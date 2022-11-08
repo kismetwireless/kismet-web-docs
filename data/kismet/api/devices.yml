@@ -5,13 +5,10 @@
   methods: ["GET", "POST"]
   roles: ["readonly"]
   uriparameters:
-    -
-      auto: "timestamp"
+    - { auto: "timestamp" }
   jsonparameters:
-    -
-      auto: "fields"
-    -
-      auto: "regex"
+    - { auto: "fields" }
+    - { auto: "regex" }
   docs: |
     Returns devices which have been active (traffic observed from the device address) 
     since the supplied timestamp.  
@@ -36,8 +33,7 @@
       description: | 
         Kismet unique device key for matching 
   jsonparameters: 
-    - 
-      auto: "fields"
+    - { auto: "fields" }
   docs: |
     Fetch a complete device record (with optional simplification), indexed by the 
     device key. 

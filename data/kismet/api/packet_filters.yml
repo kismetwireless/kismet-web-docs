@@ -1,0 +1,77 @@
+- 
+  name: "Packet filter status"
+  uri: "/filters/packet/{FILTERID}/filter"
+  methods: ["GET", "POST"]
+  roles: ["readoly"]
+  types: ["anyjson"]
+  uriparameters:
+    - {name: "FILTERID", type: "string", description: "Filter ID"}
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    Fetch the filter status, including description, default behavior, and type, of the given 
+    filter ID. 
+
+- 
+  name: "Packet filter default behavior"
+  uri: "/filters/packet/{FILTERID}/set_default"
+  types: ["cmd"]
+  roles: ["admin"]
+  methods: ["POST"]
+  uriparameters: 
+    - {name: "FILTERID", type: "string", description: "Filter ID"}
+  jsonparameters: 
+    - {name: "default", type: "string", description: "Default behavior, such as `reject` or `allow`"}
+  docs: | 
+    Configure the default behavior of the specified filter.
+
+- 
+  name: "Adding a MAC filter"
+  uri: "/filters/packet/{FILTERID}/{PHYNAME}/{BLOCKNAME}/set_filter"
+  types: ["cmd"]
+  roles: ["admin"]
+  methods: ["POST"]
+  uriparameters:
+    - {name: "FILTERID", type: "string", description: "Filter ID"}
+    - {name: "PHYNAME", type: "string", description: "Target phy to filter.  MAC filters are phy specific."}
+    - {name: "BLOCKNAME", type: "string", description: "Name of filter group (source, destination, network, other, or any)"}
+  jsonparameters:
+    - 
+      name: "filter"
+      type: "JSON object"
+      description: |
+        Dictionary object where the MAC address is the key and a boolean filter term is the value.  
+        These filters will be added to the block identified by the blockname. 
+
+        A value of `true` indicates the matching MAC address *will be blocked*, while a value 
+        of `false` indicates the matching MAC address *will be passed*.  
+  docs: |
+    MAC address filters use the type `mac_filter`.
+
+    MAC filters are phy-specific, because the same MAC could be used across multiple PHYs. 
+  example: |
+    ```json 
+    {
+      "filter": {
+        "AA:BB:CC:DD:EE:FF": true,
+        "00:11:22:00:00:00/FF:FF:FF:00:00:00": false
+      }
+    }
+    ```
+
+- 
+  name: "Removing a MAC filter"
+  uri: "/filters/{FILTERID}/{PHYNAME}/{BLOCKNAME}/remove_filter"
+  types: ["json"]
+  methods: ["POST"]
+  roles: ["admin"]
+  uriparameters:
+    - {name: "FILTERID", type: "string", description: "Filter ID"}
+    - {name: "PHYNAME", type: "string", description: "Target phy to filter.  MAC filters are phy specific."}
+    - {name: "BLOCKNAME", type: "string", description: "Name of filter group (source, destination, network, other, or any)"}
+  jsonparameters: 
+    - 
+      name: "addresses"
+      type: "JSON list"
+      description: |
+        List of MAC addresses to be removed from the target filter. 

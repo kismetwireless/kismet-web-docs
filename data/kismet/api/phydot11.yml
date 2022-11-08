@@ -1,0 +1,123 @@
+- 
+  name: "WPA handshake"
+  uri: "/phy/phy80211/by-key/{DEVICEKEY}/device/{MAC}/pcap/handshake"
+  types: ["pcap"]
+  roles: ["readonly"]
+  methods: ["GET"]
+  uriparameters: 
+    - {name: "DEVICEKEY", type: "string", description: "Kismet device key of AP"}
+    - {name: "MAC", type: "string", description: "MAC address of client"}
+  modified: "2022-11 for per-client MAC keying"
+  docs: | 
+    A WPA handshake is required to attack the WPA and WPA2 key exchanges. 
+
+    Unless configured not to, Kismet will retain EAPOL handshake packets and the first beacon 
+    from an access point, and can provide them as a PCAP file. 
+
+    Kismet retains a handshake set per client session, indexed by the MAC address of the client.
+  return: |
+    Basic PCAP format packet capture file.
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [404, "No such device key"]
+      - [-1, "Request error, such as malformed device key or missing client MAC"]
+
+-
+  name: "WPA PMKID exchange"
+  uri: "/phy/phy80211/by-key/{DEVICEKEY}/pcap/handshake-pmkid"
+  added: "2019-05"
+  modified: "2020-10"
+  methods: ["GET"]
+  types: ["pcap"]
+  roles: ["readonly"]
+  uriparameters:
+    - {name: "DEVICEKEY", type: "string", description: "Kismet device key"}
+  return: | 
+    Basic PCAP format packet capture file with a beacon and RSN PMKID packet. 
+  docs: | 
+    The WPA PMKID can be used to perform offline attacks against the WPA key.  
+
+- 
+  name: "Per-device packet stream"
+  uri: "/phy/phy80211/pcap/by-bssid/{BSSID}/packets"
+  types: ["pcapng"]
+  roles: ["readonly"]
+  methods: ["GET"]
+  uriparameters:
+    - {name: "BSSID", type: "string", description: "BSSID of AP"}
+  docs: | 
+    Fetch a streaming PCAP-NG capture of all packets to or from a specific BSSID. 
+
+    This endpoint will stream packets until closed or cancelled. 
+
+- 
+  name: "Wi-Fi clients"
+  uri: "/phy/phy80211/clients-of/{DEVICEKEY}/clients"
+  types: ["anyjson"]
+  roles: ["readonly"]
+  methods: ["GET", "POST"]
+  uriparameters:
+    - {name: "DEVICEKEY", type: "string", description: "Kismet device key"}
+  jsonparameters: 
+    - {auto: "fields"}
+  docs: | 
+    Fetch a list of devices associated with an access point.  This is also available in the 
+    full device record.
+
+-
+  name: "Access points device view"
+  uri: "/devices/views/phydot11_accesspoints/devices"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  docs: |
+    A [device view](/docs/api/device_views/) endpoint which returns Wi-Fi access point devices 
+    only. 
+
+    An access point is a Wi-Fi device which has been seen to transmit management frames or 
+    packets with from-ds set.
+
+    For complete documentation, check the [device view api](/docs/api/device_views/) 
+  notes: | 
+    This endpoint uses the [device view](/docs/api/device_views/) API.
+
+-
+  name: "Access point view by timestamp"
+  uri: "/devices/views/phy80211_accesspoints/last-time/{TIMESTAMP}/devices"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  uriparameters:
+    - {auto: "timestamp"}
+  docs: |
+    A [device view](/docs/api/device_views/) endpoint which returns Wi-Fi access point devices 
+    only. 
+
+    An access point is a Wi-Fi device which has been seen to transmit management frames or 
+    packets with from-ds set.
+
+    Devices which have been active since the specified time will be returned.
+
+    For complete documentation, check the [device view api](/docs/api/device_views/) 
+  notes: | 
+    This endpoint uses the [device view](/docs/api/device_views/) API.
+
+- 
+  name: "Wi-Fi related devices"
+  uri: "/phy/phy80211/related-to/{DEVICEKEY}/devices"
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "2019-03"
+  uriparameters:
+    - {name: "DEVICEKEY", type: "string", description: "Access point device key"}
+  jsonparameters: 
+    - {auto: "fields"}
+  docs: | 
+    Kismet can track relate devices.  On a Wi-Fi network, a related device occurs when traffic 
+    shows they are on the same physical network, make up multiple BSSIDs of the same physical 
+    AP, or make up multiple BSSIDs in a roaming SSID. 
+
+    This endpoint will return an array of complete device records of the associated devices, 
+    making it a single query to fetch the nested information.

@@ -34,7 +34,16 @@
     <div style="display: flex; padding-top: 10px;">
         <div style="flex: 1; margin-top: 5px; font-size: 60%; color: grey;">ADDED</div>
         <div style="flex: 10; padding-left: 10px;">
-            API added <span style="font-weight: 500;">{{ . }}</span>
+            API added <span style="font-weight: 500;">{{- . | markdownify -}}</span>
+        </div>
+    </div>
+    {{ end }}
+
+    {{ with .modified }}
+    <div style="display: flex; padding-top: 10px;">
+        <div style="flex: 1; margin-top: 5px; font-size: 60%; color: orange;">MODIFIED</div>
+        <div style="flex: 10; padding-left: 10px;">
+            API modified <span>{{- . | markdownify -}}</span>
         </div>
     </div>
     {{ end }}
@@ -195,7 +204,7 @@
             <p>This endpoint takes additional parameters by using a `POST` request and supplying a 
             JSON document or <code>json</code> form variable.</p>
 
-            <p>You can find more information about <a href="/docs/api/command_param/" target="_new">API paramaters here</a>.</p>
+            <p>You can find more information about <a href="/docs/api/command_param/" target="_new">API parameters here</a>.</p>
 
             {{ range . }}
             <div style="padding-bottom: 5px;">

@@ -1,0 +1,32 @@
+-
+  name: "List streams"
+  uri: "/streams/all_streams"
+  types: ["anyjson"]
+  roles: ["readonly"]
+  methods: ["GET"]
+  docs: | 
+    Fetch a list of active streams. 
+
+- 
+  name: "Stream details"
+  uri: "/streams/by-id/{STREAMID}/stream_info"
+  types: ["json"]
+  roles: ["readonly"]
+  methods: ["GET"]
+  uriparameters:
+    - {name: "STREAMID", type: "number", description: "Stream ID"}
+  docs: | 
+    Fetch details of a single stream.
+
+- 
+  name: "Close a stream"
+  uri: "/streams/by-id/{STREAMID}/close_stream"
+  types: ["cmd"]
+  roles: ["admin"]
+  methods: ["GET"]
+  uriparameters:
+    - {name: "STREAMID", type: "number", description: "Stream ID"}
+  docs: | 
+    Close an existing stream.
+
+

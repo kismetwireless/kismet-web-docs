@@ -1,5 +1,5 @@
 ---
-title: "API Parameters"
+title: "API parameters"
 description: ""
 lead: ""
 date: 2022-10-17T09:24:24-04:00

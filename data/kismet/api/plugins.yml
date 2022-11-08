@@ -1,0 +1,10 @@
+- 
+  name: "List plugins"
+  uri: "/plugins/all_plugins"
+  types: ["anyjson"]
+  methods: ["GET"]
+  roles: ["readonly"]
+  docs: |
+    Fetch a JSON list of active plugins, including descriptions, authors, and relatefd data. 
+
+  

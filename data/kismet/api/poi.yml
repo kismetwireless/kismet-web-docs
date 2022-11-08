@@ -1,0 +1,16 @@
+- 
+  name: "Create a POI"
+  uri: "/poi/create_poi"
+  types: ["cmd"]
+  roles: ["admin"]
+  methods: ["POST"]
+  added: "2019-03"
+  jsonparameters:
+    - {name: "note", type: "string", required: false, description: "Content to be attached to POI"}
+  docs: | 
+    Create a POI entry.  
+
+    POI entries are tagged with the current timestamp and location (if present). 
+
+    Optionally include data with the POI event; this could be human readable notes, 
+    JSON data, or other.

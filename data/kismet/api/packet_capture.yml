@@ -1,0 +1,52 @@
+- 
+  name: "All packets"
+  uri: "/pcap/all_packets"
+  types: ["pcapng"]
+  methods: ["GET"]
+  roles: ["readonly"]
+  docs: | 
+    A live stream of packets seen by all datasources, served in PCAP-NG format.  
+
+    This stream will return all packets seen since the stream was initiated, and will 
+    continue streaming packets until the connection is terminated.
+
+    To access packets *previosuly seen* by Kismet, use the [kismetdb endpoints](/docs/api/kismetdb).
+  notes: | 
+    This endpoint will return packets forever, until disconnected.
+
+- 
+  name: "Packets by datasource"
+  uri: "/datasource/pcap/by-uuid/{UUID}/packets"
+  types: ["pcapng"]
+  methods: ["GET"]
+  roles: ["readonly"]
+  uriparameters:
+    - {name: "UUID", type: "string", description: "Datasource UUID"}
+  docs: | 
+    A live stream of packets from a single datasource, served in PCAP-NG format.  
+
+    This stream will return all packets seen since the stream was initiated, and will 
+    continue streaming packets until the connection is terminated. 
+
+    To access packets *previosuly seen* by Kismet, use the [kismetdb endpoints](/docs/api/kismetdb).
+  notes: | 
+    This endpoint will return packets forever, until disconnected.
+
+-
+  name: "Packets by device"
+  uri: "devices/pcap/by-key/{KEY}/packets"
+  types: ["pcapng"]
+  roles: ["readonly"]
+  methods: ["GET"]
+  uriparameters:
+    - {name: "KEY", type: "string", description: "Device key"}
+  docs: |
+    A live stream of packets to, from, or otherwise associated with a specific device, 
+    served in PCAP-NG format.  
+
+    This stream will return all packets seen since the stream was initiated, and will 
+    continue streaming packets until the connection is terminated. 
+
+    To access packets *previosuly seen* by Kismet, use the [kismetdb endpoints](/docs/api/kismetdb).
+  notes: | 
+    This endpoint will return packets forever, until disconnected.
