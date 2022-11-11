@@ -37,7 +37,7 @@ Modules need to follow a few basic conventions:
 
 ### A Basic Module
 
-```javascript
+```text
 // Module boilerplate.  This will define a module kismet-plugin-foo-js which
 // will instantiate under the global object kismet_plugin_foo.
 "use strict";

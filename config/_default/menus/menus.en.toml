@@ -21,14 +21,14 @@
   name = "API"
   weight = 25
   identifier = "API"
-  url = "/docs/API/"
+  url = "/docs/api/rest_like/"
   parent = "docs"
 
 [[main]]
   name = "Development"
   weight = 50
   identifier = "development"
-  url = "/docs/development/"
+  url = "/docs/dev/plugins/"
   parent = "docs"
 
 

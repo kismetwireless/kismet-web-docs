@@ -1,6 +1,6 @@
 baseurl = "https://doks-child-theme.netlify.app/"
 canonifyURLs = false
-disableAliases = true
+disableAliases = false
 disableHugoGeneratorInject = true
 enableEmoji = true
 enableGitInfo = false
@@ -17,6 +17,9 @@ disableLanguages = ["de", "nl"]
 [outputs]
 home = ["HTML", "RSS", "REDIRECTS", "HEADERS"]
 section = ["HTML", "RSS", "SITEMAP"]
+
+[minify]
+disableJS = true
 
 # remove .{ext} from text/netlify
 [mediaTypes."text/netlify"]
@@ -65,8 +68,8 @@ rel  = "sitemap"
   blog = "/blog/:title/"
 # docs = "/docs/1.0/:sections[1:]/:title/"
 
-[minify.tdewolff.html]
-  keepWhitespace = false
+# [minify.tdewolff.html]
+#   keepWhitespace = false
 
 [related]
   threshold = 80
