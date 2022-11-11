@@ -1,0 +1,71 @@
+- 
+  name: "Bluetooth scanning report"
+  uri: "/phy/phybluetooth/scan/scan_report"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin", "scanreport"]
+  jsonparameters:
+    - {name: "reports", type: "list", description: "List of report objects"}
+    - {name: "source_name", type: "string", description: "Source name"}
+    - {name: "source_uuid", type: "string", description: "Source UUID"}
+  added: "2020-07"
+  docs: |
+    Submit a scanning report. 
+
+    A scanning report consists of a datasource name and UUID, and a list of 
+    report objects.
+  apinotes: |
+    Each report object should contain:
+
+    {{< kismet_api_param name="timestamp" type="number" required="false">}}
+      Unix timestamp with second precision.  
+
+      If no timestmap is provided, the time the report is received is used. 
+
+      Due to lack of high-precision packet data in scanning mode, timestamps 
+      are second precision only.
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="btaddr" type="string" required="true">}}
+      Bluetooth device address
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="devicetype" type="string" required="false">}}
+      Device type, if known
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="txpowerlevel" type="number" required="false">}}
+      Advertised transmission power level
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="pathloss" type="number" required="false">}}
+      Reported path loss
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="scan_data" type="string" required="false">}}
+      Binary scan data, as hex string
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="service_data" type="dictionary" required="false">}}
+      Dictionary of UUID to service scan data, as binary hex strings
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="signal" type="number" required="false">}}
+      Signal level, in dBm
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="lat" type="number" required="false">}}
+      GPS latitude of detection, in decimal degrees
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="lon" type="number" required="false">}}
+      GPS longitude of detection, in decimal degrees
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="alt" type="number" required="false">}}
+      GPS altitude of detection, in meters
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="spd" type="number" required="false">}}
+      GPS speed of motion of sensor during detection, in kilometers/hour
+    {{< /kismet_api_param >}}

@@ -19,6 +19,9 @@ titleHome = "Kismet"
 twitterSite = "@kismetwireless"
 twitterCreator = "@kismetwireless"
 
+mastodonSite = "@kismetwireless@infosec.exchange"
+mastodonCreator = "@kismetwireless@infosec.exchange"
+
 ## JSON-LD
 # schemaType = "Person"
 schemaType = "Organization"
@@ -27,6 +30,7 @@ schemaAuthor = "mkershaw / dragorn"
 schemaAuthorTwitter = "https://twitter.com/kismetwireless"
 schemaAuthorLinkedIn = ""
 schemaAuthorGitHub = "https://github.com/kismetwireless"
+schemaAuthorMastodon = "https://infosec.exchange/@kismetwireless"
 schemaLocale = "en-US"
 schemaLogo = "logo-doks.png"
 schemaLogoWidth = 512
@@ -35,6 +39,7 @@ schemaImage = "doks.png"
 schemaImageWidth = 1280
 schemaImageHeight = 640
 schemaTwitter = "https://twitter.com/kismetwireless"
+schemaMastodon = "https://infosec.exchange/@kismetwireless"
 schemaLinkedIn = ""
 schemaGitHub = "https://github.com/kismetwireless"
 schemaSection = "blog"

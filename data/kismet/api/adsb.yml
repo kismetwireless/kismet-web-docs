@@ -1,0 +1,35 @@
+- 
+  name: "ADSB BEAST websocket"
+  added: "2020-11"
+  methods: ["WEBSOCKET UPGRADE"]
+  uri: "/phy/RTLADSB/beast" 
+  types: ["ws"] 
+  roles: ["reasonly", "ADSB"]
+  uriparameters:
+    - {auto: "wsuser"}
+    - {auto: "wspassword"}
+    - {auto: "wsapikey"}
+  docs: | 
+    A streaming websocket endpoint which exports ADSB data in the binary BEAST format, for integration 
+    with other ADSB tools. 
+
+- 
+  name: "ADSB raw websocket"
+  added: "2020-11"
+  methods: ["WEBSOCKET UPGRADE"]
+  uri: "/phy/RTLADSB/raw" 
+  types: ["ws"] 
+  roles: ["reasonly", "ADSB"]
+  uriparameters:
+    - {auto: "wsuser"}
+    - {auto: "wspassword"}
+    - {auto: "wsapikey"}
+  docs: | 
+    A streaming websocket endpoint which exports ADSB data in raw hex format, for integration 
+    with other ADSB tools. 
+  example: |
+    ```bash 
+    websocat ws://user:password@localhost:1471/phy/RTLADSB/raw.ws \
+      | some_adsb_handling_tool
+    ```
+

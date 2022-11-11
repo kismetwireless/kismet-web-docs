@@ -1,0 +1,71 @@
+- 
+  name: "Wi-Fi scanning report"
+  uri: "/phy/phy80211/scan/scan_report"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin", "scanreport"]
+  jsonparameters:
+    - {name: "reports", type: "list", description: "List of report objects"}
+    - {name: "source_name", type: "string", description: "Source name"}
+    - {name: "source_uuid", type: "string", description: "Source UUID"}
+  added: "2020-06"
+  docs: |
+    Submit a scanning report. 
+
+    A scanning report consists of a datasource name and UUID, and a list of 
+    report objects.
+  apinotes: |
+    Each report object should contain:
+
+    {{< kismet_api_param name="timestamp" type="number" required="false">}}
+      Unix timestamp with second precision.  
+
+      If no timestmap is provided, the time the report is received is used. 
+
+      Due to lack of high-precision packet data in scanning mode, timestamps 
+      are second precision only.
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="ssid" type="string" required="false">}}
+      Network SSID, if known.
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="bssid" type="string" required="true">}}
+      Access point BSSID
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="capabilities" type="string" required="false">}}
+      An Android or Wigle style string of encryption options and other AP 
+      attributes, such as `[WPS]`, `[WPA-PSK-TKIP+CCMP]`, and so on. 
+
+      If no capabilities field is provided, the device is assumed to be an AP 
+      with no encryption options set. 
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="channel" type="string" required="false">}}
+      Channel string, such as `6` or `42HT40P`
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="freqkhz" type="number" required="false">}}
+      Frequency of device, in KHz
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="signal" type="number" required="false">}}
+      Signal level, in dBm
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="lat" type="number" required="false">}}
+      GPS latitude of detection, in decimal degrees
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="lon" type="number" required="false">}}
+      GPS longitude of detection, in decimal degrees
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="alt" type="number" required="false">}}
+      GPS altitude of detection, in meters
+    {{< /kismet_api_param >}}
+
+    {{< kismet_api_param name="spd" type="number" required="false">}}
+      GPS speed of motion of sensor during detection, in kilometers/hour
+    {{< /kismet_api_param >}}

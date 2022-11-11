@@ -1,0 +1,10 @@
+- 
+  name: "UAV manufacturers"
+  uri: "/phy/phyuav/manuf_matchers"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  jsonparameters: 
+    - {auto: "fields"}
+  docs: |
+    Fetch the table of matching criteria for SSIDs and manufacturers used to tag devices as UAVs.
