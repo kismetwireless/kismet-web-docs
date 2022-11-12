@@ -102,7 +102,7 @@ git clone https://github.com/kismetwireless/python-kismet-external.git
 Spectools development code can be found in the spectools git at:
 
 ```bash
-$ git clone https://www.kismetwireless.net/git/spectools.git
+git clone https://www.kismetwireless.net/git/spectools.git
 ```
 
 or you can download the Spectools-2016-01-R1 code release [here](/code/spectools-2016-01-R1.tar.xz)

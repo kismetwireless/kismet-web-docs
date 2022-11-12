@@ -31,7 +31,10 @@
   url = "/docs/dev/plugins/"
   parent = "docs"
 
-
+[[main]]
+  name = "Projects"
+  url = "/projects/"
+  weight = 75
 
 [[main]]
   name = "Posts"
