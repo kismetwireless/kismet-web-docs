@@ -1,7 +1,6 @@
 ---
 title: "Wardriving & Multple WiFi Cards"
-description: "Introducing Doks, a Hugo theme helping you build modern documentation websites that are secure, fast, and SEO-ready — by default."
-excerpt: "Introducing Doks, a Hugo theme helping you build modern documentation websites that are secure, fast, and SEO-ready — by default."
+excerpt: "Some musings on using Kismet at speed, and how much multiple capture cards can help."
 date: 2022-07-31
 draft: false
 weight: 50

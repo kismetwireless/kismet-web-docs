@@ -1,0 +1,8 @@
+- 
+  date: "2022-11-11"
+  title: "Welcome to the new Kismet site!"
+  content: | 
+    Welcome to the new Kismet site; redone using Hugo as the generation engine and a lot of work towards 
+    templating to make more of the documentation, especially the API documentation, much more consistent.
+
+    Let us know if any links broke, and expect more updates to the readme and development documentation!

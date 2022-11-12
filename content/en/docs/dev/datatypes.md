@@ -147,20 +147,20 @@ Already knowing the 802.11 characteristics makes filling in the `kis_common_info
 
 ```C++
 int Kis_80211_Phy::CommonClassifierDot11(CHAINCALL_PARMS) {
-    /* Grab the instance of the Dot111 Phy from the auxptr, remember we're a
-       static function so that we can be called directly */
+    // Grab the instance of the Dot111 Phy from the auxptr, remember we are a
+    // static function so that we can be called directly 
     Kis_80211_Phy *d11phy = (Kis_80211_Phy *) auxdata;
 
-    /* Get the 802.11 component of the packet, or die trying */
+    // Get the 802.11 component of the packet, or die trying 
     dot11_packinfo *dot11info =
         (dot11_packinfo *) in_pack->fetch(d11phy->pack_comp_80211);
 
 	if (dot11info == NULL)
 		return 0;
 
-    /* Get the common info, and if it doesn't exist, make one and insert it.
-       There shouldn't be a situation where we have a CI already, but if we
-       just inserted blindly we risk leaking memory. */
+    // Get the common info, and if it doesn't exist, make one and insert it.
+    // There shouldn't be a situation where we have a CI already, but if we
+    // just inserted blindly we risk leaking memory. 
 	kis_common_info *ci =
 		(kis_common_info *) in_pack->fetch(d11phy->pack_comp_common);
 
@@ -169,10 +169,10 @@ int Kis_80211_Phy::CommonClassifierDot11(CHAINCALL_PARMS) {
 		in_pack->insert(d11phy->pack_comp_common, ci);
 	}
 
-    /* Set the phy ID from our phyhandler */
+    // Set the phy ID from our phyhandler 
 	ci->phyid = d11phy->phyid;
 
-    /* Start decoding the dot11 to get our common info */
+    // Start decoding the dot11 to get our common info 
 	if (dot11info->type == packet_management) {
 		ci->type = packet_basic_mgmt;
 
@@ -198,27 +198,27 @@ int Kis_80211_Phy::CommonClassifierDot11(CHAINCALL_PARMS) {
         // ...
 	}
 
-    /* If we're known corrupt from the dot11 handlers... */
+    // If we're known corrupt from the dot11 handlers... 
 	if (dot11info->type == packet_noise || dot11info->corrupt ||
 			   in_pack->error || dot11info->type == packet_unknown ||
 			   dot11info->subtype == packet_sub_unknown) {
 		ci->error = 1;
 	}
 
-    /* Set the channel from the dot11 channel */
+    // Set the channel from the dot11 channel 
 	ci->channel = dot11info->channel;
 
-    /* Set the data size */
+    // Set the data size 
 	ci->datasize = dot11info->datasize;
 
-    /* Either we're encrypted or we're not */
+    // Either we're encrypted or we're not 
 	if (dot11info->cryptset == crypt_none) {
 		ci->basic_crypt_set = KIS_DEVICE_BASICCRYPT_NONE;
 	} else {
 		ci->basic_crypt_set = KIS_DEVICE_BASICCRYPT_ENCRYPTED;
 	}
 
-    /* Add in the additional L2/L3 crypto knowledge from the 802.11 decoder */
+    // Add in the additional L2/L3 crypto knowledge from the 802.11 decoder 
 	if (dot11info->cryptset & crypt_l2_mask) {
 		ci->basic_crypt_set |= KIS_DEVICE_BASICCRYPT_L2;
 	} if (dot11info->cryptset & crypt_l3_mask) {

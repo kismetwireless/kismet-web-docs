@@ -46,15 +46,15 @@ var local_uri_prefix = "";
 if (typeof(KISMET_URI_PREFIX) !== 'undefined')
     local_uri_prefix = KISMET_URI_PREFIX;
 
-/* Export a constant value */
+// Export a constant value 
 export const opt1 = 1;
 
-/* Export a function */
+// Export a function
 export const SomeFunction = (a, b) => {
     console.log(a, b);
 }
 
-/* Highlight WPA RSN PMKID using the Kismet row highlight API */
+// Highlight WPA RSN PMKID using the Kismet row highlight API
 kismet_ui.AddDeviceRowHighlight({
     name: "RSN PMKID",
     description: "Network contains a RSN PMKID packet",

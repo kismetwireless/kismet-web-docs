@@ -19,9 +19,14 @@
   <div class="row justify-content-center">
     <div class="col-lg-12 text-left">
       <h2 class="mt-0">News</h2>
-      <p><code>2020-11-11</code> New website!  Welcome to the new Kismet site; redone using Hugo as the generation engine and a 
-      lot of work towards templating to make more of the documentation, especially the API documentation, much more consistent.<br/> 
-      Let us know if any links broke, and expect more updates to the readme and development documentation!</p>
+      {{ range $.Site.Data.kismet.news }}
+      <div>
+          <p><code>{{ .date }}</code> <strong>{{- .title | markdownify -}}</strong>
+          <div style="padding-left: 20px;">
+          {{- .content | markdownify -}}
+          </div>
+      </div>
+      {{ end }}
     </div>
 
   </div>

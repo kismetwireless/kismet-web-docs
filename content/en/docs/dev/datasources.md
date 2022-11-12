@@ -507,51 +507,50 @@ public:
 dlt_example::dlt_example() :
     kis_dlt_handler() {
 
-    /* Packet components and insertion into the packetchain is handled
-       automatically by the Kis_DLT_Handler constructor.  All that needs
-       to happen here is setting the name and DLT type */
+    // Packet components and insertion into the packetchain is handled
+    // automatically by the Kis_DLT_Handler constructor.  All that needs
+    // to happen here is setting the name and DLT type 
     dlt_name = "Example DLT";
 
-    /* DLT type is set in tcpdump.h */
+    // DLT type is set in tcpdump.h 
     dlt = DLT_SOME_EXAMPLE;
 
-    /* Optionally, announce that we're loaded */
+    // Optionally, announce that we're loaded
     _MSG_INFO("Registering support for DLT_SOME_EXAMPLE");
 }
 
-/* handle_packet(...) is called by the packet chain with the packet data
-   as reported by the datasource.  This may already include GPS and signal
-   information, as well as the actual link data frame.
+// handle_packet(...) is called by the packet chain with the packet data
+// as reported by the datasource.  This may already include GPS and signal
+// information, as well as the actual link data frame.
 
-   HandlePacket is responsible for decapsulating the DLT, creating any
-   additional kis_packet records, and prepping the data for the classifier
-   stage.
-*/
+// HandlePacket is responsible for decapsulating the DLT, creating any
+// additional kis_packet records, and prepping the data for the classifier
+// stage.
 
 int dlt_example::handle_packet(std::shared_ptr<kis_packet> in_pack) {
-    /* Example sanity check - do we already have packet data
-       decapsulated?  For a type like radiotap or PPI that encodes another
-       DLT, this encapsulated chunk might be handled differently */
+    // Example sanity check - do we already have packet data
+    // decapsulated?  For a type like radiotap or PPI that encodes another
+    // DLT, this encapsulated chunk might be handled differently 
     auto decapchunk = in_pack->fetch_as<kis_datachunk>(pack_comp_decap);
 
     if (decapchunk != nullptr) {
         return 1;
     }
 
-    /* Get the linklayer data record */
+    // Get the linklayer data record 
     auto linkdata = in_pack->fetch_as<kis_datachunk>(pack_comp_linkframe);
 
-    /* Sanity check - do we even have a link chunk? */
+    // Sanity check - do we even have a link chunk? 
     if (linkdata == nullptr) {
         return 1;
     }
 
-    /* Sanity check - does the DLT match? */
+    // Sanity check - does the DLT match? 
     if (linkdata->dlt != dlt) {
         return 1;
     }
 
-    /* Other code goes here */
+    // Other code goes here 
 }
 ```
 

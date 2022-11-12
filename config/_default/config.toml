@@ -18,8 +18,8 @@ disableLanguages = ["de", "nl"]
 home = ["HTML", "RSS", "REDIRECTS", "HEADERS"]
 section = ["HTML", "RSS", "SITEMAP"]
 
-[minify]
-disableJS = true
+#[minify]
+#disableJS = true
 
 # remove .{ext} from text/netlify
 [mediaTypes."text/netlify"]
@@ -68,8 +68,8 @@ rel  = "sitemap"
   blog = "/blog/:title/"
 # docs = "/docs/1.0/:sections[1:]/:title/"
 
-# [minify.tdewolff.html]
-#   keepWhitespace = false
+[minify.tdewolff.html]
+  keepWhitespace = false
 
 [related]
   threshold = 80

@@ -67,6 +67,8 @@ Many Debian-derived distributions are very similar, but be sure to pick the pack
 
 Installing packages from another distribution, or another version, *may* work sometimes, but often results in errors about missing library packages or similar.
 
+{{< kismet_packages >}}
+
 ## Kali Linux
 
 Kali Linux (amd64, armel, armhf, arm64)

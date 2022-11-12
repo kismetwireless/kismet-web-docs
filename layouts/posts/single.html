@@ -4,7 +4,7 @@
   <div class="col-md-12 col-lg-10">
     <div class="blog-header">
       <h1>{{ .Title }}</h1>
-      {{ partial "main/blog-meta.html" . }}
+      {{ partial "main/posts-meta.html" . }}
     </div>
   </div>
   <div class="col-md-13">
@@ -38,7 +38,7 @@
         <article>
           <h2 class="h3"><a class="stretched-link text-body" href="{{ .RelPermalink }}">{{ .Params.title }}</a></h2>
           <p>{{ .Params.excerpt | safeHTML }}</p>
-          {{ partial "main/blog-meta.html" . -}}
+          {{ partial "main/posts-meta.html" . -}}
         </article>
       </div>
     </div>
