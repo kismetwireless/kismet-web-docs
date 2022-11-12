@@ -4,3 +4,61 @@
   key: "kali"
   name: "Kali Linux"
 
+- 
+  distro: "Debian / Raspbian Buster"
+  platforms: ["amd64", "arm64"]
+  name: "Debian and Raspbian Buster"
+  key: "buster"
+  notes: | 
+    *WARNING* - You will *not* be able to capture from the built-in Wi-Fi on a 
+    Raspberry Pi unless you also install the [nexmon driver](https://github.com/seemoo-lab/nextmon).
+    This patch adds reverse-engineered monitor mode to the Broadcom drivers.
+
+    You will still likely see better performance and stability with an external 
+    USB device.
+
+- 
+  distro: "Debian Bullseye" 
+  platforms: ["i386", "amd64", "armhf", "arm64"]
+  name: "Debian Bullseye"
+  key: "bullseye"
+
+- 
+  distro: "Debian Bookworm" 
+  platforms: ["amd64", "arm64"]
+  name: "Debian Bookworm"
+  key: "bookworm"
+
+- 
+  distro: "Ubuntu Bionic (18.04)" 
+  platforms: ["i386", "amd64"]
+  name: "Ubuntu Bionic (18.04)"
+  key: "bionic"
+  notes: |
+    Due to limitations in the packages and versions of libraries in Ubuntu Bionic, 
+    these packages do not contain all features.  You may be able to manually install 
+    new versions of the required libraries and compile from source, instead. 
+
+    The following features are not available in Bionic packages: 
+      
+    * Remote capture via websockets 
+
+      A Bionic install cannot funciton as a remote capture node feeding a Kismet server 
+      over websockets. 
+
+      TCP mode is still available. 
+
+      A Bionic Kismet server supports receiving remote captures over websockets, only 
+      client-mode websockets are impacted.
+
+- 
+  distro: "Ubuntu Focal (20.04)" 
+  platforms: ["amd64", "armhf", "arm64"]
+  name: "Ubuntu Focal (20.04)"
+  key: "focal"
+
+- 
+  distro: "Ubuntu Jammy (22.04)" 
+  platforms: ["amd64", "armhf", "arm64"]
+  name: "Ubuntu Jammy (22.04)"
+  key: "jammy"

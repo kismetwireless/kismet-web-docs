@@ -1,20 +1,29 @@
 <style>
+button {
+	border: 0;
+	background: none;
+	font: inherit;
+	color: inherit;
+	cursor: pointer;
+}
 .flavor-tabs button {
 	padding: .25em .5em;
-	border: none;
-    background-color: gray;
 }
-.flavor-tabs button:hover,
-.flavor-tabs button:focus {
+.flavor-tabs button:hover {
 	text-decoration: underline;
 }
 .flavor-tabs button.is-active {
-    background-color: white;
+    font-weight: 500;
+    background: darkgray;
 }
 .flavor-tab-panel {
 	display: none;
 	z-index: 1;
 	padding: .5em;
+    border: solid gray;
+	border-width: 5px 0;
+	transition: border-color .15s ease-out;
+
 }
 .flavor-tab-panel.is-active {
 	display: block;
@@ -27,12 +36,17 @@
 <div>
     {{ .name }} ( {{ range .platforms }} {{ . }} {{ end }} )
 </div>
+{{ with .notes }}
+<div>
+{{ . | markdownify }}
+</div>
+{{ end }}
 <div class="flavor-tabs">
     <button
         type="button"
         data-toggle-class
-        data-toggle-target="#tabPanel_1_{{ .distro | urlize }}"
-        data-toggle-radio-group="tabsGroup_{{ .distro | urlize }}"
+        data-toggle-target="#tabPanel_1_{{ .key | urlize }}"
+        data-toggle-radio-group="tabsGroup_{{ .key | urlize }}"
         data-toggle-is-active>
         Release
     </button>
@@ -41,12 +55,12 @@
     <button
         type="button"
         data-toggle-class
-        data-toggle-target="#tabPanel_2_{{ .distro | urlize }}"
-        data-toggle-radio-group="tabsGroup_{{ .distro | urlize }}">
+        data-toggle-target="#tabPanel_2_{{ .key | urlize }}"
+        data-toggle-radio-group="tabsGroup_{{ .key | urlize }}">
         Git
     </button>
 </div>
-<div class="flavor-tab-panel" id="tabPanel_1_{{ .distro | urlize }}">
+<div class="flavor-tab-panel" id="tabPanel_1_{{ .key | urlize }}">
 <pre>
 wget -O - https://www.kismetwireless.net/repos/kismet-release.gpg.key | sudo apt-key add -
 echo 'deb https://www.kismetwireless.net/repos/apt/release/{{ .key | lower }} {{ .key | lower }} main' | sudo tee /etc/apt/sources.list.d/kismet.list
@@ -54,7 +68,7 @@ sudo apt update
 sudo apt install kismet
 </pre>
 </div>
-<div class="flavor-tab-panel" id="tabPanel_2_{{ .distro | urlize }}">
+<div class="flavor-tab-panel" id="tabPanel_2_{{ .key | urlize }}">
 <pre>
 wget -O - https://www.kismetwireless.net/repos/kismet-release.gpg.key | sudo apt-key add -
 echo 'deb https://www.kismetwireless.net/repos/apt/git/{{ .key | lower }} {{ .key | lower }} main' | sudo tee /etc/apt/sources.list.d/kismet.list
