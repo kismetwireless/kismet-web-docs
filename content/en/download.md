@@ -13,15 +13,7 @@ toc: true
 
 You can get packages for the latest Kismet code for many distributions from [the Kismet package repositories](/packages/).
 
-### <a name="kismet-release"></a>Kismet 2022-08-R1
-
-Download the Kismet 2022-08-R1 source release tarball [here](/code/kismet-2022-08-R1.tar.xz)  
-
-Release tarballs are also available as git tags, and release trees are available under branches in git.
-
-Read the release announcement [here](/release/kismet-2022-08-R1/)!
-
-If you're interested in the *absolute latest* Kismet code, you might want to get the [git code](/downloads/#kismet-git), below.
+{{< kismet_release >}}
 
 ### <a name="kismet-git"></a>Kismet git
 
@@ -41,9 +33,9 @@ or to checkout from the Github mirror:
 git clonehttps://github.com/kismetwireless/kismet.git
 ```
 
-You can browse the development code and documentation [via Github here](https://github.com/kismetwireless/kismet)
+You can browse the development code [via Github here](https://github.com/kismetwireless/kismet)
 
-Nightly packages are also available, which are built for many distributions from the `master` branch of git.
+[Nightly packages](/packaeges/) are also available, which are built for many distributions from the `master` branch of git.
 
 ### <a name="kismet-docs"></a>Kismet documentation
 
