@@ -23,25 +23,25 @@ Over time, the Kismet endpoint API will change - while efforts are made to retai
 
 Changes to the REST API:
 
-* Added `WEBGPS` role to the [webgps POST API](/docs/devel/webui_rest/gps/#web-gps)
-* Soft-launched the [metagps API](/docs/devel/webui_rest/gps/#meta-gps) for remote capture GPS
+* Added `WEBGPS` role to the [webgps POST API](/docs/api/gps/#web-gps)
+* Soft-launched the [metagps API](/docs/api/gps/#meta-gps) for remote capture GPS
 
 #### 2022-01-R2
 
 Changes to the REST API:
 
-* Added regex to [device view by time](/docs/devel/webui_rest/device_views/#devices-by-view--time)
+* Added regex to [device view by time](/docs/api/device_views/#devices-by-view-and-time)
 
 #### 2022-01-R1
 
 Changes to the REST API:
 
-* Added the option to [filter pcap-ng streams](/docs/devel/webui_rest/kismetdb/#filter-options) by packet tag
-* Added [additional events](/docs/devel/webui_rest/eventbus/#dot11_advertised_ssid) to the eventbus, including the first packet for advertised SSIDs, responding SSIDs, and probed SSIDs.
+* Added the option to [filter pcap-ng streams](/docs/api/kismetdb/#tags) by packet tag
+* Added [additional events](/docs/api/eventbus/#dot11_advertised_ssid) to the eventbus, including the first packet for advertised SSIDs, responding SSIDs, and probed SSIDs.
 
 Changes to the kismetdb database:
 
-* Updated to version 8 of kismetdb, which [adds additional packet metadata](/docs/devel/kismetdb/#version-8)
+* Updated to version 8 of kismetdb, which [adds additional packet metadata](/docs/dev/kismetdb/#version-8)
 
 Changes to pcapng logging:
 
@@ -55,9 +55,9 @@ Changes to ipc/remote:
 
 Changes to the REST API:
 
-* Added a [view-specific device subscription API](/docs/devel/webui_rest/device_views/#realtime-device-monitoring-by-view) under `/device/views/[VIEWID]/monitor.ws` 
-* Added a [datasource-specific ADSB hex API](/docs/devel/webui_rest/phyadsb/#adsb-raw-hex-wbesocket-per-source) under `/datasource/by-uuid/[uuid]/adsb_raw.ws`
-* Added `class` and `severity` to [alert definitions](/docs/devel/webui_rest/alerts/#defining-alerts) and returned alerts
+* Added a [view-specific device subscription API](/docs/api/device_views/#realtime-device-monitoring-by-view) under `/device/views/[VIEWID]/monitor.ws` 
+* Added a [datasource-specific ADSB hex API](/docs/api/adsb/#adsb-raw-websocket) under `/datasource/by-uuid/[uuid]/adsb_raw.ws`
+* Added `class` and `severity` to [alert definitions](/docs/api/alerts/#alert-severities) and returned alerts
 
 #### 2020-12-R1
 
@@ -73,18 +73,18 @@ Changes to the REST API:
 * Websockets are now implemented in the Kismet webserver, with the Eventbus websocket being the largest user.
 * `wget` is now supported by detection of the user-agent field; a full HTTP 401 and WWW-Authenticate header is sent to accommodate `wget` not sending basic-auth until it fails an auth check.
 * HTTP GET variables are now properly supported 
-* [API keys and roles](/docs/devel/webui_rest/logins/#api-tokens-and-roles) are now supported
+* [API keys and roles](/docs/api/login/#api-tokens-and-roles) are now supported
 * JSON data accepted as application/json as well as application/x-form-urlencoded
 * Authentication may be passed as `user`, `password`, or `KISMET` GET URL variables
 
 New endpoints:
 
-* Realtime message, alert, GPS, system status, and more via the [eventbus](/docs/devel/webui_rest/eventbus/) websocket at `/eventbus/events.ws`
-* [API auth token manipulation](/docs/devel/webui_rest/logins/#api-tokens-and-roles) endpoints on `/auth/apikey/generate.cmd`, `/auth/apikey/revoke.cmd`, and `/auth/apikey/list.json`.
-* Runtime [changing of the devicefound/deviceleft alert list](/docs/devel/webui_rest/devices/#alerts---device-presence--absence---changing) via `/devices/alerts/mac/[type]/add.cmd`, `/devices/alerts/mac/[type]/remove.cmd` and `/devices/alerts/mac/[type]/macs.json`
-* Live [ADSB data](/docs/devel/webui_rest/phyadsb/) in text/hex mode via `ws://.../phy/RTLADSB/raw.ws`, streams a text-based hex output of the ADSB data
-* Live [ADSB data](/docs/devel/webui_rest/phyadsb/) in binary/beast mode via `ws://.../phy/RTLADSB/beast.ws`, streams a binary beast-protocol ADSB dump
-* Subscription-style [live device monitoring](/docs/devel/webui_rest/devices/#realtime-device-monitoring) websocket endpoint at `ws://.../devices/monitor.ws`
+* Realtime message, alert, GPS, system status, and more via the [eventbus](/docs/api/eventbus/) websocket at `/eventbus/events.ws`
+* [API auth token manipulation](/docs/api/login/#api-tokens-and-roles) endpoints on `/auth/apikey/generate.cmd`, `/auth/apikey/revoke.cmd`, and `/auth/apikey/list.json`.
+* Runtime [changing of the devicefound/deviceleft alert list](/docs/api/devices/#device-presence-alerts-view) via `/devices/alerts/mac/[type]/add.cmd`, `/devices/alerts/mac/[type]/remove.cmd` and `/devices/alerts/mac/[type]/macs.json`
+* Live [ADSB data](/docs/api/adsb/#adsb-raw-websocket) in text/hex mode via `ws://.../phy/RTLADSB/raw.ws`, streams a text-based hex output of the ADSB data
+* Live [ADSB data](/docs/api/adsb/#adsb-beast-websocket) in binary/beast mode via `ws://.../phy/RTLADSB/beast.ws`, streams a binary beast-protocol ADSB dump
+* Subscription-style [live device monitoring](/docs/api/devices/#realtime-device-monitoring) websocket endpoint at `ws://.../devices/monitor.ws`
 
 
 Changes to data:
