@@ -8,7 +8,7 @@
 
 {{ with .changelog }}
 <div style="padding-left: 25px; padding-bottom: 20px;">
-    {{ . }}
+    {{ . | markdownify }}
     <br/>
     <br/>
     Read the full release announcement <a href="/releases/kismet-{{ $version }}/">here</a>.

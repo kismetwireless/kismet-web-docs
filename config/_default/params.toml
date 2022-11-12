@@ -10,7 +10,7 @@ description = "Kismet is a sniffer, WIDS, and wardriving tool for Wi-Fi, Bluetoo
 # docsVersion = "0.3"
 
 ## Open Graph
-images = ["doks.png"]
+images = ["kismet-web.png"]
 ogLocale = "en_US"
 domainTLD = "kismetwireless.net"
 titleHome = "Kismet"
@@ -32,10 +32,10 @@ schemaAuthorLinkedIn = ""
 schemaAuthorGitHub = "https://github.com/kismetwireless"
 schemaAuthorMastodon = "https://infosec.exchange/@kismetwireless"
 schemaLocale = "en-US"
-schemaLogo = "logo-doks.png"
+schemaLogo = "kismet-web.png"
 schemaLogoWidth = 512
 schemaLogoHeight = 512
-schemaImage = "doks.png"
+schemaImage = "kismet-web.png"
 schemaImageWidth = 1280
 schemaImageHeight = 640
 schemaTwitter = "https://twitter.com/kismetwireless"

@@ -1,4 +1,8 @@
 kismet: 
   version: "2022-08-R1"
   changelog: | 
-    Initial introduction of 6e 6GHz support and lots of performance boosts
+    Initial introduction of 6e 6GHz support 
+
+    Significant memory improvements 
+
+    Significant performance improvements in dense environments
