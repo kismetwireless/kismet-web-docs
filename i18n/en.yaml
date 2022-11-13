@@ -11,7 +11,11 @@
   translation: "Page not found :("
 
 - id: 404-text
-  translation: "The page you are looking for doesn't exist or has been moved."
+  translation: | 
+    The page you are looking for doesn't exist or has been moved.
+
+    The Kismet site recently underwent major changes to improve the site and documentation, so the link you're looking 
+    for may have changed.
 
 - id: browse
   translation: "Browse"

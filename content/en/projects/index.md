@@ -10,7 +10,7 @@ images: []
 
 Looking for the instructions and info about the [acrylic WiFi Pineapple MK7 case](/hak5-mk7-case/)?
 
-Looking for info about the [LED mod](/hak5-led-mod/) for the WiFi Pineapple MK7?
+Looking for info about the [LED mod](/mk7-led-mod/) for the WiFi Pineapple MK7?
 
 ## Printable cases 
 
