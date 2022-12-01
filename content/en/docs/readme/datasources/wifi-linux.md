@@ -15,7 +15,7 @@ toc: true
 
 Linux Wi-Fi was the first capture type Kismet was created for, and is most likely the main data source.
 
-The Linux Wi-Fi source captures from network interfaces in monitor mode
+The Linux Wi-Fi source captures from network interfaces in monitor mode which is a semi-standard method for capturing raw 802.11 layer packets from a Wi-Fi card.
 
 The Linux Wi-Fi data source handles capturing from Wi-Fi interfaces using the two most recent Linux standards:  The new netlink/mac80211 standard present since approximately 2007, and the legacy ioctl-based IW extensions system present since approximately 2002.
 
@@ -347,6 +347,16 @@ Use a kernel-level BPF filter to filter out all packets *except* 802.11 manageme
 Enabling this filter will *drastically* reduce the amount of processing power required for Kismet, however it will exclude *all other data packets*.  Wireless APs and clients will be visible, however wired/bridged clients will not, and data-based statistics like bandwidth will not be available, however beacon-based statistics like QBSS reports will be retained.
 
 This feature is used by the wardrive-mode overlay.
+{{</configopt>}}
+
+{{<configopt truncate_data true false>}}
+Use a kernel-level BPF program to truncate 802.11 data frames, except for EAPOL (WPA handshake) data frames. 
+
+This sets the capture size of the packet to the end of the 802.11 headers, allowing for the data counting functions in Kismet to continue working as expected.  The data component of *all* packets will be lost, and not logged to the pcap, kismetdb, or other logs. 
+
+This will disable any WIDS alerts that rely on the data content of packets (such as the DHCP alerts).
+
+Enabling this filter will *drastically* reduce the amount of bandwidth required for remote capture, will reduce the size of logs significantlty, and will reduce the overall processing requirement of Kismet, at the cost of comprehensive data content in the logs.
 {{</configopt>}}
 
 
