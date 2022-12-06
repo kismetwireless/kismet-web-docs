@@ -33,6 +33,16 @@ alert=NETSTUMBLER,5/min,1/sec
 
 Will allow at most one alert per second, and at most 5 alerts per minute.  Excess alerts will not be reported.
 
+### Disabling alerts 
+
+An alert can be disabled by setting the maximum throttle and burst to 0.  
+
+```
+alert=NOCLIENTMFP,0/min,0/sec
+```
+
+Some critical system alerts, such as those raised while loading configuration files, can not be disabled.
+
 ### Complex alert configuration 
 
 Some alerts, such as `APSPOOF`, have additional configuration options.  These options are documented in the description of each alert.

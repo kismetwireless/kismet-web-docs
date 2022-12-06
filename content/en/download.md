@@ -35,7 +35,7 @@ git clonehttps://github.com/kismetwireless/kismet.git
 
 You can browse the development code [via Github here](https://github.com/kismetwireless/kismet)
 
-[Nightly packages](/packaeges/) are also available, which are built for many distributions from the `master` branch of git.
+[Nightly packages](/packages/) are also available, which are built for many distributions from the `master` branch of git.
 
 ### <a name="kismet-docs"></a>Kismet documentation
 
