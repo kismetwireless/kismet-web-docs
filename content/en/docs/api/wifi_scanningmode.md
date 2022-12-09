@@ -57,8 +57,8 @@ and will be updated automatically if the name changes in subsequent reports.
 
 ### Cache and burst mode reporting 
 
-Scanning mode assumes that the device doing scannign may not be able to maintain a 
-constant connection to the Ksimet server. 
+Scanning mode assumes that the device doing scanning may not be able to maintain a 
+constant connection to the Kismet server. 
 
 Reports can be cached in sent in groups using the report endpoint;  each report 
 contains a timestamp, GPS location, and signal information.  Multiple reports for 

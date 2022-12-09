@@ -69,3 +69,15 @@
     {{< kismet_api_param name="spd" type="number" required="false">}}
       GPS speed of motion of sensor during detection, in kilometers/hour
     {{< /kismet_api_param >}}
+
+    {{<kismet_api_param name="tags" type="object" required="false">}}
+      Object/Map of [device tags](/docs/api/devices/#editing-device-tags) device tags which will be 
+      applied to the device.
+
+      Tagged scans should be used with caution:  Tags will be applied to the device and will override 
+      any existing tags, so care must be taken with tags that overlap those editable by the user interface. 
+
+      Submitting a user name or description tag, for instance, may be valuable if the user can enter 
+      that data in the scanning app, but the user should be advised that they can't also edit that user name 
+      in the normal Kismet UI.
+    {{< /kismet_api_param }}
