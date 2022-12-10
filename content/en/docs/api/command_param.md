@@ -13,11 +13,11 @@ weight: 40
 toc: true
 ---
 
-Kismet command parameters are sent via `HTTP POST`.
+Kismet command parameters are (usually) sent via `HTTP POST`.  Additional endpoints may accept other HTTP verbs in the future such as `PUT`, and will be marked as such in the API documentation.
 
-Command paraeters can be sent as a JSON dictionary object as the content of the `POST`, or as a JSON dictionary object in a `POST` field named `json`.
+Parameters can be sent as either a HTTP form-encoded post, where the parameters should be encoded as a form variable named `json`, or as a JSON document sent as a JSON content type.
 
-Parameters sent as a `POST` field should be sent using the `x-www-form-encoded` content type; if your API does not do this by default, you may need to specify:
+Parameters sent as a form element should be sent using the `x-www-form-encoded` content type; if your environment does not set this by default, you may need to specify
 
 ```javascript
 Content-Type: application/x-www-form-urlencoded; charset=UTF-8
@@ -49,7 +49,13 @@ $.post("/some/endpoint", data = postdata, dataType = "json");
 
 Similarly, commands can be sent from the command line:
 ```bash
-$ curl -d 'json={"cmd": "lock", "channel": 6}' http://host:port/some/endpoint
+curl -d 'json={"cmd": "lock", "channel": 6}' http://user@host:2501/some/endpoint
+```
+
+To send parameters as a JSON object directly:
+
+```bash 
+curl --data '{"cmd":"lock", "source_uuid":"AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"}' -H 'Content-Type: application/json' http://user@host:2501/some/endpoint
 ```
 
 Commands are encoded as dictionaries to allow flexibility across calling platforms, as well as forward-compatibility as endpoints evolve.  Adding additional keys to an options dictionary should not cause an older version of the server code to return an error.
