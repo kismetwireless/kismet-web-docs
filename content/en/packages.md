@@ -70,6 +70,23 @@ Installing packages from another distribution, or another version, *may* work so
 
 {{< kismet_packages >}}
 
+## Suid-root / privileged capture 
+
+During the package install process, you will be prompted to install Kismet with suid-root, or without; We strongly recommend installing the capture sources as suid-root!
+
+Kismet is split between the actual Kismet server itself (which processes packets, presents the UI, performs logging, etc) and the packet datasources (capture programs which actually collect packets and send them to the server). 
+
+Many datasources require root privileges to be able to reconfigure the device, change channel, etc.  However, generally it is unwise to run the Kismet server itself as root:  While Kismet is written with security in mind, any vulnerabilities in the code could then be used with root privileges as well. 
+
+To address this, Kismet can be installed with the datasources configured as suid-root or with elevated capabilities.  To further protect the install from untrusted users being able to reconfigure network interfaces, users running Kismet need to be part of the `kismet` group.
+
+After installing Kismet as suid-root, be sure to add your user to the `kismet` group:
+
+```bash
+sudo usermod -aG kismet your-user-here
+```
+
+Once you've added your user to the group, you *will need to reboot your system* because Linux does not refresh the groups until the user logs into a new session! 
 
 ## Installing Kismet
 

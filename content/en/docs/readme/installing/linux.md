@@ -138,7 +138,7 @@ sudo make suidinstall
 `make suidinstall` will automatically create a `kismet` group.  To run Kismet, your user needs to be part of this group.
 
 ```bash
-sudo usermod -aG kismet ${USER}
+sudo usermod -aG kismet your-user-here
 ```
 
 This will add your current logged in user to the `kismet` group.
