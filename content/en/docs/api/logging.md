@@ -15,6 +15,6 @@ toc: true
 
 Kismet has a centralized logging engine which supports many formats of logs.
 
-Streaming logs like pcapng also integrate with the [streams API](/docs/api/streams/)
+Streaming logs like PCAP-NG also integrate with the [streams API](/docs/api/streams/)
 
 {{< kismet_api logging >}}
