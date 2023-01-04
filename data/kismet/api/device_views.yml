@@ -263,7 +263,7 @@
     fetching the key, last-active time, and last signal level.
 
     ```javascript 
-    var ws = new Websocket('ws://host:2501/devices/views/FOOBAR/monitor.ws?'
+    var ws = new WebSocket('ws://host:2501/devices/views/FOOBAR/monitor.ws?'
       'user=username&password=password');
     ws.onmessage = function(msg) {
         var json = JSON.parse(msg.data);
