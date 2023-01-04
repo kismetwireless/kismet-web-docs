@@ -72,5 +72,5 @@ Use an alternative configuration directory instead of the value Kismet was compi
 
 
 {{<argument override flavor>}}
-Use an override config file.  [Learn about config overrides here](/docs/readme/starting/configfiles/#configuration-override-flavors).
+Use an override config file.  [Learn about config overrides here](/docs/readme/configuring/configfiles/#configuration-override-and-flavors).
 {{</argument>}}

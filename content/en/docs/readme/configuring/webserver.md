@@ -41,7 +41,7 @@ Enable cross-origin resource sharing (CORS). To access the REST API from an web 
 
 
 {{<configopt httpd_allowed_origin "http://origin.url">}}
-Sets the webserver `Access-Control-Allow-Origin` response header. The origin is the full address of the server hosting your web app including protocol and port number. Because [nearly all Kismet REST endpoints require authentication](/docs/devel/webui_rest/endpoints/) an actual origin, not a `*` wildcard, should be specified to meet the CORS specification. The `httpd_allow_cors` option is also required to enable CORS cross-site requests. 
+Sets the webserver `Access-Control-Allow-Origin` response header. The origin is the full address of the server hosting your web app including protocol and port number. Because [nearly all Kismet REST endpoints require authentication](/docs/api/rest_like/) an actual origin, not a `*` wildcard, should be specified to meet the CORS specification. The `httpd_allow_cors` option is also required to enable CORS cross-site requests. 
 {{</configopt>}}
 
 {{<configopt httpd_port port>}}

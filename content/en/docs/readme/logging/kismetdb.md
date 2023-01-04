@@ -151,5 +151,5 @@ Adds a packet filter for the given phyname, address type (source, destination, n
 
 ### Live filter control
 
-Packet filters can be enabled and manipulated live via the [filter REST API](/docs/devel/webui_rest/filters/).
+Packet filters can be enabled and manipulated live via the [filter REST API](/docs/api/packet_filter/).
 

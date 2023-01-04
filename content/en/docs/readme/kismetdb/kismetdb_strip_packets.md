@@ -19,7 +19,7 @@ This tool is available as part of Kismet when built from source, or in the kisme
 
 ## Packet data
 
-Kismet stores packets as binary data in the [kismetdb log file](/docs/readme/logging).
+Kismet stores packets as binary data in the [kismetdb log file](/docs/readme/logging/logging/).
 
 Packet data is invaluable for analyzing results, replaying data, capturing handshakes, and more; It can also be large, take a lot of room, and contain personally identifiable or private information gathered during a capture. 
 
