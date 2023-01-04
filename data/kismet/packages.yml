@@ -11,7 +11,7 @@
   key: "buster"
   notes: | 
     *WARNING* - You will *not* be able to capture from the built-in Wi-Fi on a 
-    Raspberry Pi unless you also install the [nexmon driver](https://github.com/seemoo-lab/nextmon).
+    Raspberry Pi unless you also install the [nexmon driver](https://github.com/seemoo-lab/nexmon).
     This patch adds reverse-engineered monitor mode to the Broadcom drivers.
 
     You will still likely see better performance and stability with an external 
