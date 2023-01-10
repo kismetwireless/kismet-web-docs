@@ -285,7 +285,7 @@ filter: function(data) {
 
 A function, responsible for populating the content of the details panel.  It is passed the data record for the active device, and the element created for the details panel.
 
-A draw function can use any mechanism for populating the details panel.  To replicate the standard system for displaying details, the `jquery.kismet.devicedata` module can be used (and is documented at [DeviceData](webui.jquery.kismet.devicedata.html))
+A draw function can use any mechanism for populating the details panel.  To replicate the standard system for displaying details, the `jquery.kismet.devicedata` module can be used (and is documented at [DeviceData](/docs/dev/webui_devices/)).
 
 ## Sidebar Menu
 

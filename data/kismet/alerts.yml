@@ -323,7 +323,7 @@
   class: "fingerprint"
   phy: "dot11"
   docs: |
-    Invalid RSN (802.11i) security tags in a beacon frame can be used to cause loops and denial of service in some versions of the Atheros drivers, as described in CVE-2017-9714 and [pleasestopnamingvulnerabilities.com](https://pleasestopnamingvulnerabilities.com/).
+    Invalid RSN (802.11i) security tags in a beacon frame can be used to cause loops and denial of service in some versions of the Atheros drivers, as described in CVE-2017-9714 and by [Scott Bauer](https://plzdonthack.me/blog//2017/11/04/A-tale-of-5-remote-kernel-bugs.html).
 
 -
   name: "RTL8195VD1406"
@@ -376,7 +376,7 @@
   class: "fingerprint"
   phy: "dot11"
   docs: |
-    Too many WMMTSPEC options were seen in a probe response; this may be triggered by CVE-2017-11013 as described at [pleasestopnamingvulnerabilities.com](https://pleasestopnamingvulnerabilities.com/)
+    Too many WMMTSPEC options were seen in a probe response; this may be triggered by CVE-2017-11013 as described by [Scott Bauer](https://plzdonthack.me/blog//2017/11/04/A-tale-of-5-remote-kernel-bugs.html).
 
 
 

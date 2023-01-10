@@ -34,8 +34,8 @@ The WSL environment (and the WSL2 HyperV environment) do not have direct access 
 
 However, it *IS* possible to capture packets using the Kismet remote capture system.
 
-For more info on remote capture, see the Kismet remote cap docs (LINK NEEDED)
+For more info on remote capture, see the Kismet [remote capture docs](/docs/readme/remotecap/remotecap/).
 
 ## Compiling
 
-Since WSL is Linux, follow the compile directions for the Linux distribution you haveinstalled (typically Ubuntu or Kali) under the [Linux documentation](/docs/readme/compiling/linux)
+Since WSL is Linux, follow the compile directions for the Linux distribution you have installed (typically Ubuntu or Kali) under the [Linux documentation](/docs/readme/installing/linux/#installing-from-source).

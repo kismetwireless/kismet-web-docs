@@ -15,7 +15,7 @@ When installing from packages, make sure that your distribution is installing a 
 
 Kismet provides official packages - release and nightly - for many common distributions including Ubuntu, Kali, and Raspbian.
 
-Learn more about the Kismet packages [here](/docs/readme/packages)!
+Learn more about the Kismet packages [here](/packages/)!
 
 ## Compiling or packages?
 

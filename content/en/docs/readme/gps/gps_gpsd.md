@@ -13,7 +13,7 @@ weight: 40
 toc: true
 ---
 
-[GPSD](http://www.catb.org/gpsd/) is a service which parses GPS data from a wide range of GPS vendors, including several binary protocols which normal NMEA parsers cannot decode. 
+[GPSD](https://gpsd.gitlab.io/gpsd/index.html) is a service which parses GPS data from a wide range of GPS vendors, including several binary protocols which normal NMEA parsers cannot decode. 
 
 Modern GPSD is a solid option for controlling most GPS receivers.
 

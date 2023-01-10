@@ -55,7 +55,7 @@ If it is not available as a package on your distribution, you will need to compi
 
 On some older distributions, `libwebsockets` may not be available as a modern version.  Kismet uses the libwebsockets async API which was introduced a year ago, but some distributions still may not provide it.  You can try to compile libwebsockets yourself, or you can disable libwebsockets in the Kismet build with `--disable-libwebsockets` in the configure stage below. 
 
-Libwebsockets is used by the remote capture code; compiling without it will not remove websockets from the Kismet server, or prevent using websockets, but any remote capture code compiled without libwebsockets will only be able to use the legacy TCP connection mode.  If you're not planning to use remote capture nodes, none of this matters to you, and you can [get more info about remote capture here](/docs/readme/datasources_remote_capture).
+Libwebsockets is used by the remote capture code; compiling without it will not remove websockets from the Kismet server, or prevent using websockets, but any remote capture code compiled without libwebsockets will only be able to use the legacy TCP connection mode.  If you're not planning to use remote capture nodes, none of this matters to you, and you can [get more info about remote capture here](/docs/readme/remotecap/remotecap/).
 
 * *Linux Fedora (and related)*
 
@@ -95,7 +95,7 @@ cd kismet
 
 Pay attention to the summary at the end and look out for any warnings! The summary will show key features and raise warnings for missing dependencies which will drastically affect the compiled Kismet.
 
-If you're compiling for a remote capture platform *only*, check the [remote capture docs](/docs/readme/datasources_remote_capture/) for more information.
+If you're compiling for a remote capture platform *only*, check the [remote capture docs](/docs/readme/remotecap/remotecap/) for more information.
 
 ### Compile
 

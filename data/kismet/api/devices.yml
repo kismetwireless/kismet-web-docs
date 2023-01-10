@@ -441,7 +441,7 @@
     fetching the key, last-active time, and last signal level.
 
     ```javascript 
-    var ws = new Websocket('ws://host:2501/devices/monitor.ws?'
+    var ws = new WebSocket('ws://host:2501/devices/monitor.ws?'
       'user=username&password=password');
     ws.onmessage = function(msg) {
         var json = JSON.parse(msg.data);
@@ -579,7 +579,7 @@
     This endpoint can run smaller systems out of memory and is generally not 
     encouraged.
 
-    A much safer method is to use the [device view API](/docs/api/device-view/) 
+    A much safer method is to use the [device view API](/docs/api/device-views/) 
     `all` view, using sort-by first seen and a sliding window.
   methods: ["GET", "POST"]
   roles: ["readonly"]
