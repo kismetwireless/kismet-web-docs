@@ -11,13 +11,15 @@ menu:
     identifier: "wardrive-37c3080141199b5ce6efbd7e2dde7d00"
 weight: 50
 toc: true
+aliases: 
+    - /docs/readme/wardriving/
 ---
 
 The wardriving mode configuration overlay (and code to support it) was added to Kismet in `2022-01-git` and subsequent releases.
 
 ## Wardriving mode
 
-Kismet is already equipped for what most would consider to be wardriving out of the box:  With a GPS and one (or more) Wi-Fi cards, Kismet will generate logs suitable for uploading to Wigle or generating your own maps and logs.
+Kismet is already equipped for what most would consider to be wardriving out of the box:  With a GPS and one (or more) Wi-Fi cards, Kismet will generate logs suitable for uploading to [Wigle](https://wigle.net) or generating your own maps and logs.
 
 Many people however want to run Kismet on what would typically be considered light-weight or even underpowered hardware, which presents challenges in high-density areas (or even lower density areas, depending how under-powered the hardware is).
 
