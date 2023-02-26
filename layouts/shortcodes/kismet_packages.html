@@ -62,16 +62,16 @@ button {
 </div>
 <div class="flavor-tab-panel" id="tabPanel_1_{{ .key | urlize }}">
 <pre>
-wget -O - https://www.kismetwireless.net/repos/kismet-release.gpg.key | sudo apt-key add -
-echo 'deb https://www.kismetwireless.net/repos/apt/release/{{ .key | lower }} {{ .key | lower }} main' | sudo tee /etc/apt/sources.list.d/kismet.list
+wget -O - https://www.kismetwireless.net/repos/kismet-release.gpg.key|gpg --dearmor | sudo tee /usr/share/keyrings/kismet-archive-keyring.gpg
+echo 'deb [signed-by=/usr/share/keyrings/kismet-archive-keyring.gpg] https://www.kismetwireless.net/repos/apt/release/{{ .key | lower }} {{ .key | lower }} main' | sudo tee /etc/apt/sources.list.d/kismet.list
 sudo apt update
 sudo apt install kismet
 </pre>
 </div>
 <div class="flavor-tab-panel" id="tabPanel_2_{{ .key | urlize }}">
 <pre>
-wget -O - https://www.kismetwireless.net/repos/kismet-release.gpg.key | sudo apt-key add -
-echo 'deb https://www.kismetwireless.net/repos/apt/git/{{ .key | lower }} {{ .key | lower }} main' | sudo tee /etc/apt/sources.list.d/kismet.list
+wget -O - https://www.kismetwireless.net/repos/kismet-release.gpg.key|gpg --dearmor | sudo tee /usr/share/keyrings/kismet-archive-keyring.gpg
+echo 'deb [signed-by=/usr/share/keyrings/kismet-archive-keyring.gpg] https://www.kismetwireless.net/repos/apt/git/{{ .key | lower }} {{ .key | lower }} main' | sudo tee /etc/apt/sources.list.d/kismet.list
 sudo apt update
 sudo apt install kismet
 </pre>
