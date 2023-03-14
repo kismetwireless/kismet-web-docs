@@ -62,3 +62,9 @@
   platforms: ["amd64", "armhf", "arm64"]
   name: "Ubuntu Jammy (22.04)"
   key: "jammy"
+
+-
+  distro: "Ubuntu Kinetic (22.10)"
+  platforms: ["amd64", "armhf", "arm64"]
+  name: "ubuntu Kinetic (22.10)"
+  key: "kinetic"
