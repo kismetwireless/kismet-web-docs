@@ -20,13 +20,6 @@ Kismet can be installed directly on macOS via `brew`.
 
 You will need to install the `brew` tool from [brew.sh](https://brew.sh).
 
-To install the latest released version:
-
-```
-brew tap kismetwireless/kismet
-brew install kismet
-```
-
 To install the latest git development code:  
 
 ```
@@ -35,6 +28,8 @@ brew install --HEAD kismet-git
 ```
 
 This will install the dependencies, download Kismet, build, and install it. 
+
+The next release of Kismet will support `brew` based installation; for now, you'll need to use the nightly versions.
 
 ## Building it manually
 
