@@ -7,7 +7,7 @@ weight: 50
 images: []
 categories: ["News", "Wardriving"]
 tags: ["wardriving", "wi-fi" ]
-contributors: ["Mike Kershaw"]
+contributors: ["Mike Kershaw / Dragorn"]
 pinned: false
 homepage: false
 aliases: 
