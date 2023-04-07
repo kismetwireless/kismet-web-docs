@@ -30,7 +30,7 @@ git clone https://www.kismetwireless.net/git/kismet.git
 or to checkout from the Github mirror:
 
 ```bash
-git clonehttps://github.com/kismetwireless/kismet.git
+git clone https://github.com/kismetwireless/kismet.git
 ```
 
 You can browse the development code [via Github here](https://github.com/kismetwireless/kismet)
