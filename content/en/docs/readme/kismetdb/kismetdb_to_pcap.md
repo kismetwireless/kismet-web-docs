@@ -85,7 +85,7 @@ will generate a legacy PCAP log with only the first and second interfaces.
 If you have multiple datasources and want to generate a log file for each, or extremely large log files and want to split the logs by packet count or by log size, `kismetdb_to_pcap` can do that, as well:
 
 ```bash
-kismetdb_to_pcap --in some-kismet-log.kismet --out some-pcap-log.pcap --old-pcap --split-datasources 
+kismetdb_to_pcap --in some-kismet-log.kismet --out some-pcap-log.pcap --old-pcap --split-datasources
 ```
 
 will make a pcap for each datasource named `some-kismet-log.kismet-[uuid]`.
@@ -100,7 +100,7 @@ will make a pcap every 10000 packets, named `some-pcap-log.pcap-[XXXXXX]`.
 
 The `--split-datasources` option can be combined with the `--split-packets` or the `--split-size` options.
 
-## Paramters 
+## Parameters
 
 {{<argumentshort i in filename>}}
 Path to the kismetdb file to process
