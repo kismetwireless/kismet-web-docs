@@ -43,7 +43,7 @@
       
     * Remote capture via websockets 
 
-      A Bionic install cannot funciton as a remote capture node feeding a Kismet server 
+      A Bionic install cannot function as a remote capture node feeding a Kismet server 
       over websockets. 
 
       TCP mode is still available. 
