@@ -17,7 +17,7 @@ Kismet captures data from "data sources".  The captured data is typically raw pa
 
 ## Configuring sources 
 
-Sources are added to Kismet via the Web UI (Menu->Datasources), via the Kismet config file, or on the ommand line when starting Kismet.
+Sources are added to Kismet via the Web UI (Menu->Datasources), via the Kismet config file, or on the command line when starting Kismet.
 
 Most datasources can be detected automatically, however some must be manually added because the hardware can't be identified.
 
