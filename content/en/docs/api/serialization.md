@@ -19,11 +19,17 @@ Kismet can export data as several different formats; generally these formats are
 
 Kismet will export objects in traditional JSON format suitable for consumption in javascript or any other language with a JSON interpreter.
 
+## TJSON
+
+Some JSON processing systems use the period (`.`) as a separator for trees and paths, while Kismet uses it as part of the name space of the field.
+
+Using the `.tjson` extension on any REST endpoint will return normal JSON records, but all field names will be changed so that the `.` separator is swapped for `_`; for example `kismet.device.base` will become `kismet_device_base`, and `sensor.device.last_record` would become `sensor_device_last_record`.
+
 ## EKJSON
 
 "EK" JSON is modeled after the Elastic Search JSON format, where a complete JSON object is found on each line of the output.
 
-Kismet supports ekjson on any REST endpoint which returns a vector/list/array of results.  
+Kismet supports ekjson on any REST endpoint which returns a vector/list/array of results.
 
 *Added 2019-10*
 To be compatible with the ELK interpretation of field names, Kismet now permutes all field names in `ekjson` output, replacing all instances of `.` with `_`.
