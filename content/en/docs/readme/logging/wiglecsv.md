@@ -11,6 +11,8 @@ menu:
     identifier: "wiglecsv-7c369bce9c4baf95050e8c7a9bd0a2d4"
 weight: 40
 toc: true
+aliases:
+    - /docs/readme/wigle/
 ---
 
 [Wigle](https://wigle.net) is a community for wardriving and mapping WiFi networks.

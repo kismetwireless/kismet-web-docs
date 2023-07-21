@@ -1,8 +1,8 @@
-kismet: 
-  version: "2022-08-R1"
-  changelog: | 
-    Initial introduction of 6e 6GHz support 
+kismet:
+  version: "2023-07-R1"
+  changelog: |
+    Dark mode UI
 
-    Significant memory improvements 
+    Massive speed gains for processing on multicore systems
 
-    Significant performance improvements in dense environments
+    Many, many bug fixes and enhancements

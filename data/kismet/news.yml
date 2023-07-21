@@ -1,8 +1,15 @@
-- 
+-
+  date: "2023-07-21"
+  title: "Kismet 2023-07-R1 is out!"
+  content: |
+    Kismet 2023-07-R1 is out!  This brings a lot of speed boosts, memory improvements, bug fixes,
+    and a new dark-mode UI, as well as improved 6ghz channel support, improved RF sensor and
+    power meter support, and more.
+-
   date: "2022-11-11"
   title: "Welcome to the new Kismet site!"
-  content: | 
-    Welcome to the new Kismet site; redone using Hugo as the generation engine and a lot of work towards 
+  content: |
+    Welcome to the new Kismet site; redone using Hugo as the generation engine and a lot of work towards
     templating to make more of the documentation, especially the API documentation, much more consistent.
 
     Let us know if any links broke, and expect more updates to the readme and development documentation!

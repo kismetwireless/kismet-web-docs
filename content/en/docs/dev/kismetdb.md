@@ -61,7 +61,7 @@ Timestamps are stored as integer seconds since the epoch for low-precision times
 
 *As of KismetDB version 5* the GPS coordinates are stored as 8-byte `REAL` double-precision floats; these are the native GPS coordinate, and no transformation is necessary.
 
-*Prior to database version 5* the GPS coordinates were normalized to integers.  
+*Prior to database version 5* the GPS coordinates were normalized to integers.
 
 #### *This is deprecated for all logs created under version 5 or newer*.
 
@@ -208,6 +208,8 @@ Packets are stored in the raw, original capture format; in the case of Wi-Fi thi
 | error      | *int*         | Boolean, packet was flagged by Kismet as an error in rx or otherwise invalid due to parsing errors                                                              |
 | tags       | *text*        | Arbitrary space-separated list of tags added by packet dissectors in Kismet                                                                                     |
 | datarate   | *real*        | Datarate, in mbit/sec                                                                                                                                           |
+| hash       | int         | CRC32 hash of the packet contents (not including radio headers), equivalent to the pcap-ng hash record.                                                         |
+| packetid   | *int*         | Unique packet ID, equivalent to the packet ID field in pcap-ng.  Can be used to correlate duplicate packets across multiple interfaces.                         |
 
 ### Snapshots
 
