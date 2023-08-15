@@ -53,5 +53,11 @@
 -
   distro: "Ubuntu Kinetic (22.10)"
   platforms: ["amd64", "armhf", "arm64"]
-  name: "ubuntu Kinetic (22.10)"
+  name: "Ubuntu Kinetic (22.10)"
   key: "kinetic"
+
+-
+  distro: "Ubuntu Lunar (23.04)"
+  platforms: ["amd64", "armhf", "arm64"]
+  name: "Ubuntu Lunar (22.10)"
+  key: "lunar"

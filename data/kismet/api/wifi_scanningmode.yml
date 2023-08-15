@@ -1,4 +1,4 @@
-- 
+-
   name: "Wi-Fi scanning report"
   uri: "/phy/phy80211/scan/scan_report"
   types: ["cmd"]
@@ -6,23 +6,23 @@
   roles: ["admin", "scanreport"]
   jsonparameters:
     - {name: "reports", type: "list", description: "List of report objects"}
-    - {name: "source_name", type: "string", description: "Source name"}
-    - {name: "source_uuid", type: "string", description: "Source UUID"}
+    - {name: "source_name", type: "string", description: "Source name", required: true}
+    - {name: "source_uuid", type: "string", description: "Source UUID", required: true}
   added: "2020-06"
   docs: |
-    Submit a scanning report. 
+    Submit a scanning report.
 
-    A scanning report consists of a datasource name and UUID, and a list of 
+    A scanning report consists of a datasource name and UUID, and a list of
     report objects.
   apinotes: |
     Each report object should contain:
 
     {{< kismet_api_param name="timestamp" type="number" required="false">}}
-      Unix timestamp with second precision.  
+      Unix timestamp with second precision.
 
-      If no timestmap is provided, the time the report is received is used. 
+      If no timestmap is provided, the time the report is received is used.
 
-      Due to lack of high-precision packet data in scanning mode, timestamps 
+      Due to lack of high-precision packet data in scanning mode, timestamps
       are second precision only.
     {{< /kismet_api_param >}}
 
@@ -35,11 +35,11 @@
     {{< /kismet_api_param >}}
 
     {{< kismet_api_param name="capabilities" type="string" required="false">}}
-      An Android or Wigle style string of encryption options and other AP 
-      attributes, such as `[WPS]`, `[WPA-PSK-TKIP+CCMP]`, and so on. 
+      An Android or Wigle style string of encryption options and other AP
+      attributes, such as `[WPS]`, `[WPA-PSK-TKIP+CCMP]`, and so on.
 
-      If no capabilities field is provided, the device is assumed to be an AP 
-      with no encryption options set. 
+      If no capabilities field is provided, the device is assumed to be an AP
+      with no encryption options set.
     {{< /kismet_api_param >}}
 
     {{< kismet_api_param name="channel" type="string" required="false">}}
@@ -71,14 +71,14 @@
     {{< /kismet_api_param >}}
 
     {{<kismet_api_param name="tags" type="object" required="false">}}
-      Object/Map of [device tags](/docs/api/devices/#editing-device-tags) which will be 
+      Object/Map of [device tags](/docs/api/devices/#editing-device-tags) which will be
       applied to the device created by this scan.
 
-      Tagged scans should be used with caution:  Tags will be applied to the device and will override 
-      any existing tags, so care must be taken with tags that overlap those editable by the user interface. 
+      Tagged scans should be used with caution:  Tags will be applied to the device and will override
+      any existing tags, so care must be taken with tags that overlap those editable by the user interface.
 
-      Submitting a user name or description tag, for instance, may be valuable if the user can enter 
-      that data in the scanning app, but the user should be advised that they can't also edit that user name 
+      Submitting a user name or description tag, for instance, may be valuable if the user can enter
+      that data in the scanning app, but the user should be advised that they can't also edit that user name
       in the normal Kismet UI.
     {{< /kismet_api_param >}}
 
