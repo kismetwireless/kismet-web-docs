@@ -52,7 +52,7 @@ The release versions are built from the latest tagged releases.
 
 ## Hardware platforms 
 
-Packages are built for specific hardware platforms; your package manager shoudl automatically select packages for your platform.
+Packages are built for specific hardware platforms; your package manager should automatically select packages for your platform.
 
 | Platform | Type | Devices |
 | -------- | ---- | ------- |
