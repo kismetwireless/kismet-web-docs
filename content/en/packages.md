@@ -40,7 +40,7 @@ Additionally, the packaged versions of Kismet place all the configuration files 
 
 ### Use kismet_site.conf 
 
-Installing Kismet from packages highlights the utility of the (kismet_site.conf)[/docs/readme/configuring/configfiles/#customizing-configs-with-kismet_siteconf] configuration override file.
+Installing Kismet from packages highlights the utility of the [kismet_site.conf](/docs/readme/configuring/configfiles/#customizing-configs-with-kismet_siteconf) configuration override file.
 
 By placing any configuration changes in this override, you will be able to upgrade the Kismet packages at any time without losing configuration changes or raising configuration conflict errors.
 
