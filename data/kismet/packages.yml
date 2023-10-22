@@ -55,9 +55,18 @@
   platforms: ["amd64", "armhf", "arm64"]
   name: "Ubuntu Kinetic (22.10)"
   key: "kinetic"
+  notes: |
+    Lunar is a non-LTS non-stable release due to be aged out from the build system, consider
+    upgradig to Lunar or Mantic!
 
 -
   distro: "Ubuntu Lunar (23.04)"
   platforms: ["amd64", "armhf", "arm64"]
   name: "Ubuntu Lunar (22.10)"
   key: "lunar"
+
+-
+  distro: "Ubuntu Mantic (23.10)"
+  platforms: ["amd64", "armhf", "arm64"]
+  name: "Ubuntu Mantic (23.10)"
+  key: "mantic"
