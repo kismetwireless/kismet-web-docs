@@ -6,14 +6,14 @@
   types: []
   roles: ["none"]
   docs: |
-    This API is used by the Kismet web UI, and is available for other alternate full-UI replacements.  It is 
-    used to indicate if Kismet has been configured fully. 
+    This API is used by the Kismet web UI, and is available for other alternate full-UI replacements.  It is
+    used to indicate if Kismet has been configured fully.
 
-    Kismet does not provide a default username or password; instead, if the user has not configured a static 
-    account in a configuration file, the UI is expected to prompt the user during the first-tine startup. 
+    Kismet does not provide a default username or password; instead, if the user has not configured a static
+    account in a configuration file, the UI is expected to prompt the user during the first-tine startup.
 
     The majority of API endpoints will not be available if the account setup process has not been completed.
-  return: | 
+  return: |
     Basic document with success state communicated via HTTP error codes.
   responses:
     success:
@@ -22,7 +22,7 @@
       - [406, "If the the credentials are hard-coded into a configuration file"]
       - [-1, "If the initial setup has not been completed and the user must configure a password to continue"]
   notes: |
-    If the password is set in the Kismet configuration files, this API will not be available 
+    If the password is set in the Kismet configuration files, this API will not be available
     and will return `HTTP 406`
 
 -
@@ -33,21 +33,21 @@
   types: []
   roles: ["none", "admin"]
   docs: |
-    Configure the initial login. 
+    Configure the initial login.
 
     This causes Kismet to store the initial login in the settings file in the users home directory.
   parameters:
     -
-      name: "username" 
+      name: "username"
       type: "string"
-      required: true 
+      required: true
       description: "Username used for standard web login.  This user will have the `admin` role."
     -
-      name: "password" 
-      type: "string" 
-      required: true 
+      name: "password"
+      type: "string"
+      required: true
       description: "Password string for admin user login."
-  return: | 
+  return: |
     Basic document with success state communicated via HTTP error codes.
   responses:
     success:
@@ -56,15 +56,15 @@
       - [406, "If the the server password is hard-coded into a configuration file"]
       - [-1, "If the login information could not be set for some other reason"]
   notes: |
-    Setting the initial password does not require a login. 
+    Setting the initial password does not require a login.
 
-    Subsequent attempts to change the login and password will require a valid login 
+    Subsequent attempts to change the login and password will require a valid login
     session.
 
-    Changing the password does not invalidate any current login sessions.  
+    Changing the password does not invalidate any current login sessions.
 
-    If the password is set in the global Kismet configuration files, such as 
-    `kismet_httpd.conf` or `kismet_site.conf`, this API will not be available 
+    If the password is set in the global Kismet configuration files, such as
+    `kismet_httpd.conf` or `kismet_site.conf`, this API will not be available
     and will return `HTTP 406`
 
 -
@@ -72,12 +72,14 @@
   uri: "/session/check_session"
   methods: ["GET"]
   types: []
-  roles: ["none"]
+  roles: ["admin"]
   docs: |
-    If a UI or script has a saved session, it can use this endpoint to check if the session is still valid and take an 
-    appropriate action (such as using a saved login or prompting the user to log in again) if it is no longer valid. 
+    If a UI or script has a saved session, it can use this endpoint to check if the session is still valid and take an
+    appropriate action (such as using a saved login or prompting the user to log in again) if it is no longer valid.
 
     If basic auth data also provided, a new login will be created and returned if the session is no longer valid.
+
+    This endpoint validates login sessions; API keys will not be accepted on this endpoint.
   return:
     Empty content, status is communicated via error codes.
   responses:
@@ -93,11 +95,11 @@
   methods: ["GET"]
   roles: ["none"]
   docs: |
-    A UI or script may need to check for a valid login and prompt the user to take an appropriate action if the login 
-    credentials are not valid. 
+    A UI or script may need to check for a valid login and prompt the user to take an appropriate action if the login
+    credentials are not valid.
 
-    Most likely, the session check API is more appropriate as it will return a valid session simultaneously if the 
-    login is valid. 
+    Most likely, the session check API is more appropriate as it will return a valid session simultaneously if the
+    login is valid.
   return: |
     Empty document, results communicated in status codes.
   responses:
@@ -113,10 +115,10 @@
   added: "2020-11"
   methods: ["GET"]
   roles: ["admin"]
-  docs: | 
-    Fetch a list of created API tokens, descriptions, and associated roles. 
+  docs: |
+    Fetch a list of created API tokens, descriptions, and associated roles.
 
-    If `httpd_allow_auth_view` is set to `false` in the Kismet configuration, the results *will not include* the API 
+    If `httpd_allow_auth_view` is set to `false` in the Kismet configuration, the results *will not include* the API
     tokens, and the user must look at the Kismet configuration files to view previously created API keys.
   responses:
     success:
@@ -128,16 +130,16 @@
   name: "Creating API tokens"
   uri: "/auth/apikey/generate"
   types: ["cmd"]
-  added: "2020-11" 
+  added: "2020-11"
   methods: ["POST"]
   roles: ["admin"]
-  docs: | 
-    Create a new API token and assign it a role. 
+  docs: |
+    Create a new API token and assign it a role.
 
-    New API tokens can *only* be generated if the `httpd_allow_auth_creation` option is set to `true` in the 
-    Kismet config.  This is set by default. 
+    New API tokens can *only* be generated if the `httpd_allow_auth_creation` option is set to `true` in the
+    Kismet config.  This is set by default.
 
-    If `httpd_allow_auth_view` is not set to `true` in the Kismet configuration, API tokens may only be viewed 
+    If `httpd_allow_auth_view` is not set to `true` in the Kismet configuration, API tokens may only be viewed
     at the time of creation, or by inspecting the session file in the users Kismet configuration directory.
   parameters:
     -
@@ -145,19 +147,19 @@
       type: "string"
       required: true
       description: "Name of API key; each API key must have a unique name."
-    - 
-      name: "role" 
-      type: "string" 
-      required: true 
-      description: "Role of API key; this will restrict what the key is allowed to access."
-    - 
-      name: "duration" 
+    -
+      name: "role"
       type: "string"
-      required: true 
+      required: true
+      description: "Role of API key; this will restrict what the key is allowed to access."
+    -
+      name: "duration"
+      type: "string"
+      required: true
       description: "Duration, in seconds, of token validity, from the time of token creation (now).  May be 0 for a permanent token."
   result: |
     A plain-text response of the newly created token
-  responses: 
+  responses:
     success:
       - [200, "On success, a plain-text response of the newly created token"]
     failure:
@@ -175,16 +177,16 @@
   methods: ["POST"]
   roles: ["admin"]
   docs: |
-    Revoke and delete an API token. 
+    Revoke and delete an API token.
 
     All active sessions using the token will be revoked and future sessions prevented.
 
     If `httpd_allow_auth_creation` is not set in the Kismet configuration, this API will return an error.
   parameters:
-    - 
-      name: "name" 
+    -
+      name: "name"
       type: "string"
-      required: true 
+      required: true
       description: "Name of API token to revoke"
   return: |
     Empty document, success communicated in status codes.
