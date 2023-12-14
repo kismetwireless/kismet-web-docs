@@ -17,7 +17,7 @@ Kismet can leverage the cheap [rtl-sdr](https://www.rtl-sdr.com) software define
 
 The SDR RTLADSB source can autodetect rtl-sdr devices automatically, and can be manually specified with `type=rtladsb`:
 ```
-source=rtlradsb-0:type=rtladsb
+source=rtladsb-0:type=rtladsb
 ```
 
 ## ADSB
