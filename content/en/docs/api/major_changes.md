@@ -15,7 +15,15 @@ toc: true
 
 Over time, the Kismet endpoint API will change - while efforts are made to retain compatibility whenever possible, some changes will require breaking older implementations.  These significant changes will be documented here.
 
-#### git
+#### Git
+
+* Added `crypt_bitfield` fields for modern Wi-Fi encryption options.  Added `crypt_string` for printable versions of the crypt bitfield.  Older crypset options remain, but are deprecated, and can not accurated represent the full modern encryption options.
+
+* Added common string cache for crypt string and Wi-Fi SSIDs, invisible to the API consumption but optimizing in the background.
+
+* Expanded the system status API to included additional string cache records.
+
+#### 2023-07-R1
 
 * Changed to JWT internally for generating session tokens
 
@@ -55,7 +63,7 @@ Changes to ipc/remote:
 
 Changes to the REST API:
 
-* Added a [view-specific device subscription API](/docs/api/device_views/#realtime-device-monitoring-by-view) under `/device/views/[VIEWID]/monitor.ws` 
+* Added a [view-specific device subscription API](/docs/api/device_views/#realtime-device-monitoring-by-view) under `/device/views/[VIEWID]/monitor.ws`
 * Added a [datasource-specific ADSB hex API](/docs/api/adsb/#adsb-raw-websocket) under `/datasource/by-uuid/[uuid]/adsb_raw.ws`
 * Added `class` and `severity` to [alert definitions](/docs/api/alerts/#alert-severities) and returned alerts
 
@@ -72,7 +80,7 @@ Changes to the REST API:
 * All REST endpoints in the API now use `cmd` as the file extension for all commands, deprecating and removing the `jcmd` extension fully (which has not been a documented command extension for several releases already).
 * Websockets are now implemented in the Kismet webserver, with the Eventbus websocket being the largest user.
 * `wget` is now supported by detection of the user-agent field; a full HTTP 401 and WWW-Authenticate header is sent to accommodate `wget` not sending basic-auth until it fails an auth check.
-* HTTP GET variables are now properly supported 
+* HTTP GET variables are now properly supported
 * [API keys and roles](/docs/api/login/#api-tokens-and-roles) are now supported
 * JSON data accepted as application/json as well as application/x-form-urlencoded
 * Authentication may be passed as `user`, `password`, or `KISMET` GET URL variables
@@ -113,7 +121,7 @@ Fields made dynamic:
 
 To save RAM, the `kismet.device.base.tags` sub-map is now optional; if there are no tags in a device, this field will not exist in the serialized JSON data.  Consumers of this data should check that `kismet.device.base.tags` is present in the device map.
 
-#### 2019-10 
+#### 2019-10
 
 To more cleanly support ELK, all location records now use `geopoint` formats.  A geopoint is an array containing `[lon, lat]`.  `kismet.common.location.lat` and `kismet.common.location.lon` are now `kismet.common.location.geopoint`.
 
@@ -124,7 +132,7 @@ To more cleanly support ELK the advertised ssid and probed ssid components of do
 
 #### 2019-10
 
-To more cleanly support ELK EKJSON format, the `ekjson` serialization now permutes the field names to transform all `.` to `_`.  This brings it in line with the ELK interpretation that a `.` is a field separator.  To access the old implemention, where the field names are unmodified, use the new `itjson` (or 'iterative json') format; it will return results which are a vector of objects as an object per line, suitable for serialized parsing and processing. 
+To more cleanly support ELK EKJSON format, the `ekjson` serialization now permutes the field names to transform all `.` to `_`.  This brings it in line with the ELK interpretation that a `.` is a field separator.  To access the old implemention, where the field names are unmodified, use the new `itjson` (or 'iterative json') format; it will return results which are a vector of objects as an object per line, suitable for serialized parsing and processing.
 
 #### 2019-04
 
