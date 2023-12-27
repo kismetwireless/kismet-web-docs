@@ -9,7 +9,7 @@ menu:
   docs:
     parent: ""
     identifier: "logging-77528a8d9a5aa7a6ac2ff71b0f8ec4da"
-weight: 10 
+weight: 10
 toc: true
 ---
 
@@ -29,6 +29,10 @@ Kismet can log to multiple logs simultaneously, configured in the `kismet_loggin
 ```
 log_types=kismet,pcapng
 ```
+
+Different log formats can be useful in different situations.  The `kismet` log is a unified single log for all Kismet related data - everything shown in the UI is available in the `kismet` log, and all packets and other data records are available.  Some features require the `kismet` log to process historical packets.
+
+For extremely high-density logging, the `pcapng` log may offer better performance.  `pcapng` logs can be processed by Wireshark and other popular tools, and are written as a stream instead of random access; for high-volume logging or rotating logs, it may make sense to use the `pcapng` log instead of the `kismet` log - or to combine them, by turning off packet logging in the `kismet` log.
 
 ## Log names and locations
 
@@ -63,16 +67,16 @@ Kismet stores logs in the directory it is launched from.  This can be changed us
 log_prefix=/tmp/kismet
 ```
 
-## Log name templates 
+## Log name templates
 
-The template used to create the logfile names can be changed in the Kismet configs using the `log_template` option. 
+The template used to create the logfile names can be changed in the Kismet configs using the `log_template` option.
 
 By default, Kismet will log files as:
 ```text
 {prefix}/{title}-{YYYYMMDD}-{HH-MM-SS}-{#}.{type}
 ```
 
-using the template 
+using the template
 ```
 log_template=%p/%n-%D-%t-%i.%l
 ```
@@ -86,10 +90,10 @@ Templates are defined with `%` codes:
 | %n | Logging title (such as the `-t` option on the command line) |
 | %d | Log date as `Mmm-DD-YYYY` |
 | %D | Log date as `YYYYMMDD` |
-| %t | Log time as `HH-MM-SS` | 
-| %T | Log time as `HHMMSS` | 
+| %t | Log time as `HH-MM-SS` |
+| %T | Log time as `HHMMSS` |
 | %i | Log number, if multiple logs of the same name are found |
-| %I | Multi-part log number padded with zeroes | 
+| %I | Multi-part log number padded with zeroes |
 | %l | Log type (kismet, pcapng, etc) |
 | %h | Home directory |
 

@@ -203,6 +203,14 @@
     While the 802.11 standard doesn't place restrictions on what data can be in a SSID, the percent sign format indicators used by several programming languages have been used to crash devices such as iPhones and macOS systems.
 
 -
+  name: "FLIPPERZERO"
+  class: "fingerprint"
+  phy: "bt"
+  added: "2023-12-git"
+  docs: |
+    The Flipper Zero device can generate BTLE packets which can cause denial of service conditions or other operational errors on some Bluetooth devices.  The presence of a Flipper Zero device does not necessarily mean such an attack is happening.
+
+-
   name: "KARMAOUI"
   class: "fingerprint"
   phy: "dot11"
