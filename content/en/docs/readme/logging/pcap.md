@@ -13,7 +13,7 @@ weight: 30
 toc: true
 ---
 
-PCAP (and PCAP-NG) are standard formats for recording packets, which most tools which manipulate packets accept, including Tcpdump and Wireshark.  
+PCAP (and PCAP-NG) are standard formats for recording packets, which most tools which manipulate packets accept, including Tcpdump and Wireshark.
 
 A kismetdb log can be converted to PCAP-NG, or Kismet can write the packet logs directly.
 
@@ -31,7 +31,7 @@ There are two main flavors of PCAP supported by Kismet:
 
     Whenever possible, the PCAP-NG log file will have richer content.
 
-## When to enable PCAP 
+## When to enable PCAP
 
 Typically there is no need to enable both the `kismet` log type and the PCAP log types at the same time, since the PCAP log can be created using the `kismetdb_to_pcap` tool which is part of Kismet.
 
@@ -47,6 +47,17 @@ and
 log_types=pcapng
 ```
 
+## Rotating logs
+
+As of `kismet-2023-12-git`, the `pcapng` log supports rotating the log file based on size.  When enabled, a new `pcapng` log will be made once the existing log exceeds the specified size.
+
+```
+pcapng_log_max_mb=1024
+```
+
+Log size is specified in megabytes.  Logs are rotated when the size *exceeds* the configured maximum, and may be up to 4kb larger than the maximum specified size (in other words, if logging to a filesystem with a maximum file size, do not set the maximum `pcapng` log to the exact maximum as it may exceed the filesystem maximum by a small amount).
+
+Logs are rotated so that no packets should be lost during the creation of the new log file.
 
 ## Filtering
 
