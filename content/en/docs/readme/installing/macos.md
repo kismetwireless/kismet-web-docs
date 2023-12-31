@@ -47,7 +47,9 @@ You will need to install the `brew` tool from [brew.sh](https://brew.sh).  There
 #### Install the required packages via Brew:
 
 ```bash
-brew install pkg-config python3 libpcap protobuf protobuf-c pcre librtlsdr libbtbb ubertooth libusb openssl libwebsockets rtl_433
+brew install pkg-config python3 libpcap protobuf protobuf-c pcre \
+librtlsdr libbtbb ubertooth libusb openssl libwebsockets rtl_433 \
+mosquitto
 ```
 
 ### Clone git

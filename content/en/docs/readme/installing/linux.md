@@ -5,7 +5,7 @@ weight: 50
 toc: true
 ---
 
-## Installing from package 
+## Installing from package
 
 Packages for many popular distributions are available on the [Kismet packages page](/packages/).
 
@@ -13,7 +13,7 @@ Make sure you're installing a modern version when installing from packages!  Som
 
 ## Installing suid-root
 
-Kismet has the option to be installed as a *suid-root* tool.  
+Kismet has the option to be installed as a *suid-root* tool.
 
 To configure network interfaces, the Kismet capture process needs root privileges.  These can be granted by running *all* of Kismet as root (`sudo kismet`), or by installing the capture tools as suid-root.
 
@@ -27,16 +27,22 @@ If you installed Kismet using a package from your distribution, uninstall it usi
 
 If you compiled Kismet from source, the safest course is to remove it manually, however if you did not change the install prefix, a new compile and install will overwrite it.
 
-### Install dependencies 
+### Install dependencies
 
 Kismet needs a number of libraries and  development headers to compile; these should be available in nearly all distributions.  Some distributions use a single package for the libraries and development headers, while others split them into `-devel` packages.
 
 * *Linux Ubuntu/Debian/Kali/Mint* and other deb-based distributions
 
-### Core dependencies 
+### Core dependencies
 
 ```bash
-sudo apt install build-essential git libwebsockets-dev pkg-config zlib1g-dev libnl-3-dev libnl-genl-3-dev libcap-dev libpcap-dev libnm-dev libdw-dev libsqlite3-dev libprotobuf-dev libprotobuf-c-dev protobuf-compiler protobuf-c-compiler libsensors4-dev libusb-1.0-0-dev python3 python3-setuptools python3-protobuf python3-requests python3-numpy python3-serial python3-usb python3-dev python3-websockets librtlsdr0 libubertooth-dev libbtbb-dev
+sudo apt install build-essential git libwebsockets-dev pkg-config \
+zlib1g-dev libnl-3-dev libnl-genl-3-dev libcap-dev libpcap-dev \
+libnm-dev libdw-dev libsqlite3-dev libprotobuf-dev libprotobuf-c-dev \
+protobuf-compiler protobuf-c-compiler libsensors4-dev libusb-1.0-0-dev \
+python3 python3-setuptools python3-protobuf python3-requests \
+python3-numpy python3-serial python3-usb python3-dev python3-websockets \
+librtlsdr0 libubertooth-dev libbtbb-dev libmosquitto-dev
 ```
 
 On some older distributions, `libprotobuf-c-dev` may be called `libprotobuf-c0-dev`.
@@ -53,14 +59,20 @@ If it is not available as a package on your distribution, you will need to compi
 
 #### Libwebsockets
 
-On some older distributions, `libwebsockets` may not be available as a modern version.  Kismet uses the libwebsockets async API which was introduced a year ago, but some distributions still may not provide it.  You can try to compile libwebsockets yourself, or you can disable libwebsockets in the Kismet build with `--disable-libwebsockets` in the configure stage below. 
+On some older distributions, `libwebsockets` may not be available as a modern version.  Kismet uses the libwebsockets async API which was introduced a year ago, but some distributions still may not provide it.  You can try to compile libwebsockets yourself, or you can disable libwebsockets in the Kismet build with `--disable-libwebsockets` in the configure stage below.
 
 Libwebsockets is used by the remote capture code; compiling without it will not remove websockets from the Kismet server, or prevent using websockets, but any remote capture code compiled without libwebsockets will only be able to use the legacy TCP connection mode.  If you're not planning to use remote capture nodes, none of this matters to you, and you can [get more info about remote capture here](/docs/readme/remotecap/remotecap/).
 
 * *Linux Fedora (and related)*
 
 ```bash
-sudo dnf install make automake gcc gcc-c++ kernel-devel git libwebsockets-devel pkg-config zlib-devel libnl3-devel libcap-devel libpcap-devel NetworkManager-libnm-devel libdwarf libdwarf-devel elfutils-devel libsqlite3x-devel protobuf-devel protobuf-c-devel protobuf-compiler protobuf-c-compiler lm_sensors-devel libusb-devel fftw-devel
+sudo dnf install make automake gcc gcc-c++ kernel-devel git \
+libwebsockets-devel pkg-config zlib-devel libnl3-devel \
+libcap-devel libpcap-devel NetworkManager-libnm-devel \
+libdwarf libdwarf-devel elfutils-devel libsqlite3x-devel \
+protobuf-devel protobuf-c-devel protobuf-compiler \
+protobuf-c-compiler lm_sensors-devel libusb-devel fftw-devel \
+libmosquitto-devel
 ```
 
 You will also need the related python3, rtlsdr, and ubertooth packages.
@@ -69,7 +81,7 @@ You will also need the related python3, rtlsdr, and ubertooth packages.
 
 Most distributions will have equivalent packages.  If your distribution splits binary and development packages, make sure to install both if you're compiling.
 
-### Clone git 
+### Clone git
 
 Clone Kismet from git.  If you haven't cloned Kismet before:
 
@@ -85,7 +97,7 @@ git pull
 ```
 
 ### Configure
-    
+
 This will find all the specifics about your system and prepare Kismet for compiling.  If you have any missing dependencies or incompatible library versions, they will show up here.
 
 ```bash
