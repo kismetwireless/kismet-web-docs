@@ -44,7 +44,7 @@ Kismet remote capture is part of the Kismet capture tools; the same tools launch
 | Bluetooth - TICC 2540 | kismet_cap_ti_cc_2540 | 
 | Bluetooth - Ubertooth | kismet_cap_ubertooth_one |
 | Meters - AMR | kismet_cap_sdr_rtlamr | 
-| Sensors - rtl_433 | kismet_cap_sdr_rtl4333 | 
+| Sensors - rtl_433 | kismet_cap_sdr_rtl433 | 
 | Wi-Fi - Linux | kismet_cap_linux_wifi | 
 | Wi-Fi - macOS | kismet_cap_osx_corewlan | 
 | Wi-Fi - BladeRF2 | kismet_cap_bladerf_wiphy | 
