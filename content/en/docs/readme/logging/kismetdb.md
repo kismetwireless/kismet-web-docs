@@ -25,7 +25,7 @@ log_types=kismet
 
 ## Kismet log journal files
 
-The `kismet` log format uses sqlite3 to create a dynamic random-access file.  If Kismet exits abnormally (such as running out of RAM or the power to the device failing), it may leave behind a `...-journal` file.  
+The `kismet` log format uses sqlite3 to create a dynamic random-access file.  If Kismet exits abnormally (such as running out of RAM or the power to the device failing), it may leave behind a `...-journal` file.
 
 This file is part of the sqlite3 integrity protection, and contains partial data which was not written to the database.
 
@@ -77,10 +77,10 @@ Filtering is most useful when coupled with other tools, and most users won't nee
 
 Kismet can record duplicate packets when multiple datasources capture the same data.  In some instances, keeping duplicate packets is desirable (such as remote captures used for device location), while in others, logging duplicates may be a waste of space.
 
-To exclude duplicate packets, set the following in your configuration: 
+To exclude duplicate packets, set the following in your configuration:
 
 ```
-kismetdb_log_duplicate_packets=false
+kis_log_duplicate_packets=false
 ```
 
 ### Data packets
@@ -88,7 +88,7 @@ kismetdb_log_duplicate_packets=false
 Kismet typically logs all types of packets.  To discard data packets, retaining only management frames, set:
 
 ```
-kismetdb_log_data_packets=false
+kis_log_data_packets=false
 ```
 
 ### Pass and block filters modes
@@ -103,9 +103,9 @@ Records can match a pass or block mode before reaching the default mode.  A filt
 
 ### Group matches
 
-MAC addresses can be specified as a single address `AA:BB:CC:DD:EE:FF`, or as a masked group `11:22:33:00:00:00/FF:FF:FF:00:00:00`.  
+MAC addresses can be specified as a single address `AA:BB:CC:DD:EE:FF`, or as a masked group `11:22:33:00:00:00/FF:FF:FF:00:00:00`.
 
-A masked group works like an IP netmask specification:  the value after the `/` indicates the bytes to match on; in the case above, the match will grab any MAC address beginning with `11:22:33:...`. 
+A masked group works like an IP netmask specification:  the value after the `/` indicates the bytes to match on; in the case above, the match will grab any MAC address beginning with `11:22:33:...`.
 
 The most common use for masked matching is to match OUIs which are the first 3 bytes of the MAC address.
 
