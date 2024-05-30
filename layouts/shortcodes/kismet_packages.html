@@ -42,6 +42,7 @@ button {
 </div>
 {{ end }}
 <div class="flavor-tabs">
+  {{ if in .builds "release" }}
     <button
         type="button"
         data-toggle-class
@@ -50,15 +51,18 @@ button {
         data-toggle-is-active>
         Release
     </button>
+  {{ end }}
 
-    <!-- Other buttons -->
+  {{ if in .builds "git" }}
     <button
         type="button"
         data-toggle-class
         data-toggle-target="#tabPanel_2_{{ .key | urlize }}"
-        data-toggle-radio-group="tabsGroup_{{ .key | urlize }}">
+        data-toggle-radio-group="tabsGroup_{{ .key | urlize }}"
+        {{ if not (in .builds "release") }}data-toggle-is-active{{ end }} >
         Git
     </button>
+  {{ end }}
 </div>
 <div class="flavor-tab-panel" id="tabPanel_1_{{ .key | urlize }}">
 <pre>

@@ -51,6 +51,14 @@ The Radiacode source requires the Radiacode Geiger counter hardware, connected v
 
 The Radiacode is a modern Geiger counter which can report counts per second and dosage rates.
 
+## Viewing
+
+Realtime radiation data can be viewed in the Web UI in the `Radiation` panel, or enabled in the top status bar via the `Settings` panel.
+
+## Logging
+
+Radiation data is logged in the [kismetdb](/docs/readme/logging/kismetdb/) log as JSON records in the `snapshots` and `data` tables.  Once development is complete, it will be logged in [pcapng](/docs/readme/logging/pcap/) as a custom packet block.
+
 ## Stability
 
 The Radiacode hardware appears to have a slightly fragile USB implementation.  While *typically* this is not a problem, on some occaisons, initializing the device over USB can cause the USB implementation on the Radiacode to crash.

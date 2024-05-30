@@ -67,4 +67,10 @@ You *must* provide the path to the serial device associated with the Radview.
 Baudrate of the serial interface; by default this should be `1000000`.  This should only be changed if the firmware running on the Arduino is changed.
 {{</configopt>}}
 
+## Viewing
 
+Realtime radiation data can be viewed in the Web UI in the `Radiation` panel, or enabled in the top status bar via the `Settings` panel.
+
+## Logging
+
+Radiation data is logged in the [kismetdb](/docs/readme/logging/kismetdb/) log as JSON records in the `snapshots` and `data` tables.  Once development is complete, it will be logged in [pcapng](/docs/readme/logging/pcap/) as a custom packet block.

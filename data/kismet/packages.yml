@@ -3,24 +3,28 @@
   platforms: ["amd64", "armel", "armhf", "arm64"]
   key: "kali"
   name: "Kali Linux"
+  builds: ["release", "git"]
 
 -
   distro: "Debian Bullseye"
   platforms: ["i386", "amd64", "armhf", "arm64"]
   name: "Debian Bullseye"
   key: "bullseye"
+  builds: ["release", "git"]
 
 -
   distro: "Debian Bookworm"
-  platforms: ["amd64"]
+  platforms: ["amd64", "arm64"]
   name: "Debian Bookworm"
   key: "bookworm"
+  builds: ["release", "git"]
 
 -
   distro: "Ubuntu Bionic (18.04)"
   platforms: ["i386", "amd64"]
   name: "Ubuntu Bionic (18.04)"
   key: "bionic"
+  builds: ["release", "git"]
   notes: |
     Due to limitations in the packages and versions of libraries in Ubuntu Bionic,
     these packages do not contain all features.  You may be able to manually install
@@ -43,30 +47,25 @@
   platforms: ["amd64", "armhf", "arm64"]
   name: "Ubuntu Focal (20.04)"
   key: "focal"
+  builds: ["release", "git"]
 
 -
   distro: "Ubuntu Jammy (22.04)"
   platforms: ["amd64", "armhf", "arm64"]
   name: "Ubuntu Jammy (22.04)"
   key: "jammy"
-
--
-  distro: "Ubuntu Kinetic (22.10)"
-  platforms: ["amd64", "armhf", "arm64"]
-  name: "Ubuntu Kinetic (22.10)"
-  key: "kinetic"
-  notes: |
-    Lunar is a non-LTS non-stable release due to be aged out from the build system, consider
-    upgradig to Lunar or Mantic!
-
--
-  distro: "Ubuntu Lunar (23.04)"
-  platforms: ["amd64", "armhf", "arm64"]
-  name: "Ubuntu Lunar (22.10)"
-  key: "lunar"
+  builds: ["release", "git"]
 
 -
   distro: "Ubuntu Mantic (23.10)"
   platforms: ["amd64", "armhf", "arm64"]
   name: "Ubuntu Mantic (23.10)"
   key: "mantic"
+  builds: ["release", "git"]
+
+-
+  distro: "Ubuntu Noble (24.04)"
+  platforms: ["amd64", "armhf", "arm64"]
+  name: "Ubuntu Noble (23.10)"
+  key: "noble"
+  builds: ["git"]
