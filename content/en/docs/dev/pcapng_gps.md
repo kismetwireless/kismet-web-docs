@@ -29,7 +29,7 @@ As of `2021-03` Kismet can include GPS data in pcap-ng when using the `kismetdb_
 
 ## Kismet IANA PEN
 
-The [IANA](https://pen.iana.org/) maintains a registry of *Private Enterprise Numbers*, which are unique identifiers.  
+The [IANA](https://pen.iana.org/) maintains a registry of *Private Enterprise Numbers*, which are unique identifiers.
 
 The Kismet PEN used for custom options and blocks in the pcap-ng file is:
 
@@ -47,7 +47,7 @@ The Kismet GPS block consists of the following:
      +---------------------------------------------------------------+
      |                  GPS Fields Presence Bitmask                  |
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-     /                            GPS Data                           /  
+     /                            GPS Data                           /
      /                         variable length                       /
      +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ```
@@ -93,7 +93,7 @@ A simple example of converting from a second and microsecond timestamp in C or C
 
 ```C
 uint64_t conv_ts = ((uint64_t) ts_sec * 1000000L) + ts_usec;
-uint32_t ts_high = (conv_ts >> 32);                                                           
+uint32_t ts_high = (conv_ts >> 32);
 uint32_t ts_low = conv_ts;
 ```
 
@@ -149,20 +149,20 @@ An example implementation of encoding and decoding fixed3_7 would be:
 
 ```C++
 uint32_t float_to_fixed3_7(double flt) {
-    if (flt <= -180.0000001) 
+    if (flt <= -180.0000001)
         throw std::runtime_error("invalid value");
     if (flt >= +180.0000001)
         throw std::runtime_error("invalid value");
- 
+
     int32_t scaled = (int32_t) ((flt) * (double) 10000000);
-    return = (u_int32_t) (scaled + ((int32_t) 180 * 10000000));
+    return (u_int32_t) (scaled + ((int32_t) 180 * 10000000));
 }
 
 double fixed3_7_to_float(uint32_t fixed) {
     if (fixed > 3600000000)
         throw std::runtime_error("invalid value");
- 
-    int32_t remapped = fixed – (180 * 10000000);
+
+    int32_t remapped = fixed - (180 * 10000000);
     return (double) ((double) remapped / 10000000);
 }
 ```
@@ -187,17 +187,17 @@ Most other data such as altitude does not need high precision, but may need larg
 An example implementation of encoding and decoding fixed3_7 would be:
 
 ```C++
-uint32_t float_to_fixed3_7(double flt) {
-    if (flt <= -180000.0001) 
+uint32_t float_to_fixed6_4(double flt) {
+    if (flt <= -180000.0001)
         throw std::runtime_error("invalid value");
     if (flt >= +180000.0001)
         throw std::runtime_error("invalid value");
-        
+
     int32_t scaled_l = (int32_t) ((flt) * (double) 10000);
-    return (u_int32_t) (scaled_l + ((int32_t) 180000 * 10000)); 
+    return (u_int32_t) (scaled_l + ((int32_t) 180000 * 10000));
 }
 
-double fixed3_7_to_float(uint32_t fixed) {
+double fixed6_4_to_float(uint32_t fixed) {
     if (fixed > 3600000000)
         throw std::runtime_error("invalid value");
 
@@ -266,7 +266,7 @@ An EPB with the Kismet GPS data would look like:
       +---------------------------------------------------------------+
       |                  GPS Fields Presence Bitmask                  |
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-      /                            GPS Data                           /  
+      /                            GPS Data                           /
       /              variable length, padded to 32 bits               /
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       |                      End-of-options block                     |
@@ -293,7 +293,7 @@ A custom pcap-ng Kismet GPS block would look like:
       +---------------------------------------------------------------+
       |                  GPS Fields Presence Bitmask                  |
       +---------------------------------------------------------------+
-      /                            GPS Data                           /  
+      /                            GPS Data                           /
       /              variable length, padded to 32 bits               /
       +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
       /                      Options (variable)                       /
