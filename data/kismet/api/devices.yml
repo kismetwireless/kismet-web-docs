@@ -581,7 +581,7 @@
     This endpoint can run smaller systems out of memory and is generally not
     encouraged.
 
-    A much safer method is to use the [device view API](/docs/api/device-views/)
+    A much safer method is to use the [device view API](/docs/api/device_views/)
     `all` view, using sort-by first seen and a sliding window.
   methods: ["GET", "POST"]
   roles: ["readonly"]
