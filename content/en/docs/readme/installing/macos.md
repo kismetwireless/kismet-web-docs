@@ -52,6 +52,8 @@ librtlsdr libbtbb ubertooth libusb openssl libwebsockets rtl_433 \
 mosquitto
 ```
 
+When compiling git/nightly versions, additional packages may be required.
+
 ### Clone git
 
 Clone Kismet from git.  If you haven't cloned Kismet before:
@@ -79,6 +81,14 @@ LDFLAGS=-L$(brew --prefix)/lib CPPFLAGS="-I$(brew --prefix)/include -I$(brew --p
 Pay attention to the summary at the end and look out for any warnings! The summary will show key features and raise warnings for missing dependencies which will drastically affect the compiled Kismet.
 
 ### Compile
+
+If you are compiling a fresh checkout, the version file will be automatically generated.  If you use one git checkout and recompile on demand, be sure to update the version file:
+
+```bash
+make version
+```
+
+Then, compile Kismet and the Kismet tools:
 
 ```bash
 make

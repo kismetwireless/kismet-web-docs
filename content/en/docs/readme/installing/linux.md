@@ -47,6 +47,8 @@ librtlsdr0 libubertooth-dev libbtbb-dev libmosquitto-dev
 
 On some older distributions, `libprotobuf-c-dev` may be called `libprotobuf-c0-dev`.
 
+Compiling from git / nightly code man require additional packages as well.
+
 #### RTL-433 SDR
 
 For rtl-433 SDR support, you will need the [rtl_433 tool](https://github.com/merbanan/rtl_433).  On more modern distributions this is available as a package:
@@ -110,6 +112,14 @@ Pay attention to the summary at the end and look out for any warnings! The summa
 If you're compiling for a remote capture platform *only*, check the [remote capture docs](/docs/readme/remotecap/remotecap/) for more information.
 
 ### Compile
+
+If you are compiling a fresh checkout, the version file will be automatically generated.  If you use one git checkout and recompile on demand, be sure to update the version file:
+
+```bash
+make version
+```
+
+Then, compile Kismet and the Kismet tools:
 
 ```bash
 make
