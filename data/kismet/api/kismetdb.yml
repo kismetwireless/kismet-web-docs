@@ -1,4 +1,4 @@
-- 
+-
   name: "Historic packets"
   added: "2018-12"
   uri: "/logging/kismetdb/pcap/{TITLE}"
@@ -7,24 +7,24 @@
   uriparameters:
     - {name: "TITLE", type: "string", description: "Arbitrary file name"}
     - {name: "filter", type: "multiple", required: false, description: "Multiple filter options"}
-  jsonparameters: 
+  jsonparameters:
     - {name: "filter", type: "multiple", required: false, description: "Multiple filter options"}
-  docs: | 
-    When the `kismetdb` log type is enabled, fetch packets which match the filter statement from 
-    the logfile. 
+  docs: |
+    When the `kismetdb` log type is enabled, fetch packets which match the filter statement from
+    the logfile.
 
     Returns a PCAP-NG format stream of packets.
-  apinotes: | 
-    The filter options can be passed as individual arguments on the `GET` URI, as URI-encoded 
-    variables (ie `/logging/kismetdb/pcap/foo.pcapng?datasource=...&foo=...&bar=...`), or passed 
-    as a JSON command dictionary as a `POST` request. 
+  apinotes: |
+    The filter options can be passed as individual arguments on the `GET` URI, as URI-encoded
+    variables (ie `/logging/kismetdb/pcap/foo.pcapng?datasource=...&foo=...&bar=...`), or passed
+    as a JSON command dictionary as a `POST` request.
 
-    Filters function as an `AND` statement: To match a packet, it must match *all* filter 
-    terms.  
+    Filters function as an `AND` statement: To match a packet, it must match *all* filter
+    terms.
 
-    #### Time window 
+    #### Time window
 
-    Restrict packets by a timeframe which can be either bounded (both start and end times specified) 
+    Restrict packets by a timeframe which can be either bounded (both start and end times specified)
     or open-ended (only start or end specified)
 
     {{< kismet_api_param name="timestamp_start" type="number" required="false">}}
@@ -35,7 +35,7 @@
       Posix timestamp with optional double precision as seconds.microseconds
     {{< /kismet_api_param >}}
 
-    #### Datasource 
+    #### Datasource
 
     Limit packets to a specific datasource, by datasource UUID
 
@@ -43,7 +43,7 @@
       Datasource UUID
     {{< /kismet_api_param >}}
 
-    #### Device key 
+    #### Device key
 
     Packets to, from, or otherwise associated with, the specified device.
 
@@ -51,10 +51,10 @@
       Kismet device key
     {{< /kismet_api_param >}}
 
-    #### Data link type 
+    #### Data link type
 
-    Match a specific data link type (DLT).  This numeric DLT matches the libpcap link types and 
-    describes the physical frame type of the packet. 
+    Match a specific data link type (DLT).  This numeric DLT matches the libpcap link types and
+    describes the physical frame type of the packet.
 
     {{< kismet_api_param name="dlt" type="number" required="false">}}
       PCAP DLT value
@@ -62,7 +62,7 @@
 
     #### Frequency
 
-    Match a specific, bounded, or open-ended frequency rage. 
+    Match a specific, bounded, or open-ended frequency rage.
 
     {{< kismet_api_param name="frequency" type="number" required="false">}}
       Natch a single frequency in KHz
@@ -76,11 +76,11 @@
       Maximum frequency, in KHz
     {{< /kismet_api_param >}}
 
-    #### Signal 
+    #### Signal
 
-    Match a bounded or open-ended window of signal levels.  
+    Match a bounded or open-ended window of signal levels.
 
-    Packets with no signal level are considered to have a signal level of 0. 
+    Packets with no signal level are considered to have a signal level of 0.
 
     {{< kismet_api_param name="signal_min" type="number" required="false">}}
       Minimum signal level
@@ -90,9 +90,9 @@
       Maximum signal level
     {{< /kismet_api_param >}}
 
-    #### Device MAC addresses 
+    #### Device MAC addresses
 
-    Match by MAC address, if available. 
+    Match by MAC address, if available.
 
     {{< kismet_api_param name="address_source" type="string" required="false">}}
       Source MAC address
@@ -106,9 +106,9 @@
       Transmitter MAC aaddress (such as the AP BSSID on Wi-Fi)
     {{< /kismet_api_param >}}
 
-    #### Location 
+    #### Location
 
-    Filter by a bounded location of rectangular minimum and maximum coordinates.  
+    Filter by a bounded location of rectangular minimum and maximum coordinates.
 
     Coordinates are decimal degrees in floating point format (`123.456789`).
 
@@ -130,7 +130,7 @@
 
     #### Packet size
 
-    Match a bounded or unbounded packet size window. 
+    Match a bounded or unbounded packet size window.
 
     {{< kismet_api_param name="size_min" type="number" required="false">}}
       Minimum packet size, in bytes
@@ -140,14 +140,14 @@
       Maximum packet size, in bytes
     {{< /kismet_api_param >}}
 
-    #### Tags 
+    #### Tags
 
     {{< kismet_api_param name="tag" type="string" required="false">}}
       Packet tag to match
     {{< /kismet_api_param >}}
 
-    #### Limit 
-    
+    #### Limit
+
     Limit the number of packets returned.
 
     {{< kismet_api_param name="limit" type="number" required="false">}}
@@ -155,7 +155,7 @@
     {{< /kismet_api_param >}}
 
 
-- 
+-
   name: "Deleting packets"
   uri: "/logging/kismetdb/pcap/drop"
   types: ["cmd"]
@@ -163,10 +163,10 @@
   methods: ["POST"]
   jsonparameters:
     - {name: "drop_before", type="number", description="Unix timestamp second value"}
-  docs: | 
-    Delete all packets before `drop_before` from the KismetDB log. 
+  docs: |
+    Delete all packets before `drop_before` from the KismetDB log.
 
-    On very long-running Kismet processes, this can be used to prevent the kismetdb from 
-    becoming unmanageable while retaining packet history, for instance by fetching all 
+    On very long-running Kismet processes, this can be used to prevent the kismetdb from
+    becoming unmanageable while retaining packet history, for instance by fetching all
     packets using the historic packet endpoint, then removing them from the kismetdb log.
 
