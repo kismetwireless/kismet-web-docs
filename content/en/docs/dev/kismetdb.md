@@ -28,6 +28,10 @@ This means that basic queries (time, signal levels, location, device identifiers
 ## Log Versions
 The log file version is stored in the `db_version` field of the `KISMET` table.  When changes to the base database structure are made, this version will be incremented.
 
+### Version 9
+As of February 2025, Kismet has started using db_version 9.  This version adds:
+1. `packet_full_len` to the `packets` table.  This contains the original length of the packet.  This is the same as the `caplen` value reported by libpcap, and will be greater than the original packet length when the capture size is limited.
+
 ### Version 8
 As of October 2021, Kismet has started using db_version 8.  This version adds:
 1. `hash` to the `packets` table.  This contains the CRC32 hash of the payload of the packet, not including the capture-specific radio headers.  This is equivalent to the pcapng packet hash.
@@ -188,28 +192,29 @@ The `packets` section is directly analogous to a pcap (or pcap-ng) file and can 
 
 Packets are stored in the raw, original capture format; in the case of Wi-Fi this may be a format such as Radiotap which, itself, also encodes the frequency, signal levels, and detailed antenna data.  Kismet exposes a normalized subset of per-packet data to facilitate slicing the Kismet log into manageable pieces easily.
 
-| Field      | Type          | Description                                                                                                                                                     |
+| Field      | Type          | Description |
 | ---------- | ------------: | ------------------------------------------------------------                                                                                                    |
-| ts_sec     | *timestamp*   | Packet time, as second-precision integer                                                                                                                        |
-| ts_usec    | *timestamp*   | Packet time, as usec-precision integer                                                                                                                          |
+| ts_sec | *timestamp*   | Packet time, as second-precision integer |
+| ts_usec    | *timestamp*   | Packet time, as usec-precision integer |
 | phyname    | *text*        | Name of capturing phy                                                                                                                                           |
-| sourcemac  | *text*        | MAC address of packet source (if available)                                                                                                                     |
+| sourcemac  | *text*        | MAC address of packet source (if available) |
 | destmac    | *text*        | MAC address of packet destination (if available)                                                                                                                |
-| transmac   | *text*        | MAC address of packet transmitter (if available)                                                                                                                |
+| transmac   | *text*        | MAC address of packet transmitter (if available) |
 | frequency  | *real*        | Decimal frequency of packet, in KHz (if available)                                                                                                              |
-| devkey     | *text*        | DEPRECATED.  This field is no longer used because packets are not a 1:1 relationship with devices, but the field is retained for schema compatibility.          |
-| lat        | *real/double* | GPS latitude                                                                                                                                                    |
-| lon        | *real/double* | GPS longitude                                                                                                                                                   |
-| packet_len | *integer*     | Total packet length, in bytes                                                                                                                                   |
-| signal     | *integer*     | Received signal level of packet (typically in DBm but may be phy-specific)                                                                                      |
+| devkey     | *text*        | DEPRECATED.  This field is no longer used because packets are not a 1:1 relationship with devices, but the field is retained for schema compatibility. |
+| lat        | *real/double* | GPS latitude  |
+| lon        | *real/double* | GPS longitude |
+| packet_len | *integer*     | Total packet length, in bytes |
+| packet_full_len | *integer* | Original packet length (may be larger than available packet length), in bytes |
+| signal     | *integer*     | Received signal level of packet (typically in DBm but may be phy-specific) |
 | datasource | *uuid*        | UUID of capturing Kismet data source, as string                                                                                                                 |
 | dlt        | *int*         | DLT (Data Link Type) of packet content; this correlates to the original packet format as understood by pcap (such as raw 802.11, radiotap, raw btle, and so on) |
-| packet     | *blob*        | Raw binary packet content                                                                                                                                       |
-| error      | *int*         | Boolean, packet was flagged by Kismet as an error in rx or otherwise invalid due to parsing errors                                                              |
+| packet     | *blob*        | Raw binary packet content |
+| error      | *int*         | Boolean, packet was flagged by Kismet as an error in rx or otherwise invalid due to parsing errors |
 | tags       | *text*        | Arbitrary space-separated list of tags added by packet dissectors in Kismet                                                                                     |
-| datarate   | *real*        | Datarate, in mbit/sec                                                                                                                                           |
-| hash       | int         | CRC32 hash of the packet contents (not including radio headers), equivalent to the pcap-ng hash record.                                                         |
-| packetid   | *int*         | Unique packet ID, equivalent to the packet ID field in pcap-ng.  Can be used to correlate duplicate packets across multiple interfaces.                         |
+| datarate   | *real*        | Datarate, in mbit/sec |
+| hash       | int         | CRC32 hash of the packet contents (not including radio headers), equivalent to the pcap-ng hash record. |
+| packetid   | *int*         | Unique packet ID, equivalent to the packet ID field in pcap-ng.  Can be used to correlate duplicate packets across multiple interfaces. |
 
 ### Snapshots
 
