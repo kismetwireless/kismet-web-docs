@@ -48,10 +48,9 @@ For mPCI-e or M2, Intel is currently making the most reliable cards - the 802.11
 An important factor to keep in mind is that USB GPS devices are *traditional* GPS:  They have GPS receivers *only*.  In contrast to "GPS" implementations on cell phones, they require a much strong signal and typically will not work indoors, because the smartphone GPS system uses a combination of Wi-Fi, Bluetooth, and cellular data to provide a synthetic location.  Pure GPS usually needs an open view of the sky and may take several minutes to get the initial lock.
 
 Some GPS devices we've had luck with include:
-* The [Transsystem GPS/Glonass/Galileo/BeiDou](https://amzn.to/3BxkCGO) device is unfortunately pricey, but has been one of the better performing receivers available.
-* The [VK-112](https://amzn.to/3wZGreB) is an extremely cheap option, but lacks a repositionable antenna.
+* The [BN-808](https://amzn.to/3Zc6u3G) is a more expensive but quite sensitive, multi-standard device (it can use the GPS constellation, but also GLONASS, Galileo, and more) and fuses the multiple locations into one report.
+* The [VK-112](https://amzn.to/3wZGreB) is an extremely cheap option, but lacks an external antenna.  It's cheap.
 * The [Stratux uBlox](https://amzn.to/3iPgYiY) is another reasonably cheap option with a stronger antenna.
-* The [Neo-7M uBlox](https://amzn.to/3rxJw4B) device coupled with an [active antenna](https://amzn.to/3BIAmHk) may be an acceptable option for some situations where portability isn't as great a concern.
 
 ## Other Radios and SDR
 
@@ -59,32 +58,29 @@ Some GPS devices we've had luck with include:
 
 Most of the SDR capture sources in Kismet use the RTLSDR radios - they're cheap, low power, and easy to get running.  Like Wi-Fi, a SDR radio can only tune to one range of frequencies at a time:  Often it makes sense to get multiple radios, one for each SDR-based protocol you want to monitor.
 
-* The [RTLSDR Kit](https://amzn.to/2JcSeAq) with the radio, several antennas, and mounts, is a good place to start.
-* The [stand-alone RTLSDR-blog radio](https://amzn.to/2J9DNgd) comes with BIAS-T power injection (for running external amps and filters).
-* The [nooelec](https://amzn.to/33VbFpn) version of the RTLSDR is low profile for fitting multiple radios into adjacent USB ports.  The basic model lacks bias-t power injection, however.
-* The [nooelec smartee](https://amzn.to/2BrToUp) has continual bias-t power injection and a similar physical profile allowing multiple radios to be used on adjacent ports.
+* The [RTLSDR v4 Kit](https://amzn.to/4eBa8bC) with the radio, several antennas, and mounts, is a good place to start.  You'll need to make sure you have a current version of librtlsdr in your distribution, but the v4 has been available for over a year now and should be well supported.
+* The [Same RTLSDR v4](https://amzn.to/4hQTGah) but as the radio only, to save a few dollars.  This radio supports bias-tee injection for powering amps and filters.
+* The [nooelec](https://amzn.to/33VbFpn) version of the RTLSDR is low profile for fitting multiple radios into adjacent USB ports.  The basic model lacks bias-t power injection, however.  While the Nooelec radios fit well into most USB connectors, we've had some trouble with reliability and the hardware failing after a few months.
+* The [nooelec smartee](https://amzn.to/2BrToUp) has continual bias-t power injection and a similar physical profile allowing multiple radios to be used on adjacent ports.  While the Nooelec radios fit well into most USB connectors, we've had some trouble with reliability and hardware failures.
 
 ### CC2540 BTLE
 
 The CC2540 BTLE card is a super cheap BTLE capture card (for advertisements only).  While it lacks an external antenna jack, it can be modified, and the cost makes up for a lot.
 
-* [The basic CC2540](https://amzn.to/3cWFXNt)
-* [The CC2540 plus programmer cable](https://amzn.to/3aL5SpA).  Generally you won't need to reprogram these, but it's handy to have.
+* [The basic CC2540](https://amzn.to/3CsNhBO) can capture BTLE advertisements as raw packets.  Make sure to pick the 2540 version for BTLE!
 
 ### CC2531 Zigbee
 
 Similar to the CC2540, the CC2531 is an ultra cheap zigbee/802.15.4 capture card.  It lacks an external antenna and is 2.4GHz only, but the cost makes up for it.
 
-* [The basic CC2531](https://amzn.to/2wRTBkJ)
+* [The basic CC2531](https://amzn.to/48WDIaz) is the zigbee/802.15.4 variant of the above adapter.  Make sure to pick the 2531 version for 802.15.4!
 
 ## 1090/ADSB
 
 Coupled with a RTL-SDR, antennas specific for ADSB can help increase your range for plane spotting using the new Kismet ADSB capture source.  Remember though - you're unlikely to get more range than your line of sight, so often it's easier to see more distant planes at a higher altitude.  Some good tools include:
 
 * The [X-Boost 1090mhz](https://amzn.to/4bUx1Hd) antenna is a compact option.
-* The [FlightAware 1090MHz antenna](https://amzn.to/2WB4jqE) from the FlightAware team.
-* An [N to SMA cable](https://amzn.to/2UrekDT) is needed to connect the antenna to the RTL-SDR.  Notice you need a *standard* SMA cable not a RP-SMA for most SDRs!  Generally you want to keep this as short as possible.
-* Optionally, a [1090MHz Filter/Amplifier](https://amzn.to/2xdCh9U).  If you have a busy RF environment, are near a large FM broadcast antenna, or are otherwise getting weak signals, a combination filter and amplifier can dramatically increase your coverage.  You'll need a [bias-tee capable sdr](https://amzn.to/2BrToUp) to power the amplifier!
+* Optionally, a [1090MHz Filter/Amplifier](https://amzn.to/4ev1ifG).  A filter will significantly improve your ADSB reception by blocking signals from FM radio and over bleed-over.
 
 
 ## Servers / SBCs
@@ -96,7 +92,7 @@ While not the most powerful device, the [Zima series](https://amzn.to/42e4LL7) o
 
 ### Raspberry Pi 5
 
-Bigger number, better board? [Raspberry Pi 5](https://amzn.to/3SAkaCf) is always an option.
+Bigger number, better board? [Raspberry Pi 5](https://amzn.to/3SAkaCf) is always an option, but beware, the Pi 5 runs so close to the power budget that you'll certainly need a powered USB hub, and possibly some config tricks to convince the Pi 5 it has enough power.
 
 ### Raspberry Pi 4
 
