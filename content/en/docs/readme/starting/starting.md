@@ -32,7 +32,7 @@ If you did *not* install Kismet suid-root, you will need to launch it as root wi
 sudo kismet
 ```
 
-Kismet will display information about the startup process, and any errors.  
+Kismet will display information about the startup process, and any errors.
 
 A typical startup from Kismet would look like:
 
@@ -97,4 +97,3 @@ INFO: Did not find a user plugin directory (/home/user/plugins/), skipping: No s
 ```
 
 Kismet will be verbose during startup; lines starting with `INFO` are meant to communicate configuration options and general state.  Lines which prevent Kismet from starting will be prefixed with `FATAL` and repeated as Kismet exits.
-

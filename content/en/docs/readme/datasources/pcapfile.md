@@ -48,4 +48,3 @@ Limit the replay to a packets-per-second maximum.  Without this option, pcapfile
 {{<configopt realtime true false>}}
 Replay a pcapfile in real time, using the time offsets between packets in the original log.
 {{</configopt>}}
-

@@ -109,9 +109,8 @@ or you can download the Spectools-2016-01-R1 code release [here](/code/spectools
 
 ### <a name="android-pcap-git"></a>Android PCAP
 
-Android PCAP was an experiment in porting a Wi-Fi USB driver from Linux to the Android USB API; while funcitonal, this targets only a very old version of an old driver, and an old version of Android, making the code likely of academic interest only.
+Android PCAP was an experiment in porting a Wi-Fi USB driver from Linux to the Android USB API; while functional, this targets only a very old version of an old driver, and an old version of Android, making the code likely of academic interest only.
 
 ```bash
 git clone https://www.kismetwireless.net/git/android-pcap.git
 ```
-

@@ -27,7 +27,7 @@ as part of the requests you send.
 
 Parameters sent as JSON content should be sent as type `application/json`:
 
-```javascript 
+```javascript
 Content-Type: application/json; charset=UTF-8
 ```
 
@@ -54,7 +54,7 @@ curl -d 'json={"cmd": "lock", "channel": 6}' http://user@host:2501/some/endpoint
 
 To send parameters as a JSON object directly:
 
-```bash 
+```bash
 curl --data '{"cmd":"lock", "source_uuid":"AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"}' -H 'Content-Type: application/json' http://user@host:2501/some/endpoint
 ```
 
@@ -76,7 +76,7 @@ Relative timestamps are useful for fetching events from the past *N* seconds, wi
 
 Most Kismet endpoints which return records will also accept a field simplification as part of the command dictionary.  Field simplifications allow the reduction of the data being returned, analogous to `select a, b, c` instead of `select *` in SQL.
 
-Simplifying fields, especially when performing very large queries, reduces the CPU and memory requiremets of Kismet *and* the client by reducing the amount of data being serialized, transmitted, and deserialized.  Users of the REST API are *strongly* encouraged to make use of field simplification whenever plausible.
+Simplifying fields, especially when performing very large queries, reduces the CPU and memory requirements of Kismet *and* the client by reducing the amount of data being serialized, transmitted, and deserialized.  Users of the REST API are *strongly* encouraged to make use of field simplification whenever plausible.
 
 Field simplification objects take the format of a vector/array containing multiple field definitions:
 
@@ -172,5 +172,3 @@ json={"regex": [ ["field", "match"] ]}
 ```
 json={"regex": ["broken", "example"]}
 ```
-
-

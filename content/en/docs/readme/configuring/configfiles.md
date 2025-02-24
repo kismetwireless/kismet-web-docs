@@ -17,11 +17,11 @@ toc: true
 
 Kismet is primarily configured through a set of text files wth a simple `option=value` format.
 
-By default these are installed into `/usr/local/etc/` when compiling from source, and `/etc/kismet/` when installing from the Kismet packages. 
+By default these are installed into `/usr/local/etc/` when compiling from source, and `/etc/kismet/` when installing from the Kismet packages.
 
 The config files are broken into several smaller files for readability:
 
-| File | Description | 
+| File | Description |
 | ---- | ----------- |
 | kismet.conf | The primary config file which loads all the other configuration files.  `kismet.conf` also contains the system-wide options. |
 | kismet_alerts.conf | Alert / WIDS configuration, which includes rules for alert matching, rate limits on alerts, and other IDS/problem detection options |
@@ -36,7 +36,7 @@ The config files are broken into several smaller files for readability:
 
 ### Configuration Format
 
-Configuration files are plain text.  
+Configuration files are plain text.
 
 Any lines beginning with a `#` are comments, and are ignored.
 
@@ -46,7 +46,7 @@ Configuration options all take the form of:
 
    `option=value`
 
-Some configuration options support repeated definitions, such as the 
+Some configuration options support repeated definitions, such as the
 `source` option which defines a Kismet datasource:
 
    `source=wlan0`
@@ -139,5 +139,3 @@ log_types+=wiglecsv
 ```
 
 This will add to the `log_types` configuration instead of replacing it.
-
-

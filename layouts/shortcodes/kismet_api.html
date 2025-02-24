@@ -6,7 +6,7 @@
 
     {{ $apidata := . }}
 
-    <h3 id="{{ .name | urlize }}">{{ .name }} <a href="#{{ .name | urlize }}" class="anchor" aria-hidden="true">#</a></h3> 
+    <h3 id="{{ .name | urlize }}">{{ .name }} <a href="#{{ .name | urlize }}" class="anchor" aria-hidden="true">#</a></h3>
 
     {{ with .deprecated }}
     <div style="display: flex; padding-top: 10px; padding-bottom: 10px;">
@@ -84,75 +84,75 @@
         <div style="padding-bottom: 5px;">
             {{ if isset . "auto" }}
                 {{ if eq .auto "timestamp" }}
-                <span style="font-weight: 500;"><code>TIMESTAMP</code></span> 
+                <span style="font-weight: 500;"><code>TIMESTAMP</code></span>
                 <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">number</span>
                 <span style="color: red; font-style: italic; font-size: 60%;">REQUIRED</span>
 
                 <div style="padding-left: 10px;">
-                    <p>Timestamps can be absolute (UNIX epochal) timestamps, or they 
-                    can be relative negativ numbers, indiciating "number of seconds 
+                    <p>Timestamps can be absolute (UNIX epochal) timestamps, or they
+                    can be relative negative numbers, indicating "number of seconds
                     before now".
 
-                    <p>You can read more about 
-                    <a href="/docs/api/command_param/#timestamps" target="_new">timestamp handling</a> 
+                    <p>You can read more about
+                    <a href="/docs/api/command_param/#timestamps" target="_new">timestamp handling</a>
                     and how to use it <a href="/docs/api/command_param/#timestamps" target="_new">here</a>.
                 </div>
                 {{ else if eq .auto "timestampms" }}
-                <span style="font-weight: 500;"><code>TIMESTAMP</code></span> 
+                <span style="font-weight: 500;"><code>TIMESTAMP</code></span>
                 <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">number (double)</span>
                 <span style="color: red; font-style: italic; font-size: 60%;">REQUIRED</span>
 
                 <div style="padding-left: 10px;">
-                    A double-precision timestamp of the UNix epochal second *and* a microsecond 
+                    A double-precision timestamp of the UNix epochal second *and* a microsecond
                     precision sub-second timestamp (such as 1234567.12345)
                 </div>
                 {{ else if eq .auto "wsuser" }}
-                <span style="font-weight: 500;"><code>user</code></span> 
+                <span style="font-weight: 500;"><code>user</code></span>
                 <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">string</span>
                 <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
                 <div style="padding-left: 10px;">
                     <p>Login user ID; most websocket client APIs do not support basic-auth,
                     cookies, or other header-based login methods.</p>
 
-                    <p>You must provide either <code>user</code> and <code>password</code> 
-                    GET variables, or an API token or logins ession token via the 
+                    <p>You must provide either <code>user</code> and <code>password</code>
+                    GET variables, or an API token or logins ession token via the
                     <code>KISMET</code> GET variable.</p>
                 </div>
                 {{ else if eq .auto "wspassword" }}
-                <span style="font-weight: 500;"><code>password</code></span> 
+                <span style="font-weight: 500;"><code>password</code></span>
                 <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">string</span>
                 <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
                 <div style="padding-left: 10px;">
                     <p>Password associated with the user.</p>
-                    <p>You must provide either <code>user</code> and <code>password</code> 
-                    GET variables, or an API token or logins ession token via the 
+                    <p>You must provide either <code>user</code> and <code>password</code>
+                    GET variables, or an API token or logins ession token via the
                     <code>KISMET</code> GET variable.</p>
                 </div>
                 {{ else if eq .auto "wsapikey" }}
-                <span style="font-weight: 500;"><code>KISMET</code></span> 
+                <span style="font-weight: 500;"><code>KISMET</code></span>
                 <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">string</span>
                 <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
                 <div style="padding-left: 10px;">
                     <p>An API key or session token key.</p>
 
-                    <p>You must provide either <code>user</code> and <code>password</code> 
-                    GET variables, or an API token or logins ession token via the 
+                    <p>You must provide either <code>user</code> and <code>password</code>
+                    GET variables, or an API token or login session token via the
                     <code>KISMET</code> GET variable.</p>
                 </div>
                 {{ end  }}
             {{ else }}
-                <span style="font-weight: 500;"><code>{{ .name }}</code></span> 
+                <span style="font-weight: 500;"><code>{{ .name }}</code></span>
 
                 {{ with .type }}
                 <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">{{ . }}</span>
                 {{ end }}
 
-                {{ with default true .required }} 
-                    {{ if eq . true }} 
-                    <span style="color: red; font-size: 60%;">REQUIRED</span> 
-                    {{ else }} 
+                {{ with default true .required }}
+                    {{ if eq . true }}
+                    <span style="color: red; font-size: 60%;">REQUIRED</span>
+                    {{ else }}
                     <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
-                    {{ end }} 
+                    {{ end }}
                 {{ end }}
 
                 <div style="padding-left: 10px;">
@@ -173,17 +173,17 @@
 
         {{ range . }}
         <div style="padding-bottom: 5px;">
-            <span style="font-weight: 500;"><code>{{ .name }}</code></span> 
+            <span style="font-weight: 500;"><code>{{ .name }}</code></span>
 
             {{ with .type }}
             <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">{{ . }}</span>
             {{ end }}
 
-            {{ if .required }} 
-            <span style="color: red; font-size: 60%;">REQUIRED</span> 
-            {{ else }} 
+            {{ if .required }}
+            <span style="color: red; font-size: 60%;">REQUIRED</span>
+            {{ else }}
             <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
-            {{ end }} 
+            {{ end }}
 
             <div style="padding-left: 10px;">
                 <p>{{ .description | markdownify }}</p>
@@ -201,7 +201,7 @@
         <div style="flex: 1; margin-top: 5px; font-size: 60%; color: grey;">JSON<br/>PARAMETERS</div>
         <div style="flex: 10; padding-left: 10px;">
 
-            <p>This endpoint takes additional parameters by using a `POST` request and supplying a 
+            <p>This endpoint takes additional parameters by using a `POST` request and supplying a
             JSON document or <code>json</code> form variable.</p>
 
             <p>You can find more information about <a href="/docs/api/command_param/" target="_new">API parameters here</a>.</p>
@@ -211,44 +211,44 @@
                 {{ if isset . "auto" }}
 
                     {{ if eq .auto "fields" }}
-                    <span style="font-weight: 500;"><code>fields</code></span> 
+                    <span style="font-weight: 500;"><code>fields</code></span>
                     <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">field simplification</span>
                     <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
 
                     <div style="padding-left: 10px;">
-                        <p>Kismet can reduce the amount of information being processed and returned by an API by simplifying the 
+                        <p>Kismet can reduce the amount of information being processed and returned by an API by simplifying the
                         fields to only return the data needed by the caller.</p>
 
-                        <p>You can read more about the 
-                        <a href="/docs/api/command_param/#field-simplification" target="_new">field simplification API</a> 
+                        <p>You can read more about the
+                        <a href="/docs/api/command_param/#field-simplification" target="_new">field simplification API</a>
                         and how to use it <a href="/docs/api/command_param/#field-simplification" target="_new">here</a>.
                     </div>
                     {{ else if eq .auto "regex" }}
-                    <span style="font-weight: 500;"><code>regex</code></span> 
+                    <span style="font-weight: 500;"><code>regex</code></span>
                     <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">regular expression</span>
                     <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
 
                     <div style="padding-left: 10px;">
-                        <p>When compiled with PCRE support, Kismet can apply 
+                        <p>When compiled with PCRE support, Kismet can apply
                         regular expression filters.</p>
                         <p>Regular expressions can be applied to multiple fields.</p>
 
-                        <p>You can read more about the 
-                        <a href="/docs/api/command_param/#regex-filters" target="_new">field regex API</a> 
+                        <p>You can read more about the
+                        <a href="/docs/api/command_param/#regex-filters" target="_new">field regex API</a>
                         and how to use it <a href="/docs/api/command_param/#regex-filters" target="_new">here</a>.
                     </div>
                     {{ end }}
 
                 {{ else }}
-                    <span style="font-weight: 500;"><code>{{ .name }}</code></span> 
+                    <span style="font-weight: 500;"><code>{{ .name }}</code></span>
 
                     {{ with .type }}
                     <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">{{ . }}</span>
                     {{ end }}
 
-                    {{ if .required }} 
-                    <span style="color: red; font-size: 60%;">REQUIRED</span> 
-                    {{ else }} 
+                    {{ if .required }}
+                    <span style="color: red; font-size: 60%;">REQUIRED</span>
+                    {{ else }}
                     <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
                     {{ end }}
 
@@ -336,7 +336,7 @@
         </div>
     </div>
     {{ end }}
-        
+
     {{ end }}
     {{ end }}
 

@@ -15,7 +15,6 @@ toc: true
 
 An arbitrary time and location can be tagged as a "point of interest".
 
-Points of interest are logged in the `kismetdb` log file, and can be used as markers to 
-retrieve information during post-processing. 
+Points of interest are logged in the `kismetdb` log file, and can be used as markers to retrieve information during post-processing.
 
 {{< kismet_api poi >}}

@@ -15,14 +15,11 @@ toc: true
 
 Kismet provides endpoints to obtain packets live as a stream in the PCAP-NG format.
 
-PCAP-NG is a standard, extended version of the traditional PCAP format, which offers the 
-ability to include multiple interfaces, multiple link types, and the original radio headers of 
-all the captured packets. 
+PCAP-NG is a standard, extended version of the traditional PCAP format, which offers the
+ability to include multiple interfaces, multiple link types, and the original radio headers of all the captured packets.
 
-Tools like Wireshark can process the complete PCAP-NG format, while simpler tools like tcpdump 
-and other libpcap-based tools can process single-linktype pcapng directly. 
+Tools like Wireshark can process the complete PCAP-NG format, while simpler tools like tcpdump and other libpcap-based tools can process single-linktype pcapng directly.
 
-PCAP-NG files can be post-processed with `tshark` or `wireshark` to strip the capture to a 
-single interface and link type if necessary.
+PCAP-NG files can be post-processed with `tshark` or `wireshark` to strip the capture to a single interface and link type if necessary.
 
 {{< kismet_api packet_capture >}}

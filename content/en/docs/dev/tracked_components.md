@@ -106,7 +106,7 @@ public:
         register_fields();
         reserve_fields(NULL);
     }
-    
+
     // Constructor which takes the ID
     web_tracked_message(int in_id) :
     tracker_component(in_id) {
@@ -126,7 +126,7 @@ public:
         register_fields();
         reserve_fields(e);
     }
-    
+
     // We need to provide a signature for this type, since all tracker_components
     // are TrackerType::TrackerMap at their base; typically this signature can be
     // a quick checksum of the type name.
@@ -252,7 +252,7 @@ public:
         // Since we used __Proxy to define get and set functions, we'll
         // call them instead of doing custom get/set and risking doing
         // it wrong.
-        
+
         set_timestamp(globalreg->timestamp.tv_sec);
         set_message(in_msg);
         set_flags(in_flags);
@@ -294,7 +294,7 @@ A caller could use this via:
 ```C++
     ...
     TrackedElementVector ev(foo->get_example_vec);
-    for (TrackedElementVector::iterator i = foo->begin; 
+    for (TrackedElementVector::iterator i = foo->begin;
             i != foo->end(); ++i) {
         ...
     }
@@ -303,7 +303,7 @@ A caller could use this via:
 
 ## Serialization
 
-Serialization is handled by the `tracker_component` and `tracker_element` system automatically.  Since the types of the fields are introspectable, serialization systems should be able to export nested data automatically.  
+Serialization is handled by the `tracker_component` and `tracker_element` system automatically.  Since the types of the fields are introspectable, serialization systems should be able to export nested data automatically.
 
 The only aspect of serialization that a custom `tracker_component` class needs to consider is what happens prior to serialization.  This is handled by the `pre_serialize()` method, and is called by any serialization/export class.
 
@@ -317,7 +317,7 @@ public:
         // Always call the parent in case work needs to be done
         tracker_component::pre_serialize();
 
-        // Call an internal funtion for adding a sample; we add '0' to our
+        // Call an internal function for adding a sample; we add '0' to our
         // current sample and set the time, this fast-forwards the RRD to
         // 'now' and computes history for us in case we didn't see an update
         // in a long time
@@ -354,4 +354,3 @@ It is important to remember that due to the mechanics of `shared_ptr<>` that two
 Since tracked objects tend to be used to assign attributes to devices, and there can be tens or hundreds of thousands of devices per session, it can be important to balance the demands on RAM with the demands on CPU.  Even a single `std::shared_ptr` to a field can consume up to 16 bytes of ram per device (two 8-byte pointers).
 
 Kismet offers two, similar, ways to deal with this.
-

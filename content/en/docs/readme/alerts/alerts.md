@@ -33,9 +33,9 @@ alert=NETSTUMBLER,5/min,1/sec
 
 Will allow at most one alert per second, and at most 5 alerts per minute.  Excess alerts will not be reported.
 
-### Disabling alerts 
+### Disabling alerts
 
-An alert can be disabled by setting the maximum throttle and burst to 0.  
+An alert can be disabled by setting the maximum throttle and burst to 0.
 
 ```
 alert=NOCLIENTMFP,0/min,0/sec
@@ -43,15 +43,15 @@ alert=NOCLIENTMFP,0/min,0/sec
 
 Some critical system alerts, such as those raised while loading configuration files, can not be disabled.
 
-### Complex alert configuration 
+### Complex alert configuration
 
 Some alerts, such as `APSPOOF`, have additional configuration options.  These options are documented in the description of each alert.
 
 ## False positives
 
-Kismet includes alerts for many theoretical attacks reported in research, as CVEs, etc.  
+Kismet includes alerts for many theoretical attacks reported in research, as CVEs, etc.
 
-Many of these attacks rely on a combination of specific chipsets and drivers, and specific abuses of the Wi-Fi standard; as Wi-Fi evolves, what was previously an over-long packet element used to exploit a driver may become a commonly used field which needs extra data. 
+Many of these attacks rely on a combination of specific chipsets and drivers, and specific abuses of the Wi-Fi standard; as Wi-Fi evolves, what was previously an over-long packet element used to exploit a driver may become a commonly used field which needs extra data.
 
 Deprecated attacks in Kismet are typically disabled by default in the config file, but at times a new evolution or use of Wi-Fi will trigger an alert with a false positive.
 
@@ -60,4 +60,3 @@ Deprecated attacks in Kismet are typically disabled by default in the config fil
 ## Alerts
 
 {{< kismet_alert_list >}}
-

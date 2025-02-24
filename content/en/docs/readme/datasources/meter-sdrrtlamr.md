@@ -22,7 +22,7 @@ source=rtlamr-0:type=rtlamr
 
 ## Supported hardware
 
-The RTL-SDR is a repurposed digital TV tuner which functions as an extremely cheap SDR, or software defined radio. 
+The RTL-SDR is a repurposed digital TV tuner which functions as an extremely cheap SDR, or software defined radio.
 
 The Kismet implementation of AMR decoding is tightly coupled to the cheap RTL-SDR, and currently will not work with other SDR hardware.
 
@@ -49,7 +49,7 @@ Not all RTL-SDR hardware populates the serial number field, and some hardware sh
 Serial numbers can be found using the standard rtlsdr tools, like rtl_test:
 
 ```
-$ rtl_test 
+$ rtl_test
 Found 4 device(s):
   0:  NooElec, NESDR Nano 3, SN: 2686186936
   1:  NooElec, NESDR Nano 3, SN: 1177459274
@@ -57,7 +57,7 @@ Found 4 device(s):
   3:  NooElec, NESDR Nano 3, SN: 0572734167
 ```
 
-### Multiple RTL-SDR devices 
+### Multiple RTL-SDR devices
 
 Every datasource in Kismet must have a unique identifier, the source UUID. Kismet calculates this using the serial number of the RTL-SDR device.
 
@@ -71,7 +71,7 @@ A unique ID can be set using the `rtl_eeprom` tool to assign a proper serial num
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
 
-### Channel control options 
+### Channel control options
 
 {{<configopt channel "frequency-in-Hz">}}
 By default, SDR RTLAMR will tune to 915MHz.  To manually set the frequency, in Hz;
@@ -84,18 +84,17 @@ source=rtlamr-0:channel=512000000
 ### Radio control options
 
 {{<configopt biastee true false>}}
-Enable bias-tee power on supported radios. 
+Enable bias-tee power on supported radios.
 
 Bias-tee is used to supply power to external amplifiers or other equipment in the antenna chain, and requires that your radio hardware has power injection support.
 {{</configopt>}}
 
 
 {{<configopt gain value>}}
-Specifiy a fixed gain level for the radio; by default, the hardware automatic gain control is used.
+Specify a fixed gain level for the radio; by default, the hardware automatic gain control is used.
 {{</configopt>}}
 
 
 {{<configopt ppm error_value>}}
 Specify a PPM error offset for fine-tuning your radio, if your hardware has a known offset.
 {{</configopt>}}
-

@@ -17,8 +17,7 @@ The [Freaklabs 2.4](https://freaklabsstore.com/index.php?main_page=product_info&
 
 To sniff, you will need to update the device with the [SenSniff](https://github.com/freaklabs/sensniff-freaklabs) firmware (via the Arduino IDE).
 
-
-## 802.15.4 (Zigbee) 
+## 802.15.4 (Zigbee)
 
 The 802.15.4 standard is a low-bandwidth low-power networking standard.  A commercial implementation is Zigbee, however other devices also implement the 802.15.4 physical layer.
 
@@ -52,7 +51,7 @@ Further information about adding the required libraries to the Arduino IDE can b
 
 ## Freaklabs interfaces
 
-The Freaklabs interface in kismet can be referred to as simply `freaklabs`.  These devices appear as serial ports, so cannot be auto-detected. 
+The Freaklabs interface in kismet can be referred to as simply `freaklabs`.  These devices appear as serial ports, so cannot be auto-detected.
 
 Each `freaklabs` source must have a `device` option and a `band` option.  The `device` option tells Kismet where to find the serial device, and the `band` option chooses what radio frequency to set.  Be sure to match the frequency to the type of device you have!
 
@@ -68,12 +67,12 @@ source=freaklabs:device=/dev/ttyUSB0,band=900
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
 
-### Device selection 
+### Device selection
 
 {{<configopt device "/path/to/serial/device">}}
-The Freaklabs devices appear as USB serial devices, and serial devices can not be auto-discovered. 
+The Freaklabs devices appear as USB serial devices, and serial devices can not be auto-discovered.
 
-You *must* provide the path to the serial device associated with the Freaklabs Freakduino sniffer. 
+You *must* provide the path to the serial device associated with the Freaklabs Freakduino sniffer.
 {{</configopt>}}
 
 ### Band options
@@ -82,7 +81,7 @@ You *must* provide the path to the serial device associated with the Freaklabs F
 Frequency band to tune to.  This must match the supported radio in your device.
 {{</configopt>}}
 
-### Channel control options 
+### Channel control options
 
 {{<configopt channel_hop true false>}}
 Enable or disable channel hopping on this data source.  Even if Kismet is (configured for)[/docs/readme/datasources/channelhop/#configuration] channel hopping.
@@ -110,7 +109,7 @@ Set a fixed list of channels instead of probing the source for all supported cha
 
 The list of channels must be:
 
-* Comma separated 
+* Comma separated
 * Contained in quotes
 
 Example:

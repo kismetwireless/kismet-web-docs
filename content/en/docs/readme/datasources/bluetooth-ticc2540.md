@@ -22,6 +22,7 @@ To use the TI CC2540 capture, you must have a TI CC2540 dongle flashed with the 
 *Note*: It seems that while many CC2540 devices are *advertised* as pre-flashed with the sniffer firmware, they appear not to be!
 
 ## Bluetooth
+
 Bluetooth uses a frequency-hopping system with dynamic MAC addresses and other oddities - this makes sniffing it not as straightforward as capturing Wi-Fi.
 
 ## Supported hardware
@@ -52,7 +53,7 @@ The position of USB devices may change if more devices are added or if devices a
 
 ## TI CC2540 concerns
 
-The sniffer firmware in the TI CC2540 sometimes goes into a permanent error state until the device is physically re-initialized - by disconnecting it from USB and reconnecting it.  
+The sniffer firmware in the TI CC2540 sometimes goes into a permanent error state until the device is physically re-initialized - by disconnecting it from USB and reconnecting it.
 
 Unfortunately, there does not seem to be any way to automate this process, as once the device enters an error state, it will remain in that state and cannot be reinitialized over USB.
 
@@ -63,4 +64,3 @@ Connecting the CC2540 device to a USB port with programmable power control may p
 ### Naming and description options
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
-

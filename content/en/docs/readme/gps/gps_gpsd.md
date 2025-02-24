@@ -1,5 +1,5 @@
 ---
-title: "GPS - GPSD"
+title: "GPS - GPSd"
 description: ""
 lead: ""
 date: 2022-09-15T14:45:27-04:00
@@ -13,13 +13,13 @@ weight: 40
 toc: true
 ---
 
-[GPSD](https://gpsd.gitlab.io/gpsd/index.html) is a service which parses GPS data from a wide range of GPS vendors, including several binary protocols which normal NMEA parsers cannot decode. 
+[GPSd](https://gpsd.gitlab.io/gpsd/index.html) is a service which parses GPS data from a wide range of GPS vendors, including several binary protocols which normal NMEA parsers cannot decode.
 
-Modern GPSD is a solid option for controlling most GPS receivers.
+Modern GPSd is a solid option for controlling most GPS receivers.
 
-Extremely old distributions or versions of GPSD (prior to 2015 or so) may have various issues.  Kismet still supports the now-ancient GPSD text protocol, but will default to the modern JSON protocol.
+Extremely old distributions or versions of GPSd (prior to 2015 or so) may have various issues. Kismet still supports the now-ancient GPSd text protocol, but will default to the modern JSON protocol.
 
-## Configuration 
+## Configuration
 
 ```
 gps=gpsd:host=localhost,port=2947
@@ -27,16 +27,16 @@ gps=gpsd:host=localhost,port=2947
 
 To determine the proper path to your GPS unit, look below in the `device` options.
 
-## GPS options 
+## GPS options
 
 ### Common options
 
 {{<configopt name name>}}
-Set an arbitrary human-readable name for the GPS.  This will be used in the Kismet GPS logs. 
+Set an arbitrary human-readable name for the GPS.  This will be used in the Kismet GPS logs.
 {{</configopt>}}
 
 {{<configopt reconnect true false>}}
-Automatically attempt to re-open the GPS if an error occurs or the connection is interrupted.  
+Automatically attempt to re-open the GPS if an error occurs or the connection is interrupted.
 
 This is enabled by default.
 {{</configopt>}}
@@ -44,15 +44,14 @@ This is enabled by default.
 ### GPSD options
 
 {{<configopt host "hostname-for-gpsd">}}
-*REQUIRED* 
+*REQUIRED*
 
 Hostname to connect to; typically this will be `localhost`
 {{</configopt>}}
 
 
 {{<configopt port port>}}
-*REQUIRED* 
+*REQUIRED*
 
-Port number for GPSD.  Typically this will be `2947`
+Port number for GPSd.  Typically this will be `2947`
 {{</configopt>}}
-

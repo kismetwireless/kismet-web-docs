@@ -28,7 +28,7 @@ Kismet has deep dependencies on the Posix (ie, Unix-based) libraries and environ
 
 It is possible to run Kismet inside the WSL (Windows Subsystem for Linux) environment, either in WSL1 or WSL2.
 
-## Limits 
+## Limits
 
 The WSL environment (and the WSL2 HyperV environment) do not have direct access to USB, PCI, or other hardware interfaces.  It is not possible to capture packets directly in Kismet in WSL from a local device.
 

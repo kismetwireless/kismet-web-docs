@@ -23,7 +23,6 @@ Wigle does not collect packet contents, so a `wiglecsv` log does not contain pac
 
 Since Wigle is designed for mapping wireless, Kismet will only create entries in the `wiglecsv` log when a GPS is connected and a location is available.  If you have no GPS location, the `wiglecsv` will be empty.
 
-
 ## Log type
 
 ```
@@ -68,4 +67,3 @@ By default, `kismetdb_to_wiglecsv` will only emit one record per second per acce
 ## Uploading to Wigle
 
 Once your log is converted, you can upload it to [Wigle](https://www.wigle.net) by creating an account there and choosing the file from your computer.
-

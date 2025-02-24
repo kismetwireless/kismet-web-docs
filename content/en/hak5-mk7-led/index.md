@@ -83,4 +83,3 @@ You can find more examples and detailed info with:
 The LED mod uses an attiny841, flashed with an Arduino bootloader.  It has a standard 6-pin AVR ISP header for programming.
 
 Because of how the board is connected to the MK7, you *must* use a programmer which can be configured to flash without power.  You should *never* feed power into the MK7 via a programmer.  A [programmer like this](https://amzn.to/3ceBA0k) (Amazon affiliate link) will work fine.
-

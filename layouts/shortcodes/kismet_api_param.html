@@ -1,60 +1,60 @@
 <div style="padding-bottom: 5px;">
     {{ if ne (default "" (.Get "auto")) "" }}
         {{ if eq (.Get "auto") "timestamp" }}
-            <span style="font-weight: 500;"><code>TIMESTAMP</code></span> 
+            <span style="font-weight: 500;"><code>TIMESTAMP</code></span>
             <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">number</span>
             <span style="color: red; font-style: italic; font-size: 60%;">REQUIRED</span>
 
             <div style="padding-left: 10px;">
-                <p>Timestamps can be absolute (UNIX epochal) timestamps, or they 
-                can be relative negativ numbers, indiciating "number of seconds 
+                <p>Timestamps can be absolute (UNIX epochal) timestamps, or they
+                can be relative negative numbers, indicating "number of seconds
                 before now".
 
-                <p>You can read more about 
-                <a href="/docs/api/command_param/#timestamps" target="_new">timestamp handling</a> 
+                <p>You can read more about
+                <a href="/docs/api/command_param/#timestamps" target="_new">timestamp handling</a>
                 and how to use it <a href="/docs/api/command_param/#timestamps" target="_new">here</a>.
             </div>
         {{ else if eq (.Get "auto") "fields" }}
-            <span style="font-weight: 500;"><code>fields</code></span> 
+            <span style="font-weight: 500;"><code>fields</code></span>
             <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">field simplification</span>
             <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
 
             <div style="padding-left: 10px;">
-                <p>Kismet can reduce the amount of information being processed and returned by an API by simplifying the 
+                <p>Kismet can reduce the amount of information being processed and returned by an API by simplifying the
                 fields to only return the data needed by the caller.</p>
 
-                <p>You can read more about the 
-                <a href="/docs/api/command_param/#field-simplification" target="_new">field simplification API</a> 
+                <p>You can read more about the
+                <a href="/docs/api/command_param/#field-simplification" target="_new">field simplification API</a>
                 and how to use it <a href="/docs/api/command_param/#field-simplification" target="_new">here</a>.
             </div>
         {{ else if eq (.Get "auto") "regex" }}
-            <span style="font-weight: 500;"><code>regex</code></span> 
+            <span style="font-weight: 500;"><code>regex</code></span>
             <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">regular expression</span>
             <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
 
             <div style="padding-left: 10px;">
-                <p>When compiled with PCRE support, Kismet can apply 
+                <p>When compiled with PCRE support, Kismet can apply
                 regular expression filters.</p>
                 <p>Regular expressions can be applied to multiple fields.</p>
 
-                <p>You can read more about the 
-                <a href="/docs/api/command_param/#regex-filters" target="_new">field regex API</a> 
+                <p>You can read more about the
+                <a href="/docs/api/command_param/#regex-filters" target="_new">field regex API</a>
                 and how to use it <a href="/docs/api/command_param/#regex-filters" target="_new">here</a>.
             </div>
         {{ end }}
     {{ else }}
-        <span style="font-weight: 500;"><code>{{ .Get "name" }}</code></span> 
+        <span style="font-weight: 500;"><code>{{ .Get "name" }}</code></span>
 
         {{ with .Get "type" }}
             <span style="font-size: 70%; font-weight: bold; padding-right: 5px;">{{ . }}</span>
         {{ end }}
 
-        {{ with default true (.Get "required") }} 
-            {{ if or (eq . true) (eq . "true") }} 
-                <span style="color: red; font-size: 60%;">REQUIRED</span> 
-            {{ else }} 
+        {{ with default true (.Get "required") }}
+            {{ if or (eq . true) (eq . "true") }}
+                <span style="color: red; font-size: 60%;">REQUIRED</span>
+            {{ else }}
                 <span style="font-style: italic; font-size: 60%;">OPTIONAL</span>
-            {{ end }} 
+            {{ end }}
         {{ end }}
 
         <div style="padding-left: 10px;">

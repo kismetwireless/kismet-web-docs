@@ -18,6 +18,7 @@ The macOS CoreWLAN datasource works with the built-in Airport Wi-Fi interfaces o
 Packet capture on Wi-Fi is accomplished via "monitor mode", a special mode where the card is told to report all packets seen, and to report them at the 802.11 link layer instead of emulating an Ethernet device.
 
 The macOS CoreWLAN Wi-Fi source will auto-detect supported interfaces by querying the network interface list and checking for wireless configuration APIs.  It can be manually specified with `type=osxcorewlan`:
+
 ```
 source=en0:type=osxcorewlan
 ```
@@ -25,13 +26,13 @@ source=en0:type=osxcorewlan
 The macOS CoreWLAN Wi-Fi capture uses the 'kismet_cap_osx_corewlan_wifi' tool, and should
 typically be installed suid-root.  macOS requires root permissions to change the state of the network interface.
 
-
 Example source definitions:
+
 ```
 source=en0
 ```
 
-or 
+or
 
 ```
 source=en0:name=some_meaningful_name
@@ -66,7 +67,7 @@ The Kismet macOS CoreWLAN support works with the Airport internal Wi-Fi hardware
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
 
-### Channel control options 
+### Channel control options
 
 {{<configopt channel_hop true false>}}
 Enable or disable channel hopping on this data source.  Even if Kismet is (configured for)[/docs/readme/datasources/channelhop/#configuration] channel hopping.
@@ -95,7 +96,7 @@ Set a fixed list of channels instead of probing the source for all supported cha
 
 The list of channels must be:
 
-* Comma separated 
+* Comma separated
 * Contained in quotes
 
 Example:
@@ -119,7 +120,7 @@ Kismet will autodetect channels on almost all Wi-Fi sources, but some non-standa
 
 The list of channels to add must be:
 
-* Comma separated 
+* Comma separated
 * Contained in quotes
 
 Example:
@@ -135,7 +136,7 @@ kismet -c 'wlan0:name=Foo,add_channels="1W5,2W5,6W10"'
 ```
 {{</configopt>}}
 
-### Interface control options 
+### Interface control options
 
 {{<configopt timestamp true false>}}
 Typically, Kismet will override the timestamp of the packet with the local timestamp of the server; this is the default behavior for remote data sources, but it can be turned off either on a per-source basis or in `kismet.conf` globally.
@@ -143,7 +144,7 @@ Typically, Kismet will override the timestamp of the packet with the local times
 Generally the defaults have the proper behavior, especially for remote data sources which may not be NTP time synced with the Kismet server.
 {{</configopt>}}
 
-### Filtering options 
+### Filtering options
 
 {{<configopt dot11_process_phy true false>}}
 802.11 Wi-Fi networks have three basic packet classes - Management, Phy, and Data.  The Phy packet type is the shortest, and contains the least amount of information - it is used to acknowledge packet reception and controls the packet collision detection CTS/RTS system.  These packets can be useful, however they are also the most likely to become corrupted and still pass checksum.

@@ -29,7 +29,7 @@ Kismet interfaces with environmental sensors, including Geiger Counter / Radiati
 
 **Always** consult the documentation for your Geiger counter.  Different Geiger counter hardware is sensitive to different energy levels of radiation.
 
-The location of your detector, the type of detection hardware, and the speed at which you are travelling can all impact
+The location of your detector, the type of detection hardware, and the speed at which you are traveling can all impact
 
 ## Compiling Radview support
 

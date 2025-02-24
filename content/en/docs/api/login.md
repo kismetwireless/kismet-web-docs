@@ -9,11 +9,11 @@ menu:
   docs:
     parent: ""
     identifier: "login-b898b25d5b6a19d57507937ca625ed36"
-weight: 200 
+weight: 200
 toc: true
 ---
 
-Kismet uses HTTP basic-auth to submit login information, and session tokens to retain login state.  
+Kismet uses HTTP basic-auth to submit login information, and session tokens to retain login state.
 
 As of `2019-04-git`, all interaction with the Kismet server requires a login.
 
@@ -33,9 +33,9 @@ If the administrator username and password is provided via Basic auth or via get
 
 *Added 2020-10* API-token-only consumers of the API should provide *ONLY* the API token given, and supply it in the `KISMET` cookie or URI parameter.
 
-## API Keys 
+## API Keys
 
-API keys are, essentially, pre-provisioned session tokens stored in the Kismet settings files in the users home directory.  
+API keys are, essentially, pre-provisioned session tokens stored in the Kismet settings files in the users home directory.
 
 An API key is associated with a role, and can be used with any endpoint which supports that role.
 
@@ -55,13 +55,13 @@ The same rules apply to the user and password and session token login process - 
 
 ## Login roles
 
-As of `2020-10`, Kismet supports login roles. 
+As of `2020-10`, Kismet supports login roles.
 
 Every endpoint supports one or more roles.  The provided authentication, session key, or API key must be authorized for that role or the endpoint will return a permission denied error.
 
 Roles are not inherited; a role limits the API token to those roles.
 
-Logins as the Kismet user are given the role `admin`, which has access to all endpoints; this retains the standard behavior of endpoints and logins. 
+Logins as the Kismet user are given the role `admin`, which has access to all endpoints; this retains the standard behavior of endpoints and logins.
 
 The most common use for roles is to limit the access of an API token.
 

@@ -17,33 +17,33 @@ A virtual GPS always reports a single, fixed, static location.
 
 The virtual GPS can be helpful for injecting location data on a stationary Kismet server.
 
-## Configuration 
+## Configuration
 
 ```
 gps=virtual:lat={xyz},lon={xyz},alt={xyz}
 ```
 
-## GPS options 
+## GPS options
 
 ### Common options
 
 {{<configopt name name>}}
-Set an arbitrary human-readable name for the GPS.  This will be used in the Kismet GPS logs. 
+Set an arbitrary human-readable name for the GPS.  This will be used in the Kismet GPS logs.
 {{</configopt>}}
 
 
 {{<configopt reconnect true false>}}
-Automatically attempt to re-open the GPS if an error occurs or the connection is interrupted.  
+Automatically attempt to re-open the GPS if an error occurs or the connection is interrupted.
 
 This is enabled by default.
 {{</configopt>}}
 
-### Virtual options 
+### Virtual options
 
 {{<configopt lat latitude>}}
 *REQUIRED*
 
-Latitude to report, as decimal degrees 
+Latitude to report, as decimal degrees
 {{</configopt>}}
 
 
@@ -57,4 +57,3 @@ Longitude to report, as decimal degrees
 {{<configopt alt altitude>}}
 Altitude to report, in meters
 {{</configopt>}}
-

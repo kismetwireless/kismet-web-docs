@@ -13,11 +13,11 @@ weight: 500
 toc: true
 ---
 
-The AVR RZUSBSTICK is a USB prototype device for 802.15.4 communications.  To use it with Kismet, the stock firmware will work.  The device can also be flashed with the Killerbee firmware [provided by River Loop Security](https://github.com/riverloopsec/killerbee).
+The AVR RZUSBSTICK is a USB prototype device for 802.15.4 communications.  To use it with Kismet, the stock firmware will work.  The device can also be flashed with the KillerBee firmware [provided by River Loop Security](https://github.com/riverloopsec/killerbee).
 
 Kismet must be compiled with support for `libusb` to use AVR RZUSBSTICK; you will need `libusb-1.0-dev` (or the equivalent for your distribution), and you will need to make sure that the `RZ KILLERBEE` option is enabled in the output from `./configure`.
 
-## 802.15.4 (Zigbee) 
+## 802.15.4 (Zigbee)
 
 The 802.15.4 standard is a low-bandwidth low-power networking standard.  A commercial implementation is Zigbee, however other devices also implement the 802.15.4 physical layer.
 
@@ -53,7 +53,7 @@ When using multiple AVR RZUSBSTICK dongles, they can be specified by their locat
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
 
-### Channel control options 
+### Channel control options
 
 {{<configopt channel_hop true false>}}
 Enable or disable channel hopping on this data source.  Even if Kismet is (configured for)[/docs/readme/datasources/channelhop/#configuration] channel hopping.
@@ -81,7 +81,7 @@ Set a fixed list of channels instead of probing the source for all supported cha
 
 The list of channels must be:
 
-* Comma separated 
+* Comma separated
 * Contained in quotes
 
 Example:

@@ -26,31 +26,41 @@ In order to support the arbitrary data collected by Kismet about different phy l
 This means that basic queries (time, signal levels, location, device identifiers, and MAC addresses) can be done via SQL queries, but more complex queries will require retrieving the JSON object.
 
 ## Log Versions
+
 The log file version is stored in the `db_version` field of the `KISMET` table.  When changes to the base database structure are made, this version will be incremented.
 
 ### Version 9
+
 As of February 2025, Kismet has started using db_version 9.  This version adds:
 1. `packet_full_len` to the `packets` table.  This contains the original length of the packet.  This is the same as the `caplen` value reported by libpcap, and will be greater than the original packet length when the capture size is limited.
 
 ### Version 8
+
 As of October 2021, Kismet has started using db_version 8.  This version adds:
 1. `hash` to the `packets` table.  This contains the CRC32 hash of the payload of the packet, not including the capture-specific radio headers.  This is equivalent to the pcapng packet hash.
 2. `packetid` to the `packets` table.  This contains the packet id of the packet, which is unique to all packets of the same hash.  This is equivalent to the pcapng packet id option.
 
 ### Version 7
+
 As of April 2021, Kismet has started using db_version 7.  This version contains one change:
+
 1. The `packets` table now contains the field `datarate`, a real number.  This is the data rate as seen by Kismet, in mbit/sec.
 
 ### Version 6
+
 As of May 2019, Kismet has started using db_version 6.  This version contains one change:
+
 1. the `packets` table now has an additional field, `tags`.  This is a space-separated list of arbitrary packet tags.  These can be used to identify packets tagged by parts of the Kismet code, for instance, WPA handshake packets.
 
 ### Version 5
+
 As of February 2019, Kismet has started using db_version 5.  This version contains two major changes:
+
 1. Kismet no longer stores GPS coordinates as normalized integers.  GPS related data will be stored as SQL type `REAL`, an 8-byte double-precision float.
 2. Kismet now adds per-packet GPS speed, altitude, and heading records.
 
 ### Version 4
+
 Through Kismet 2018/2019 Beta 2, Kismet used db_version 4.  This version *did not* contain per-packet altitude, speed, or heading records, and *did* contain normalized GPS coordinates.
 
 ## Data Formats
@@ -234,4 +244,3 @@ The `snapshots` section holds arbitrary time-based snapshots of data; this funct
 If the Kismet Databaselog is enabled, Kismet will expose an API for extracting historic data.  If the databaselog is not enabled, these APIs will not be available and will return an error.
 
 The `kismetdb` REST API [can be found here.](/docs/api/kismetdb/)
-

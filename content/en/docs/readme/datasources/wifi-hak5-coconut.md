@@ -25,7 +25,7 @@ source=coconut:type=hak5_coconut
 
 The WiFi Coconut source works with the Hak5 WiFi hardware.
 
-## Compiling Coconut support 
+## Compiling Coconut support
 
 WiFi Coconut requires libUSB support, and you will need to enable Coconut support at compile time by passing `--enable-wifi-coconut` to `./configure`.
 
@@ -33,9 +33,9 @@ WiFi Coconut support is also built into packages from the main Kismet repositori
 
 Kismet Hak5 WiFi Coconut support will also work on macOS!
 
-## Kismet WiFi Coconut support 
+## Kismet WiFi Coconut support
 
-The WiFi Coconut presents as 14 Wi-Fi radios.  Under Linux, these can either be configured as 14 independent sources in Kismet, or as the WiFi Coconut source. 
+The WiFi Coconut presents as 14 Wi-Fi radios.  Under Linux, these can either be configured as 14 independent sources in Kismet, or as the WiFi Coconut source.
 
 When configured with Coconut support, Kismet will load the userspace driver from the WiFi Coconut tool, configure each radio on a channel, and report packets from all 14 2.4GHz channels simultaneously in Kismet.
 
@@ -43,19 +43,18 @@ Under macOS, there is no monitor-mode capable USB driver for the Wi-Fi card used
 
 ## BladeRF WiPhy source parameters
 
-### Interfaces 
+### Interfaces
 
-The WiFi Coconut is addressed as `coconut-X` where `X` is the position on the USB topology that the Coconut was found. 
+The WiFi Coconut is addressed as `coconut-X` where `X` is the position on the USB topology that the Coconut was found.
 
-If there is only one Coconut, it can be configured as `coconut`; for multiple Coconut devices on a single system you will need to configure as the USB position, such as `coconut-8`.  
+If there is only one Coconut, it can be configured as `coconut`; for multiple Coconut devices on a single system you will need to configure as the USB position, such as `coconut-8`.
 
 ### Naming and description options
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
 
-### Coconut options 
+### Coconut options
 
 {{<configopt disable_leds true false>}}
 Once the WiFi Coconut is opened and enabled, disable the LEDs.
 {{</configopt>}}
-

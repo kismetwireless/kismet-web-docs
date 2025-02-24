@@ -44,21 +44,21 @@ source=nxp_kw41z:device=/dev/ttyUSB0,phy=btle
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
 
-### Device selection 
+### Device selection
 
 {{<configopt device "/path/to/serial/device">}}
-The NXP KW41Z devices appear as USB serial devices, and serial devices can not be auto-discovered. 
+The NXP KW41Z devices appear as USB serial devices, and serial devices can not be auto-discovered.
 
-You *must* provide the path to the serial device associated with the nRF 51822 sniffer. 
+You *must* provide the path to the serial device associated with the nRF 51822 sniffer.
 {{</configopt>}}
 
-### Phy type 
+### Phy type
 
 {{<configopt phy btle zigbee>}}
 The NXP KW41Z can capture from BTLE and Zigbee.  To only enable one phy, use the `phy` option.
 {{</configopt>}}
 
-### Channel control options 
+### Channel control options
 
 Channel control for NXP KW41Z is only available in Zigbee mode.
 
@@ -88,7 +88,7 @@ Set a fixed list of channels instead of probing the source for all supported cha
 
 The list of channels must be:
 
-* Comma separated 
+* Comma separated
 * Contained in quotes
 
 Example:
