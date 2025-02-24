@@ -11,7 +11,7 @@ menu:
     identifier: "ubertooth-35c8f95aede066448b4dd0420f7612c4"
 weight: 210
 toc: true
---- 
+---
 
 The Ubertooth One is an open-source hardware Bluetooth and BTLE sniffer by Great Scott Gadgets.
 
@@ -26,7 +26,6 @@ Bluetooth uses a frequency-hopping system with dynamic MAC addresses and other o
 This datasource works with the [Ubertooth One by Great Scott Gadgets](https://greatscottgadgets.com/ubertoothone/).
 
 The Ubertooth datasource works on Linux and macOS via libUSB and libUbertooth.
-
 
 ## Ubertooth interfaces
 
@@ -63,4 +62,3 @@ kismet -c ubertooth:channel=39
 ```
 
 To try to mitigate firmware hangs, Kismet will reset the U1 device periodically, which will reboot the U1.  This does not prevent all firmware hangs, however, and you may find it necessary to remove and re-insert the Ubertooth One periodically.
-

@@ -11,7 +11,7 @@ menu:
     identifier: "wardrive-37c3080141199b5ce6efbd7e2dde7d00"
 weight: 50
 toc: true
-aliases: 
+aliases:
     - /docs/readme/wardriving/
 ---
 
@@ -45,9 +45,9 @@ kismet -t some_wardrive --override wardrive
 
 You'll receive an alert that wardriving mode is active and that logging is greatly reduced, and Kismet will automatically be optimized for pure AP collection.
 
-## Logging 
+## Logging
 
-The wardrive mode overlay enables wiglecsv logging, but leaves other logging types enabled. 
+The wardrive mode overlay enables wiglecsv logging, but leaves other logging types enabled.
 
 This is done by an append config option for `log_types`:
 
@@ -88,7 +88,7 @@ What does wardriving mode change?  You can see all the options in the `kismet_wa
 
     Access point advertisements only happen on the primary Wi-Fi channels; there's no need to tune to HT20, HT40, VHT80, or VHT160 channels.  By eliminating them, we increase the effective channel coverage by hopping through the list faster, meaning we're less likely to miss APs while in motion.
 
-    The options are appended to any 802.11 datasource, local or remote, which doesn't have an explicit option already set.  Specific sources could be left on VHT channels by adding `ht_channels=true,vht_channels=true,default_ht20=true,expand_ht20=true` to those datasource `source=` defintiions.
+    The options are appended to any 802.11 datasource, local or remote, which doesn't have an explicit option already set.  Specific sources could be left on VHT channels by adding `ht_channels=true,vht_channels=true,default_ht20=true,expand_ht20=true` to those datasource `source=` definitions.
 
     ```
     # Turn off HT20, HT40, and VHT options on wifi datasources (unless they explicitly set them)
@@ -121,10 +121,9 @@ What does wardriving mode change?  You can see all the options in the `kismet_wa
 
 * Turn off some other logging
 
-    The kismetdb log can contain channel usage over time, datasource rates over time, and other info - we don't care about that for wardriving, turn it off.  This saves both disk space and IO time to slower disks, like microsd cards.
+    The kismetdb log can contain channel usage over time, datasource rates over time, and other info - we don't care about that for wardriving, turn it off.  This saves both disk space and IO time to slower disks, like Micro SD cards.
 
     ```
     kis_log_channel_history=false
     kis_log_datasources=false
     ```
-

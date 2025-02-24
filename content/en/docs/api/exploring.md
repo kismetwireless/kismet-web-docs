@@ -13,7 +13,7 @@ weight: 30
 toc: true
 ---
 
-The easiest way to explore the REST system, aside from the docs, is to query the JSON endpoints directly.  Remember that as of `2019-04-git` you will need to have a valid login to explore the server setup.  
+The easiest way to explore the REST system, aside from the docs, is to query the JSON endpoints directly.  Remember that as of `2019-04-git` you will need to have a valid login to explore the server setup.
 
 You can use `curl` or `python` to quickly grab output and format the JSON to be easily human readable:
 
@@ -72,9 +72,9 @@ Entering the subscribe command:
 
 ```
 {"SUBSCRIBE": "TIMESTAMP"}
-``` 
+```
 
-will enroll this websocket with the eventbus, and stsart returning events like:
+will enroll this websocket with the eventbus, and start returning events like:
 
 ```
 {"TIMESTAMP": {"kismet.system.timestamp.usec": 671986,"kismet.system.timestamp.sec": 1603120458}}
@@ -83,10 +83,9 @@ will enroll this websocket with the eventbus, and stsart returning events like:
 
 Beyond `websocat`, websockets can be explored in a Javascript environment (like `jsc`, `node`, or a browser console), with Python, or with almost any other language with modern web client libraries.
 
-
 ## What do all the fields mean?
 
-More information about each field can be found in the `/system/tracked_fields.html` URI, simply by visiting `http://username:password@localhost:2501/system/tracked_fields.html` in your browser.  
+More information about each field can be found in the `/system/tracked_fields.html` URI, simply by visiting `http://username:password@localhost:2501/system/tracked_fields.html` in your browser.
 
 This endpoint shows a table of every registered field, the type of data the fields holds, and the description of the field.
 
@@ -126,4 +125,3 @@ For each defined field, Kismet will include a metadata field, `description.whate
 While the `prettyjson` format is well suited for learning about Kismet and developing tools to interface with the REST API, the `json` format should be used for final code; it is significantly faster than `prettyjson` and is optimized for processing time and space.
 
 `prettyjson` should work with nearly all REST endpoints which return JSON records, but will *NOT* work with `ekjson`-only endpoints (which are relatively rare, and documented accordingly below in the REST docs).
-

@@ -56,17 +56,15 @@ Force overwriting any existing files, by default `kismetdb_to_pcap` will refuse 
 {{</argumentshort>}}
 
 {{<argument json-path>}}
-Reformat field names to be compatible with JSON path searching and ELK by rewriting all `.` to `_`; For example, `kismet.base.key` becomes `kismet_base_key`.  
+Reformat field names to be compatible with JSON path searching and ELK by rewriting all `.` to `_`; For example, `kismet.base.key` becomes `kismet_base_key`.
 
 This is turned on automatically when ELK mode is enabled.
 {{</argument>}}
 
 {{<argument ekjson>}}
-Export as an `ekjson` format; Instead of exporting a JSON array of the devices, instead export each device as an object on a single line.  
+Export as an `ekjson` format; Instead of exporting a JSON array of the devices, instead export each device as an object on a single line.
 
-While not technically valid JSON, this format can be used to stream processing or inserting into other tools (such as ELK), and can be processed line-by-line with far fewer resources than a single array of all options.  
+While not technically valid JSON, this format can be used to stream processing or inserting into other tools (such as ELK), and can be processed line-by-line with far fewer resources than a single array of all options.
 
 This will automatically enable JSON path mode.
 {{</argument>}}
-
-

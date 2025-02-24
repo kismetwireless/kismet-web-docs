@@ -22,6 +22,7 @@ The Linux Wi-Fi data source handles capturing from Wi-Fi interfaces using the tw
 Packet capture on Wi-Fi is accomplished via "monitor mode", a special mode where the card is told to report all packets seen, and to report them at the 802.11 link layer instead of emulating an Ethernet device.
 
 The Linux Wi-Fi source will auto-detect supported interfaces by querying the network interface list and checking for wireless configuration APIs.  It can be manually specified with `type=linuxwifi`:
+
 ```
 source=wlan1:type=linuxwifi
 ```
@@ -31,6 +32,7 @@ typically be installed suid-root:  Linux requires root to manipulate the
 network interfaces and create new ones.
 
 Example source definitions:
+
 ```
 source=wlan0
 source=wlan1:name=some_meaningful_name
@@ -58,7 +60,6 @@ Channels can be defined by number or by frequency.
 | xxW10      | 10MHz half-channel, a non-standard channel type supported on some Atheros devices.  This cannot be automatically detected, you must manually add it to the channel list for a source. |
 | xxW5       | 5MHz quarter-channel, a non-standard channel type supported on some Atheros devices.  This cannot be automatically detected, you must manually add it to the channel list for a source. |
 
-
 ## Lockfiles
 
 Linux doesn't gracefully handle probing and creating multiple monitor mode VIFs at once.  To prevent this from happening, Kismet uses a lockfile in `/tmp/.kismet_cap_linux_wifi_interface_lock`;  The Linux capture tool uses this to ensure that only one Kismet process is creating a monitor mode interface at once.
@@ -73,18 +74,17 @@ sudo rm /tmp/.kismet_cap_linux_wifi_interface_lock
 
 Not all hardware and drivers support monitor mode, but the majority do.  Typically any driver shipped with the Linux kernel supports monitor mode, and does so in a standard way Kismet understands.  If a specific piece of hardware does not have a Linux driver yet, or does not have a standard driver with monitor mode support, Kismet will not be able to use it.
 
-
 ### Known good chipsets
 
 * Atheros-based ath5k, ath9k, USB-based atheros cards like the AR9271)
 
-    Atheros 802.11abgn cards are typically the most reliable, however they appear to return false packets with valid checksums on very small packets such as phy/control and powersave control packets.  This may lead Kismet to detect spurious devices not actually present if phy packet filtering is not enabled. 
+    Atheros 802.11abgn cards are typically the most reliable, however they appear to return false packets with valid checksums on very small packets such as phy/control and powersave control packets.  This may lead Kismet to detect spurious devices not actually present if phy packet filtering is not enabled.
 
-    The Atheros ath10k and ath11k chipsets use a clsoed-source RTOS firmware on the card itself, which has had problems in monitor mode in the past.  Performance may be highly suspect.
+    The Atheros ath10k and ath11k chipsets use a closed-source RTOS firmware on the card itself, which has had problems in monitor mode in the past.  Performance may be highly suspect.
 
 * Intel-based cards (all supported by the iwlwifi driver including the 3945, 4965, 7265, 8265, ax200, ax210 and similar)
 
-    Intel cards, with older kernel drivers and firmware, have significant crashing issues when tuning to HT40 and HT80 channels.  
+    Intel cards, with older kernel drivers and firmware, have significant crashing issues when tuning to HT40 and HT80 channels.
 
     Modern kernels appear to have resolved this issue; any kernel from 2020 or newer should have few if any problems.  If you cannot upgrade your kernel, you can disable HT and VHT channels by passing the source options `ht_channels=false` and `vht_channels=false`; such as `source=wlp4s0:name=someintel,ht_channels=false,vht_channels=false`
 
@@ -96,31 +96,31 @@ Not all hardware and drivers support monitor mode, but the majority do.  Typical
 
 * ZyDAS cards
 
-* Broadcom cards such as those found in the Raspberry Pi 3 and Raspberry Pi 0W, *if you are using the nexmon drivers*.  
+* Broadcom cards such as those found in the Raspberry Pi 3 and Raspberry Pi 0W, *if you are using the nexmon drivers*.
 
     Even fully patched with nexmon, the Broadcom drivers often exhibit some form of instability, often ceasing to return packets after a minute or two, with no obvious errors.
 
-    It is not posisble to use Kismet with the *default drivers* from Raspbian or similar distributions.
+    It is not possible to use Kismet with the *default drivers* from Raspbian or similar distributions.
 
     The Kali distribution for the Raspberry Pi *includes the nexmon patches already* and will work.
 
     To patch your own distribution with nexmon, consult the nexmon site at: https://github.com/seemoo-lab/nexmon
 
-* Mediatek mt7612u 802.11AC devices; these are some of the best supported devices.
+* MediaTek mt7612u 802.11AC devices; these are some of the best supported devices.
 
 * Almost all other drivers shipped with the Linux kernel
 
 ### Cards known to have significant issues
 
-* ath10k 
+* ath10k
 
     Atheros 802.11AC cards have many problems, including floods of spurious packets in monitor mode.  These packets carry 'valid' checksum flags, making it impossible to programmatically filter them.  Expect large numbers of false devices.  It appears this will require a fix to the closed-source Atheros firmware to resolve.
 
-* rtl8812 and 8814 
+* rtl8812 and 8814
 
     USB 802.11AC cards are known to have many strange problems.  While extremely common hardware, these cards use out-of-kernel drivers which do not support standard monitor mode vif configuration.  There are many flavors of these drivers, many of which cannot enter monitor mode, or silently fail to enable monitor mode.  Despite being a common and cheap chipset, these cards are best avoided because they will take a lot of work to get running.
 
-* rtl88x2bu based cards 
+* rtl88x2bu based cards
 
     These devices have an out-of-kernel driver which doesn't support mac80211 VIFs or modern channel control.  Kismet will fall back to the old WEXT ioctl control method, but these drivers will not support setting HT channels.
 
@@ -136,7 +136,7 @@ The Linux Wi-Fi source is extensively configurable.
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
 
-### Channel control options 
+### Channel control options
 
 {{<configopt channel_hop true false>}}
 Enable or disable channel hopping on this data source.  Even if Kismet is (configured for)[/docs/readme/datasources/channelhop/#configuration] channel hopping.
@@ -165,7 +165,7 @@ Set a fixed list of channels instead of probing the source for all supported cha
 
 The list of channels must be:
 
-* Comma separated 
+* Comma separated
 * Contained in quotes
 
 Example:
@@ -189,7 +189,7 @@ Kismet will autodetect channels on almost all Wi-Fi sources, but some non-standa
 
 The list of channels to add must be:
 
-* Comma separated 
+* Comma separated
 * Contained in quotes
 
 Example:
@@ -209,7 +209,7 @@ kismet -c 'wlan0:name=Foo,add_channels="1W5,2W5,6W10"'
 {{<configopt default_ht20 true false>}}
 Added `2019-04-git`
 
-If the interface is HT capable, automatically use HT20 channels for all 20mhz wide channels.  This explicitly tells the interface to set the HT20 attributes instead of a basic channel.  If `default_ht20=true`, then `expand_ht20` is ignored. 
+If the interface is HT capable, automatically use HT20 channels for all 20mhz wide channels.  This explicitly tells the interface to set the HT20 attributes instead of a basic channel.  If `default_ht20=true`, then `expand_ht20` is ignored.
 {{</configopt>}}
 
 
@@ -245,7 +245,7 @@ See the `ht_channels` option for similar control over 40MHz HT channels.
 {{<configopt band24ghz true false>}}
 Added `2022-08-git`
 
-Enable only channels in the 2.4GHz band.  
+Enable only channels in the 2.4GHz band.
 
 This can be combined with `band5ghz=true` and `band6ghz=true`.
 
@@ -255,7 +255,7 @@ Example:
 
 ```
 # Source0 enables 2.4ghz channels only.
-source=wlan0:name=Source0:band24ghz=true 
+source=wlan0:name=Source0:band24ghz=true
 # Source1 enables 5ghz and 6ghz channels only.
 source=wlan1:Name=Source1:band5ghz=true,band6ghz=true
 ```
@@ -265,7 +265,7 @@ source=wlan1:Name=Source1:band5ghz=true,band6ghz=true
 {{<configopt band5ghz true false>}}
 Added `2022-08-git`
 
-Enable only channels in the 5GHz band.  
+Enable only channels in the 5GHz band.
 
 This can be combined with `band24ghz=true` and `band6ghz=true`.
 
@@ -275,7 +275,7 @@ Example:
 
 ```
 # Source0 enables 2.4ghz channels only.
-source=wlan0:name=Source0:band24ghz=true 
+source=wlan0:name=Source0:band24ghz=true
 # Source1 enables 5ghz and 6ghz channels only.
 source=wlan1:Name=Source1:band5ghz=true,band6ghz=true
 ```
@@ -285,7 +285,7 @@ source=wlan1:Name=Source1:band5ghz=true,band6ghz=true
 {{<configopt band6ghz true false>}}
 Added `2022-08-git`
 
-Enable only channels in the 6GHz band.  
+Enable only channels in the 6GHz band.
 
 This can be combined with `band24ghz=true` and `band5ghz=true`.
 
@@ -295,13 +295,13 @@ Example:
 
 ```
 # Source0 enables 2.4ghz channels only.
-source=wlan0:name=Source0:band24ghz=true 
+source=wlan0:name=Source0:band24ghz=true
 # Source1 enables 5ghz and 6ghz channels only.
 source=wlan1:Name=Source1:band5ghz=true,band6ghz=true
 ```
 {{</configopt>}}
 
-### Interface control options 
+### Interface control options
 
 {{<configopt timestamp true false>}}
 Typically, Kismet will override the timestamp of the packet with the local timestamp of the server; this is the default behavior for remote data sources, but it can be turned off either on a per-source basis or in `kismet.conf` globally.
@@ -332,7 +332,7 @@ Many drivers use `virtual interfaces` or `VIFs` to control behavior.  Kismet wil
 Use the `vif=` option to set a specific name for the VIF.  It will be created if it does not exist.
 {{</configopt>}}
 
-### Filtering options 
+### Filtering options
 
 {{<configopt filter_locals true false>}}
 Automatically detect all local interfaces and build a BPF filter to exclude them from the capture.  This is most useful for remote capture instances which are connected over wireless.  The filter can only exclude the first 8 devices found, because of limits in the kernel memory buffer for BPF filtering.
@@ -350,13 +350,13 @@ This feature is used by the wardrive-mode overlay.
 {{</configopt>}}
 
 {{<configopt truncate_data true false>}}
-Use a kernel-level BPF program to truncate 802.11 data frames, except for EAPOL (WPA handshake) data frames. 
+Use a kernel-level BPF program to truncate 802.11 data frames, except for EAPOL (WPA handshake) data frames.
 
-This sets the capture size of the packet to the end of the 802.11 headers, allowing for the data counting functions in Kismet to continue working as expected.  The data component of *all* packets will be lost, and not logged to the pcap, kismetdb, or other logs. 
+This sets the capture size of the packet to the end of the 802.11 headers, allowing for the data counting functions in Kismet to continue working as expected.  The data component of *all* packets will be lost, and not logged to the pcap, kismetdb, or other logs.
 
 This will disable any WIDS alerts that rely on the data content of packets (such as the DHCP alerts).
 
-Enabling this filter will *drastically* reduce the amount of bandwidth required for remote capture, will reduce the size of logs significantlty, and will reduce the overall processing requirement of Kismet, at the cost of comprehensive data content in the logs.
+Enabling this filter will *drastically* reduce the amount of bandwidth required for remote capture, will reduce the size of logs significantly, and will reduce the overall processing requirement of Kismet, at the cost of comprehensive data content in the logs.
 {{</configopt>}}
 
 
@@ -366,7 +366,7 @@ Enabling this filter will *drastically* reduce the amount of bandwidth required 
 Kismet turns off processing of Phy packets by default because they can lead to spurious device detection, especially in high-data captures.  For complete tracking and possible detection of hidden-node devices, it can be set to 'true' but this generally results in a large number of bogus device detections.
 {{</configopt>}}
 
-### Other options 
+### Other options
 
 {{<configopt fcsfail true false>}}
 Wi-Fi packets contain a `frame checksum` or `FCS`.  Some drivers report this as the FCS bytes, while others report it as a flag in the capture headers which indicates if the packet was received correctly.
@@ -399,5 +399,3 @@ Turn on verbose error reporting and warnings; this will raise alerts when channe
 Some sources - the Atheros 9k and possibly 10k series - support half-width (10MHz) and quarter-width (5MHz) channels.  These channels must be specified manually with `channels=...` or `add_channels=...`.
 
 Often these devices seem to have difficulty switching between normal and custom channel modes; you may need to set a card to use *only* 5MHz or 10MHz channels instead of mixing with normal mode.
-
-

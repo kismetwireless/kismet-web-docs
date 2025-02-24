@@ -16,6 +16,7 @@ toc: true
 Kismet can leverage the cheap [rtl-sdr](https://www.rtl-sdr.com) software defined radio to capture ADSB data from aircraft and helicopters.
 
 The SDR RTLADSB source can autodetect rtl-sdr devices automatically, and can be manually specified with `type=rtladsb`:
+
 ```
 source=rtladsb-0:type=rtladsb
 ```
@@ -97,9 +98,8 @@ All data sources accept the [common naming and description](/docs/readme/datasou
 
 * gain={value}
 
-    Specifiy a fixed gain level for the radio; by default, the hardware automatic gain control is used.
+    Specify a fixed gain level for the radio; by default, the hardware automatic gain control is used.
 
 * ppm={error_value}
 
     Specify a PPM error offset for fine-tuning your radio, if your hardware has a known offset.
-

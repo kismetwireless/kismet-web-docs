@@ -17,10 +17,10 @@ Kismet loads the bulk of configuration from the configuration files, however it 
 
 ## Kismet command line options
 
-### Core Kismet options 
+### Core Kismet options
 
 {{<argument no-ncurses>}}
-By default, Kismet uses a small ncurses-based wrapper to remind users to visit the web-based UI.  When running Kismet in a script or as a service, it's probably desireable to disable this and use pure text output.
+By default, Kismet uses a small ncurses-based wrapper to remind users to visit the web-based UI.  When running Kismet in a script or as a service, it's probably desirable to disable this and use pure text output.
 {{</argument>}}
 
 
@@ -30,7 +30,7 @@ Enable debug mode, primarily for running under GDB.  Debug mode disables the int
 
 
 {{<argument no-line-wrap>}}
-Kismet line-wraps messages on the terminal to make them more readable.  When running in a script or as a service, it may be more useful to have a complete status message on a single line. 
+Kismet line-wraps messages on the terminal to make them more readable.  When running in a script or as a service, it may be more useful to have a complete status message on a single line.
 {{</argument>}}
 
 
@@ -38,7 +38,7 @@ Kismet line-wraps messages on the terminal to make them more readable.  When run
 Turn off loading plugins.  Mostly useful when debugging if a plugin is causing a crash.
 {{</argument>}}
 
-### Logging options 
+### Logging options
 
 {{<argumentshort n no-logging>}}
 Turn off all logging for this run.

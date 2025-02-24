@@ -57,4 +57,3 @@ Step and DXF files [available at GitHub](https://github.com/kismetwireless/cases
 ## Tactical
 
 Need to make your MK7 more tacti-cool?  Grab and 3d print a bottom plate for the Kismet acrylic case, or print an entire case; files [available at GitHub](https://github.com/kismetwireless/cases/tree/main/hak5-pineapple-mk7)
-

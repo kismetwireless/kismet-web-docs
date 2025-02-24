@@ -51,7 +51,7 @@ Kismet will launch a capture binary and perform one of several actions:
 
 ## List devices
 
-This is called on all capture drivers to create a list of devices the user could pick.  The capture binary is responsible for enumerating any devices it can support via any mechanism; for instance the Linux Wi-Fi capture binary enumerates devices by processing the /sys/class/net/ pseudofilesystem.
+This is called on all capture drivers to create a list of devices the user could pick.  The capture binary is responsible for enumerating any devices it can support via any mechanism; for instance the Linux Wi-Fi capture binary enumerates devices by processing the /sys/class/net/ pseudo filesystem.
 
 After listing devices, a capture binary should go into a spindown/pending state and wait to be closed; no other action will be taken this execution.
 
@@ -64,4 +64,3 @@ After returning a probe response, a capture binary should go into a spindown/pen
 ## Open definition
 
 This is called to actually open and begin capturing from an interface.
-

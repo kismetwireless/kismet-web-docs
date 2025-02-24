@@ -25,7 +25,7 @@ Kismet interfaces with environmental sensors, including Geiger Counter / Radiati
 
 **Always** consult the documentation for your Geiger counter.  Different Geiger counter hardware is sensitive to different energy levels of radiation.
 
-The location of your detector, the type of detection hardware, and the speed at which you are travelling can all impact
+The location of your detector, the type of detection hardware, and the speed at which you are traveling can all impact
 
 ## Compiling Radiacode support
 
@@ -61,7 +61,7 @@ Radiation data is logged in the [kismetdb](/docs/readme/logging/kismetdb/) log a
 
 ## Stability
 
-The Radiacode hardware appears to have a slightly fragile USB implementation.  While *typically* this is not a problem, on some occaisons, initializing the device over USB can cause the USB implementation on the Radiacode to crash.
+The Radiacode hardware appears to have a slightly fragile USB implementation.  While *typically* this is not a problem, on some occasions, initializing the device over USB can cause the USB implementation on the Radiacode to crash.
 
 If this happens, the Radiacode will no longer respond on USB; to fix this, disconnect the Radiacode from USB, power the device off using the buttons and LCD interface, then power it back on and connect to USB again.
 
@@ -70,4 +70,3 @@ If this happens, the Radiacode will no longer respond on USB; to fix this, disco
 ### Naming and description options
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
-

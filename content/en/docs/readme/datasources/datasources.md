@@ -15,7 +15,7 @@ toc: true
 
 Kismet captures data from "data sources".  The captured data is typically raw packets, but can also be JSON information or other device records.
 
-## Configuring sources 
+## Configuring sources
 
 Sources are added to Kismet via the Web UI (Menu->Datasources), via the Kismet config file, or on the command line when starting Kismet.
 
@@ -23,7 +23,7 @@ Most datasources can be detected automatically, however some must be manually ad
 
 Sources have any number of options:  per-source tweaks for how that specific source will be configured.
 
-### Source definitions 
+### Source definitions
 
 Sources are always defined as:
 
@@ -40,7 +40,7 @@ source=wlan0:name=Wifi0
 If there are no options, only the capture name is needed:
 
 ```
-source=wlan0 
+source=wlan0
 ```
 
 ### Launching Kismet with a source on the command line
@@ -62,11 +62,11 @@ kismet -c wlan0:name=Wifi0 -c wlan1:name=Wifi1
 Sources can be permanently added to the `kismet_site.conf` [override config file](/docs/readme/configuring/configfiles/#customizing-configs-with-kismet_siteconf).  You can add multiple datasources with multiple `source=` lines:
 
 ```
-source=wlan0:name=Wifi0 
+source=wlan0:name=Wifi0
 source=wlan1:name=Wifi1
 ```
 
-## Naming and describing datasources 
+## Naming and describing datasources
 
 A datasource is by default named after the interface: `source=wlan0` will create a datasource named `wlan0`.
 
@@ -140,17 +140,17 @@ source=wlan0:info_amp_type=custom_duplex,info_amp_gain=20
 ```
 {{</configopt>}}
 
-## Setting source type 
+## Setting source type
 
 Nearly all sources in Kismet will autodetect the type.  You can manually set the type for the datasource by using the `type=...` source option.  The official type name for each datasource is in the documentation for the sources.
 
 There are few situations where you will need to manually specify the type:
 
-1. A datasource which does not auto-detect 
+1. A datasource which does not auto-detect
 
     These will be clearly marked in the documentation for each data source.
 
-2. A datasource which may not be present when Kismet is started, that you would like Kismet to automatically enable when it becomes available 
+2. A datasource which may not be present when Kismet is started, that you would like Kismet to automatically enable when it becomes available
 
     Kismet will not attempt to re-open a datasource which couldn't be found on startup, to prevent eternally spamming the console with open errors.  You can force Kismet to keep trying to re-open the source by passing a type, which forces Kismet to view the source as a known source in an error state.  For instance:
 
@@ -194,7 +194,7 @@ You will then need to use an additional tool to populate the GPS, using the [met
 
 Multiple datasources can use the same meta GPS, or have independent meta GPS devices (or use the system-wide GPS if no metagps is specified).
 
-## Datasource errors 
+## Datasource errors
 
 Kismet will attempt to re-open any datasource which has gone into error state.
 

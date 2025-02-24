@@ -17,9 +17,9 @@ toc: true
 
 Kismet can integrate with a GPS device to provide geolocation coordinates for devices.
 
-*Remember*: Kismet uses the GPS to determin the location *where a packet was seen*.  This is not necessarily the *location of the transmitter*, but can be used to determine where the transmitter is likely located.
+*Remember*: Kismet uses the GPS to determine the location *where a packet was seen*.  This is not necessarily the *location of the transmitter*, but can be used to determine where the transmitter is likely located.
 
-The quality of the location estimates is determined in part by the quality of the sampling methods.  Passing a transmitter once in a straight line (such as driving past) limites the possible location to that single path.  By circling the area of the suspected transmitter, or navigating in a grid around it, the data available to deduce the transmitter location is greatly increased.
+The quality of the location estimates is determined in part by the quality of the sampling methods.  Passing a transmitter once in a straight line (such as driving past) limits the possible location to that single path.  By circling the area of the suspected transmitter, or navigating in a grid around it, the data available to deduce the transmitter location is greatly increased.
 
 GPS data is included in the log files, in PPI pcap files, and exported over the REST interface.
 
@@ -37,7 +37,6 @@ Some GPS units support multiple GPS variants implemented by different countries;
 
 When testing GPS, be sure to give the receiver as much a view of the sky as possible.
 
-
 ## Configuring GPS in Kismet
 
 Kismet can handle multiple GPS types.  Generally, you will only want to define a single GPS per Kismet instance, however if multiple GPS devices are defined, Kismet will use the lcoation of the GPS with the most recent valid location report.
@@ -49,5 +48,3 @@ gps=[gpstype]:option1=value1,option2=value2
 ```
 
 GPS is configured in the [kismet.conf](/docs/readme/configuring/configfiles/) configuration file, or preferably, the [kismet_site.conf](/docs/readme/configuring/configfiles/#customizing-configs-with-kismet_siteconf) configuration override.
-
-

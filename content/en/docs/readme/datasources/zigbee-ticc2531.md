@@ -21,8 +21,7 @@ To use the TI CC2531 capture, you must have a TI CC2531 dongle flashed with the 
 
 *Note*: It seems that while many CC2531 devices are *advertised* as pre-flashed with the sniffer firmware, they appear not to be!
 
-
-## 802.15.4 (Zigbee) 
+## 802.15.4 (Zigbee)
 
 The 802.15.4 standard is a low-bandwidth low-power networking standard.  A commercial implementation is Zigbee, however other devices also implement the 802.15.4 physical layer.
 
@@ -42,7 +41,7 @@ Channels are a fixed width and are identified only by channel number (ie 1, 12, 
 
 Despite sharing the frequency range with Wi-Fi on the 2.4GHz band, 802.15.4 uses a different physical encoding standard; a Wi-Fi card is not able to see 802.15.4 packets or networks, and an 802.15.4 device is not able to see Wi-Fi packets.
 
-## TI CC2531 concerns 
+## TI CC2531 concerns
 
 The sniffer firmware in the TI CC2531 sometimes goes into a permanent error state until the device is physically re-initialized - by disconnecting it from USB and reconnecting it.  Unfortunately, there does not seem to be any way to automate this process, as once the device enters an error state, it will remain in that state and cannot be reinitialized over USB.
 
@@ -72,7 +71,7 @@ This datasource should work on any platform, so long as the appropriate librarie
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
 
-### Channel control options 
+### Channel control options
 
 {{<configopt channel_hop true false>}}
 Enable or disable channel hopping on this data source.  Even if Kismet is (configured for)[/docs/readme/datasources/channelhop/#configuration] channel hopping.
@@ -100,7 +99,7 @@ Set a fixed list of channels instead of probing the source for all supported cha
 
 The list of channels must be:
 
-* Comma separated 
+* Comma separated
 * Contained in quotes
 
 Example:

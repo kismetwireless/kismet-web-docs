@@ -24,11 +24,12 @@ Typically a kismetdb replay would be done as a command line option rather than a
 ```bash
 $ kismet -c /path/to/file.kismet
 ```
+
 ### Warnings
 
 Not all data in a kismetdb log is currently replayed: Non-packet data such as JSON records is not loaded.
 
-When replaying a kismetdb log, all packets will appear to originate from a single datasource (the kisemtdb source), not the orignial interfaces.
+When replaying a kismetdb log, all packets will appear to originate from a single datasource (the kisemtdb source), not the original interfaces.
 
 When processing logfiles, it is easy to send packets faster than the Kismet server can process.  It's always a good idea to use the `pps` source option to limit the packets per second.
 
@@ -45,4 +46,3 @@ Limit the replay to a packets-per-second maximum.  Without this option, packets 
 {{<configopt realtime true false>}}
 Replay a kismetdb log in real time, using the time offsets between packets in the original log.
 {{</configopt>}}
-

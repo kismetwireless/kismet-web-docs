@@ -13,8 +13,8 @@ weight: 370
 toc: true
 ---
 
-The Kismet `phy80211` layer processes Wi-Fi packets and devices. 
+The Kismet `phy80211` layer processes Wi-Fi packets and devices.
 
-It provides additional APIs for Wi-Fi related data. 
+It provides additional APIs for Wi-Fi related data.
 
 {{< kismet_api phydot11 >}}

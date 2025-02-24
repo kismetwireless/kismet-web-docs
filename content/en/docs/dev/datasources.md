@@ -395,12 +395,14 @@ All datasources are derived from `KisDatasource`.  A KisDatasource is based on a
 The amount of customization required when writing a KisDatasource driver depends on the amount of custom data being passed over the IPC channel.  For packet-based data sources, there should be little additional customization required, however sources which pass complex pre-parsed objects will need to customize the protocol-handling methods.
 
 KisDatasource instances are used in two ways:
+
 1. *Maintenance* instances are used as factories to create new instances.  A maintenance instance is used to enumerate supported capture types, initiate probes to find a type automatically, and to build a capture instance.
 2. *Capture* instances are bound to an IPC process for the duration of capture and are used to process the full capture protocol.
 
 At a minimum, new datasources must implement the following from KisDatasource:
 
 *probe_type(...)* is called to find out if this datasource supports a known type.  A datasource should return `true` for each type name supported.
+
 ```C++
 virtual bool probe_type(string in_type) {
     if (StrLower(in_type) == "customfoo")
@@ -411,9 +413,10 @@ virtual bool probe_type(string in_type) {
 ```
 
 *build_data_source(...)* is the factory method used for returning an instance of the KisDatasource.  A datasource should simply return a new shared ptr instance of its custom type.
+
 ```c++
-virtual std::shared_ptr<kis_datasource> 
-    build_datasource(std::shared_ptr<kis_datasource_builder> in_shared_builder) { 
+virtual std::shared_ptr<kis_datasource>
+    build_datasource(std::shared_ptr<kis_datasource_builder> in_shared_builder) {
         return std::make_shared<custom_kis_datasource>();
 
     };
@@ -467,9 +470,9 @@ A phy handler is responsible for defining any custom data structures specific to
 
 Phy handlers are derived from the base `kis_phy_handler` class.
 
-At a minumum a new phy must provide (and override):
+At a minimum a new phy must provide (and override):
 
-* The basic C++ contructor and destructor implementations
+* The basic C++ constructor and destructor implementations
 * The create function to build an actual instance of the phy handler
 * A common classifier stage to create common info from the custom packet info
 * A storage loader function to attach any custom data when a device is loaded from storage
@@ -509,10 +512,10 @@ dlt_example::dlt_example() :
 
     // Packet components and insertion into the packetchain is handled
     // automatically by the Kis_DLT_Handler constructor.  All that needs
-    // to happen here is setting the name and DLT type 
+    // to happen here is setting the name and DLT type
     dlt_name = "Example DLT";
 
-    // DLT type is set in tcpdump.h 
+    // DLT type is set in tcpdump.h
     dlt = DLT_SOME_EXAMPLE;
 
     // Optionally, announce that we're loaded
@@ -530,27 +533,27 @@ dlt_example::dlt_example() :
 int dlt_example::handle_packet(std::shared_ptr<kis_packet> in_pack) {
     // Example sanity check - do we already have packet data
     // decapsulated?  For a type like radiotap or PPI that encodes another
-    // DLT, this encapsulated chunk might be handled differently 
+    // DLT, this encapsulated chunk might be handled differently
     auto decapchunk = in_pack->fetch_as<kis_datachunk>(pack_comp_decap);
 
     if (decapchunk != nullptr) {
         return 1;
     }
 
-    // Get the linklayer data record 
+    // Get the linklayer data record
     auto linkdata = in_pack->fetch_as<kis_datachunk>(pack_comp_linkframe);
 
-    // Sanity check - do we even have a link chunk? 
+    // Sanity check - do we even have a link chunk?
     if (linkdata == nullptr) {
         return 1;
     }
 
-    // Sanity check - does the DLT match? 
+    // Sanity check - does the DLT match?
     if (linkdata->dlt != dlt) {
         return 1;
     }
 
-    // Other code goes here 
+    // Other code goes here
 }
 ```
 
@@ -575,7 +578,6 @@ Using the `stringview` `substr` function keeps us from copying data unnecessaril
 ## Minimizing memory allocations
 
 The packet handling loop is an extremely commonly used loop, where small changes can have large impacts.  To minimize thrashing the memory allocation system, Kismet uses object pools for the packet components.  Notice the following code:
-
 
 ```c++
     auto decapchunk = packetchain->new_packet_component<kis_datachunk>();
@@ -657,5 +659,4 @@ void some_data_source::handle_packet_custom(KVmap in_kvpairs) {
     // the packet when it's done with it automatically.
     packetchain->processPacket(packet);
 }
-
 ```

@@ -27,7 +27,7 @@ The BladeRF2 WiPhy source requires a BladeRF2 (aka BladeRF Micro), with the larg
 
 It requires the WiPhy FPGA image.
 
-## Compiling WiPhy support 
+## Compiling WiPhy support
 
 WiPhy support in Kismet requires the latest versions of LibBladeRF2; as these are not available in many distributions, Kismet does not enable it by default.
 
@@ -37,7 +37,7 @@ WiPhy support is also built into packages from the main Kismet repositories for 
 
 Kismet WiPhy support will also work on macOS!
 
-## Kismet WiPhy support 
+## Kismet WiPhy support
 
 BladeRF2 WiPhy integrates with the Linux mac80211hwsim virtual 802.11 driver layer.  Kismet can use this as a normal Wi-Fi interface in Linux with no additional support, using the Linux Wi-Fi datasource.
 
@@ -48,5 +48,3 @@ The Kismet WiPhy support will directly communicate with the BladeRF2 SDR using l
 ### Naming and description options
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
-
-
