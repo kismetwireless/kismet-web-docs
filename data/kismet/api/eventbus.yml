@@ -6,40 +6,40 @@
   types: ["ws"]
   roles: ["readonly"]
   docs: |
-    The Kismet `eventbus` is a push/publish system used inside Kismet where events 
-    are transmitted between Kismet components.   The eventbus is a central system 
-    for almost all asynchronous events in Kismet. 
+    The Kismet `eventbus` is a push/publish system used inside Kismet where events
+    are transmitted between Kismet components.   The eventbus is a central system
+    for almost all asynchronous events in Kismet.
 
-    Events are used to publish when devices are detected, human-readable status 
-    messages, datasource errors and state, alerts, and more.  
+    Events are used to publish when devices are detected, human-readable status
+    messages, datasource errors and state, alerts, and more.
 
-    The websocket eventbus API allows for push notification of selected events when 
-    they occur.  The Kismet web UI uses the eventbus for populating the alerts widget, 
-    message panel, GPS location widget, and more. 
+    The websocket eventbus API allows for push notification of selected events when
+    they occur.  The Kismet web UI uses the eventbus for populating the alerts widget,
+    message panel, GPS location widget, and more.
 
     Any tool monitoring Kismet should use the eventbus API.
 
-    Events are a `string::object` dictionary of values and content, and can contain 
-    simple text data, or complex complete objects like device records. 
+    Events are a `string::object` dictionary of values and content, and can contain
+    simple text data, or complex complete objects like device records.
   uriparameters:
     -
-      name: "user" 
+      name: "user"
       type: "string"
       required: false
-      description: | 
-        User to log in as; websockets do not support standard basic-auth, 
+      description: |
+        User to log in as; websockets do not support standard basic-auth,
         cookies, or other header-based login methods.
 
-        You must provide either `user` and `password` parameters, or an 
+        You must provide either `user` and `password` parameters, or an
         API token or login session token via the `KISMET` paraeter.
     -
-      name: "password" 
-      type: "string" 
+      name: "password"
+      type: "string"
       required: false
       description: |
-        Password associated with the login user. 
+        Password associated with the login user.
 
-        You must provide either `user` and `password` parameters, or an 
+        You must provide either `user` and `password` parameters, or an
         API token or login session token via the `KISMET` parameter.
     -
       name: "KISMET"
@@ -48,31 +48,31 @@
       description: |
         Kismet auth token or API key.
 
-        You must provide either `user` and `password` parameters, or an 
+        You must provide either `user` and `password` parameters, or an
         API token or login session token via the `KISMET` parameter.
   notes: |
-    Kismet websckets will accept authentication as HTTP basic auth, Kismet 
-    session tokens, API keys, or HTTP URI-encoded GET paramaters of the user 
-    auth, session token, or API key. 
+    Kismet websckets will accept authentication as HTTP basic auth, Kismet
+    session tokens, API keys, or HTTP URI-encoded GET paramaters of the user
+    auth, session token, or API key.
 
-    Some tools (websocket) allow sending HTTP basic auth as part of the URI 
+    Some tools (websocket) allow sending HTTP basic auth as part of the URI
     via `http://user:pass@host:port/eventbus/events.ws`, however modern browser
-    implementations do *not* support this, and websockets *must* be constructed 
-    with `GET` URI paramters. 
+    implementations do *not* support this, and websockets *must* be constructed
+    with `GET` URI paramters.
 
-    Websocket URIs *must* match the content type of the calling page.  A `https` 
-    page *must* use `wss` and a `http` page *must* use `ws`.  The Kismet UI 
+    Websocket URIs *must* match the content type of the calling page.  A `https`
+    page *must* use `wss` and a `http` page *must* use `ws`.  The Kismet UI
     detects and handles this automatically via Javascript.
   apinotes: |
-    The eventbus subscription API accepts JSON objects requesting a subscription topic 
-    and optional [field simplification](/docs/api/command_param/#field-simplification). 
+    The eventbus subscription API accepts JSON objects requesting a subscription topic
+    and optional [field simplification](/docs/api/command_param/#field-simplification).
 
-    Currently consumers are limited to *one* subscription *per topic*; it is not 
-    possible for a single connection to subscribe to the same topic twice with 
-    different field selections.  Multiple websocket connections from the same 
-    client may subscribe to the same topic with different field selections without 
+    Currently consumers are limited to *one* subscription *per topic*; it is not
+    possible for a single connection to subscribe to the same topic twice with
+    different field selections.  Multiple websocket connections from the same
+    client may subscribe to the same topic with different field selections without
     restriction, however.
-    
+
     An eventbus JSON command contains:
 
     {{< kismet_api_param name="SUBSCRIBE" type="string" required=false >}}
@@ -86,191 +86,191 @@
     {{< /kismet_api_param >}}
 
     {{< kismet_api_param auto="fields" >}}{{< /kismet_api_param >}}
-    
+
     Either a `SUBSCRIBE` or `UNSUBSCRIBE` must be provided with each command.
-    
+
     Once subscribed to a topic, an eventbus receiver will be sent a websocket text message containing the JSON record for each event which matches that subscription, optionally simplified.
-    
+
     #### Eventbus topics
-    
+
     Eventbus topics may be dynamically expanded by plugins, external helper tools, and more.  Some topics are used predominately as internal messaging mechanisms between components of Kismet, while others are generated at regular intervals specifically for consumption by external UI and monitoring systems.
-    
+
     Event topics include:
-    
+
     ##### ALERT
-    
+
     * Content
-    
+
         JSON object containing a Kismet alert record
-    
+
     * Generation
-    
+
         Published whenever an alert is raised in the Kismet WIDS/Alert system
-    
+
     ##### BATTERY
-    
+
     * Content
-    
+
         JSON object containing the battery presence, charge, and rate data, as per the system statistics API
-    
+
     * Generation
-    
+
         Published once per second by the Kismet server
-    
+
     ##### DATASOURCE_PAUSED
-    
+
     * Content
-    
+
         JSON object containing a Kismet datasource record
-    
+
     * Generation
-    
+
         Published when a running datasource is paused
-    
+
     ##### DATASOURCE_RESUMED
-    
+
     * Content
-    
+
         JSON object containing a Kismet datasource record
-    
+
     * Generation
-    
+
         Published when a paused datasource is resumed
-    
+
     ##### DATASOURCE_ERROR
-    
+
     * Content
-    
+
         The UUID of a Kismet datasource
-    
+
     * Generation
-    
+
         Published when a datasource experiences an error
-    
+
     ##### DATASOURCE_OPENED
-    
+
     * Content
-    
+
         The UUID of a Kismet datasource
-    
+
     * Generation
-    
+
         Published when a datasource is opened (or re-opened)
-    
+
     ##### DATASOURCE_CLOSED
-    
+
     * Content
-    
+
         The UUID of a Kismet datasource
-    
+
     * Generation
-    
+
         Published when a datasource is closed
-    
+
     ##### DOT11_ADVERTISED_SSID
-    
+
     * Content
-    
+
         Contains 2 keys, DOT11_NEW_SSID_BASEDEV and DOT11_ADVERTISED_SSID, which contain, respectively, the base Kismet device complete record, and the new SSID sub-record.
-    
+
     * Generation
-    
+
         Published when a new advertised (via beacons) SSID is discovered
-    
+
     ##### DOT11_RESPONSE_SSID
-    
+
     * Content
-    
+
         Contains 2 keys, DOT11_NEW_SSID_BASEDEV and DOT11_RESPONSE_SSID, which contain, respectively, the base Kismet device complete record, and the new SSID sub-record.
-    
+
     * Generation
-    
+
         Published when an access point responds to a SSID for the first time (vie probe responses), per BSSID.
-    
+
     ##### DOT11_PROBED_SSID
-    
+
     * Content
-    
+
         Contains 2 keys, DOT11_NEW_SSID_BASEDEV and DOT11_PROBED_SSID, which contain, respectively, the base Kismet device complete record, and the new SSID sub-record.
-    
+
     * Generation
-    
+
         Published when a device probes for a SSID the first time, per device MAC
-    
+
     ##### DOT11_WPA_HANDSHAKE
-    
+
     * Content
-    
+
         Contains two keys, DOT11_WPA_HANDSHAKE_BASEDEV and DOT11_WPA_HANDSHAKE_DOT11, which contain, respectively, the base Kismet device and the 802.11-specific device sub-record.
-    
+
     * Generation
-    
+
         Published when a complete (or estimated to be complete) WPA handshake is captured
-    
+
     ##### GPS_LOCATION
-    
+
     * Content
-    
+
         JSON object containing the current 'best' GPS location, as per the GPS location API
-    
+
     * Generation
-    
+
         Published once per second by the Kismet server
-    
+
     ##### KISMETDB_LOG_OPEN
-    
+
     * Content
-    
+
         None
-    
+
     * Generation
-    
+
         Published when the kismetdb log is successfully opened
-    
+
     ##### MESSAGE
-    
+
     * Content
-    
+
         JSON object containing a Kismet messagebus message (text, flags, and timestamp)
-    
+
     * Generation
-    
+
         Published when a new message is generated in Kismet
-    
+
     ##### NEW_DATASOURCE
-    
+
     * Content
-    
+
         JSON object containing a Kismet datasource record
-    
+
     * Generation
-    
+
         Published when a new datasource is defined
-    
+
     ##### PACKETCHAIN_STATS
-    
+
     * Content
-    
+
         JSON object containing the packet chain statistics RRDs, as per the packetchain stats API
-    
+
     * Generation
-    
+
         Published once per second by the Kismet server
-    
+
     ##### TIMESTAMP
-    
+
     * Content
-    
+
         JSON object containing the second and usecond timestamp
-    
+
     * Generation
-    
+
         Published automatically once per second by the Kismet server
   example: |
-    Constructing and connecting a websocket uses the standard Javascript websocket 
-    API: 
+    Constructing and connecting a websocket uses the standard Javascript websocket
+    API:
 
-    ```javascript 
+    ```javascript
     var ws = new WebSocket('ws://host:2501/eventbus/events.ws?'
       'user=username&password=password');
     ws.onmessage = function(msg) {
