@@ -85,6 +85,13 @@
       If the topic has not been subscribed to, this message will be ignored.
     {{< /kismet_api_param >}}
 
+    {{< kismet_api_param name="format" type="string" required=false >}}
+      <p><i>Added: 2025-02</i></p>
+
+      Optional format of the JSON output.  By default, the normal Kismet JSON format is used.  Alternate formats such as `tjson`
+      can be used here if renaming the fields is required.
+    {{< /kismet_api_param >}}
+
     {{< kismet_api_param auto="fields" >}}{{< /kismet_api_param >}}
 
     Either a `SUBSCRIBE` or `UNSUBSCRIBE` must be provided with each command.
