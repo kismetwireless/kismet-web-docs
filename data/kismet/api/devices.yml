@@ -21,7 +21,7 @@
 
 -
   name: "Device by key"
-  uri: "/devices/by-key/{DEVICEKEY}/device.json"
+  uri: "/devices/by-key/{DEVICEKEY}/device"
   types: ["anyjson"]
   methods: ["GET", "POST"]
   roles: ["readonly"]
@@ -51,7 +51,7 @@
 
 -
   name: "Devices by MAC address"
-  uri: "/devices/by-mac/{MACADDRESS}/devices.json"
+  uri: "/devices/by-mac/{MACADDRESS}/devices"
   types: ["anyjson"]
   methods: ["GET", "POST"]
   roles: ["readonly"]
