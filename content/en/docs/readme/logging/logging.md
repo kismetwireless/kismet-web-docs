@@ -18,7 +18,7 @@ Kismet supports logging to multiple log formats simultaneously:
 | Log | Description |
 | -------- | ----------- |
 | kismet   | The Kismet log is the new, unified style of logging.  Based on sqlite3, it is a database file containing packets, non-packet data, messages, location information, device records, client records, and more.  It can be converted to other formats with the `kismetdb_to_xyz` tools included in Kismet, or parsed with any language which understands sqlite3 and JSON for scripted handling of Kismet results. |
-| pcapng | PCAP-NG is the new PCAP packet capture format supported by Wireshark, Tshark, and other tools.  PCAP-NG logs contain the complete original packet and original radio headers, capture device information, and can merge multiple capture types into a single log. |
+| pcapng | PCAP-NG is the new PCAP packet capture format supported by Wireshark, TShark, and other tools.  PCAP-NG logs contain the complete original packet and original radio headers, capture device information, and can merge multiple capture types into a single log. |
 | pcapppi | PCAP-PPI is a legacy PCAP packet capture file, with PPI packet headers.  Packets must be translated to the PPi header format, which will not contain the full original information.  PCAP-PPI should only be used for legacy packet processors which cannot be updated to use PCAP-NG. |
 | wiglecsv | The wiglecsv log is meant for direct uploading to the [Wigle](https://wigle.net) project, a community wardriving and data collection site. |
 
@@ -81,7 +81,6 @@ using the template
 log_template=%p/%n-%D-%t-%i.%l
 ```
 
-
 Templates are defined with `%` codes:
 
 | Code | Value |
@@ -96,7 +95,3 @@ Templates are defined with `%` codes:
 | %I | Multi-part log number padded with zeroes |
 | %l | Log type (kismet, pcapng, etc) |
 | %h | Home directory |
-
-
-
-

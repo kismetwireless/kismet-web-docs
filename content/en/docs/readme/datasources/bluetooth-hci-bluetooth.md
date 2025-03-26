@@ -13,7 +13,7 @@ weight: 200
 toc: true
 ---
 
-Kismet can use the generic Linux HCI interface for Bluetooth discovery; this uses a normal Bluetooth adapter to perform *active scans* for discoverable Bluetooth classic and BTLE devices.  
+Kismet can use the generic Linux HCI interface for Bluetooth discovery; this uses a normal Bluetooth adapter to perform *active scans* for discoverable Bluetooth classic and BTLE devices.
 
 This is an **active scan**, not passive monitoring, and reports attributes and advertised information, not packets.
 
@@ -22,6 +22,7 @@ The Linux Bluetooth source will auto-detect supported interfaces by querying the
 The Linux Bluetooth capture uses the 'kismet_cap_linux_bluetooth' tool, and should typically be installed suid-root:  Linux requires root to manipulate the `rfkill` state and the management socket of the Bluetooth interface.
 
 ### Example source
+
 ```
 source=hci0:name=linuxbt
 ```
@@ -51,4 +52,3 @@ Linux Bluetooth sources support all the common configuration options such as nam
 ### Naming and description options
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
-

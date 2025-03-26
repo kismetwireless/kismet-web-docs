@@ -10,7 +10,7 @@ tags: ["wardriving", "wi-fi" ]
 contributors: ["Mike Kershaw / Dragorn"]
 pinned: false
 homepage: false
-aliases: 
+aliases:
     - /wardriving/
 ---
 
@@ -71,9 +71,9 @@ If we assume that when we're wardriving we're highly unlikely to pass through th
 
 Using this, we can start making some rough calculations as to how long we have to see a network.
 
-If we have a single WiFi card cycling all channels every 10 seconds, if we're traveling more than about 10 miles per hour, we'll miss the chance to see networks - if we were to cover 150 feet in 10 seconds we'd be travelling at 15 feet per second, or 10 mph.
+If we have a single WiFi card cycling all channels every 10 seconds, if we're traveling more than about 10 miles per hour, we'll miss the chance to see networks - if we were to cover 150 feet in 10 seconds we'd be traveling at 15 feet per second, or 10 mph.
 
-If we're travelling at 30mph (a more reasonable speed for residential and city streets in the United States), that's 44 feet per second - so with a single card, at the fastest reasonable hopping rate, we'd miss more than half the networks because we simply wouldn't have time to be on the right channel as we passed!
+If we're traveling at 30mph (a more reasonable speed for residential and city streets in the United States), that's 44 feet per second - so with a single card, at the fastest reasonable hopping rate, we'd miss more than half the networks because we simply wouldn't have time to be on the right channel as we passed!
 
 ### Adding more cards
 

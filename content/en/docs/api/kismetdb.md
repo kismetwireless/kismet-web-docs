@@ -13,8 +13,8 @@ weight: 360
 toc: true
 ---
 
-If the KismetDB log is enabled, Kismet exposes historic, searchable data.  
+If the KismetDB log is enabled, Kismet exposes historic, searchable data.
 
-If KismetDB logging is not enabled, these endpoints will not be available and will return an error. 
+If KismetDB logging is not enabled, these endpoints will not be available and will return an error.
 
 {{< kismet_api kismetdb >}}

@@ -79,7 +79,6 @@ kismetdb_to_pcap --in some-kismet-log.kismet --out some-pcap-log.pcap --old-pcap
 
 will generate a legacy PCAP log with only the first and second interfaces.
 
-
 ## Splitting logs
 
 If you have multiple datasources and want to generate a log file for each, or extremely large log files and want to split the logs by packet count or by log size, `kismetdb_to_pcap` can do that, as well:
@@ -155,4 +154,3 @@ Split the output into multiple files, with each file containing at most {num} pa
 {{<argument split-size size-in-kb>}}
 Split the output into multiple files, with each file containing at most {kb} bytes.
 {{</argument>}}
-

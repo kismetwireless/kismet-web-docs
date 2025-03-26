@@ -13,7 +13,6 @@ weight: 390
 toc: true
 ---
 
-Kismet can identify UAVs and drones both by specific fingerprints (such as DJI DroneID elements in 
-WiFi beacons) or by common SSIDs and manufacturers. 
+Kismet can identify UAVs and drones both by specific fingerprints (such as DJI DroneID elements in WiFi beacons) or by common SSIDs and manufacturers.
 
 {{< kismet_api uav_drone >}}

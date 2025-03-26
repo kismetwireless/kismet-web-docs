@@ -11,7 +11,7 @@ Often distributions lag behind the latest versions of tools - sometimes signific
 
 When installing from packages, make sure that your distribution is installing a *current* version of Kismet - and if it isn't, continue on for how to install from the official Kismet package repositories or build it from git!
 
-## Official Kismet respositories
+## Official Kismet repositories
 
 Kismet provides official packages - release and nightly - for many common distributions including Ubuntu, Kali, and Raspbian.
 

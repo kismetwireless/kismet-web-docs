@@ -13,7 +13,7 @@ The NXP KW41Z is a chip used for Bluetooth LE and 802.15.4 communications. To us
 
 The NXP KW41Z utilizes serial communications so no special libraries are needed for use with Kismet, however not all platforms have working serial port drivers (see below).
 
-## 802.15.4 (Zigbee) 
+## 802.15.4 (Zigbee)
 
 The 802.15.4 standard is a low-bandwidth low-power networking standard.  A commercial implementation is Zigbee, however other devices also implement the 802.15.4 physical layer.
 
@@ -50,6 +50,7 @@ source=nxp_kw41z:device=/dev/ttyUSB0,phy=zigbee
 ```
 
 To specify only BTLE:
+
 ```
 source=nxp_kw41z:device=/dev/ttyUSB0,phy=btle
 ```
@@ -60,21 +61,21 @@ source=nxp_kw41z:device=/dev/ttyUSB0,phy=btle
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
 
-### Device selection 
+### Device selection
 
 {{<configopt device "/path/to/serial/device">}}
-The NXP KW41Z devices appear as USB serial devices, and serial devices can not be auto-discovered. 
+The NXP KW41Z devices appear as USB serial devices, and serial devices can not be auto-discovered.
 
-You *must* provide the path to the serial device associated with the nRF 51822 sniffer. 
+You *must* provide the path to the serial device associated with the nRF 51822 sniffer.
 {{</configopt>}}
 
-### Phy type 
+### Phy type
 
 {{<configopt phy btle zigbee>}}
 The NXP KW41Z can capture from BTLE and Zigbee.  To only enable one phy, use the `phy` option.
 {{</configopt>}}
 
-### Channel control options 
+### Channel control options
 
 Channel control for NXP KW41Z is only available in Zigbee mode.
 
@@ -104,7 +105,7 @@ Set a fixed list of channels instead of probing the source for all supported cha
 
 The list of channels must be:
 
-* Comma separated 
+* Comma separated
 * Contained in quotes
 
 Example:
@@ -119,4 +120,3 @@ If defining datasources on the command line when launching Kismet, be aware that
 kismet -c 'nxp_kw41z:device=/dev/ttyUSB0,name=Foo,channels="12,13,14,15"'
 ```
 {{</configopt>}}
-

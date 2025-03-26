@@ -25,7 +25,7 @@ There are two main flavors of PCAP supported by Kismet:
 
 2. `pcapng`
 
-    `pcapng` is the modern pcap standard supported by Wireshark, Tshark, and other tools.
+    `pcapng` is the modern pcap standard supported by Wireshark, TShark, and other tools.
 
     PCAP-NG allows for mixing packet types (such as Wi-Fi, BTLE, and Zigbee) as well as retaining the original capture interface (which datasource in Kismet saw the packet), the original headers (pure radiotap packet headers with more complete signal info, timestamps, etc).  It also allows Kismet to log the packet without manipulation (such as header translation to PPI), allows for annotations, other data, and more.
 
@@ -88,4 +88,3 @@ and
 ```
 ppi_log_data_packets=false
 ```
-

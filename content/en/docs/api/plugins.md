@@ -13,7 +13,6 @@ weight: 330
 toc: true
 ---
 
-Kismet plugins may be integrated C++ code (loaded as a shared object), external binaries communicating 
-over IPC, or Javascript/HTML web UI extensions.
+Kismet plugins may be integrated C++ code (loaded as a shared object), external binaries communicating over IPC, or Javascript/HTML web UI extensions.
 
 {{< kismet_api plugins >}}

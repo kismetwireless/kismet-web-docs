@@ -13,7 +13,7 @@ weight: 999
 toc: true
 ---
 
-Kismet self-serves the web UI via the built-in webserver.  The web UI can interact with any exposed REST endpoint on the server.  
+Kismet self-serves the web UI via the built-in webserver.  The web UI can interact with any exposed REST endpoint on the server.
 
 Kismet does not currently support (direct) execution of CGI-style code (PHP, etc), active server-side code should be implemented via a Kismet plugin providing a new endpoint.
 
@@ -46,7 +46,7 @@ var local_uri_prefix = "";
 if (typeof(KISMET_URI_PREFIX) !== 'undefined')
     local_uri_prefix = KISMET_URI_PREFIX;
 
-// Export a constant value 
+// Export a constant value
 export const opt1 = 1;
 
 // Export a function
@@ -281,7 +281,7 @@ filter: function(data) {
 }
 ```
 
-#### draw - function(data, target) 
+#### draw - function(data, target)
 
 A function, responsible for populating the content of the details panel.  It is passed the data record for the active device, and the element created for the details panel.
 
@@ -315,7 +315,7 @@ Where in the list to insert the new item.  Smaller numbers indicate higher prior
 
 ### An example sidebar
 
-We will, again, use our example module, `kismet_plugin_foo`.  
+We will, again, use our example module, `kismet_plugin_foo`.
 
 Our sidebar option will open an extremely simple jsPanel HTML5 window.
 
@@ -323,7 +323,7 @@ Our sidebar option will open an extremely simple jsPanel HTML5 window.
 
 // Module boilerplate and other functionality
 
-// Define a function to launch our 
+// Define a function to launch our
 export const PluginWindowDemo = () => {
     var demopanel = $.jsPanel({
         id: 'sidedemo',
@@ -361,6 +361,7 @@ Kismet provides a common settings panel, which plugins are strongly encouraged t
 A plugin can register multiple categories of settings.
 
 ### Settings windows
+
 Settings windows are registered via `kismet_ui_settings.AddSettingsPane(options)`, where options is a dictionary containing:
 
 #### id - string (required)
@@ -405,11 +406,9 @@ A specific settings panel can be shown automatically by launching directly to th
 kismet_ui_settings.ShowSettings('demo_settings_panel');
 ```
 
-
 ### Example Settings
 
 An example settings group in a plugin module might look like:
-
 
 ```javascript
 

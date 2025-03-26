@@ -13,9 +13,9 @@ weight: 260
 toc: true
 ---
 
-Kismet uses alerts to communicate wireless intrusion events and critical Kismet server events. 
+Kismet uses alerts to communicate wireless intrusion events and critical Kismet server events.
 
-Alerts are generated both as text messages on [the messagebus](/docs/api/messages/) and as dedicated alert records. 
+Alerts are generated both as text messages on [the messagebus](/docs/api/messages/) and as dedicated alert records.
 
 For real-time monitoring of alerts, see the [eventbus API](/docs/api/eventbus/).
 
@@ -23,7 +23,7 @@ For real-time monitoring of alerts, see the [eventbus API](/docs/api/eventbus/).
 
 Alerts severities are categorized by numerical value; a higher number is more severe.
 
-| Severity | Defintion | Use                                                                                            |
+| Severity | Definition | Use                                                                                            |
 | -------: | --------- | ---                                                                                            |
 | 0        | INFO      | Informational alerts, such as datasource errors, Kismet state changes, etc                     |
 | 5        | LOW       | Low-risk events such as probe fingerprints                                                     |

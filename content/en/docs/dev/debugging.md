@@ -84,7 +84,7 @@ If you're interested in helping debug problems with Kismet, here's the most usef
 
 ## Advanced debugging
 
-If you're familiar with C++ development and want to help debug even further, Kismet can be compiled using the ASAN memory analyzer; to rebuild it with the analyser options:
+If you're familiar with C++ development and want to help debug even further, Kismet can be compiled using the ASAN memory analyzer; to rebuild it with the analyzer options:
 
 ```
     $ make clean
@@ -92,4 +92,3 @@ If you're familiar with C++ development and want to help debug even further, Kis
 ```
 
 ASAN has a performance impact and uses significantly more RAM, but if you are able to recreate a memory error inside an ASAN instrumented Kismet, that will be very helpful.
-

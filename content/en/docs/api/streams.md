@@ -17,7 +17,6 @@ Kismet considers anything logging a continual egress of data to be a "stream".
 
 The primary set of streams includes packet logging to PCAP files or to web endpoints.
 
-Streams can be viewed and manipulated, for instance a client pulling a packet endpoint can 
-either cancel the open connection, or issue a stream close command via the stream API.
+Streams can be viewed and manipulated, for instance a client pulling a packet endpoint can either cancel the open connection, or issue a stream close command via the stream API.
 
 {{< kismet_api streams >}}

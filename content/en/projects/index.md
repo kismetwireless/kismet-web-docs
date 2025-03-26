@@ -12,17 +12,16 @@ Looking for the instructions and info about the [acrylic WiFi Pineapple MK7 case
 
 Looking for info about the [LED mod](/mk7-led-mod/) for the WiFi Pineapple MK7?
 
-## Printable cases 
+## Printable cases
 
-A collection of 3d-printable cases for various radios and tools is available in the 
+A collection of 3d-printable cases for various radios and tools is available in the
 [Kismet cases Github](https://github.com/kismetwireless/cases)
 
-## Kismet packaging 
+## Kismet packaging
 
-The docker environment and build scripts for the [Kismet packages](/packages/) is in the 
+The docker environment and build scripts for the [Kismet packages](/packages/) is in the
 [Kismet packaging Github](https://github.com/kismetwireless/kismet-packages)
 
-## LORCON 
+## LORCON
 
 [LORCON](https://github.com/kismetwireless/lorcon) (Loss Of Radio CONtrol) is a packet creation and injection library.
-

@@ -17,8 +17,7 @@ The nRF 52840 is a chip used for 2.4Ghz communications, including 802.15.4.   To
 
 The nRF 52840 utilizes serial communications so no special libraries are needed for use with Kismet, *however* not all platforms have working serial port drivers (see below).
 
-
-## 802.15.4 (Zigbee) 
+## 802.15.4 (Zigbee)
 
 The 802.15.4 standard is a low-bandwidth low-power networking standard.  A commercial implementation is Zigbee, however other devices also implement the 802.15.4 physical layer.
 
@@ -37,7 +36,6 @@ Detecting and classifying 802.15.4 networks can be challenging, as they may tran
 Channels are a fixed width and are identified only by channel number (ie 1, 12, 13, 14).  There are no options for wide or fast channels in 802.15.4.
 
 Despite sharing the frequency range with Wi-Fi on the 2.4GHz band, 802.15.4 uses a different physical encoding standard; a Wi-Fi card is not able to see 802.15.4 packets or networks, and an 802.15.4 device is not able to see Wi-Fi packets.
-
 
 ## nRF 52840 interfaces
 
@@ -63,7 +61,7 @@ The nRF 52840 uses a CP2104 serial chip; testing with the [latest drivers](https
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
 
-### Channel control options 
+### Channel control options
 
 {{<configopt channel_hop true false>}}
 Enable or disable channel hopping on this data source.  Even if Kismet is (configured for)[/docs/readme/datasources/channelhop/#configuration] channel hopping.
@@ -91,7 +89,7 @@ Set a fixed list of channels instead of probing the source for all supported cha
 
 The list of channels must be:
 
-* Comma separated 
+* Comma separated
 * Contained in quotes
 
 Example:

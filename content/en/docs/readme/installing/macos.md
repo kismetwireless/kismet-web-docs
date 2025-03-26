@@ -6,11 +6,11 @@ weight: 75
 
 ## Kismet on macOS
 
-Kismet on macOS supports the Airport internal WiFi NIC, the Hak5 WiFi Coconut USB device, the BladeRF2 SDR with WiPhy, and more, however it does *not* work with generic USB WiFi devices.  This is because there is a lack of monitor-mode capable drivers on macOS for third-party WiFi cards.
+Kismet on macOS supports the Airport internal WiFi NIC, the Hak5 WiFi Coconut USB device, the BladeRF2 SDR with WiPhy, and more, however it does *not* work with generic USB WiFi devices. This is because there is a lack of monitor-mode capable drivers on macOS for third-party WiFi cards.
 
 ## Kismet in a VM
 
-Kismet may work in a VM which supports USB passthrough using a USB Wi-Fi card (or other USB capture types).  Parallels and VMWare Fusion are known to typically have good USB passthrough support, though not all devices will work.
+Kismet may work in a VM which supports USB passthrough using a USB Wi-Fi card (or other USB capture types). Parallels and VMWare Fusion are known to typically have good USB passthrough support, though not all devices will work.
 
 UTM and other virtual machines built on qemu may or may not work, as the libusb engine appears to have some problems with some devices and some versions of macOS.
 
@@ -22,14 +22,14 @@ You will need to install the `brew` tool from [brew.sh](https://brew.sh).
 
 To install the latest git development code:
 
-```
+```bash
 brew tap kismetwireless/kismet
 brew install kismet
 ```
 
 Alternatively, to install the latest development versions of Kismet,
 
-```
+```bash
 brew tap kismetwireless/kismet
 brew install --HEAD kismet-git
 ```
@@ -40,9 +40,9 @@ This will install the dependencies, download Kismet, build, and install it.
 
 ### Install dependencies
 
-macOS requires the XCode toolchain from the Apple store.  Once installed, you will need to launch the XCode IDE at least once to accept the license; do so before using the command line tools.
+macOS requires the Xcode toolchain from the Apple store. Once installed, you will need to launch the Xcode IDE at least once to accept the license; do so before using the command line tools.
 
-You will need to install the `brew` tool from [brew.sh](https://brew.sh).  There are of course other package managers for MacOS; feel free to use any of them which have the required packages, but Brew is known to work.
+You will need to install the `brew` tool from [brew.sh](https://brew.sh). There are of course other package managers for macOS; feel free to use any of them which have the required packages, but Brew is known to work.
 
 #### Install the required packages via Brew:
 
@@ -121,4 +121,3 @@ When installed suid-root, Kismet will launch the binaries which control the chan
 ```bash
 sudo make install
 ```
-

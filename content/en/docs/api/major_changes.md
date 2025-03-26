@@ -17,7 +17,7 @@ Over time, the Kismet endpoint API will change - while efforts are made to retai
 
 #### Git
 
-* Added `crypt_bitfield` fields for modern Wi-Fi encryption options.  Added `crypt_string` for printable versions of the crypt bitfield.  Older crypset options remain, but are deprecated, and can not accurated represent the full modern encryption options.
+* Added `crypt_bitfield` fields for modern Wi-Fi encryption options.  Added `crypt_string` for printable versions of the crypt bitfield.  Older crypset options remain, but are deprecated, and can not accurately represent the full modern encryption options.
 
 * Added common string cache for crypt string and Wi-Fi SSIDs, invisible to the API consumption but optimizing in the background.
 
@@ -94,7 +94,6 @@ New endpoints:
 * Live [ADSB data](/docs/api/adsb/#adsb-beast-websocket) in binary/beast mode via `ws://.../phy/RTLADSB/beast.ws`, streams a binary beast-protocol ADSB dump
 * Subscription-style [live device monitoring](/docs/api/devices/#realtime-device-monitoring) websocket endpoint at `ws://.../devices/monitor.ws`
 
-
 Changes to data:
 
 * Locational data no longer includes the `avg_lat`, `avg_lon`, or `avg_alt` and related fields that held the *raw* averages of location.  The average location *is still present* in average location object, this removal affects only the internal raw values which were exposed to serialization.
@@ -127,14 +126,12 @@ To more cleanly support ELK, all location records now use `geopoint` formats.  A
 
 #### 2019-10
 
-To more cleanly support ELK the advertised ssid and probed ssid components of dot11 devices are now serialized as vectors instead of maps.  Previously these were serialized as maps with a key of the hash of the SSID and attributes (an essentialy meaningless number in the export).  Now these are sent as an array of advertised or probed SSID objects.
-
+To more cleanly support ELK the advertised ssid and probed ssid components of dot11 devices are now serialized as vectors instead of maps.  Previously these were serialized as maps with a key of the hash of the SSID and attributes (an essentially meaningless number in the export).  Now these are sent as an array of advertised or probed SSID objects.
 
 #### 2019-10
 
-To more cleanly support ELK EKJSON format, the `ekjson` serialization now permutes the field names to transform all `.` to `_`.  This brings it in line with the ELK interpretation that a `.` is a field separator.  To access the old implemention, where the field names are unmodified, use the new `itjson` (or 'iterative json') format; it will return results which are a vector of objects as an object per line, suitable for serialized parsing and processing.
+To more cleanly support ELK EKJSON format, the `ekjson` serialization now permutes the field names to transform all `.` to `_`.  This brings it in line with the ELK interpretation that a `.` is a field separator.  To access the old implementation, where the field names are unmodified, use the new `itjson` (or 'iterative json') format; it will return results which are a vector of objects as an object per line, suitable for serialized parsing and processing.
 
 #### 2019-04
 
 Kismet now requires authentication on *ALL* endpoints, with the exclusion of `/system/user_status`, `/session/check_login`, `/session/check_session`, and `/session/check_setup_ok`.
-

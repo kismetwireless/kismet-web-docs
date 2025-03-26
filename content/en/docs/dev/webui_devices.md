@@ -31,7 +31,7 @@ $('#devicedata').devicedata(data, options);
 
 ## Devicedata options
 
-A `devicedata` instance takes a small number of options and an array of field defintions which perform the heavy lifting of the table display.
+A `devicedata` instance takes a small number of options and an array of field definitions which perform the heavy lifting of the table display.
 
 ### id - string (optional)
 
@@ -99,6 +99,7 @@ If the render option is a function, it will called during creation of the table 
 The render function is called with a standard options dictionary.
 
 For example, a row rendering the timestamp as a human-readable time:
+
 ```javascript
 {
     field: "kismet.device.base.first_time",
@@ -114,9 +115,11 @@ For example, a row rendering the timestamp as a human-readable time:
 Draw function called AFTER creation of the table.  This function can be used to manipulate the contents of the row (or entire table) after it has been created and rendered.  The draw callback is mostly used for graphs or other non-text content. Draw is called after the DOM is finalized so can manipulate the objects directly.
 
 Draw functions receive the normal options object, with an additional value:
+
 * **container** - object container for the `<td>` cell for this field.
 
 For example, to insert a sparkline in a row you could combine the `draw` and `render` functions:
+
 ```javascript
 {
     field: "some.data.array",
@@ -129,6 +132,7 @@ For example, to insert a sparkline in a row you could combine the `draw` and `re
 ```
 
 A more complex example could create themed elements in the `draw` function and later utilize them in the `render` function:
+
 ```javascript
 {
     field: "some.data",
@@ -199,7 +203,7 @@ Given the data:
 ```javascript
 var data = {
     'somegroup': [
-        { 
+        {
             'field1': "one",
             'field2': "two"
         },
@@ -236,14 +240,16 @@ A *standard* field definition might be `somegroup/field1`.  However, for an iter
 ```
 
 Additionally, field functions called as part of an iterative group are given an additional option in the callback options:
-* **index** - The index value used for this iteration. 
+
+* **index** - The index value used for this iteration.
 
 ### iterateTitle - string | function (optional)
 
 Provide a title for an iterative group.  May be a fixed string, or a function taking the standard options group.
 
 Additionally, the options group will contain:
-* **index** - The index value used for this iteration. 
+
+* **index** - The index value used for this iteration.
 
 ### span - boolean (optional)
 
@@ -252,6 +258,7 @@ Spans the `<td>` table cell containing the output across both columns (eliminati
 A spanned column will not show any title.
 
 For example to simply show the value, centered in bold across the entire column:
+
 ```javascript
 {
     field: "some_placeholder",
@@ -272,4 +279,3 @@ Most of the requirements for manipulating the content of a Devicedata table shou
 
 * **table**, `id` using the supplied `id` field, class `kismet_devicedata`.  This table is created for every group of fields - a devicedata table.  The parent table uses the master `id` option, and subgroup tables are each created using the `id` of the subgroup definition.
 * **tr**, `id` using a sanitized field reference prefixed with `tr_`.  To meet the requirements of an ID, complex field references (nested field names, indexed fields, etc) are converted by replacing all special characters with `_`.  A field reference such as `foo_bar_baz.sub_field` will form the table ID `tr_foo_bar_baz_sub_field`.
-
