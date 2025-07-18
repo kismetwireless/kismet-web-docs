@@ -23,14 +23,16 @@ Interested in learning *how* the SDR capture code works?  [The Scientist and Eng
 
 The newest Mediatek chipset supports tri-band operation, with 6GHz channels.  You *absolutely need* a modern Linux (Kernel 5.18 or newer), and need to set the proper regulatory domain (`iw reg set US` for those in the US) to enable 6GHz channels.
 
-There are several manufacturers of this card, the easiest to get directly is by Alfa:
-* [The Alfa AWUS036AXML](https://amzn.to/3u7AAbZ)
+There are several manufacturers of this card:
+* [Edup AX3000](https://amzn.to/4jSp1sU) is a cheap option
+* [The Alfa AWUS036AXML](https://amzn.to/3u7AAbZ) is a more expensive option,
+  but includes the optional Bluetooth chip as well
 
 Other manufacturers also make devices using this chipset, but typically without removable antennas, and sometimes it can be difficult to find reliable users of the chipset.
 
 ### Mediatek MT7612U
 
-This is a relatively new 802.11AC chipset which has increasingly good Linux support built into the kernel.  You *need* Linux 4.19.7 or later, and Linux 5.0 preferred for this to work.  This chipset works very well on Intel and Raspberry Pi 4, and can work on a Raspberry Pi 3 with an up-to-date kernel and proper module flags (`echo "options mt76_usb disable_usb_sg=1" > /etc/modprobe.d/mt76_usb.conf`)
+The Mediatek 7612U series is an 802.11AC chipset which has good Linux support built into the kernel.  You *need* Linux 4.19.7 or later, and Linux 5.0 preferred for this to work.  This chipset works very well on Intel and Raspberry Pi 4, and can work on a Raspberry Pi 3 with an up-to-date kernel and proper module flags (`echo "options mt76_usb disable_usb_sg=1" > /etc/modprobe.d/mt76_usb.conf`)
 
 There are several flavors of this card, including:
 * [The Panda Wireless PAU0D](https://amzn.to/4bhzJ96)

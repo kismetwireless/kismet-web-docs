@@ -1,4 +1,12 @@
 -
+  date: "2025-03-28"
+  title: "Kismet 2023-07-R2 is out"
+  content: |
+    A minor update to the previous release to address a html/js injection path in the web UI.
+
+    Work continues on a major new release - check the nightlies; this minor revision addresses
+    the injection bug on the older stable release is all.
+-
   date: "2023-07-21"
   title: "Kismet 2023-07-R1 is out!"
   content: |

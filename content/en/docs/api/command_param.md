@@ -27,7 +27,7 @@ as part of the requests you send.
 
 Parameters sent as JSON content should be sent as type `application/json`:
 
-```javascript 
+```javascript
 Content-Type: application/json; charset=UTF-8
 ```
 
@@ -54,7 +54,7 @@ curl -d 'json={"cmd": "lock", "channel": 6}' http://user@host:2501/some/endpoint
 
 To send parameters as a JSON object directly:
 
-```bash 
+```bash
 curl --data '{"cmd":"lock", "source_uuid":"AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"}' -H 'Content-Type: application/json' http://user@host:2501/some/endpoint
 ```
 
@@ -126,6 +126,18 @@ If the Kismet server was compiled *without* libpcre support, passing a regular e
 ]
 ```
 
+### Searchable fields
+
+To be searchable with a regular expression, a field must be a string, or of a
+type which can resolve to a string.  String-like fields are:
+
+* Strings
+* UUIDs
+* MAC addresses
+* Raw binary fields
+
+Other fields will be skipped during a regex match.
+
 ### `multifield`
 
 `multifield` is a standard field path, but it will be automatically expanded to match all values if a vector or value-map field is encountered in the path.  For example, the multifield path:
@@ -133,8 +145,6 @@ If the Kismet server was compiled *without* libpcre support, passing a regular e
 `'dot11.device/dot11.device.advertised_ssid_map/dot11.advertisedssid.ssid'`
 
 will be expanded to include all `dot11.advertisedssid` objects in the `advetised_ssid_map` dictionary, and will apply to the `dot11.advertisedssid.ssid` field in each.  Similarly, vectors, intmaps, doublemaps, macmaps, and so forth will be expanded, allowing matching against nested fields.
-
-The field is expected to resolve as a string:  if it is not a string, the regex will be considered to not match.
 
 ### `regex`
 

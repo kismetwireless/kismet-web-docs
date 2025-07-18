@@ -1,6 +1,6 @@
 ---
 title: "RRD datasets"
-description: ""
+description: "Round Robin Database time-series datasets in Kismet"
 lead: ""
 date: 2023-01-10T12:02:55-05:00
 lastmod: 2023-01-10T12:02:55-05:00
@@ -13,24 +13,42 @@ weight: 51
 toc: true
 ---
 
-Kismet uses a format known as "RRD" or "Round Robin Database" to store summarized trend data over a long timeline. 
+Kismet uses a format known as "RRD" or "Round Robin Database" to store time series data efficiently over longer timelines.
 
-The RRD concept comes from [RRDTool](https://oss.oetiker.ch/rrdtool/) and the [Cacti](https://www.cacti.net/) monitoring tool. 
+The RRD concept comes from [RRDTool](https://oss.oetiker.ch/rrdtool/) and the
+[Cacti](https://www.cacti.net/) monitoring tool.  Designed for situations where
+it is not practical to store every event in history, the RRD time series data
+uses cascading approximation:
+
+1. Data points are stored for each second; for example the signal level per
+   second of an AP for the past minute.
+2. Data points are stored for an hour, as an average of each minute.  For
+   example, the past hour of signal levels averaged per minute.
+3. Data points are stored for a day, as an average of each hour; the past day of
+   signal levels of a device, averaged per hour.
+
+This cascading format reveals trends over time while retaining a small memory
+footprint.
+
+In addition to averaging, Kismet implements several other selection functions
+internally for combining data sets, such as `maximum` or `extreme` which take
+the highest, or highest and lowest, data values; these are used when building
+time-series data from sensor values like thermometers or power usage meters.
 
 ## RRD usage
 
-Typically data is added to a RRD dataset either on a schedule (once per second, for instance), or when events occur (such as new packets). 
+Typically data is added to a RRD dataset either on a schedule (once per second, for instance), or when events occur (such as new packets).
 
-When new data is added to a RRD, or when the RRD is serialized for storage or presentation to an API call, the data is "fast-forwarded" to the current time:  If no new data has occurred for the past 60 seconds, for example, serializing the dataset will cause the minutes record to be zeroed and the average added to the minutes record. 
+When new data is added to a RRD, or when the RRD is serialized for storage or presentation to an API call, the data is "fast-forwarded" to the current time:  If no new data has occurred for the past 60 seconds, for example, serializing the dataset will cause the minutes record to be zeroed and the average added to the minutes record.
 
 Kismet supports several accumulators for RRD data, including additive (new samples are added to existing samples, such as packet counts) and peak (only the highest event count for that time is used, such as high watermark records for packet rates or temperature measurements).
 
-## The RRD dataset 
+## The RRD dataset
 
 A RRD dataset stores trends with decreasing precision.  In Kismet, a RRD typically stores:
 
 * The last minute of events with second precision.
-* The last hour of events with minute precision. 
+* The last hour of events with minute precision.
 * The last day of events with hour precision.
 
 The RRD data is stored as a ring - instead of allocating and removing records, the next timeslot in the ring is used.
@@ -40,7 +58,7 @@ Additionally, the dataset includes:
 * The time of serialization (used for formatting the RRD for presentation)
 * The nil or blank value for unused data
 
-## An example dataset 
+## An example dataset
 
 A example RRD dataset might look like:
 
@@ -67,28 +85,28 @@ A example RRD dataset might look like:
 }
 ```
 
-## Processing a RRD dataset 
+## Processing a RRD dataset
 
-To process a RRD dataset for display, simply consult the serialization time, and use it to find the starting 
+To process a RRD dataset for display, simply consult the serialization time, and use it to find the starting
 timeslot.
 
-To find the position of the latest data, modulo the timeslot by the precision of the record you wish to index. 
+To find the position of the latest data, modulo the timeslot by the precision of the record you wish to index.
 
-For example, to find the latest record of the minute data: 
+For example, to find the latest record of the minute data:
 
-```javascript 
+```javascript
 // 60 seconds in a minute; modulo 60 yields 51
 let slot = (data["kismet.common.rrd.serial_time"] % 60;
 ```
 
 Our most recent record is at index 51.  One second in the past is index 50, and so on.  At position 0, the ring loops.
 
-Envisioned a different way, as an incremental time-based array, the first record is the current time + 1, and the entire array can be 
-indexed using a modulo operation: 
+Envisioned a different way, as an incremental time-based array, the first record is the current time + 1, and the entire array can be
+indexed using a modulo operation:
 
-```javascript 
+```javascript
 let slot = data["kismet.common.rrd.serial_time"] % 60;
-for (let i = 0; i < 60; i++) { 
+for (let i = 0; i < 60; i++) {
     let index_slot = (slot + 1 + i) % 60;
     let value = data["kismet.common.rrd.minute_vec"][index_slot];
     console.log(index_slot, value);
@@ -99,7 +117,7 @@ First we find the current time slot, then we iterate the length of the ring (60)
 
 Similarly, to find the latest minute record:
 
-```javascript 
+```javascript
 // Divide timestamp to get minutes, modulo 60 to get bin
 let slot = Math.floor(data["kismet.common.rrd.serial_time"] / 60) % 60;
 ```

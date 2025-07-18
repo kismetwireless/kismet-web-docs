@@ -1,8 +1,8 @@
 kismet:
-  version: "2023-07-R1"
+  version: "2023-07-R2"
   changelog: |
-    Dark mode UI
+    Very small fix to address html/js injection via device name.
 
-    Massive speed gains for processing on multicore systems
+    The main device list was missing the HTML sanitization pass; this fix addresses that but is otherwise identical to 2023-07-R1.
 
-    Many, many bug fixes and enhancements
+    Major work continues in the git/nightly tree, with a huge new release on the horizon.

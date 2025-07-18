@@ -1,6 +1,6 @@
 -
   distro: "Kali"
-  platforms: ["amd64", "armel", "armhf", "arm64"]
+  platforms: ["amd64", "armhf", "arm64"]
   key: "kali"
   name: "Kali Linux"
   builds: ["release", "git"]
@@ -57,15 +57,16 @@
   builds: ["release", "git"]
 
 -
-  distro: "Ubuntu Mantic (23.10)"
-  platforms: ["amd64", "armhf", "arm64"]
-  name: "Ubuntu Mantic (23.10)"
-  key: "mantic"
-  builds: ["release", "git"]
-
--
   distro: "Ubuntu Noble (24.04)"
-  platforms: ["amd64", "armhf", "arm64"]
+  platforms: ["amd64", "arm64"]
   name: "Ubuntu Noble (23.10)"
   key: "noble"
   builds: ["git"]
+
+-
+  distro: "Ubuntu Plucky (25.04)"
+  platforms: ["amd64", "arm64"]
+  name: "Ubuntu Plucky (25.04)"
+  key: "plucky"
+  builds: ["git"]
+

@@ -29,23 +29,41 @@ If you compiled Kismet from source, the safest course is to remove it manually, 
 
 ### Install dependencies
 
-Kismet needs a number of libraries and  development headers to compile; these should be available in nearly all distributions.  Some distributions use a single package for the libraries and development headers, while others split them into `-devel` packages.
+Kismet needs a number of libraries and  development headers to compile; these should be available in nearly all
+distributions.  Some distributions use a single package for the libraries and development headers, while others split them
+into `-devel` packages.
 
 * *Linux Ubuntu/Debian/Kali/Mint* and other deb-based distributions
 
 ### Core dependencies
 
+For Debian-based systems (Debian, Raspbian, Ubuntu, Kali, Mint, and similar), the basic dependencies can be installed with `apt`:
+
 ```bash
 sudo apt install build-essential git libwebsockets-dev pkg-config \
 zlib1g-dev libnl-3-dev libnl-genl-3-dev libcap-dev libpcap-dev \
 libnm-dev libdw-dev libsqlite3-dev libprotobuf-dev libprotobuf-c-dev \
-protobuf-compiler protobuf-c-compiler libsensors4-dev libusb-1.0-0-dev \
+protobuf-compiler protobuf-c-compiler libsensors-dev libusb-1.0-0-dev \
 python3 python3-setuptools python3-protobuf python3-requests \
 python3-numpy python3-serial python3-usb python3-dev python3-websockets \
-librtlsdr0 libubertooth-dev libbtbb-dev libmosquitto-dev
+librtlsdr0 libubertooth-dev libbtbb-dev libmosquitto-dev librtlsdr-dev
 ```
 
-On some older distributions, `libprotobuf-c-dev` may be called `libprotobuf-c0-dev`.
+On some older distributions, `libprotobuf-c-dev` may be called
+`libprotobuf-c0-dev`, and `libsensors-dev` may be called `libsensors4-dev`.
+
+Don't be afraid to look for the required packages using the `apt` tool, if your
+distribution has different names!  Package names sometimes shift over time.
+
+On Fedora based systems:
+
+```bash
+sudo dnf install gcc gcc-c++ zlib-devel sqlite3 sqlite-devel openssl-devel \
+libwebsockets libwebsockets-devel libpcap libpcap-devel libusb1 libusb1-devel \
+rtl-sdr rtl-sdr-devel mosquitto mosquitto-devel lm_sensors lm_sensors-devel \
+libnl3-devel NetworkManager-libnm-devel
+
+```
 
 Compiling from git / nightly code man require additional packages as well.
 
@@ -61,27 +79,17 @@ If it is not available as a package on your distribution, you will need to compi
 
 #### Libwebsockets
 
-On some older distributions, `libwebsockets` may not be available as a modern version.  Kismet uses the libwebsockets async API which was introduced a year ago, but some distributions still may not provide it.  You can try to compile libwebsockets yourself, or you can disable libwebsockets in the Kismet build with `--disable-libwebsockets` in the configure stage below.
+On some older distributions, `libwebsockets` may not be available as a modern version.  Kismet uses the libwebsockets async
+API which was introduced a year ago, but some distributions still may not provide it.  You can try to compile libwebsockets
+yourself, or you can disable libwebsockets in the Kismet build with `--disable-libwebsockets` in the configure stage below.
 
-Libwebsockets is used by the remote capture code; compiling without it will not remove websockets from the Kismet server, or prevent using websockets, but any remote capture code compiled without libwebsockets will only be able to use the legacy TCP connection mode.  If you're not planning to use remote capture nodes, none of this matters to you, and you can [get more info about remote capture here](/docs/readme/remotecap/remotecap/).
+Libwebsockets is used by the remote capture code; compiling without it will not remove websockets from the Kismet server,
+or prevent using websockets, but any remote capture code compiled without libwebsockets will only be able to use the legacy
+TCP connection mode.  If you're not planning to use remote capture nodes, none of this matters to you, and you can
+[read more about remote capture here](/docs/readme/remotecap/remotecap/).
 
-* *Linux Fedora (and related)*
-
-```bash
-sudo dnf install make automake gcc gcc-c++ kernel-devel git \
-libwebsockets-devel pkg-config zlib-devel libnl3-devel \
-libcap-devel libpcap-devel NetworkManager-libnm-devel \
-libdwarf libdwarf-devel elfutils-devel libsqlite3x-devel \
-protobuf-devel protobuf-c-devel protobuf-compiler \
-protobuf-c-compiler lm_sensors-devel libusb-devel fftw-devel \
-libmosquitto-devel
-```
-
-You will also need the related python3, rtlsdr, and ubertooth packages.
-
-* *Other Linux distributions*
-
-Most distributions will have equivalent packages.  If your distribution splits binary and development packages, make sure to install both if you're compiling.
+When installing `libwebsocktets` from packages, if your distribution splits binary and development packages, make sure to
+install both: the development package will be needed for compiling.
 
 ### Clone git
 
@@ -100,20 +108,24 @@ git pull
 
 ### Configure
 
-This will find all the specifics about your system and prepare Kismet for compiling.  If you have any missing dependencies or incompatible library versions, they will show up here.
+This will find all the specifics about your system and prepare Kismet for compiling.  If you have any missing dependencies
+or incompatible library versions, they will show up here.
 
 ```bash
 cd kismet
 ./configure
 ```
 
-Pay attention to the summary at the end and look out for any warnings! The summary will show key features and raise warnings for missing dependencies which will drastically affect the compiled Kismet.
+Pay attention to the summary at the end and look out for any warnings! The summary will show key features and raise warnings for missing
+dependencies.  You may need to install additional libraries (or additional `-devel` development packages), especially if compiling the
+latest git code.
 
 If you're compiling for a remote capture platform *only*, check the [remote capture docs](/docs/readme/remotecap/remotecap/) for more information.
 
 ### Compile
 
-If you are compiling a fresh checkout, the version file will be automatically generated.  If you use one git checkout and recompile on demand, be sure to update the version file:
+If you are compiling a fresh checkout, the version file will be automatically generated.  If you use one git checkout and recompile
+on demand, be sure to update the version file:
 
 ```bash
 make version
@@ -131,7 +143,10 @@ You can accelerate the process by adding `-j #`, depending on how many CPUs you 
 make -j$(nproc)
 ```
 
-Compiling modern C++ (such as the Kismet codebase) can require a significant amount of RAM.  You may need to limit the number of parallel compile processes if you encounter memory errors during compiling.
+*WARNING*: Compiling modern C++ (such as the Kismet codebase) can require a *significant* amount of RAM.  You may need to limit the
+number of parallel compile processes if you encounter memory errors during compiling.  Typically if you have less than 16GB of ram,
+limit to `-j2` or `-j4`, and limit to `-j10` for 32GB of RAM.  Adding more parallel compiles than you have CPU cores is also rarely
+beneficial.
 
 #### Compile-time dependency errors
 

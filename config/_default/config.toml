@@ -1,4 +1,5 @@
 baseurl = "/"
+title = "Kismet"
 canonifyURLs = false
 disableAliases = false
 disableHugoGeneratorInject = true
