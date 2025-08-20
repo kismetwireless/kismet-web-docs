@@ -27,7 +27,6 @@ The config files are broken into several smaller files for readability:
 | kismet_alerts.conf | Alert / WIDS configuration, which includes rules for alert matching, rate limits on alerts, and other IDS/problem detection options |
 | kismet_httpd.conf | Webserver configuration |
 | kismet_memory.conf | Memory consumption and system tuning options.  Typically unneeded, but if you have a massive number of devices or an extremely resource-limited system, how Kismet uses memory can be tuned here. |
-| kismet_storage.conf | Kismet persistent storage configuration |
 | kismet_logging.conf | Log file options and filters |
 | kismet_filter.conf | Packet and device filter configuration |
 | kismet_uav.conf | Parsing rules for detecting UAV / Drones or similar devices; compiled from the `kismet_uav.yaml` file |
@@ -139,5 +138,6 @@ log_types+=wiglecsv
 ```
 
 This will add to the `log_types` configuration instead of replacing it.
+
 
 
