@@ -6,18 +6,18 @@
   builds: ["release", "git"]
 
 -
-  distro: "Debian Bullseye"
-  platforms: ["i386", "amd64", "armhf", "arm64"]
-  name: "Debian Bullseye"
-  key: "bullseye"
-  builds: ["release", "git"]
-
--
   distro: "Debian Bookworm"
   platforms: ["amd64", "arm64"]
   name: "Debian Bookworm"
   key: "bookworm"
   builds: ["release", "git"]
+
+-
+  distro: "Debian Trixie"
+  platforms: ["amd64", "arm64"]
+  name: "Debian Trixie"
+  key: "trixie"
+  builds: ["git"]
 
 -
   distro: "Ubuntu Bionic (18.04)"

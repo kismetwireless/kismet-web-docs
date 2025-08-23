@@ -46,8 +46,11 @@ libnm-dev libdw-dev libsqlite3-dev libprotobuf-dev libprotobuf-c-dev \
 protobuf-compiler protobuf-c-compiler libsensors-dev libusb-1.0-0-dev \
 python3 python3-setuptools python3-protobuf python3-requests \
 python3-numpy python3-serial python3-usb python3-dev python3-websockets \
-librtlsdr0 libubertooth-dev libbtbb-dev libmosquitto-dev librtlsdr-dev
+libubertooth-dev libbtbb-dev libmosquitto-dev librtlsdr-dev
 ```
+
+Additionally, for the SDR datasources, you will need `librtl`.  Depending on the
+exact distribtion and version, this may be `librtlsdr0` or `librtlsdr2`
 
 On some older distributions, `libprotobuf-c-dev` may be called
 `libprotobuf-c0-dev`, and `libsensors-dev` may be called `libsensors4-dev`.
@@ -62,10 +65,10 @@ sudo dnf install gcc gcc-c++ zlib-devel sqlite3 sqlite-devel openssl-devel \
 libwebsockets libwebsockets-devel libpcap libpcap-devel libusb1 libusb1-devel \
 rtl-sdr rtl-sdr-devel mosquitto mosquitto-devel lm_sensors lm_sensors-devel \
 libnl3-devel NetworkManager-libnm-devel
-
 ```
 
-Compiling from git / nightly code man require additional packages as well.
+Compiling from git / nightly code may require additional packages; check the
+output from the `configure` command for missing components.
 
 #### RTL-433 SDR
 
@@ -79,8 +82,8 @@ If it is not available as a package on your distribution, you will need to compi
 
 #### Libwebsockets
 
-On some older distributions, `libwebsockets` may not be available as a modern version.  Kismet uses the libwebsockets async
-API which was introduced a year ago, but some distributions still may not provide it.  You can try to compile libwebsockets
+On some older distributions, `libwebsockets` may not be available in a sufficiently modern version.  Kismet uses the libwebsockets async
+API which was introduced several revisions ago, but some distributions still may not provide it.  You can try to compile libwebsockets
 yourself, or you can disable libwebsockets in the Kismet build with `--disable-libwebsockets` in the configure stage below.
 
 Libwebsockets is used by the remote capture code; compiling without it will not remove websockets from the Kismet server,
@@ -99,7 +102,7 @@ Clone Kismet from git.  If you haven't cloned Kismet before:
 git clone https://www.kismetwireless.net/git/kismet.git
 ```
 
-If you have a Kismet repo already:
+If you have a Kismet repo checkout already, you can simply update it:
 
 ```bash
 cd kismet
