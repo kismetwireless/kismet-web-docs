@@ -81,7 +81,7 @@ Kismet looks for config files in the directory specified in `configure` via the 
 This location may vary per distribution, however typically `/etc/kismet` would be the appropriate default,
 and is the location used by the packages provided on the Kismet site.
 
-#### Use `kismet_package.conf`
+#### Use kismet_package.conf
 
 When building packages for tiny systems, like under OpenWRT, you can include a `kismet_package.conf` in
 your package; the default Kismet configs will first load the Kismet configuration files, then, if
@@ -93,7 +93,7 @@ need to maintain patches to the base Kismet configs.
 
 `kismet_package.conf` should be placed in the configuration directory with the other Kismet configs.
 
-#### Never override `kismet_site.conf`
+#### Never override kismet_site.conf
 
 Kismet provides an override mechanism for local configurations which take precedence over all
 other config options; these are kept in `kismet_site.conf` by default.  A package should never
