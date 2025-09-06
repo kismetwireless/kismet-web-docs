@@ -1,8 +1,6 @@
 kismet:
-  version: "2023-07-R2"
+  version: "2025-09-R1"
   changelog: |
-    Very small fix to address html/js injection via device name.
-
-    The main device list was missing the HTML sanitization pass; this fix addresses that but is otherwise identical to 2023-07-R1.
-
-    Major work continues in the git/nightly tree, with a huge new release on the horizon.
+    Major release with a large number of bug fixes, new features, an
+    improved device viewer in the UI, upgraded support libraries, and
+    a new optimized datasource/ipc protocol, among other improvements.
