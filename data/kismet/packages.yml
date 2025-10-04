@@ -17,7 +17,7 @@
   platforms: ["amd64", "arm64"]
   name: "Debian Trixie"
   key: "trixie"
-  builds: ["git"]
+  builds: ["release", git"]
 
 -
   distro: "Ubuntu Bionic (18.04)"
@@ -61,12 +61,12 @@
   platforms: ["amd64", "arm64"]
   name: "Ubuntu Noble (23.10)"
   key: "noble"
-  builds: ["git"]
+  builds: ["release", git"]
 
 -
   distro: "Ubuntu Plucky (25.04)"
   platforms: ["amd64", "arm64"]
   name: "Ubuntu Plucky (25.04)"
   key: "plucky"
-  builds: ["git"]
+  builds: ["release", git"]
 

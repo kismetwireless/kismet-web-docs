@@ -24,6 +24,8 @@ Interested in learning *how* the SDR capture code works?  [The Scientist and Eng
 The newest Mediatek chipset supports tri-band operation, with 6GHz channels.  You *absolutely need* a modern Linux (Kernel 5.18 or newer), and need to set the proper regulatory domain (`iw reg set US` for those in the US) to enable 6GHz channels.
 
 There are several manufacturers of this card:
+* [Panda AXE3000](https://amzn.to/4mWpWL6) has the mt7921 chipset, unfortunately
+  without removable antennas as is common among most versions
 * [Edup AX3000](https://amzn.to/4jSp1sU) is a cheap option
 * [The Alfa AWUS036AXML](https://amzn.to/3u7AAbZ) is a more expensive option,
   but includes the optional Bluetooth chip as well
