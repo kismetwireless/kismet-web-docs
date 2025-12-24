@@ -59,7 +59,7 @@
 -
   distro: "Ubuntu Noble (24.04)"
   platforms: ["amd64", "arm64"]
-  name: "Ubuntu Noble (23.10)"
+  name: "Ubuntu Noble (24.04)"
   key: "noble"
   builds: ["release", "git"]
 
