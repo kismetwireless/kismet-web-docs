@@ -70,6 +70,8 @@ If required by your platform or setup, the baud rate can be explicitly specified
 
 Example using the NordicRF Sniffer firmware default baud rate:
 
+```
 source=nrf51822:device=/dev/ttyUSB0,baudrate=460800
+```
 
 {{</configopt>}}
