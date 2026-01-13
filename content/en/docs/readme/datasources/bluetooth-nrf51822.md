@@ -61,3 +61,15 @@ The nRF 518222 devices appear as USB serial devices, and serial devices can not 
 You *must* provide the path to the serial device associated with the nRF 51822 sniffer. 
 {{</configopt>}}
 
+### Baudrate
+{{<configopt baudrate "integer">}}
+The serial baud rate used to communicate with the nRF 51822 device.
+
+When using the NordicRF Sniffer firmware, its default baud rate is 460800.
+If required by your platform or setup, the baud rate can be explicitly specified.
+
+Example using the NordicRF Sniffer firmware default baud rate:
+
+source=nrf51822:device=/dev/ttyUSB0,baudrate=460800
+
+{{</configopt>}}
