@@ -42,10 +42,7 @@ For Debian-based systems (Debian, Raspbian, Ubuntu, Kali, Mint, and similar), th
 ```bash
 sudo apt install build-essential git libwebsockets-dev pkg-config \
 zlib1g-dev libnl-3-dev libnl-genl-3-dev libcap-dev libpcap-dev \
-libnm-dev libdw-dev libsqlite3-dev \
-libsensors-dev libusb-1.0-0-dev \
-python3 python3-setuptools python3-requests \
-python3-numpy python3-serial python3-usb python3-dev python3-websockets \
+libnm-dev libdw-dev libsqlite3-dev libsensors-dev libusb-1.0-0-dev \
 libubertooth-dev libbtbb-dev libmosquitto-dev librtlsdr-dev
 ```
 
