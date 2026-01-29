@@ -53,11 +53,15 @@ The nRF 51822 uses a CP2104 serial chip; testing with the [latest drivers](https
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
 
-### Device selection 
+### Device selection
 
 {{<configopt device "/path/to/serial/device">}}
-The nRF 518222 devices appear as USB serial devices, and serial devices can not be auto-discovered. 
+The nRF 518222 devices appear as USB serial devices, and serial devices can not be auto-discovered.
 
-You *must* provide the path to the serial device associated with the nRF 51822 sniffer. 
+You *must* provide the path to the serial device associated with the nRF 51822 sniffer.
 {{</configopt>}}
 
+
+{{<configopt baudrate "serial baudrate">}}
+The Adafruit nrf51822 defaults to 460800; other devices may use different baudrates.  Use the `baudrate` option to set the serial port speed.
+{{</configopt>}}
