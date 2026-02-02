@@ -17,7 +17,17 @@
   platforms: ["amd64", "arm64"]
   name: "Debian Trixie"
   key: "trixie"
-  builds: ["release", git"]
+  builds: ["release", "git"]
+  notes: |
+    Due to changes in Trixie about the enforcement of GPG signing keys, if you have
+    already installed the Kismet signing key previously, you will need to remove the
+    kismet-release.gpg.key file and download it again:
+
+    <code>sudo rm /usr/share/keyrings/kismet-archive-keyring.gpg</code>
+
+    and re-download the key with:
+
+    <code>wget -O - https://www.kismetwireless.net/repos/kismet-release.gpg.key --quiet | gpg --dearmor | sudo tee /usr/share/keyrings/kismet-archive-keyring.gpg &gt;/dev/null</code>
 
 -
   distro: "Ubuntu Bionic (18.04)"
