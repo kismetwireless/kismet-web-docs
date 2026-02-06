@@ -198,7 +198,6 @@ Multiple datasources can use the same meta GPS, or have independent meta GPS dev
 
 Kismet will attempt to re-open any datasource which has gone into error state.
 
-dfsdfsdfsdf
 
 ### Default options
 
@@ -207,7 +206,7 @@ When no options are provided for a data source, the defaults are controlled by s
 {{<configopt channel_hop true false>}}
 Universally enable or disable channel hopping.
 
-A radio can typically only tune to a single channel at a time.  To capture from multiple channels, Kismet need to rapidly change channel.
+A radio can typically only tune to a single channel at a time.  To capture from multiple channels, Kismet needs to rapidly change channel.
 
 Typically, channel hopping should be left on.  It can be disabled per-source as a source option to zero in on a specific channel.
 {{</configopt>}}

@@ -307,7 +307,7 @@ Serialization is handled by the `tracker_component` and `tracker_element` system
 
 The only aspect of serialization that a custom `tracker_component` class needs to consider is what happens prior to serialization.  This is handled by the `pre_serialize()` method, and is called by any serialization/export class.
 
-This method allows the class to do any updating, averaging, etc before its contents are delivered to a REST endpoing, XML serialization, or other export.
+This method allows the class to do any updating, averaging, etc before its contents are delivered to a REST endpoint, XML serialization, or other export.
 
 For example, the RRD object uses this method to ensure that the data is synced to the current time:
 
@@ -317,7 +317,7 @@ public:
         // Always call the parent in case work needs to be done
         tracker_component::pre_serialize();
 
-        // Call an internal funtion for adding a sample; we add '0' to our
+        // Call an internal function for adding a sample; we add '0' to our
         // current sample and set the time, this fast-forwards the RRD to
         // 'now' and computes history for us in case we didn't see an update
         // in a long time

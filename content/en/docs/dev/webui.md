@@ -132,7 +132,7 @@ By default, all data is passed through a function which escapes HTML characters;
 
 Passed to DataTables as bSearchable, controls if the content of the column is searchable from the quick search field.
 
-#### selectabe - boolean (optional)
+#### selectable - boolean (optional)
 
 Column is selectable by the user (default: true).  The most common use for creating an unselectable column is to pair it with the 'visible' option to create an invisible, but searchable, column (or a column which provides data to another column).
 
@@ -303,7 +303,7 @@ This is the ID assigned to the `<div>` element created in the sidebar.
 
 ### listTitle - string (required)
 
-This is the title of the menu item.  This can included embedded HTML, and for consistency, it is recommended that an icon is selected from the included font-awesome icon font.
+This is the title of the menu item.  This can include embedded HTML, and for consistency, it is recommended that an icon is selected from the included font-awesome icon font.
 
 ### clickCallback - string (required)
 

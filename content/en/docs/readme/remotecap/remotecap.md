@@ -25,7 +25,7 @@ Remote capture is helpful for:
 
     Large numbers of data sources can exhibit issues as the load is increased on the USB bus (for USB based radios), and on the kernel infrastructure. 
 
-    These effects can be alleviated by using lighter-weight hardware to capture from smaller numbers of data soruces, sending the packets to a higher capacity server for processing. 
+    These effects can be alleviated by using lighter-weight hardware to capture from smaller numbers of data sources, sending the packets to a higher capacity server for processing. 
 
 * Reducing antenna distance. 
 
@@ -61,9 +61,9 @@ For each device you use for remote capture, you will need to start a remote capt
 
 Each remote capture defines the Kismet source, using the same [source definitions](/docs/readme/datasources/datasources/) as the rest of Kismet.  
 
-Source defintions are passed on the `--source` parameter.
+Source definitions are passed on the `--source` parameter.
 
-### Remote capture prototocol
+### Remote capture protocol
 
 Remote captures connect to Kismet via Websockets (modern) or raw TCP (legacy).  
 
@@ -77,7 +77,7 @@ Not all devices provide sufficient unique identifiable information; for instance
 
 For some source types this can be solved permanently with a source-specific tool; for RTL-SDR the device serial number can be set using the `rtlsdr_eeprom` tool as part of the rtlsdr software packages; remember, the serial number is used to derive the unique ID in Kismet, and therefore must be unique across all devices!
 
-For other data sources, or to avoid changing the eeprom of the RTL-SDR, Kismet acceps the `uuid=` parameter on the source definition.  When using non-Wi-Fi datasources over remote capture, you will likely need to set a unique remote UUID for each source.
+For other data sources, or to avoid changing the eeprom of the RTL-SDR, Kismet accepts the `uuid=` parameter on the source definition.  When using non-Wi-Fi datasources over remote capture, you will likely need to set a unique remote UUID for each source.
 
 Unique IDs can be generated with a tool like `genuuid`, or non-random UUIDs can be assigned so long as they fit the UUID pattern of `XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX`
 
@@ -97,7 +97,7 @@ Websocket remote capture adds:
 
 * Authentication 
 
-    Remote capture over websocket can authenticate either using the Kismet username and password, or using a restricted API key with the `datssource` role.
+    Remote capture over websocket can authenticate either using the Kismet username and password, or using a restricted API key with the `datasource` role.
 
 * Proxy capable
 
@@ -195,7 +195,7 @@ Set up a tunnel from the remote sensor to your Kismet server, for example using 
 ssh someuser@192.168.1.2 -L 3501:localhost:3501
 ```
 
-This sets up a SSH tunnel from localhost port 3501 to 192.168.1.2 port 3501. Then in a second terminal running the Kismet remote capture, using localost:3501 as the destination:
+This sets up a SSH tunnel from localhost port 3501 to 192.168.1.2 port 3501. Then in a second terminal running the Kismet remote capture, using localhost:3501 as the destination:
 
 ```bash
 /usr/local/bin/kismet_cap_linux_wifi --connect localhost:3501 --source=wlan1
@@ -277,7 +277,7 @@ apt search kismet-capture
 
 ## Building remote capture only 
 
-By default, the Kismet `./configure` script will check for all the packages need to compile all of Kismet, and the Kismet `Makefile` will attempt to compile everything. 
+By default, the Kismet `./configure` script will check for all the packages needed to compile all of Kismet, and the Kismet `Makefile` will attempt to compile everything. 
 
 To compile only for remote capture, pass the `--enable-capture-tools-only` option along with any other options you pass to `configure`:
 

@@ -66,7 +66,7 @@ All data sources accept the [common naming and description](/docs/readme/datasou
 ### Channel control options 
 
 {{<configopt channel_hop true false>}}
-Enable or disable channel hopping on this data source.  Even if Kismet is (configured for)[/docs/readme/datasources/channelhop/#configuration] channel hopping.
+Enable or disable channel hopping on this data source.  Even if Kismet is [configured for](/docs/readme/datasources/channelhop/#configuration) channel hopping.
 {{</configopt>}}
 
 
@@ -81,7 +81,7 @@ Set the source to a specific channel; combine with channel_hop=false to set the 
 Example:
 
 ```
-source=nrf528400:device=/dev/ttyUSB0,name=Foo,channel_hop=false,channel=12
+source=nrf52840:device=/dev/ttyUSB0,name=Foo,channel_hop=false,channel=12
 ```
 {{</configopt>}}
 
@@ -97,12 +97,12 @@ The list of channels must be:
 Example:
 
 ```
-source=nrf528400:device=/dev/ttyUSB0,name=Foo,channels="12,13,14,15"
+source=nrf52840:device=/dev/ttyUSB0,name=Foo,channels="12,13,14,15"
 ```
 
 If defining datasources on the command line when launching Kismet, be aware that most shells will elide the quotes, leading to a setup error.  You can avoid this by surrounding the source definition in single quotes:
 
 ```bash
-kismet -c 'nrf528400:device=/dev/ttyUSB0,name=Foo,channels="12,13,14,15"'
+kismet -c 'nrf52840:device=/dev/ttyUSB0,name=Foo,channels="12,13,14,15"'
 ```
 {{</configopt>}}

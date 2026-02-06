@@ -31,7 +31,7 @@ $('#devicedata').devicedata(data, options);
 
 ## Devicedata options
 
-A `devicedata` instance takes a small number of options and an array of field defintions which perform the heavy lifting of the table display.
+A `devicedata` instance takes a small number of options and an array of field definitions which perform the heavy lifting of the table display.
 
 ### id - string (optional)
 
@@ -51,7 +51,7 @@ Many options can be passed as a string or as a function.  Functions all take an 
 * **data** - Complete data set assigned to this `devicedata` object
 * **value** - Resolved value for the current field
 * **basekey** - Optional string key of base object, used in iterative groups (more on these later)
-* **base** - Object of the sub-set of data for the current field, used it iterative groups.
+* **base** - Object of the sub-set of data for the current field, used in iterative groups.
 
 Additional fields may be present in the options object depending on the callback, and will be mentioned below.
 
@@ -132,7 +132,7 @@ A more complex example could create themed elements in the `draw` function and l
 ```javascript
 {
     field: "some.data",
-    title: "Dynamid draw",
+    title: "Dynamic draw",
     render: '<div class="custom" />',
     draw: function(opts) {
         var mydiv = $('div.custom', opts['container']);
@@ -186,7 +186,7 @@ For example, to define a location group:
 
 ### groupIterate - boolean (optional)
 
-Indicated that this field contains an iterative group.
+Indicates that this field contains an iterative group.
 
 Iterative groups apply to data sets like arrays or dictionaries.  The group is treated like a subgroup, and loops over each value in the array or dictionary.
 

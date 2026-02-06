@@ -25,7 +25,7 @@ Devices are indexed two primary ways in Kismet:
 
     The MAC address is a (theoretically) unique identifier given to each device at manufacture time.  It is used to identify the device uniquely on a network. 
 
-    Typically, the the IEEE assigns each manufacturer a block of addresses with a common header (the OUI) and the manufacturer is responsible for creating unique identifiers within that block. 
+    Typically, the IEEE assigns each manufacturer a block of addresses with a common header (the OUI) and the manufacturer is responsible for creating unique identifiers within that block. 
 
     For datasources without a defined MAC address, Kismet will attempt to synthesize a MAC address from the unique data available.
 

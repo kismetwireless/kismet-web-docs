@@ -21,9 +21,9 @@ For real-time monitoring of alerts, see the [eventbus API](/docs/api/eventbus/).
 
 ### Alert severities
 
-Alerts severities are categorized by numerical value; a higher number is more severe.
+Alert severities are categorized by numerical value; a higher number is more severe.
 
-| Severity | Defintion | Use                                                                                            |
+| Severity | Definition | Use                                                                                            |
 | -------: | --------- | ---                                                                                            |
 | 0        | INFO      | Informational alerts, such as datasource errors, Kismet state changes, etc                     |
 | 5        | LOW       | Low-risk events such as probe fingerprints                                                     |

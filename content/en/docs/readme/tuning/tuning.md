@@ -128,7 +128,7 @@ If set to zero, Kismet will *never* drop packets, but this may lead to runaway R
 
 
 {{<configopt ulimit_mbytes megabytes>}}
-Instruct Kismet to set an OS-level hard limit on the amount of RAM it is alowed to consume via the `ulimit` system in Linux.
+Instruct Kismet to set an OS-level hard limit on the amount of RAM it is allowed to consume via the `ulimit` system in Linux.
 
 This applies ONLY to Kismet on Linux-based hosts. 
 
@@ -183,13 +183,13 @@ This is used for WIDS detection of EAPOL replay attacks like KRACK, and for gene
 
 Turning this off will disable WPA handshake downloading in the UI and prevents EAPOL replay alerts from functioning.
 
-Handshakes can still be extracted frmo the kismetdb and PCAP logs.
+Handshakes can still be extracted from the kismetdb and PCAP logs.
 {{</configopt>}}
 
 
 ## Runtime type checking
 
-Kismet uses a dynamic type system to store data in a way that can be serialzied into JSON for logging, the web UI, etc.
+Kismet uses a dynamic type system to store data in a way that can be serialized into JSON for logging, the web UI, etc.
 
 As of `2022-08`, run-time type checking on this system is disabled by default in the configuration scripts; much of the type control is now implemented at compile time, and type errors are exposed during the development and debug process.
 
@@ -203,7 +203,7 @@ $ ./configure --enable-element-typesafety
 
 Using large numbers of *local* datasources (large being a difficult to define quantity, but often over 12 on an Intel system or 6 on a system like a Raspberry Pi 4) can introduce new instabilities and concerns; depending highly on the device types used, the Linux kernel version, and driver versions.
 
-Modern kernels (Linux 5.10 and newer) include mitigations for some of the most disruptive aspects of running many sources at once, however many systems begin to show problems with the USB bus and even the PCI-E system dependign on the drivers used.
+Modern kernels (Linux 5.10 and newer) include mitigations for some of the most disruptive aspects of running many sources at once, however many systems begin to show problems with the USB bus and even the PCI-E system depending on the drivers used.
 
 Generally speaking, for extremely large numbers of datasources, the best success has been found with:
 
@@ -231,7 +231,7 @@ Generally speaking, for extremely large numbers of datasources, the best success
 
 Some drivers and kernels seem especially impacted when first setting a very large number of interfaces to monitor mode; this can lead to timeouts or even kernel crashes on some drivers.  
 
-More modern changes in Kismet mitigates the need for tuning these options *most* of the time, but they remain in case specific situations require them:
+More modern changes in Kismet mitigate the need for tuning these options *most* of the time, but they remain in case specific situations require them:
 
 {{<configopt source_stagger_threshold number>}}
 This determines when Kismet will start staggering local source bring-up - if you have more than this number of sources defined, Kismet will slow down the startup process.
@@ -239,7 +239,7 @@ This determines when Kismet will start staggering local source bring-up - if you
 
 
 {{<configopt source_launch_group number>}}
-This determines how many sources will be bought up at a time.
+This determines how many sources will be brought up at a time.
 {{</configopt>}}
 
 {{<configopt source_launch_delay seconds>}}

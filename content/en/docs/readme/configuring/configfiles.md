@@ -15,7 +15,7 @@ toc: true
 
 ## Configuring Kismet
 
-Kismet is primarily configured through a set of text files wth a simple `option=value` format.
+Kismet is primarily configured through a set of text files with a simple `option=value` format.
 
 By default these are installed into `/usr/local/etc/` when compiling from source, and `/etc/kismet/` when installing from the Kismet packages. 
 

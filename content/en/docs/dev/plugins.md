@@ -38,7 +38,7 @@ Plugins are mapped into the Kismet webserver under `/plugin/[plugin-directory-na
 
 To register a JS module for automatic loading (for instance, to interact with the normal Kismet web UI and add new tabs, details, etc), a plugin must either:
 
-* Register the module with with the `kis_httpd_registry::register_js(...)` system
+* Register the module with the `kis_httpd_registry::register_js(...)` system
 * Define a plugin manifest stored in `[prefix]/plugins/[name]/manifest.conf`
 
 ## Plugin external HTTP helpers

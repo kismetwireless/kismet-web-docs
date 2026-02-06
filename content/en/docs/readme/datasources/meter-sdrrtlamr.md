@@ -91,7 +91,7 @@ Bias-tee is used to supply power to external amplifiers or other equipment in th
 
 
 {{<configopt gain value>}}
-Specifiy a fixed gain level for the radio; by default, the hardware automatic gain control is used.
+Specify a fixed gain level for the radio; by default, the hardware automatic gain control is used.
 {{</configopt>}}
 
 

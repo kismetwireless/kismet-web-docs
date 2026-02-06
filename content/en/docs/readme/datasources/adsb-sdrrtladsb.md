@@ -97,7 +97,7 @@ All data sources accept the [common naming and description](/docs/readme/datasou
 
 * gain={value}
 
-    Specifiy a fixed gain level for the radio; by default, the hardware automatic gain control is used.
+    Specify a fixed gain level for the radio; by default, the hardware automatic gain control is used.
 
 * ppm={error_value}
 

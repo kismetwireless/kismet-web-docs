@@ -52,7 +52,7 @@ To create the scanning mode datasource, a scanning report must include:
 all reports from this datasource.  Scanning software should cache this UUID for 
 consistent reporting between instances. 
 
-2. A human-readable name.  This wil be assigned as the name of the datasource, 
+2. A human-readable name.  This will be assigned as the name of the datasource, 
 and will be updated automatically if the name changes in subsequent reports. 
 
 ### Cache and burst mode reporting 
@@ -60,7 +60,7 @@ and will be updated automatically if the name changes in subsequent reports.
 Scanning mode assumes that the device doing scanning may not be able to maintain a 
 constant connection to the Kismet server. 
 
-Reports can be cached in sent in groups using the report endpoint;  each report 
+Reports can be cached and sent in groups using the report endpoint;  each report 
 contains a timestamp, GPS location, and signal information.  Multiple reports for 
 the same AP reflecting information over time can be sent in a single connection.
 

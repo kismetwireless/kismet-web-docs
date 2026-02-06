@@ -154,7 +154,7 @@ The `device` section holds complete Kismet device objects; the device object is 
 | Field            |          Type | Description                                                  |
 | ---------------- | ------------: | ------------------------------------------------------------ |
 | first_time       |   *timestamp* | First time seen, as second-precision timestamp               |
-| last_time        |   *timestamp* | Last time see, as second-precision timestamp                 |
+| last_time        |   *timestamp* | Last time seen, as second-precision timestamp                 |
 | devkey           |        *text* | Unique device key                                            |
 | phyname          |        *text* | Name of primary phy (such as IEEE80211)                      |
 | devmac           |   *mac, text* | Device MAC (such as the source MAC address in IEEE80211)     |

@@ -17,7 +17,7 @@ Kismet uses a REST-like interface for the embedded webserver, which provides dat
 
 Kismet attempts to provide sane and consistent endpoints.
 
-Many Kismet endpoints support both a basic `GET` implementation, and a more complex `POST` inmplementation which accepts filtering, optimization, and more.
+Many Kismet endpoints support both a basic `GET` implementation, and a more complex `POST` implementation which accepts filtering, optimization, and more.
 
 Kismet can serialize the endpoint data to multiple formats; whenever possible, an endpoint will support all output formats. 
 

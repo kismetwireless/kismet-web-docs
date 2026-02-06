@@ -42,7 +42,7 @@ All data sources accept the [common naming and description](/docs/readme/datasou
 ### Pcapfile options
 
 {{<configopt pps "rate">}}
-Limit the replay to a packets-per-second maximum.  Without this option, pcapfiles are streamed to Kismet as fast as possible, which may outrun the processing queue on the Kismet server.  Pcapfile replays should always be throttled to a rate your server hardware can support to prevent lose packets during the replay; often 1000 to 10000 packets per second is a reasonable starting point.
+Limit the replay to a packets-per-second maximum.  Without this option, pcapfiles are streamed to Kismet as fast as possible, which may outrun the processing queue on the Kismet server.  Pcapfile replays should always be throttled to a rate your server hardware can support to prevent lost packets during the replay; often 1000 to 10000 packets per second is a reasonable starting point.
 {{</configopt>}}
 
 {{<configopt realtime true false>}}

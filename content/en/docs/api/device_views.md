@@ -15,7 +15,7 @@ toc: true
 
 Device views in Kismet are optimized subsets of the global device list. 
 
-Device views can by defined by PHY handlers, plugins, as part of the Kismet basic code, or by user-supplied data. 
+Device views can be defined by PHY handlers, plugins, as part of the Kismet basic code, or by user-supplied data. 
 
 Kismet uses device views to organize devices by capture interface, phy type, specific device type (like the phy80211 access point view), and more. 
 

@@ -143,7 +143,7 @@ float fixed3_6_to_float(uint32_t fixed) {
 
 ### Fixed3_7
 
-Latitude and longitude are typically represented as double-precision floating point values between -180.0000000 and +180.0000000.  In order to eliminate storing a signed value, these are mapped to the range (0, 3600000000) with a fixed decimal point at the third digit.  This allows any longitude and latitude to be represented in 4 bytes with 7 digits of precision to the right of the decimal.  Any values between 3600000001 (0x0xD693A401) and 4294967295 (0xFFFFFFFF) are invalid
+Latitude and longitude are typically represented as double-precision floating point values between -180.0000000 and +180.0000000.  In order to eliminate storing a signed value, these are mapped to the range (0, 3600000000) with a fixed decimal point at the third digit.  This allows any longitude and latitude to be represented in 4 bytes with 7 digits of precision to the right of the decimal.  Any values between 3600000001 (0xD693A401) and 4294967295 (0xFFFFFFFF) are invalid
 
 An example implementation of encoding and decoding fixed3_7 would be:
 
@@ -184,7 +184,7 @@ double fixed3_7_to_float(uint32_t fixed) {
 
 Most other data such as altitude does not need high precision, but may need larger range; the fixed6_4 encoding can express -180000.0000 to 180000.0000.
 
-An example implementation of encoding and decoding fixed3_7 would be:
+An example implementation of encoding and decoding fixed6_4 would be:
 
 ```C++
 uint32_t float_to_fixed6_4(double flt) {

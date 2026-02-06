@@ -15,7 +15,7 @@ toc: true
 
 The `kismet` log format is a unified common file of packets, non-packet data, devices, location, system messages, datasource records, historical trends, and almost everything else Kismet can track.  It replaces the legacy logs where multiple log files were required and eliminates the need to correlate data from multiple logs to get a complete view of the capture history.
 
-The `kismet` log file cam be converted to many other log types using the associated log tools, including pcap, pcapng, wiglecsv, json records, KML, and more.
+The `kismet` log file can be converted to many other log types using the associated log tools, including pcap, pcapng, wiglecsv, json records, KML, and more.
 
 ## Log type
 
@@ -41,7 +41,7 @@ or via the included Kismet log cleanup tool:
 $ kismetdb_clean foo.kismet
 ```
 
-If you have a journal file, it is important that you combine it with the log before transfering the `kismet` file.
+If you have a journal file, it is important that you combine it with the log before transferring the `kismet` file.
 
 ## Kismetdb ephemeral and timed logs
 

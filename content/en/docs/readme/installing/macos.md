@@ -1,6 +1,6 @@
 ---
 title: "macOS"
-exerpt: "Compiling Kismet on macOS"
+excerpt: "Compiling Kismet on macOS"
 weight: 75
 ---
 

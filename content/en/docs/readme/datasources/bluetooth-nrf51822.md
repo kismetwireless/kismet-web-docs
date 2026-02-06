@@ -33,7 +33,7 @@ Because there is no unique information available for the nrf51822 source, if you
 
 ## Channel Hopping
 
-The firmware does it's own channel hopping so no selections are available.
+The firmware does its own channel hopping so no selections are available.
 
 ## Limitations
 
@@ -56,7 +56,7 @@ All data sources accept the [common naming and description](/docs/readme/datasou
 ### Device selection
 
 {{<configopt device "/path/to/serial/device">}}
-The nRF 518222 devices appear as USB serial devices, and serial devices can not be auto-discovered.
+The nRF 51822 devices appear as USB serial devices, and serial devices can not be auto-discovered.
 
 You *must* provide the path to the serial device associated with the nRF 51822 sniffer.
 {{</configopt>}}

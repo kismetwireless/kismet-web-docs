@@ -69,7 +69,7 @@ All data sources accept the [common naming and description](/docs/readme/datasou
 ### Channel control options 
 
 {{<configopt channel_hop true false>}}
-Enable or disable channel hopping on this data source.  Even if Kismet is (configured for)[/docs/readme/datasources/channelhop/#configuration] channel hopping.
+Enable or disable channel hopping on this data source.  Even if Kismet is [configured for](/docs/readme/datasources/channelhop/#configuration) channel hopping.
 {{</configopt>}}
 
 
@@ -128,7 +128,7 @@ Example:
 source=wlan0:name=Foo,add_channels="1W5,2W5,6W10"
 ```
 
-If defining datasources on the command line when launching Kismet, be aware that most shells will elide the quotes, leading to a setup error.  YOu can avoid this by surrounding the definition in single quotes:
+If defining datasources on the command line when launching Kismet, be aware that most shells will elide the quotes, leading to a setup error.  You can avoid this by surrounding the definition in single quotes:
 
 ```bash
 kismet -c 'wlan0:name=Foo,add_channels="1W5,2W5,6W10"'

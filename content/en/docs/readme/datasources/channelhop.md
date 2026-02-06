@@ -35,7 +35,7 @@ Picking a channel hopping speed is a balance between several factors:
 
 2. The frequency of data in the target protocol.
 
-    Changing channel more frequently than devices are likely to transmit means the chances of losing data is significantly higher. 
+    Changing channel more frequently than devices are likely to transmit means the chances of losing data are significantly higher. 
 
 3. Ability of the drivers to tune rapidly 
 

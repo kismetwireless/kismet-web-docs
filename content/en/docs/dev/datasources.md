@@ -85,7 +85,7 @@ Report configuration status and success to Kismet; This report must contain the 
 
 #### `KDSDATAREPORT` (KismetDatasource.DataReport) *Datasource -> Kismet*
 
-Datasources uses `KDSDATAREPORT` to send packets, signal data, and GPS data to Kismet.  The packet payload is mapped to the Kismet datasource, and sent to the packet processing subsystem.
+Datasources use `KDSDATAREPORT` to send packets, signal data, and GPS data to Kismet.  The packet payload is mapped to the Kismet datasource, and sent to the packet processing subsystem.
 
 ##### Content
 
@@ -162,7 +162,7 @@ Remote captures are multiplexed over a single TCP port; to associate a remote ca
 
 ##### Response
 
-After receiving and successfully mapping a `KDSNEWSOURCE` to a datasource driver, Kismet will send a `KDSOPENSOURCE` command to being configuration.
+After receiving and successfully mapping a `KDSNEWSOURCE` to a datasource driver, Kismet will send a `KDSOPENSOURCE` command to begin configuration.
 
 #### `KDSOPENSOURCE` (KismetDatasource.OpenSource) *Kismet -> Datasource*
 
@@ -467,9 +467,9 @@ A phy handler is responsible for defining any custom data structures specific to
 
 Phy handlers are derived from the base `kis_phy_handler` class.
 
-At a minumum a new phy must provide (and override):
+At a minimum a new phy must provide (and override):
 
-* The basic C++ contructor and destructor implementations
+* The basic C++ constructor and destructor implementations
 * The create function to build an actual instance of the phy handler
 * A common classifier stage to create common info from the custom packet info
 * A storage loader function to attach any custom data when a device is loaded from storage
@@ -478,7 +478,7 @@ At a minumum a new phy must provide (and override):
 
 A new phy will almost certainly define a custom tracked data type - `dot11_tracked_device` and `bluetooth_tracked_device` for instance.  As part of defining this custom type, the phy must provide a storage loader function to import stored data into a proper object.
 
-In addition, there are some specific pitfalls when loading custom objects - be sure to check the  "Restoring vector and map objects" section of of the `tracked_component` docs!
+In addition, there are some specific pitfalls when loading custom objects - be sure to check the  "Restoring vector and map objects" section of the `tracked_component` docs!
 
 Currently storage code is not used, but may be leveraged in the future.
 
@@ -616,7 +616,7 @@ void some_data_source::handle_packet_custom(KVmap in_kvpairs) {
     kis_layer1_packinfo *siginfo = NULL;
     kis_gps_packinfo *gpsinfo = NULL;
 
-    // We accept messages, so process them using the existin message KV
+    // We accept messages, so process them using the existing message KV
     // handler
     if ((i = in_kvpairs.find("message")) != in_kvpairs.end()) {
         handle_kv_message(i->second);

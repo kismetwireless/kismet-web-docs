@@ -19,7 +19,7 @@ toc: true
 
 ## Kismet API documentation 
 
-[Kismet has a rich REST-like API](/docs/api/rest_like/) with full JSON records, streamig pcap-ng, and websocket pub/sub endpoints. 
+[Kismet has a rich REST-like API](/docs/api/rest_like/) with full JSON records, streaming pcap-ng, and websocket pub/sub endpoints. 
 
 ## Kismet developer documentation 
 

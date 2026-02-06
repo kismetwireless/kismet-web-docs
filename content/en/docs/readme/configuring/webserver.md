@@ -36,7 +36,7 @@ Set a global, fixed password.  This overrides any per-user login information in 
 
 
 {{<configopt httpd_allow_cors true false>}}
-Enable cross-origin resource sharing (CORS). To access the REST API from an web app hosted on a different origin (domain, protocol, or port) to the Kismet webserver this option needs to be set to true. The `http_allowed_origin` option will also need to be configured to pass CORS. 
+Enable cross-origin resource sharing (CORS). To access the REST API from a web app hosted on a different origin (domain, protocol, or port) to the Kismet webserver this option needs to be set to true. The `http_allowed_origin` option will also need to be configured to pass CORS. 
 {{</configopt>}}
 
 
@@ -51,7 +51,7 @@ Sets the port for the webserver to listen to.  By default, this is port 2501, th
 {{<configopt httpd_bind_address "a.b.c.d">}}
 Added `2019-03`
 
-Typically Kismet listens on all interfaces; To restrict Kismet to a single interface (such as the loopback address), set the address in the `httpd_bind_address` option.  To restrict binding to the loopback interface only, use `http_bind_address=127.0.0.1`.
+Typically Kismet listens on all interfaces; To restrict Kismet to a single interface (such as the loopback address), set the address in the `httpd_bind_address` option.  To restrict binding to the loopback interface only, use `httpd_bind_address=127.0.0.1`.
 {{</configopt>}}
 
 {{<configopt httpd_uri_prefix "/prefix">}}

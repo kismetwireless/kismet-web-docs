@@ -9,7 +9,7 @@ toc: true
 ---
 
 Every distribution is different, and has different idioms for configuration location
-and style, but we recommend the following guideliens for packages where ever possible.
+and style, but we recommend the following guidelines for packages wherever possible.
 
 Of all the guidelines, perhaps the most important is to provide a suid or setcap
 option; Kismet is designed to run only the minimal required components with
@@ -39,8 +39,8 @@ and pivot into a read-only mount namespace.
 
 Until `2025-09-R1` the Kismet IPC and remote capture datasource protocol was based on
 Google Protobufs.  The Protobufs dependency has become increasingly difficult to
-deal with in a portable fashion, and has been superceded by a much simpler
-protocol encoded via messagepack.  The messagepack encoder is embeded in the
+deal with in a portable fashion, and has been superseded by a much simpler
+protocol encoded via messagepack.  The messagepack encoder is embedded in the
 Kismet source.
 
 For `2025-09-R1` and possibly the next major release after, the legacy Protobufs
@@ -50,7 +50,7 @@ to still talk to the new Kismet server until the user has upgraded them, however
 it likely is not a major issue if carrying the protobufs dependency is
 problematic.
 
-Legacy protobufs support will likely be completly removed once upgrading remote
+Legacy protobufs support will likely be completely removed once upgrading remote
 captures is no longer of concern.
 
 ### Provide multiple packages for capture tools
@@ -67,13 +67,13 @@ Kismet installs data and lookup files to `${prefix}/share/kismet/`; these includ
 
 The manuf file should, if possible, always be installed - this is the lookup database for manufacturer assignments
 based on MAC address.  For *extremely* size constrained distributions this file could be omitted (preferably moved
-to a separate so that a user can choose to install it), however the user experience will be degraded as
+to a separate package so that a user can choose to install it), however the user experience will be degraded as
 manufacturers will no longer be detected.
 
 The ICAO file is particularly large (6+ MB, gzipped).  This file is used to resolve the FAA ICAO registration for ADSB.
 In the main Kismet packages, this is installed as a by-default included, but independent, package.  For any platform
 where storage is a concern, this file can be split into an independent package.  The user experience will only be
-impacted if the user is using a SDR to capture ADSB airplane data.
+impacted if the user is using an SDR to capture ADSB airplane data.
 
 ### Config files
 

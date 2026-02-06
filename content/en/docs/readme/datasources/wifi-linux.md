@@ -80,7 +80,7 @@ Not all hardware and drivers support monitor mode, but the majority do.  Typical
 
     Atheros 802.11abgn cards are typically the most reliable, however they appear to return false packets with valid checksums on very small packets such as phy/control and powersave control packets.  This may lead Kismet to detect spurious devices not actually present if phy packet filtering is not enabled. 
 
-    The Atheros ath10k and ath11k chipsets use a clsoed-source RTOS firmware on the card itself, which has had problems in monitor mode in the past.  Performance may be highly suspect.
+    The Atheros ath10k and ath11k chipsets use a closed-source RTOS firmware on the card itself, which has had problems in monitor mode in the past.  Performance may be highly suspect.
 
 * Intel-based cards (all supported by the iwlwifi driver including the 3945, 4965, 7265, 8265, ax200, ax210 and similar)
 
@@ -100,7 +100,7 @@ Not all hardware and drivers support monitor mode, but the majority do.  Typical
 
     Even fully patched with nexmon, the Broadcom drivers often exhibit some form of instability, often ceasing to return packets after a minute or two, with no obvious errors.
 
-    It is not posisble to use Kismet with the *default drivers* from Raspbian or similar distributions.
+    It is not possible to use Kismet with the *default drivers* from Raspbian or similar distributions.
 
     The Kali distribution for the Raspberry Pi *includes the nexmon patches already* and will work.
 
@@ -124,7 +124,7 @@ Not all hardware and drivers support monitor mode, but the majority do.  Typical
 
     These devices have an out-of-kernel driver which doesn't support mac80211 VIFs or modern channel control.  Kismet will fall back to the old WEXT ioctl control method, but these drivers will not support setting HT channels.
 
-Kismet generally *will not work* with most other out-of-kernel (drivers not shipped with Linux itself), specifically drivers such as the SerialMonkey RTL drivers used for many of the cheap, tiny cards shipped with devices like the Raspberry Pi and included in distributions like Raspbian.  Some times it's possible to find other, supported drivers for the same hardware, however some cards have no working solution.
+Kismet generally *will not work* with most other out-of-kernel (drivers not shipped with Linux itself), specifically drivers such as the SerialMonkey RTL drivers used for many of the cheap, tiny cards shipped with devices like the Raspberry Pi and included in distributions like Raspbian.  Sometimes it's possible to find other, supported drivers for the same hardware, however some cards have no working solution.
 
 Many more devices should be supported - if yours isn't listed and works, let us know via Twitter (@kismetwireless).
 
@@ -139,7 +139,7 @@ All data sources accept the [common naming and description](/docs/readme/datasou
 ### Channel control options 
 
 {{<configopt channel_hop true false>}}
-Enable or disable channel hopping on this data source.  Even if Kismet is (configured for)[/docs/readme/datasources/channelhop/#configuration] channel hopping.
+Enable or disable channel hopping on this data source.  Even if Kismet is [configured for](/docs/readme/datasources/channelhop/#configuration) channel hopping.
 {{</configopt>}}
 
 
@@ -198,7 +198,7 @@ Example:
 source=wlan0:name=Foo,add_channels="1W5,2W5,6W10"
 ```
 
-If defining datasources on the command line when launching Kismet, be aware that most shells will elide the quotes, leading to a setup error.  YOu can avoid this by surrounding the definition in single quotes:
+If defining datasources on the command line when launching Kismet, be aware that most shells will elide the quotes, leading to a setup error.  You can avoid this by surrounding the definition in single quotes:
 
 ```bash
 kismet -c 'wlan0:name=Foo,add_channels="1W5,2W5,6W10"'
@@ -356,7 +356,7 @@ This sets the capture size of the packet to the end of the 802.11 headers, allow
 
 This will disable any WIDS alerts that rely on the data content of packets (such as the DHCP alerts).
 
-Enabling this filter will *drastically* reduce the amount of bandwidth required for remote capture, will reduce the size of logs significantlty, and will reduce the overall processing requirement of Kismet, at the cost of comprehensive data content in the logs.
+Enabling this filter will *drastically* reduce the amount of bandwidth required for remote capture, will reduce the size of logs significantly, and will reduce the overall processing requirement of Kismet, at the cost of comprehensive data content in the logs.
 {{</configopt>}}
 
 

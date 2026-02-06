@@ -145,7 +145,7 @@ Once Kismet has generated a HTTP authentication token it is sent to the helper i
 
 ### HTTPREGISTERURI (KismetExternalHttp.HttpRegisterUri) *Helper -> Kismet*
 
-A helper can create endpoints in the Kismet server by registering the URI.  The URI can be registered as a GET or PUSH, and can specify if there just be an authenticated login. 
+A helper can create endpoints in the Kismet server by registering the URI.  The URI can be registered as a GET or PUSH, and can specify if there must be an authenticated login. 
 
 Kismet will handle the incoming web request and authentication validation. 
 

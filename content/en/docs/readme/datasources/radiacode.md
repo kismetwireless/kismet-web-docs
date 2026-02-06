@@ -61,7 +61,7 @@ Radiation data is logged in the [kismetdb](/docs/readme/logging/kismetdb/) log a
 
 ## Stability
 
-The Radiacode hardware appears to have a slightly fragile USB implementation.  While *typically* this is not a problem, on some occaisons, initializing the device over USB can cause the USB implementation on the Radiacode to crash.
+The Radiacode hardware appears to have a slightly fragile USB implementation.  While *typically* this is not a problem, on some occasions, initializing the device over USB can cause the USB implementation on the Radiacode to crash.
 
 If this happens, the Radiacode will no longer respond on USB; to fix this, disconnect the Radiacode from USB, power the device off using the buttons and LCD interface, then power it back on and connect to USB again.
 

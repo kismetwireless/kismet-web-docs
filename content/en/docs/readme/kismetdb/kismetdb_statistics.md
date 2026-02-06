@@ -130,7 +130,7 @@ Path to the pcap or pcapng file that will be written
 {{</argumentshort>}}
 
 {{<argumentshort s skip-clean>}}
-By default, `kismetdb_strip_packets` runs a SQL Vacuum command to optimize the database and clean up any journal files.  Skipping this process will save time on larger captures.
+By default, `kismetdb_statistics` runs a SQL Vacuum command to optimize the database and clean up any journal files.  Skipping this process will save time on larger captures.
 {{</argumentshort>}}
 
 {{<argument json>}}
