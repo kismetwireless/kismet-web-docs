@@ -25,6 +25,24 @@ errors with missing system libraries.  Despite a strong similarity between
 distributions like Debian, Ubuntu, Mint, Parrot, and Kali, often system
 libraries have different naming schemes.
 
+## Updating the signing key
+
+As of `2026-02-01` (February 2026), new key signing requirements were enacted
+for some Debian based distributions.
+
+The Kismet signing key has been refreshed with a strong signature algorithm
+(SHA256); the key is otherwise the same.
+
+It may be necessary on some apt-based systems to refresh the Kismet pubkey.
+This can be done by replacing the keychain file; simply remove the old keyring
+and re-download the updated key:
+
+```
+sudo rm /usr/share/keyrings/kismet-archive-keyring.gpg
+wget -O - https://www.kismetwireless.net/repos/kismet-release.gpg.key --quiet | gpg --dearmor | sudo tee /usr/share/keyrings/kismet-archive-keyring.gpg >/dev/null
+
+```
+
 ## Before installing the Kismet packages
 
 ### Remove any Kismet installed from source
