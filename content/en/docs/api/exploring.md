@@ -74,7 +74,7 @@ Entering the subscribe command:
 {"SUBSCRIBE": "TIMESTAMP"}
 ``` 
 
-will enroll this websocket with the eventbus, and stsart returning events like:
+will enroll this websocket with the eventbus, and start returning events like:
 
 ```
 {"TIMESTAMP": {"kismet.system.timestamp.usec": 671986,"kismet.system.timestamp.sec": 1603120458}}

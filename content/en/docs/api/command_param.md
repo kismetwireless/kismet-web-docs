@@ -76,7 +76,7 @@ Relative timestamps are useful for fetching events from the past *N* seconds, wi
 
 Most Kismet endpoints which return records will also accept a field simplification as part of the command dictionary.  Field simplifications allow the reduction of the data being returned, analogous to `select a, b, c` instead of `select *` in SQL.
 
-Simplifying fields, especially when performing very large queries, reduces the CPU and memory requiremets of Kismet *and* the client by reducing the amount of data being serialized, transmitted, and deserialized.  Users of the REST API are *strongly* encouraged to make use of field simplification whenever plausible.
+Simplifying fields, especially when performing very large queries, reduces the CPU and memory requirements of Kismet *and* the client by reducing the amount of data being serialized, transmitted, and deserialized.  Users of the REST API are *strongly* encouraged to make use of field simplification whenever plausible.
 
 Field simplification objects take the format of a vector/array containing multiple field definitions:
 
@@ -144,7 +144,7 @@ Other fields will be skipped during a regex match.
 
 `'dot11.device/dot11.device.advertised_ssid_map/dot11.advertisedssid.ssid'`
 
-will be expanded to include all `dot11.advertisedssid` objects in the `advetised_ssid_map` dictionary, and will apply to the `dot11.advertisedssid.ssid` field in each.  Similarly, vectors, intmaps, doublemaps, macmaps, and so forth will be expanded, allowing matching against nested fields.
+will be expanded to include all `dot11.advertisedssid` objects in the `advertised_ssid_map` dictionary, and will apply to the `dot11.advertisedssid.ssid` field in each.  Similarly, vectors, intmaps, doublemaps, macmaps, and so forth will be expanded, allowing matching against nested fields.
 
 ### `regex`
 

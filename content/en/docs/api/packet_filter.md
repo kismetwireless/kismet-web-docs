@@ -35,7 +35,7 @@ be processed.
 
 ### MAC address filters 
 
-MAC address filters use the filter type `mac_filter`, and filter (perhaps obviosuly) on MAC addresses. 
+MAC address filters use the filter type `mac_filter`, and filter (perhaps obviously) on MAC addresses. 
 
 MAC filters can be applied to: 
 * *source* - Original source device.  In Wi-Fi networks, equivalent to the source MAC; in other phy types, typically the originating device.

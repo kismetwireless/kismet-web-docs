@@ -60,7 +60,7 @@ Additionally, the dataset includes:
 
 ## An example dataset
 
-A example RRD dataset might look like:
+An example RRD dataset might look like:
 
 ```json
 {

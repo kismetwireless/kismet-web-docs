@@ -45,7 +45,7 @@ If you're interested in helping debug problems with Kismet, here's the most usef
 
   This saves all the output to `gdb.txt`
 
-5. Run Kismet - *in debug mode*
+6. Run Kismet - *in debug mode*
 
   ```
   (gdb) run --debug [any other options]
@@ -57,30 +57,30 @@ If you're interested in helping debug problems with Kismet, here's the most usef
   (gdb) run --debug -n -c wlan1
   ````
 
-6.  Wait for Kismet to crash
+7.  Wait for Kismet to crash
 
-7.  Collect a backtrace
+8.  Collect a backtrace
    ```
    (gdb) bt
    ```
 
    This shows where Kismet crashed.
 
-8.  Collect thread info
+9.  Collect thread info
    ```
    (gdb) info threads
    ```
 
    This shows what other threads were doing, which is often critical for debugging.
 
-9.  Collect per-thread backtraces
+10.  Collect per-thread backtraces
    ```
    (gdb) thread apply all bt full
    ```
 
    This generates a dump of all the thread states
 
-10. Send us the gdb log and any info you have about when the crash occurred; dragorn@kismetwireless.net or swing by IRC or the Discord channel (info available about these on the website, https://www.kismetwireless.net)
+11. Send us the gdb log and any info you have about when the crash occurred; dragorn@kismetwireless.net or swing by IRC or the Discord channel (info available about these on the website, https://www.kismetwireless.net)
 
 ## Advanced debugging
 

@@ -55,7 +55,7 @@ This is done by an append config option for `log_types`:
 log_types+=wiglecsv
 ```
 
-This can easily by changed by copying the wardrive overlay into your `kismet_site.conf` file and changing this to:
+This can easily be changed by copying the wardrive overlay into your `kismet_site.conf` file and changing this to:
 
 ```
 log_types=wiglecsv
@@ -88,7 +88,7 @@ What does wardriving mode change?  You can see all the options in the `kismet_wa
 
     Access point advertisements only happen on the primary Wi-Fi channels; there's no need to tune to HT20, HT40, VHT80, or VHT160 channels.  By eliminating them, we increase the effective channel coverage by hopping through the list faster, meaning we're less likely to miss APs while in motion.
 
-    The options are appended to any 802.11 datasource, local or remote, which doesn't have an explicit option already set.  Specific sources could be left on VHT channels by adding `ht_channels=true,vht_channels=true,default_ht20=true,expand_ht20=true` to those datasource `source=` defintiions.
+    The options are appended to any 802.11 datasource, local or remote, which doesn't have an explicit option already set.  Specific sources could be left on VHT channels by adding `ht_channels=true,vht_channels=true,default_ht20=true,expand_ht20=true` to those datasource `source=` definitions.
 
     ```
     # Turn off HT20, HT40, and VHT options on wifi datasources (unless they explicitly set them)
@@ -110,7 +110,7 @@ What does wardriving mode change?  You can see all the options in the `kismet_wa
 
 * Tune 802.11 tracking
 
-    Kismet normally tracks all device it sees, keeps fingerprints, optionally keeps IE tags for display, and keeps handshakes.  All of this takes memory, so we turn it off.
+    Kismet normally tracks all devices it sees, keeps fingerprints, optionally keeps IE tags for display, and keeps handshakes.  All of this takes memory, so we turn it off.
 
     ```
     dot11_ap_only_survey=true

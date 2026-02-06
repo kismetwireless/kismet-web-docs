@@ -34,11 +34,11 @@ Path to the kismetdb file to process
 {{</argumentshort>}}
 
 {{<argumentshort o out filename>}}
-Path to the pcap or pcapng file that will be written
+Path to the KML file that will be written
 {{</argumentshort>}}
 
 {{<argumentshort s skip-clean>}}
-By default, `kismetdb_strip_packets` runs a SQL Vacuum command to optimize the database and clean up any journal files.  Skipping this process will save time on larger captures.
+By default, `kismetdb_to_kml` runs a SQL Vacuum command to optimize the database and clean up any journal files.  Skipping this process will save time on larger captures.
 {{</argumentshort>}}
 
 {{<argument verbose>}}
@@ -46,7 +46,7 @@ Add status output to the console.
 {{</argument>}}
 
 {{<argumentshort f force>}}
-Force overwriting any existing files, by default `kismetdb_to_pcap` will refuse to erase existing output files.
+Force overwriting any existing files, by default `kismetdb_to_kml` will refuse to erase existing output files.
 {{</argumentshort>}}
 
 {{<argument basic-location>}}

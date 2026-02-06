@@ -85,7 +85,7 @@ Frequency band to tune to.  This must match the supported radio in your device.
 ### Channel control options 
 
 {{<configopt channel_hop true false>}}
-Enable or disable channel hopping on this data source.  Even if Kismet is (configured for)[/docs/readme/datasources/channelhop/#configuration] channel hopping.
+Enable or disable channel hopping on this data source.  Even if Kismet is [configured for](/docs/readme/datasources/channelhop/#configuration) channel hopping.
 {{</configopt>}}
 
 

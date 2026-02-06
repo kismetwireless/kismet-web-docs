@@ -83,7 +83,7 @@ Installing packages from another distribution, or another version, *may* work so
 
 ## Suid-root / privileged capture
 
-During the package install process, you will be prompted to install Kismet with suid-root, or without; We strongly recommend installing the capture sources as suid-root!
+During the package install process, you will be prompted to install Kismet with suid-root, or without; we strongly recommend installing the capture sources as suid-root!
 
 Kismet is split between the actual Kismet server itself (which processes packets, presents the UI, performs logging, etc) and the packet datasources (capture programs which actually collect packets and send them to the server).
 

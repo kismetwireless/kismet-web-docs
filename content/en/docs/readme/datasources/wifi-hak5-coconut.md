@@ -41,7 +41,7 @@ When configured with Coconut support, Kismet will load the userspace driver from
 
 Under macOS, there is no monitor-mode capable USB driver for the Wi-Fi card used in the Coconut, and the Kismet datasource is required.
 
-## BladeRF WiPhy source parameters
+## WiFi Coconut source parameters
 
 ### Interfaces 
 

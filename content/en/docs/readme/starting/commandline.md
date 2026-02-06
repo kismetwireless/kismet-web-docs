@@ -20,7 +20,7 @@ Kismet loads the bulk of configuration from the configuration files, however it 
 ### Core Kismet options 
 
 {{<argument no-ncurses>}}
-By default, Kismet uses a small ncurses-based wrapper to remind users to visit the web-based UI.  When running Kismet in a script or as a service, it's probably desireable to disable this and use pure text output.
+By default, Kismet uses a small ncurses-based wrapper to remind users to visit the web-based UI.  When running Kismet in a script or as a service, it's probably desirable to disable this and use pure text output.
 {{</argument>}}
 
 

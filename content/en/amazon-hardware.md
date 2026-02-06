@@ -9,7 +9,7 @@ url: /amazon-hardware/
 
 ## Hardware
 
-We're often asked what hardware works well with Kismet; here's a list of some useful starting points with links to Amazon.  These links help the Kismet project a little if you use them to order, but by all means order from where ever works best for you!
+We're often asked what hardware works well with Kismet; here's a list of some useful starting points with links to Amazon.  These links help the Kismet project a little if you use them to order, but by all means order from wherever works best for you!
 
 ## Books
 
@@ -49,7 +49,7 @@ For mPCI-e or M2, Intel is currently making the most reliable cards - the 802.11
 
 ## GPS
 
-An important factor to keep in mind is that USB GPS devices are *traditional* GPS:  They have GPS receivers *only*.  In contrast to "GPS" implementations on cell phones, they require a much strong signal and typically will not work indoors, because the smartphone GPS system uses a combination of Wi-Fi, Bluetooth, and cellular data to provide a synthetic location.  Pure GPS usually needs an open view of the sky and may take several minutes to get the initial lock.
+An important factor to keep in mind is that USB GPS devices are *traditional* GPS:  They have GPS receivers *only*.  In contrast to "GPS" implementations on cell phones, they require a much stronger signal and typically will not work indoors, because the smartphone GPS system uses a combination of Wi-Fi, Bluetooth, and cellular data to provide a synthetic location.  Pure GPS usually needs an open view of the sky and may take several minutes to get the initial lock.
 
 Some GPS devices we've had luck with include:
 * The [BN-808](https://amzn.to/3Zc6u3G) is a more expensive but quite sensitive, multi-standard device (it can use the GPS constellation, but also GLONASS, Galileo, and more) and fuses the multiple locations into one report.
@@ -60,7 +60,7 @@ Some GPS devices we've had luck with include:
 
 ### RTLSDR
 
-Most of the SDR capture sources in Kismet use the RTLSDR radios - they're cheap, low power, and easy to get running.  Like Wi-Fi, a SDR radio can only tune to one range of frequencies at a time:  Often it makes sense to get multiple radios, one for each SDR-based protocol you want to monitor.
+Most of the SDR capture sources in Kismet use the RTLSDR radios - they're cheap, low power, and easy to get running.  Like Wi-Fi, an SDR radio can only tune to one range of frequencies at a time:  Often it makes sense to get multiple radios, one for each SDR-based protocol you want to monitor.
 
 * The [RTLSDR v4 Kit](https://amzn.to/4eBa8bC) with the radio, several antennas, and mounts, is a good place to start.  You'll need to make sure you have a current version of librtlsdr in your distribution, but the v4 has been available for over a year now and should be well supported.
 * The [Same RTLSDR v4](https://amzn.to/4hQTGah) but as the radio only, to save a few dollars.  This radio supports bias-tee injection for powering amps and filters.
@@ -84,7 +84,7 @@ Similar to the CC2540, the CC2531 is an ultra cheap zigbee/802.15.4 capture card
 Coupled with a RTL-SDR, antennas specific for ADSB can help increase your range for plane spotting using the new Kismet ADSB capture source.  Remember though - you're unlikely to get more range than your line of sight, so often it's easier to see more distant planes at a higher altitude.  Some good tools include:
 
 * The [X-Boost 1090mhz](https://amzn.to/4bUx1Hd) antenna is a compact option.
-* Optionally, a [1090MHz Filter/Amplifier](https://amzn.to/4ev1ifG).  A filter will significantly improve your ADSB reception by blocking signals from FM radio and over bleed-over.
+* Optionally, a [1090MHz Filter/Amplifier](https://amzn.to/4ev1ifG).  A filter will significantly improve your ADSB reception by blocking signals from FM radio and other bleed-over.
 
 
 ## Servers / SBCs

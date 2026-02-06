@@ -14,10 +14,10 @@ toc: true
 ---
 
 Every source of packet and device data in Kismet is a datasource.  Typically a datasource is 
-analogous to a network interace, but may encompass other captures such as SDR, serially attached 
+analogous to a network interface, but may encompass other captures such as SDR, serially attached 
 capture systems, or summarized scan data posted to an endpoint. 
 
-Datasoruces are defined on startup in `kismet.conf` as a `source=...`, or on the command line 
+Datasources are defined on startup in `kismet.conf` as a `source=...`, or on the command line 
 with `-c {source definition}`
 
 {{< kismet_api datasources >}}

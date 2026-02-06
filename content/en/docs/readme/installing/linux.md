@@ -47,7 +47,7 @@ libubertooth-dev libbtbb-dev libmosquitto-dev librtlsdr-dev
 ```
 
 Additionally, for the SDR datasources, you will need `librtl`.  Depending on the
-exact distribtion and version, this may be `librtlsdr0` or `librtlsdr2`
+exact distribution and version, this may be `librtlsdr0` or `librtlsdr2`
 
 On some older distributions, `libprotobuf-c-dev` may be called
 `libprotobuf-c0-dev`, and `libsensors-dev` may be called `libsensors4-dev`.
@@ -88,7 +88,7 @@ or prevent using websockets, but any remote capture code compiled without libweb
 TCP connection mode.  If you're not planning to use remote capture nodes, none of this matters to you, and you can
 [read more about remote capture here](/docs/readme/remotecap/remotecap/).
 
-When installing `libwebsocktets` from packages, if your distribution splits binary and development packages, make sure to
+When installing `libwebsockets` from packages, if your distribution splits binary and development packages, make sure to
 install both: the development package will be needed for compiling.
 
 ### Clone git

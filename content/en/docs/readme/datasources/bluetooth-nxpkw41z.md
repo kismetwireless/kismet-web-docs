@@ -49,7 +49,7 @@ All data sources accept the [common naming and description](/docs/readme/datasou
 {{<configopt device "/path/to/serial/device">}}
 The NXP KW41Z devices appear as USB serial devices, and serial devices can not be auto-discovered. 
 
-You *must* provide the path to the serial device associated with the nRF 51822 sniffer. 
+You *must* provide the path to the serial device associated with the NXP KW41Z sniffer. 
 {{</configopt>}}
 
 ### Phy type 
@@ -63,7 +63,7 @@ The NXP KW41Z can capture from BTLE and Zigbee.  To only enable one phy, use the
 Channel control for NXP KW41Z is only available in Zigbee mode.
 
 {{<configopt channel_hop true false>}}
-Enable or disable channel hopping on this data source.  Even if Kismet is (configured for)[/docs/readme/datasources/channelhop/#configuration] channel hopping.
+Enable or disable channel hopping on this data source.  Even if Kismet is [configured for](/docs/readme/datasources/channelhop/#configuration) channel hopping.
 {{</configopt>}}
 
 

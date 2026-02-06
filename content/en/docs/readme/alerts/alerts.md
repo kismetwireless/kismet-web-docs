@@ -55,7 +55,7 @@ Many of these attacks rely on a combination of specific chipsets and drivers, an
 
 Deprecated attacks in Kismet are typically disabled by default in the config file, but at times a new evolution or use of Wi-Fi will trigger an alert with a false positive.
 
-*Generally* speaking, it is unlikely that most users will encounter cutting edge attacks in the wild.  Many things are possible - which is why Kismet provides the alerts - but often unlikely.  When given an usual alert, consider taking the step of examining the PCAP log directly with a tool like [Wireshark](https://wireshark.org).
+*Generally* speaking, it is unlikely that most users will encounter cutting edge attacks in the wild.  Many things are possible - which is why Kismet provides the alerts - but often unlikely.  When given an unusual alert, consider taking the step of examining the PCAP log directly with a tool like [Wireshark](https://wireshark.org).
 
 ## Alerts
 

@@ -135,7 +135,7 @@ The center frequency of the communication, in kHz.
 
 ### An Example of Common Info
 
-To demonstrate how to use the common into, lets take the 802.11 common classifier as an example.  This is registered by the 802.11 decoder as a packet chain element in the `CLASSIFIER` portion.
+To demonstrate how to use the common info, let's take the 802.11 common classifier as an example.  This is registered by the 802.11 decoder as a packet chain element in the `CLASSIFIER` portion.
 
 The classifier is called after we have already:
 
@@ -147,7 +147,7 @@ Already knowing the 802.11 characteristics makes filling in the `kis_common_info
 
 ```C++
 int Kis_80211_Phy::CommonClassifierDot11(CHAINCALL_PARMS) {
-    // Grab the instance of the Dot111 Phy from the auxptr, remember we are a
+    // Grab the instance of the Dot11 Phy from the auxptr, remember we are a
     // static function so that we can be called directly 
     Kis_80211_Phy *d11phy = (Kis_80211_Phy *) auxdata;
 

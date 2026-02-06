@@ -17,6 +17,6 @@ Kismet uses an internal `messagebus` system (an extension of the event bus) for 
 
 The messagebus is used to pass error, status, and debug messages, as well as notifications to the user about detected devices, alerts, etc. 
 
-For real-time messges, see the [eventbus](/docs/api/eventbus).  The Kismet UI uses a combination of the messages API to load previous content, and the eventbus to received pushed future messages immediately. 
+For real-time messages, see the [eventbus](/docs/api/eventbus).  The Kismet UI uses a combination of the messages API to load previous content, and the eventbus to receive pushed future messages immediately. 
 
 {{< kismet_api messages >}}

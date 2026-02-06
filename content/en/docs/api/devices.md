@@ -15,7 +15,7 @@ toc: true
 
 A device is the central record of a tracked entity in Kismet.  Clients, bridges, access points, wireless sensors, and every other type of entity seen by Kismet will ultimately be a device.  
 
-Each PHY layer will add fields to the device record and populate thec ommon fields. 
+Each PHY layer will add fields to the device record and populate the common fields. 
 
 For complex relationships (such as 802.11 Wi-Fi), a list of related devices in the device record describes the access point-client relationship, shared hardware, etc.
 

@@ -33,7 +33,7 @@ The location of your detector, the type of detection hardware, and the speed at 
 
 ## Compiling Radview support
 
-Radview support is build automatically in Kismet releases after `2024-04` git code.  Kismet interfaces with the Radview via a serial connection on an Arduino or similar device.
+Radview support is built automatically in Kismet releases after `2024-04` git code.  Kismet interfaces with the Radview via a serial connection on an Arduino or similar device.
 
 ## Radview sources
 

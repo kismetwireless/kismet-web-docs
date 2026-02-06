@@ -56,7 +56,7 @@ All data sources accept the [common naming and description](/docs/readme/datasou
 ### Channel control options 
 
 {{<configopt channel_hop true false>}}
-Enable or disable channel hopping on this data source.  Even if Kismet is (configured for)[/docs/readme/datasources/channelhop/#configuration] channel hopping.
+Enable or disable channel hopping on this data source.  Even if Kismet is [configured for](/docs/readme/datasources/channelhop/#configuration) channel hopping.
 {{</configopt>}}
 
 
@@ -93,6 +93,6 @@ source=rzkillerbee:name=Foo,channels="12,13,14,15"
 If defining datasources on the command line when launching Kismet, be aware that most shells will elide the quotes, leading to a setup error.  You can avoid this by surrounding the source definition in single quotes:
 
 ```bash
-kismet -c 'nzkillerbee:name=Foo,channels="12,13,14,15"'
+kismet -c 'rzkillerbee:name=Foo,channels="12,13,14,15"'
 ```
 {{</configopt>}}
