@@ -28,6 +28,11 @@ This means that basic queries (time, signal levels, location, device identifiers
 ## Log Versions
 The log file version is stored in the `db_version` field of the `KISMET` table.  When changes to the base database structure are made, this version will be incremented.
 
+### Version 10
+
+Version 10 was added in February of 2026, and contains one simple addition:
+1. `signal` added to the `data` table for radio signal levels on `json` objects
+
 ### Version 9
 As of February 2025, Kismet has started using db_version 9.  This version adds:
 1. `packet_full_len` to the `packets` table.  This contains the original length of the packet.  This is the same as the `caplen` value reported by libpcap, and will be greater than the original packet length when the capture size is limited.
@@ -133,6 +138,7 @@ The `data` section holds arbitrary data records which are *not* packets but whic
 | datasource |        *uuid* | UUID of capturing datasource, as text                  |
 | type       |        *text* | Type of data record, as text                           |
 | json       |        *json* | Arbitrary JSON record of event                         |
+| signal | *int* | Signal / RSSI level of event |
 
 ### Datasource
 
