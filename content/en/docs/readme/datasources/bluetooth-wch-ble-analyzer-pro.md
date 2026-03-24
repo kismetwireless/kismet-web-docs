@@ -13,12 +13,6 @@ toc: true
 
 The [WCH BLE Analyzer Pro](https://www.olimex.com/Products/RISC-V/WCH/WCH-BLE-Analyzer-PRO/) is a 3-radio BLE analyzer device which consists of 3 microcontroller-based BLE radios and a USB hub.
 
-## Warning
-
-The current firmware/drivers for the WCH BLE Analyzer Pro are unable to filter invalid packets (packets which do not pass the CRC checksum); while it is usable with Kismet, this may lead to large numbers of incorrect devices detected.
-
-The WCH BLE Analyzer may be usable in some situations, but is not currently recommended.
-
 ## Bluetooth
 
 Bluetooth uses a frequency-hopping system with dynamic MAC addresses and other oddities - this makes sniffing it not as straightforward as capturing Wi-Fi.
@@ -48,10 +42,6 @@ source=wch-btle-mcu-32-17:name="wch ble mcu 3"
 ## Channel Hopping
 
 Each radio is configured to a static channel.
-
-## Limitations
-
-Currently, these devices may (and will) report invalid packets, with no available checksum for validation.  This may make them unsuitable for some applications.
 
 ## Source parameters
 
