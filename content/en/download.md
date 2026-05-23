@@ -115,3 +115,12 @@ Android PCAP was an experiment in porting a Wi-Fi USB driver from Linux to the A
 git clone https://www.kismetwireless.net/git/android-pcap.git
 ```
 
+
+### <a name="third-party-clients"></a>Third-Party Clients
+
+**KismetMobile**  
+[KismetMobile](https://primary-null.github.io/KismetMobile/) is an open-source, third-party Android client for Kismet that provides a modern material design interface for viewing devices, running wardriving campaigns, streaming PCAPs, and verifying local Bluetooth/Wi-Fi devices via the Kismet REST API.
+
+```bash
+git clone https://github.com/primary-null/KismetMobile.git
+```
