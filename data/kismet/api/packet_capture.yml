@@ -34,7 +34,7 @@
 
 -
   name: "Packets by device"
-  uri: "devices/pcap/by-key/{KEY}/packets"
+  uri: "/devices/pcap/by-key/{KEY}/packets"
   types: ["pcapng"]
   roles: ["readonly"]
   methods: ["GET"]
@@ -50,3 +50,21 @@
     To access packets *previosuly seen* by Kismet, use the [kismetdb endpoints](/docs/api/kismetdb).
   notes: |
     This endpoint will return packets forever, until disconnected.
+
+-
+  name: "Packets from temporary ring buffer"
+  uri: "/logging/pcapng_ring/snapshot/{LABEL}"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["logon"]
+  urlparameters:
+    - {name: "LABEL", type: "string", description: "Snapshot label"}
+  jsonparameters:
+    - {name: "post_seconds", type: "number", description: "Post-trigger window"}
+  added: "2026-06"
+  docs: |
+    When the PCAP-NG memory ringbuffer logging is enabled, trigger a snapshot of the in-memory
+    ringbuffer to a pcapng file.
+
+    If the `post_seconds` JSON parameter is provided, an additional PCAP-NG file is written
+    containing packets seen in the next `post_seconds` seconds.
