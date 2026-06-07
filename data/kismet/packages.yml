@@ -27,7 +27,7 @@
 
     and re-download the key with:
 
-    <code>wget -O - https://www.kismetwireless.net/repos/kismet-release.gpg.key --quiet | gpg --dearmor | sudo tee /usr/share/keyrings/kismet-archive-keyring.gpg &gt;/dev/null</code>
+    <code>wget -O - https://www.kismetwireless.net/repos/kismet-release.gpg.key &dash;&dash;quiet | gpg &dash;&dash;dearmor | sudo tee /usr/share/keyrings/kismet-archive-keyring.gpg &gt;/dev/null</code>
 
 -
   distro: "Ubuntu Bionic (18.04)"
