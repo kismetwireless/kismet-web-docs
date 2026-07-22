@@ -35,7 +35,7 @@ There are two main flavors of PCAP supported by Kismet:
 
 Typically there is no need to enable both the `kismet` log type and the PCAP log types at the same time, since the PCAP log can be created using the `kismetdb_to_pcap` tool which is part of Kismet.
 
-### Log type
+## Log type
 
 ```
 log_types=pcapppi
