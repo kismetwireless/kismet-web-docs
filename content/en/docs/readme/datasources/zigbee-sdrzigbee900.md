@@ -80,14 +80,28 @@ Kismet identifies this source as `zigbee900sdr`:
 source=zigbee900sdr:name=zigbee900
 ```
 
-The capture helper always uses the first RTL-SDR device it finds; see Limitations, below, if more than one SDR is attached to the system.
+On a system with more than one RTL-SDR attached, pin a specific device with a `zigbee900sdr-<idx or serial>` interface, the same convention the `rtl433`/`rtl433_v2` datasource already uses - bare `zigbee900sdr` always aliases to device 0:
+
+```
+source=zigbee900sdr-0:name=zigbee900_first
+source=zigbee900sdr-1:name=zigbee900_second
+source=zigbee900sdr-AB12CD34:name=zigbee900_by_serial
+```
+
+This makes it possible to run a `zigbee900sdr` source alongside other RTL-SDR-backed sources (or a second `zigbee900sdr` instance) on the same multi-device system, each pinned to its own physical unit - previously the capture helper always grabbed whichever RTL-SDR happened to enumerate first, so a second instance (or one instance on any device but the first) would silently collide on/miss the intended hardware.
+
+## Reported per-frame metadata
+
+Each decoded frame carries:
+
+* **Channel/frequency** - the specific channel the decoder was tuned to when that frame was captured (not just the source's nominal channel at open time), reported as both a channel number and `kismet.device.base.frequency` in kHz per the 802.15.4-2006 6.1.2.1 channel plan.
+* **Signal strength** - a relative dBFS-style reading of channel power at decode time, sampled before the receive chain's squelch/AGC stage (downstream of AGC the amplitude is normalized toward a fixed reference, which would erase the actual received power level). This is **not a calibrated absolute dBm value** - the same caveat most RTL-SDR-based Kismet datasources' signal readings carry - but it does track real, relative differences in channel conditions.
 
 ## Limitations
 
-* Only the first RTL-SDR device on the system is used. There is currently no option to select a specific unit by serial number, and only one `zigbee900sdr` source can be run at a time on a given system.
-* The default source UUID is a fixed value derived from the capture helper's own name, not from the RTL-SDR's hardware serial number (unlike the `rtl433`/`rtlamr` datasources). If you script around the UUID, set one explicitly with `uuid=` rather than relying on the default.
 * The O-QPSK PHY has only been validated with synthetic, known-plaintext test data offline; it has not yet been confirmed decoding a real over-the-air O-QPSK transmission. Treat O-QPSK reception as unverified until tested against real hardware transmitting that PHY.
-* Radio gain (RTL-SDR gain plus IF/baseband gain stages) is fixed in `zigbee900_live_rx.py` rather than exposed as a source option. These values were tuned against one specific RTL-SDR Blog V4 unit at short range; a different unit, antenna, or link distance may need the script's `RTL_GAIN` and related constants adjusted directly.
+* Radio gain (RTL-SDR gain plus IF/baseband gain stages) is fixed in `zigbee900_live_rx.py` rather than exposed as a source option. These values were tuned against one specific RTL-SDR Blog V4 unit at short range; a different unit, antenna, or link distance may need the script's `RTL_GAIN` and related constants adjusted directly. In testing this did produce measurable ADC clipping at very close transmitter-to-receiver range, though it did not actually prevent decoding in that test.
+* Reported signal strength is relative (dBFS-style), not a calibrated absolute dBm reading - see Reported per-frame metadata, above.
 
 ## Supported hardware
 
@@ -118,5 +132,5 @@ Set the initial channel. Defaults to channel 1 (906MHz) if not specified. This s
 ### Source identification
 
 {{<configopt uuid "uuid-value">}}
-Override the auto-generated source UUID. See Limitations, above, for why this matters more here than on most other datasources.
+Override the auto-generated source UUID. The default is derived from the targeted RTL-SDR device's own manufacturer/product/serial strings (matching the `rtl433`/`rtlamr` datasources' approach), so it's already stable and distinct per physical device without needing this option in most cases.
 {{</configopt>}}
