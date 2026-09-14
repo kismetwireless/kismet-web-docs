@@ -80,14 +80,29 @@ Kismet identifies this source as `zigbee900sdr`:
 source=zigbee900sdr:name=zigbee900
 ```
 
-The capture helper always uses the first RTL-SDR device it finds; see Limitations, below, if more than one SDR is attached to the system.
+A specific RTL-SDR can be targeted with a `zigbee900sdr-<idx or serial>` interface, the same convention the `rtl433`/`rtl433_v2` datasource uses. Bare `zigbee900sdr` refers to device 0.
+
+```
+source=zigbee900sdr-0:name=zigbee900_first
+source=zigbee900sdr-1:name=zigbee900_second
+source=zigbee900sdr-AB12CD34:name=zigbee900_by_serial
+```
+
+This lets a `zigbee900sdr` source run alongside other RTL-SDR-backed sources, or a second `zigbee900sdr` instance, each pinned to its own physical device.
+
+## Reported per-frame metadata
+
+Each decoded frame carries the channel it was captured on and a signal strength reading.
+
+Channel and frequency reflect whatever channel the decoder was actually tuned to at capture time, not just the source's nominal channel at open. `kismet.device.base.frequency` is reported in kHz, following the 802.15.4-2006 6.1.2.1 channel plan.
+
+Signal strength is a dBFS style reading of channel power, sampled ahead of the receive chain's squelch and AGC stages; downstream of AGC the amplitude is normalized toward a fixed reference, so measuring there would not reflect the real received power. This is a relative value, not a calibrated absolute dBm reading, the same caveat that applies to most RTL-SDR based Kismet datasources.
 
 ## Limitations
 
-* Only the first RTL-SDR device on the system is used. There is currently no option to select a specific unit by serial number, and only one `zigbee900sdr` source can be run at a time on a given system.
-* The default source UUID is a fixed value derived from the capture helper's own name, not from the RTL-SDR's hardware serial number (unlike the `rtl433`/`rtlamr` datasources). If you script around the UUID, set one explicitly with `uuid=` rather than relying on the default.
-* The O-QPSK PHY has only been validated with synthetic, known-plaintext test data offline; it has not yet been confirmed decoding a real over-the-air O-QPSK transmission. Treat O-QPSK reception as unverified until tested against real hardware transmitting that PHY.
-* Radio gain (RTL-SDR gain plus IF/baseband gain stages) is fixed in `zigbee900_live_rx.py` rather than exposed as a source option. These values were tuned against one specific RTL-SDR Blog V4 unit at short range; a different unit, antenna, or link distance may need the script's `RTL_GAIN` and related constants adjusted directly.
+* The O-QPSK PHY has only been validated with synthetic, known-plaintext test data offline; it has not been confirmed against a real over-the-air O-QPSK transmission. Treat O-QPSK reception as unverified until tested with real hardware transmitting that PHY.
+* Radio gain (RTL-SDR gain plus IF and baseband gain stages) is fixed in `zigbee900_live_rx.py` rather than exposed as a source option. These values were tuned against one RTL-SDR Blog V4 unit at short range; a different unit, antenna, or link distance may need the script's `RTL_GAIN` and related constants adjusted directly. A transmitter very close to the receiver can saturate the ADC at the default gain.
+* Reported signal strength is relative, not a calibrated absolute dBm reading. See Reported per-frame metadata, above.
 
 ## Supported hardware
 
@@ -118,5 +133,5 @@ Set the initial channel. Defaults to channel 1 (906MHz) if not specified. This s
 ### Source identification
 
 {{<configopt uuid "uuid-value">}}
-Override the auto-generated source UUID. See Limitations, above, for why this matters more here than on most other datasources.
+Override the auto-generated source UUID. By default the UUID is derived from the targeted RTL-SDR device's own manufacturer, product, and serial strings, the same approach the `rtl433`/`rtlamr` datasources use, so it is already stable and distinct per physical device without needing this option set explicitly.
 {{</configopt>}}
