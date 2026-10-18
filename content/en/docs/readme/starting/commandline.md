@@ -21,6 +21,13 @@ Kismet loads the bulk of configuration from the configuration files, however it 
 
 {{<argument no-ncurses>}}
 By default, Kismet uses a small ncurses-based wrapper to remind users to visit the web-based UI.  When running Kismet in a script or as a service, it's probably desirable to disable this and use pure text output.
+
+The wrapper can also be turned off permanently with `enable_ncurses=false` in `kismet.conf` or `kismet_site.conf`.  `--no-ncurses` always disables it, regardless of the config.
+{{</argument>}}
+
+
+{{<argument enable-ncurses>}}
+Enable the ncurses wrapper for this run even if `enable_ncurses=false` is set in the config.  Debug mode and `--daemonize` still disable the wrapper.
 {{</argument>}}
 
 

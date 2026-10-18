@@ -87,6 +87,8 @@ Using the stable `/dev/serial/by-id/...` path rather than a plain `/dev/ttyUSB0`
 
 Like the Ubertooth One, legacy BLE advertisements cycle across 3 primary channels (37, 38, 39); this datasource listens to only one channel at a time, it does not hop. General "detect anything nearby" coverage is therefore roughly 1/3 of total advertisement traffic for a given channel choice. Use the `channel` option to choose deliberately, or run multiple dongles on different channels for fuller coverage.
 
+BLE 5 extended advertisements only carry a pointer on the primary channel; their contents are sent on a secondary channel.  Use `auxadv=true` to capture them.
+
 Passive discovery, on any sniffer hardware, only ever reveals what a device chooses to broadcast. Some devices intentionally broadcast no service information at all in their advertisements as a privacy measure.
 
 You must specify a `device` option pointing to the serial port this device has been assigned by the kernel. It can not be automatically detected, and will not appear in the datasource list.
@@ -103,8 +105,16 @@ All data sources accept the [common naming and description](/docs/readme/datasou
 
 ### Channel control
 
-{{<configopt channel "37|38|39">}}
-Primary advertising channel to listen on. Defaults to 37 if not specified.
+{{<configopt channel "0-39">}}
+Channel to listen on.  Defaults to 37 if not specified.  37, 38 and 39 are the primary advertising channels; 0 through 36 are the secondary channels, used by BLE 5 extended advertising and connections.
+{{</configopt>}}
+
+{{<configopt auxadv "true|false">}}
+Follow BLE 5 extended advertising: when an advertisement on the primary channel points to an auxiliary packet on a secondary channel, Sniffle follows it and captures the auxiliary packet.  Extended advertisements carry their data in the auxiliary packet, so this is needed to see their contents, including BLE 5 Remote ID broadcasts.  Defaults to `false`.
+{{</configopt>}}
+
+{{<configopt phy "1m|coded">}}
+Radio PHY to receive on.  `1m` is the standard BLE PHY.  `coded` receives the BLE 5 long range (coded, S=8) PHY, which some Remote ID transmitters use for extended range; a `coded` source does not see standard 1M advertisements.  Defaults to `1m`.
 {{</configopt>}}
 
 ### Baud rate
