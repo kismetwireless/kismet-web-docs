@@ -267,3 +267,59 @@
 
     This endpoint is designed for use with Kismet remote capture tools, and uses a binary 
     message type.
+
+-
+  name: "Disable a source"
+  uri: "/datasource/by-uuid/{UUID}/disable_source"
+  types: ["cmd"]
+  methods: ["GET", "POST"]
+  roles: ["admin"]
+  uriparameters:
+    -
+      name: "UUID"
+      type: "string"
+      required: true
+      description: Source UUID
+  docs: |
+    Disable a source.  The source is closed, marked in error with the reason "Source disabled",
+    and is not re-opened automatically.
+
+    Unlike [closing a source](#close-a-source), a disabled remote capture source is not re-opened
+    when the remote reconnects; incoming connections for it are refused.  Use
+    [re-open a source](#re-open-a-source) to re-enable it.
+  return: |
+    JSON datasource record.
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [500, "Invalid UUID or no such datasource"]
+
+-
+  name: "Antennas"
+  uri: "/antennas/antennas"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    Kismet tracks antennas as a combination of a datasource and an antenna number on that
+    datasource, and assigns each a small numerical ID, so that per-antenna signal data can be
+    grouped across sources.
+
+    Antennas are only created by datasources which report multiple antennas; this list is
+    typically empty.
+  return: |
+    JSON object keyed by antenna ID, of antenna records:
+
+    | Field | Content |
+    | ----- | ------- |
+    | `kismet.antenna.id` | Antenna ID |
+    | `kismet.antenna.uuid` | Antenna UUID |
+    | `kismet.antenna.source_uuid` | UUID of the datasource the antenna belongs to |
+    | `kismet.antenna.source_antnum` | Antenna number on the datasource |
+    | `kismet.antenna.power_adjust` | Signal adjustment applied to the antenna |
+  responses:
+    success:
+      - [200, "Success"]

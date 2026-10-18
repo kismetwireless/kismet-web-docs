@@ -1,0 +1,35 @@
+-
+  name: "Radiation sensors"
+  uri: "/radiation/sensors/all_sensors"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    Radiation data from Geiger counter datasources, such as the
+    [Radiacode](/docs/readme/datasources/radiacode/) and
+    [Radview](/docs/readme/datasources/radview/).
+
+    Count and dose history is kept as RRD (round robin database) records, reporting the past 60
+    seconds, the past hour per minute, and the past day per hour; see the
+    [RRD documentation](/docs/api/rrd/).  The aggregated energy spectrum is kept for the number of
+    samples set by `geiger_spectrum_history` (by default `86400`).
+
+    Radiation data is also logged to the kismetdb log as `RADIATION` snapshots, and sent to the
+    [eventbus](/docs/api/eventbus/).
+  return: |
+    JSON object keyed by datasource UUID, of sensor records:
+
+    | Field | Content |
+    | ----- | ------- |
+    | `radiation.sensor.type` | Sensor type, `Radview` or `Radiacode` |
+    | `radiation.sensor.datasource` | Datasource record |
+    | `radiation.sensor.cps_rrd` | RRD of counts per second |
+    | `radiation.sensor.usv_rrd` | RRD of dose rate, in microsieverts per hour, for sensors which report it |
+    | `radiation.sensor.aggregate_spectrum` | Aggregated energy spectrum, for sensors which report it |
+    | `radiation.sensor.aggregate_spectrum_start` | Timestamp of the first spectrum sample |
+    | `radiation.sensor.aggregate_spectrum_end` | Timestamp of the last spectrum sample |
+  responses:
+    success:
+      - [200, "Success"]

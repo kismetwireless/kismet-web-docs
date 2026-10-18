@@ -1,6 +1,6 @@
 -
   name: "First-time login check"
-  uri: "/session/check-setup-ok"
+  uri: "/session/check_setup_ok"
   added: "2019-01"
   methods: ["GET"]
   types: []

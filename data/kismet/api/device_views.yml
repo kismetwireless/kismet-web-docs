@@ -303,3 +303,31 @@
 
     Which would be highly appropriate for monitoring signal levels of a group of devices, for 
     instance.
+
+-
+  name: "Devices by view and modification time"
+  uri: "/devices/views/{VIEWID}/modified-since/{TIMESTAMP}/devices"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  uriparameters:
+    -
+      name: "VIEWID"
+      type: "string"
+      required: true
+      description: |
+        Named device view
+    - {auto: "timestamp"}
+  jsonparameters:
+    - {auto: "fields"}
+    - {auto: "regex"}
+  docs: |
+    Devices in a view which have been modified since the supplied timestamp.
+
+    This is similar to devices by view and time, but includes devices which have changed
+    without new traffic being seen, such as a name or tag set through the API.
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [400, "Invalid regex"]

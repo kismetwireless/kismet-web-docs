@@ -2,34 +2,161 @@
   name: "ADSB BEAST websocket"
   added: "2020-11"
   methods: ["WEBSOCKET UPGRADE"]
-  uri: "/phy/RTLADSB/beast" 
-  types: ["ws"] 
-  roles: ["reasonly", "ADSB"]
+  modified: "2026-10, moved from `/phy/RTLADSB/beast`"
+  uri: "/phy/ADSB/beast"
+  types: ["ws"]
+  roles: ["readonly", "ADSB"]
   uriparameters:
     - {auto: "wsuser"}
     - {auto: "wspassword"}
     - {auto: "wsapikey"}
-  docs: | 
-    A streaming websocket endpoint which exports ADSB data in the binary BEAST format, for integration 
-    with other ADSB tools. 
+  docs: |
+    A streaming websocket endpoint which exports ADSB data in the binary BEAST format, for integration
+    with other ADSB tools.
+
+    Each Mode-S message is sent as a binary websocket message containing one BEAST frame: the `0x1a`
+    escape byte, the frame type (`2` for short and `3` for long Mode-S messages), a 6 byte 12MHz
+    timestamp taken from the packet time, a signal byte (always 0), and the 7 or 14 byte Mode-S
+    message.  Any `0x1a` byte after the frame type is doubled, as required by the BEAST format.
+
+    Messages from all ADSB datasources are included.  Messages sent by the client are ignored.
 
 - 
   name: "ADSB raw websocket"
   added: "2020-11"
   methods: ["WEBSOCKET UPGRADE"]
-  uri: "/phy/RTLADSB/raw" 
-  types: ["ws"] 
-  roles: ["reasonly", "ADSB"]
+  modified: "2026-10, moved from `/phy/RTLADSB/raw`"
+  uri: "/phy/ADSB/raw"
+  types: ["ws"]
+  roles: ["readonly", "ADSB"]
   uriparameters:
     - {auto: "wsuser"}
     - {auto: "wspassword"}
     - {auto: "wsapikey"}
-  docs: | 
-    A streaming websocket endpoint which exports ADSB data in raw hex format, for integration 
-    with other ADSB tools. 
+  docs: |
+    A streaming websocket endpoint which exports ADSB data in raw hex format, for integration
+    with other ADSB tools.
+
+    Each ADSB message is sent as a websocket text message in the AVR format (`*` + hex + `;`),
+    followed by a newline.  Messages from all ADSB datasources are included.  Messages sent by the
+    client are ignored.
   example: |
-    ```bash 
-    websocat ws://user:password@localhost:1471/phy/RTLADSB/raw.ws \
+    ```bash
+    websocat ws://user:password@localhost:2501/phy/ADSB/raw.ws \
       | some_adsb_handling_tool
     ```
 
+
+-
+  name: "ADSB raw by datasource"
+  uri: "/datasource/by-uuid/{UUID}/adsb_raw"
+  types: ["ws"]
+  methods: ["WEBSOCKET UPGRADE"]
+  roles: ["readonly", "ADSB"]
+  uriparameters:
+    -
+      name: "UUID"
+      type: "string"
+      required: true
+      description: Datasource UUID
+    - {auto: "wsuser"}
+    - {auto: "wspassword"}
+    - {auto: "wsapikey"}
+  docs: |
+    Websocket stream of the raw ADSB messages received by a single datasource, as hex text in the
+    AVR format (`*` + hex + `;`) followed by a newline, one message per websocket text message.
+
+    Messages sent by the client are ignored.
+  responses:
+    failure:
+      - [500, "Invalid UUID"]
+
+-
+  name: "ADSB map data"
+  uri: "/phy/ADSB/map_data"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    ADSB devices seen in the past 10 minutes, with the bounding box of their locations, for
+    drawing a map.  This is the endpoint used by the ADSB map in the Kismet web UI.
+  return: |
+    JSON object containing:
+
+    | Field | Content |
+    | ----- | ------- |
+    | `kismet.adsb.map.min_lat`, `kismet.adsb.map.max_lat` | Latitude range of the devices |
+    | `kismet.adsb.map.min_lon`, `kismet.adsb.map.max_lon` | Longitude range of the devices |
+    | `kismet.adsb.map.devices` | List of device records |
+
+    If no ADSB devices have been seen, an object with `kismet.common.error` is returned instead.
+  responses:
+    success:
+      - [200, "Success"]
+
+-
+  name: "Create ADSB proxy"
+  uri: "/phy/ADSB/proxy/create"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin"]
+  jsonparameters:
+    -
+      name: "uuid"
+      type: "string"
+      required: false
+      description: |
+        UUID for the new datasource.  If not given, a UUID is generated.
+    -
+      name: "name"
+      type: "string"
+      required: false
+      description: |
+        Name of the new datasource; by default `ADSB proxy`.
+  docs: |
+    Create a virtual ADSB datasource, which accepts raw ADSB messages pushed to Kismet by an
+    external tool over a websocket.
+
+    Creating a proxy registers a [proxy websocket](#adsb-proxy-websocket) for the new datasource,
+    at `/phy/ADSB/by-uuid/{UUID}/proxy.ws`.  The datasource is shown as running while a client is
+    connected to the websocket.
+
+    Proxy datasources are not saved, and must be created again when Kismet restarts.
+  return: |
+    JSON datasource record of the new datasource.
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [500, "Invalid UUID, or a datasource with that UUID already exists"]
+
+-
+  name: "ADSB proxy websocket"
+  uri: "/phy/ADSB/by-uuid/{UUID}/proxy"
+  types: ["ws"]
+  methods: ["WEBSOCKET UPGRADE"]
+  roles: ["admin", "datasource"]
+  uriparameters:
+    -
+      name: "UUID"
+      type: "string"
+      required: true
+      description: UUID of a datasource created with [create ADSB proxy](#create-adsb-proxy)
+    - {auto: "wsuser"}
+    - {auto: "wspassword"}
+    - {auto: "wsapikey"}
+  docs: |
+    Websocket for pushing raw ADSB messages into Kismet, for a datasource created with
+    [create ADSB proxy](#create-adsb-proxy).  This websocket only exists once the proxy has been
+    created.
+
+    Each websocket text message contains one or more ADSB messages in the AVR format, one per line:
+
+    ```
+    *8D4840D6202CC371C32CE0576098;
+    ```
+
+    Messages are timestamped as they arrive, and processed as packets from the proxy datasource;
+    invalid messages are ignored.  Kismet does not send anything to the client.

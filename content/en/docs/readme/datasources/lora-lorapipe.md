@@ -29,6 +29,10 @@ kismet -c lorapipe:device=/dev/ttyUSB0,region=US
 
 The LoraPipe source requires a LoRa microcontroller running LoraPipe sniffer firmware, connected via USB serial.
 
+## LoraPipe firmware
+
+The Kismet LoraPipe support uses the [LoraPipe firmware](https://github.com/krak3n77/lorapipe/tree/main) from krak3n77.  This firmware runs on just about any microcontroller which can run Meshtastic or Meshcore, and precompiled binaries which are flashable via the MeshCore web flasher should be available [in the DataParty.js GitHub](https://github.com/datapartyjs/MeshTNC/releases).
+
 ## Compiling LoraPipe support
 
 LoraPipe support is built automatically, and needs no additional libraries.
@@ -43,7 +47,7 @@ Packets are logged in [pcapng](/docs/readme/logging/pcap/) and [kismetdb](/docs/
 
 ## Channels
 
-Channels can be given as a protocol preset, or as raw radio settings.
+Channels can be given as a protocol preset, or as raw radio settings with an optional protocol.
 
 ### Presets
 
@@ -72,6 +76,15 @@ Any radio configuration can be given as `frequency-bandwidth-spreading-coding-sy
 906.875-250-11-5-2b
 910.525-62.5-7-5-12
 ```
+
+For Meshtastic and MeshCore networks on settings which don't match a preset, the sync word can instead come from the protocol, as `protocol-frequency-bandwidth-spreading-coding`.  The protocol is `meshtastic` (sync word `0x2b`) or `meshcore` (sync word `0x12`), and is not case-sensitive:
+
+```
+meshcore-919.500-500-10-5
+meshtastic-906.875-250-11-5
+```
+
+Raw radio settings are reported using the name they were given with.
 
 ### Regions
 
@@ -102,13 +115,25 @@ The region used to build the channel list.  This option is required.
 {{</configopt>}}
 
 {{<configopt channel "preset or radio settings">}}
-The channel to tune to when the source opens.  If no channel is given, the first channel of the region is used.
+The channel to tune to when the source opens.  If no channel is given, the source opens on the first usable channel of `channels=`, or if that is not set, the first channel of the region.
+
+The source reports preset channels by the names used in the channel list, so `channel=MESHCORE-us-narrow` is shown as `meshcore-US-NARROW`.
 
 To stay on a single channel, also set `channel_hop=false`:
 
 ```
 source=lorapipe:device=/dev/ttyUSB0,region=US,channel=meshcore-US-NARROW,channel_hop=false
 ```
+{{</configopt>}}
+
+{{<configopt channels "channel,channel,...">}}
+Hop only between the listed channels, instead of the full channel list of the region.  Channels can be presets or raw radio settings, in any case; the list must be quoted because it contains commas:
+
+```
+source=lorapipe:device=/dev/ttyUSB0,region=US,channels="meshtastic-US-LONG_FAST,meshcore-US-NARROW"
+```
+
+Channels which can not be parsed, or which the radio rejects, are reported in the Kismet messages and dropped from the hopping list; the source keeps hopping between the remaining channels.  A channel given with `channel=` must be valid, or the source will not open.
 {{</configopt>}}
 
 The common [channel and hopping](/docs/readme/datasources/channelhop/) options are also supported.

@@ -85,7 +85,7 @@
 
 -
   name: "Access point view by timestamp"
-  uri: "/devices/views/phy80211_accesspoints/last-time/{TIMESTAMP}/devices"
+  uri: "/devices/views/phydot11_accesspoints/last-time/{TIMESTAMP}/devices"
   types: ["anyjson"]
   methods: ["GET", "POST"]
   roles: ["readonly"]

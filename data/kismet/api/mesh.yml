@@ -1,0 +1,85 @@
+-
+  name: "Meshtastic channels"
+  uri: "/meshtastic/channels"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    Meshtastic channels known to Kismet, with their keys and recently decoded text messages.
+
+    The default channel of every modem preset, with the default key, is always present; other
+    channels are added with `meshtastic_key` in `kismet_meshtastic.conf`.  The number of messages
+    kept per channel is set by `meshtastic_num_messages` (by default `128`).
+
+    Only text messages are kept; other Meshtastic packets update the device records.
+
+    Field paths for simplification use `/` to separate levels, such as
+    `meshtastic.channels/meshtastic.channel.messages/meshtastic.message.message`.
+  return: |
+    JSON object containing `meshtastic.channels`, an object keyed by channel name:
+
+    | Field | Content |
+    | ----- | ------- |
+    | `meshtastic.channel.channel` | Channel name |
+    | `meshtastic.channel.key` | Channel key, in base64, expanded to the full AES key |
+    | `meshtastic.channel.messages` | List of messages, oldest first |
+
+    Each message contains:
+
+    | Field | Content |
+    | ----- | ------- |
+    | `meshtastic.message.nodeid` | Node ID of the sender, as `!XXXXXXXX` |
+    | `meshtastic.message.channel` | Channel name |
+    | `meshtastic.message.message` | Message text |
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [500, "Invalid field simplification"]
+
+-
+  name: "MeshCore channels"
+  uri: "/meshcore/channels"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    MeshCore group channels known to Kismet, with their keys and recently decoded group messages.
+
+    The public channel is always present; private channels are added with `meshcore_key`, and
+    hashtag channels with `meshcore_hashtag`, in `kismet_meshcore.conf`.  The newest messages are
+    kept, up to `meshcore_num_messages` (by default `128`) per channel.
+
+    MeshCore messages are flooded through the mesh and repeated by every repeater; each message is
+    recorded once, no matter how many times it is heard.
+
+    Field paths for simplification use `/` to separate levels, such as
+    `meshcore.channels/meshcore.channel.messages/meshcore.message.message`.
+  return: |
+    JSON object containing `meshcore.channels`, an object keyed by channel name:
+
+    | Field | Content |
+    | ----- | ------- |
+    | `meshcore.channel.channel` | Channel name; `Public`, the configured name, or the hashtag |
+    | `meshcore.channel.key` | Channel secret, in base64 |
+    | `meshcore.channel.key_type` | Encryption type, `AES128` |
+    | `meshcore.channel.hash` | Channel hash, the first byte of the SHA-256 of the secret |
+    | `meshcore.channel.messages` | List of messages, oldest first |
+
+    Each message contains:
+
+    | Field | Content |
+    | ----- | ------- |
+    | `meshcore.message.timestamp` | Timestamp from the sender's clock, which may be wrong or unset |
+    | `meshcore.message.channel` | Channel name |
+    | `meshcore.message.sender` | Sender name, from the message text; this is not authenticated |
+    | `meshcore.message.message` | Message text |
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [500, "Invalid field simplification"]

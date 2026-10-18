@@ -57,3 +57,236 @@
   return: |
     JSON object containing a list of alerts since `TIMESTAMP.UTIMESTAMP` and the exact timestamp 
     of the return generation.
+
+-
+  name: "Alert table view"
+  uri: "/alerts/alerts_view"
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  types: ["anyjson"]
+  jsonparameters:
+    - {auto: "fields"}
+  parameters:
+    -
+      name: "page"
+      type: "number"
+      required: false
+      description: |
+        Page number to return, starting at 0.  Setting `page` enables pagination, sorting, and
+        searching, and wraps the results in a paging container.
+    -
+      name: "length"
+      type: "number"
+      required: false
+      description: |
+        Number of alerts per page.  `size` is accepted as an alias.  If no length is given, all
+        matching alerts are returned in a single page.
+    -
+      name: "sort"
+      type: "string"
+      required: false
+      description: |
+        Field to sort by, such as `kismet.alert.timestamp`.  Only used when `page` is set.
+    -
+      name: "sort_dir"
+      type: "string"
+      required: false
+      description: |
+        Sort direction; `asc` sorts ascending, any other value sorts descending.  Only used when
+        `page` is set.
+    -
+      name: "search"
+      type: "string"
+      required: false
+      description: |
+        Case-insensitive text to search for.  The search is performed on every field listed in
+        `fields`; if no fields are given, no searching is done.  Alert severities match by name
+        (`INFO`, `LOW`, `MEDIUM`, `HIGH`, and `CRITICAL`).  Only used when `page` is set.
+  docs: |
+    Alerts, with server-side paging, sorting, and searching, for displaying alerts in a table.
+    This is the endpoint used by the alerts table in the Kismet web UI.
+
+    The paging parameters (`page`, `length`, `sort`, `sort_dir`, and `search`) are read from the
+    URL query string or from form-encoded POST variables, while `fields` is read from the JSON
+    request.
+
+    Only alerts in the alert backlog (the last *N* alerts, set by `alertbacklog` in
+    `kismet_memory.conf`) are available.
+  return: |
+    Without `page`, a JSON list of alert records.
+
+    With `page`, a JSON object:
+
+    ```json
+    {
+      "data": [ ... alert records ... ],
+      "last_page": 4,
+      "last_row": 200,
+      "total_row": 250
+    }
+    ```
+
+    `last_page` is the number of pages, `last_row` is the number of alerts matching the search,
+    and `total_row` is the total number of alerts in the backlog.
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [400, "Invalid field map or paging parameters"]
+
+-
+  name: "Alert by ID"
+  uri: "/alerts/by-id/{ALERTID}/alert"
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  types: ["anyjson"]
+  uriparameters:
+    -
+      name: "ALERTID"
+      type: "number"
+      required: true
+      description: |
+        Alert ID, the `kismet.alert.hash` value of the alert record.
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    Fetch a single alert by ID.
+
+    Only alerts in the alert backlog are available.
+  return: |
+    JSON alert record.
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [404, "No alert with this ID in the backlog"]
+      - [500, "Invalid alert ID"]
+
+-
+  name: "Define an alert"
+  uri: "/alerts/definitions/define_alert"
+  methods: ["POST"]
+  roles: ["admin"]
+  types: ["cmd"]
+  jsonparameters:
+    -
+      name: "name"
+      type: "string"
+      required: true
+      description: |
+        Name of the alert.  Alert names are converted to upper case.
+    -
+      name: "description"
+      type: "string"
+      required: true
+      description: |
+        Description of the alert, shown in the alert definitions.
+    -
+      name: "class"
+      type: "string"
+      required: true
+      description: |
+        Class of the alert, such as `SYSTEM`, `DENIAL`, `SPOOF`, or `EXPLOIT`; see the
+        [alert types](#alert-types) above.
+    -
+      name: "severity"
+      type: "number"
+      required: true
+      description: |
+        Alert severity; one of `0`, `5`, `10`, `15`, or `20`.  See the
+        [alert severities](#alert-severities) above.
+    -
+      name: "throttle"
+      type: "string"
+      required: true
+      description: |
+        Maximum rate of the alert, as `count/unit`, such as `10/min`.  Units are `sec`, `min`,
+        `hour`, and `day`; with no unit, the rate is per minute.  A rate of `0` disables the alert.
+    -
+      name: "burst"
+      type: "string"
+      required: true
+      description: |
+        Maximum burst rate of the alert, in the same format as `throttle`, such as `1/sec`.  The
+        burst unit must be shorter than the throttle unit.
+    -
+      name: "phyname"
+      type: "string"
+      required: false
+      description: |
+        Phy the alert applies to.  If omitted, or `any`, the alert applies to all phys.
+  docs: |
+    Define a new alert type, so that it can be raised with the [raise alerts](#raise-alerts)
+    endpoint.
+
+    Alerts can only be defined once; an alert which is already defined (including alerts defined
+    in the Kismet config files) can not be redefined.
+  responses:
+    success:
+      - [200, "Alert defined"]
+    failure:
+      - [400, "Invalid request, unknown severity, unparseable throttle or burst rate, or unknown phy"]
+      - [503, "Alert already defined"]
+      - [504, "Alert could not be activated"]
+
+-
+  name: "Raise alerts"
+  uri: "/alerts/raise_alerts"
+  methods: ["POST"]
+  roles: ["admin"]
+  types: ["cmd"]
+  jsonparameters:
+    -
+      name: "name"
+      type: "string"
+      required: true
+      description: |
+        Name of a defined alert type, in upper case.
+    -
+      name: "text"
+      type: "string"
+      required: true
+      description: |
+        Alert text.
+    -
+      name: "bssid"
+      type: "string"
+      required: false
+      description: |
+        MAC address of the network (or transmitter) associated with the alert.
+    -
+      name: "source"
+      type: "string"
+      required: false
+      description: |
+        Source MAC address associated with the alert.
+    -
+      name: "dest"
+      type: "string"
+      required: false
+      description: |
+        Destination MAC address associated with the alert.
+    -
+      name: "other"
+      type: "string"
+      required: false
+      description: |
+        Other MAC address associated with the alert.
+    -
+      name: "channel"
+      type: "string"
+      required: false
+      description: |
+        Channel associated with the alert.
+  docs: |
+    Raise an alert from an external tool.  The alert must already be defined, either in the Kismet
+    configuration or with the [define an alert](#define-an-alert) endpoint.
+
+    Raised alerts are rate limited by the alert throttle and burst rates, include the current GPS
+    location when available, are added to the alert backlog, logged, and sent to the
+    [eventbus](/docs/api/eventbus/) and messagebus like alerts generated by Kismet.
+  responses:
+    success:
+      - [200, "Alert raised"]
+    failure:
+      - [400, "Unknown alert type, invalid MAC address, or alert throttle reached"]

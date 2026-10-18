@@ -17,9 +17,9 @@ The macOS CoreWLAN datasource works with the built-in Airport Wi-Fi interfaces o
 
 Packet capture on Wi-Fi is accomplished via "monitor mode", a special mode where the card is told to report all packets seen, and to report them at the 802.11 link layer instead of emulating an Ethernet device.
 
-The macOS CoreWLAN Wi-Fi source will auto-detect supported interfaces by querying the network interface list and checking for wireless configuration APIs.  It can be manually specified with `type=osxcorewlan`:
+The macOS CoreWLAN Wi-Fi source will auto-detect supported interfaces by querying the network interface list and checking for wireless configuration APIs.  It can be manually specified with `type=osxcorewlanwifi`:
 ```
-source=en0:type=osxcorewlan
+source=en0:type=osxcorewlanwifi
 ```
 
 The macOS CoreWLAN Wi-Fi capture uses the 'kismet_cap_osx_corewlan_wifi' tool, and should

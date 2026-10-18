@@ -14,3 +14,30 @@
 
     Optionally include data with the POI event; this could be human readable notes, 
     JSON data, or other.
+
+-
+  name: "List POIs"
+  uri: "/poi/list_poi"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    List the points of interest recorded in the current kismetdb log, oldest first.
+
+    POIs are stored in the kismetdb log, so only POIs from the current log are listed.  If kismetdb
+    logging is not enabled, an empty list is returned.
+  return: |
+    JSON list of POI records:
+
+    | Field | Content |
+    | ----- | ------- |
+    | `kismet.poi.ts_sec` | Timestamp, in seconds |
+    | `kismet.poi.ts_usec` | Timestamp, microseconds |
+    | `kismet.poi.lat` | Latitude, or 0 if there was no GPS location |
+    | `kismet.poi.lon` | Longitude, or 0 if there was no GPS location |
+    | `kismet.poi.note` | POI note |
+  responses:
+    success:
+      - [200, "Success"]

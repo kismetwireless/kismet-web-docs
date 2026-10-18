@@ -15,10 +15,10 @@ toc: true
 
 The WiFi Coconut source works with the [Hak5 WiFi Coconut](https://shop.hak5.org/products/wifi-coconut), a USB device with 14 2.4GHz Wi-Fi radios.
 
-Kismet will auto-detect Coconut devices as `hak5_coconut`, or you may manually specify the type:
+Kismet will auto-detect Coconut devices as `hak5wificoconut`, or you may manually specify the type:
 
 ```
-source=coconut:type=hak5_coconut
+source=coconut:type=hak5wificoconut
 ```
 
 ## Supported hardware

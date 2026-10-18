@@ -99,3 +99,132 @@
     success:
       - [200, "Success"]
   
+
+-
+  name: "User status"
+  uri: "/system/user_status"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["none"]
+  docs: |
+    The user Kismet is running as.  This endpoint does not require a login, so a UI can warn
+    about Kismet running as root before the user logs in.
+  return: |
+    JSON object containing `kismet.system.user`, the system user Kismet is running as.
+  responses:
+    success:
+      - [200, "Success"]
+
+-
+  name: "Incoming packet rate"
+  uri: "/packetchain/packet_rate"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    RRD (round robin database) record of every packet received by Kismet, including packets which are later dropped.
+
+    This is one of the RRDs included in the [packet statistics](#packet-statistics); see the
+    [RRD documentation](/docs/api/rrd/) for the RRD format.
+  return: |
+    JSON RRD record, in packets per second; the hour and day records are averages.
+  responses:
+    success:
+      - [200, "Success"]
+
+-
+  name: "Incoming packet peak rate"
+  uri: "/packetchain/packet_peak"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    RRD (round robin database) record of every packet received by Kismet, including packets which are later dropped.
+
+    This is one of the RRDs included in the [packet statistics](#packet-statistics); see the
+    [RRD documentation](/docs/api/rrd/) for the RRD format.
+  return: |
+    JSON RRD record, in packets per second; the hour and day records are the peak per-second rate in each minute and hour, rather than averages.
+  responses:
+    success:
+      - [200, "Success"]
+
+-
+  name: "Processed packet rate"
+  uri: "/packetchain/packet_processed"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    RRD (round robin database) record of packets which have been fully processed.
+
+    This is one of the RRDs included in the [packet statistics](#packet-statistics); see the
+    [RRD documentation](/docs/api/rrd/) for the RRD format.
+  return: |
+    JSON RRD record, in packets per second; the hour and day records are averages.
+  responses:
+    success:
+      - [200, "Success"]
+
+-
+  name: "Error packet rate"
+  uri: "/packetchain/packet_error"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    RRD (round robin database) record of processed packets marked as errors, such as corrupt or undecodable frames.  Packets with an invalid checksum are not counted as errors.
+
+    This is one of the RRDs included in the [packet statistics](#packet-statistics); see the
+    [RRD documentation](/docs/api/rrd/) for the RRD format.
+  return: |
+    JSON RRD record, in packets per second; the hour and day records are averages.
+  responses:
+    success:
+      - [200, "Success"]
+
+-
+  name: "Duplicate packet rate"
+  uri: "/packetchain/packet_dupe"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    RRD (round robin database) record of processed packets identified as duplicates, such as the same packet received by multiple datasources.
+
+    This is one of the RRDs included in the [packet statistics](#packet-statistics); see the
+    [RRD documentation](/docs/api/rrd/) for the RRD format.
+  return: |
+    JSON RRD record, in packets per second; the hour and day records are averages.
+  responses:
+    success:
+      - [200, "Success"]
+
+-
+  name: "Dropped packet rate"
+  uri: "/packetchain/packet_drop"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    RRD (round robin database) record of packets dropped because the packet processing queue was full.  The queue size is set by `packet_backlog_limit` in `kismet_memory.conf`.
+
+    This is one of the RRDs included in the [packet statistics](#packet-statistics); see the
+    [RRD documentation](/docs/api/rrd/) for the RRD format.
+  return: |
+    JSON RRD record, in packets per second; the hour and day records are averages.
+  responses:
+    success:
+      - [200, "Success"]

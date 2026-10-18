@@ -61,7 +61,7 @@
 
 - 
   name: "Removing a MAC filter"
-  uri: "/filters/{FILTERID}/{PHYNAME}/{BLOCKNAME}/remove_filter"
+  uri: "/filters/packet/{FILTERID}/{PHYNAME}/{BLOCKNAME}/remove_filter"
   types: ["json"]
   methods: ["POST"]
   roles: ["admin"]
@@ -75,3 +75,120 @@
       type: "JSON list"
       description: |
         List of MAC addresses to be removed from the target filter. 
+
+-
+  name: "Class filter"
+  uri: "/filters/class/{FILTERID}/filter"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  uriparameters:
+    - {name: "FILTERID", type: "string", description: "Filter ID"}
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    Class filters match tracked objects, such as devices, rather than packets.  Like packet
+    filters, MAC class filters are phy-specific, but they do not have filter blocks, because a
+    device has a single address.
+
+    Kismet uses the `kismetdb_devices` class filter to choose which devices are written to the
+    kismetdb log.  It is configured with `kis_log_device_filter_default` and
+    `kis_log_device_filter` in `kismet_logging.conf`.
+
+    Changes made through the API are not saved to the configuration.
+  return: |
+    JSON object of the filter ID, description, type, default, and the per-phy filter map of MAC
+    addresses to filter values (`true` to block, `false` to pass).
+  responses:
+    success:
+      - [200, "Success"]
+
+-
+  name: "Class filter default"
+  uri: "/filters/class/{FILTERID}/set_default"
+  types: ["cmd"]
+  roles: ["admin"]
+  methods: ["POST"]
+  uriparameters:
+    - {name: "FILTERID", type: "string", description: "Filter ID"}
+  jsonparameters:
+    -
+      name: "default"
+      type: "string"
+      required: true
+      description: |
+        Default behavior for objects which do not match a filter.  `block`, `deny`, `reject`,
+        `filter`, `true`, or `1` block them; any other value, such as `pass`, passes them.
+  docs: |
+    Configure the default behavior of the specified class filter.
+  responses:
+    success:
+      - [200, "Default filter: 0 or 1"]
+    failure:
+      - [500, "Invalid request"]
+
+-
+  name: "Setting class MAC filters"
+  uri: "/filters/class/{FILTERID}/{PHYNAME}/set_filter"
+  types: ["cmd"]
+  roles: ["admin"]
+  methods: ["POST"]
+  uriparameters:
+    - {name: "FILTERID", type: "string", description: "Filter ID"}
+    - {name: "PHYNAME", type: "string", description: "Target phy to filter.  MAC filters are phy specific."}
+  jsonparameters:
+    -
+      name: "filter"
+      type: "JSON object"
+      required: true
+      description: |
+        Dictionary object where the MAC address is the key and a boolean filter term is the value.
+
+        A value of `true` indicates the matching MAC address *will be blocked*, while a value
+        of `false` indicates the matching MAC address *will be passed*.
+  docs: |
+    Add MAC addresses to a class filter.  Filters for a phy which has not yet been loaded are
+    kept, and applied when the phy loads.
+  example: |
+    ```json
+    {
+      "filter": {
+        "AA:BB:CC:DD:EE:FF": true,
+        "00:11:22:33:44:55": false
+      }
+    }
+    ```
+  responses:
+    success:
+      - [200, "Set filter"]
+    failure:
+      - [500, "Filter is not a dictionary, or invalid MAC address"]
+
+-
+  name: "Removing class MAC filters"
+  uri: "/filters/class/{FILTERID}/{PHYNAME}/remove_filter"
+  types: ["cmd"]
+  roles: ["admin"]
+  methods: ["POST"]
+  uriparameters:
+    - {name: "FILTERID", type: "string", description: "Filter ID"}
+    - {name: "PHYNAME", type: "string", description: "Target phy"}
+  jsonparameters:
+    -
+      name: "filter"
+      type: "JSON array"
+      required: true
+      description: |
+        List of MAC addresses to remove from the filter.  Removed addresses are handled by the
+        filter default.
+  example: |
+    ```json
+    {
+      "filter": ["AA:BB:CC:DD:EE:FF", "00:11:22:33:44:55"]
+    }
+    ```
+  responses:
+    success:
+      - [200, "Removed filter"]
+    failure:
+      - [500, "Filter is not an array, or invalid MAC address"]
