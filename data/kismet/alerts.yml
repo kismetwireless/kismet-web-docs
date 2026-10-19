@@ -53,6 +53,19 @@
     The advertised beacon rate of a SSID has changed; in a managed enterprise environment this may indicate a normal configuration change, however it may also indicate a spoofing attack such as evil twin which did not properly copy the attributes of the original access point.
 
 -
+  name: "BCMWPSMONITOR"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    Many routers and access points run the WPS daemon (`wps_monitor`) from Broadcom's SDK, which may be vulnerable to memory corruption when reassembling fragmented WPS messages.  An attacker in range can send these messages without knowing the network key.  See [broadcom-wps](https://github.com/qkaiser/broadcom-wps) for details and a list of affected devices.
+
+    Kismet records an assessment of each advertised SSID in `dot11.advertisedssid.wps_broadcom`:
+
+    * **1, possible:** the AP advertises WPS and Broadcom's proprietary information element.  Broadcom's driver adds this element under other WPS daemons too, so this does not raise an alert.
+    * **2, likely:** the AP advertises the Broadcom SDK's default WPS identity or UUID.  This raises the alert.
+    * **3, confirmed:** Kismet saw the AP reject a zero length WPS fragment the way `wps_monitor` does (see `WPSFRAGPROBE`).  This raises the alert.
+
+-
   name: "BCOM11KCHAN"
   class: "trend"
   phy: "dot11"
@@ -416,6 +429,22 @@
     The WPS protocol has been shown to have numerous vulnerabilities, including errors in how the key exchanged is processed making it much weaker against brute force attacks.
 
     Excessive WPS negotiation attempts may indicate a brute force attack such as [Reaver](https://outpost24.com/blog/wps-cracking-with-reaver) against a WPS enabled Access Point.
+
+-
+  name: "WPSFRAGLEN"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    A station sent fragmented WPS (EAP-WSC) messages whose fragments are longer than the total message length they declare: a first fragment larger than the declared total, or fragments which add up to more than it.  This is never valid WPS, and may be an attempt to exploit fragment reassembly in the access point's WPS daemon, such as Broadcom's `wps_monitor` (see `BCMWPSMONITOR`).
+
+-
+  name: "WPSFRAGPROBE"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    A station sent a WPS (EAP-WSC) first fragment declaring a zero length message.  Broadcom's `wps_monitor` rejects this, while `hostapd` acknowledges it, so it is used to find access points which may be vulnerable to WPS fragment reassembly attacks (see `BCMWPSMONITOR`), for example by the [broadcom-wps](https://github.com/qkaiser/broadcom-wps) fingerprinting script.
+
+    When Kismet also sees the access point's answer, an access point which rejects the fragment is marked as confirmed in `dot11.advertisedssid.wps_broadcom`.
 
 -
   name: "WMMTSPEC"
