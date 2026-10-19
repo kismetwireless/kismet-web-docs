@@ -451,7 +451,7 @@
   class: "fingerprint"
   phy: "dot11"
   docs: |
-    Too many WMMTSPEC options were seen in a probe response; this may be triggered by CVE-2017-11013 as described by [Scott Bauer](https://plzdonthack.me/blog//2017/11/04/A-tale-of-5-remote-kernel-bugs.html).
+    Too many WMMTSPEC options were seen in an association response; this may be triggered by CVE-2017-11013 as described by [Scott Bauer](https://plzdonthack.me/blog//2017/11/04/A-tale-of-5-remote-kernel-bugs.html).
 
 
 
