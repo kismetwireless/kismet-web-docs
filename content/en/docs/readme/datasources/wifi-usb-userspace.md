@@ -65,6 +65,8 @@ or in the Kismet web UI datasources panel.
 
 The source UUID is generated from the MAC address of the adapter, so it stays the same when the adapter is moved to a different USB port.
 
+When used as a remote capture (`--connect`), the adapter is opened and its firmware loaded before connecting to the Kismet server, so the server can match the source by its UUID when it reconnects.  This takes a few seconds longer to connect than other remote sources.
+
 ## Channels
 
 Channels use the same names as the [Linux Wi-Fi](/docs/readme/datasources/wifi-linux/) datasource:
