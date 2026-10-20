@@ -199,6 +199,22 @@
     To detect the DHCP responses, the network must be unencrypted so that the data may be observed.
 
 -
+  name: "DOT11CSACH14"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    A Channel Switch Announcement (CSA) tells clients that the access point is moving to another channel.  Spoofed CSAs can force clients off the network, even when management frame protection (including WPA3) is in use, since beacons are only protected when beacon protection is enabled.  Tools such as `aireplay-ng --csa` announce channel 14 by default, which isn't available in most regions; many clients, especially Linux based ones, disconnect.
+
+-
+  name: "DOT11CSAFLOOD"
+  class: "trend"
+  phy: "dot11"
+  docs: |
+    An access point sends at most one beacon per beacon interval, so a real channel switch can only produce that many beacons with a Channel Switch Announcement.  Kismet alerts when a BSSID sends more than twice as many CSA beacons as its beacon interval allows within 2 seconds, which indicates spoofed CSA beacons such as the bursts sent by `aireplay-ng --csa`.  Beacon intervals under 20 TU are treated as 20 TU, so a forged interval can't hide a flood.
+
+    A few spoofed CSA beacons are enough to disconnect some clients and won't trigger this alert.
+
+-
   name: "DOT11D"
   class: "trend"
   phy: "dot11"
