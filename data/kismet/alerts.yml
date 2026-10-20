@@ -210,9 +210,23 @@
   class: "trend"
   phy: "dot11"
   docs: |
-    An access point sends at most one beacon per beacon interval, so a real channel switch can only produce that many beacons with a Channel Switch Announcement.  Kismet alerts when a BSSID sends more than twice as many CSA beacons as its beacon interval allows within 2 seconds, which indicates spoofed CSA beacons such as the bursts sent by `aireplay-ng --csa`.  Beacon intervals under 20 TU are treated as 20 TU, so a forged interval can't hide a flood.
+    An access point sends at most one beacon per beacon interval, so a real channel switch can only produce that many beacons with a Channel Switch Announcement.  Kismet alerts when a BSSID sends more than twice as many announcements as its beacon interval allows within 2 seconds, which indicates spoofed announcements such as the bursts sent by `aireplay-ng --csa`.  Beacons with CSA or Extended CSA (ECSA) elements and CSA or ECSA action frames are all counted.  Beacon intervals under 20 TU are treated as 20 TU, so a forged interval can't hide a flood.
 
-    A few spoofed CSA beacons are enough to disconnect some clients and won't trigger this alert.
+    A few spoofed announcements are enough to disconnect some clients and won't trigger this alert; see `DOT11CSASPOOF`.
+
+-
+  name: "DOT11CSASPOOF"
+  class: "fingerprint"
+  phy: "dot11"
+  docs: |
+    Kismet checks every Channel Switch Announcement (CSA) and Extended CSA, in beacons, probe responses and action frames, against the access point it claims to come from.  Spoofed announcements disconnect clients even on networks with management frame protection, such as WPA3, unless beacon protection is enabled.  Kismet alerts when an announcement:
+
+    * repeats the TSF of an earlier announcement with another sequence number, as a copied beacon does;
+    * has a TSF more than 10 seconds off the AP's own beacons;
+    * keeps its count for three beacon intervals, or raises it by more than one, within one countdown;
+    * points to a channel that doesn't exist in the AP's band, or, by ECSA, to another band.
+
+    Lost beacons, the same frames from several sources, a cancelled and re-announced switch, and an AP restarting mid-countdown don't trigger it.  APs whose own beacons repeat their TSF are left out of the TSF checks.  Unlike `DOT11CSAFLOOD`, a handful of spoofed frames is enough.
 
 -
   name: "DOT11D"
