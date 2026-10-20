@@ -35,7 +35,7 @@ The MM8108 firmware and the board configuration files (BCFs) for Morse Micro and
 
 The firmware is selected by the chip revision, and the board configuration by the board type stored in the adapter.  Either can be overridden with the `firmware=` and `boardfile=` options.  Board configurations for modules from other vendors which are not included with Kismet can be placed in a directory given with the `firmwaredir=` option.
 
-Some adapters have no board type programmed.  For these, `bcf_default.bin` is used if it is present in the firmware directories, as with the Morse Micro Linux driver; otherwise the MM8108 reference module's board configuration, `bcf_mf15457.bin`, is used, with a warning.  If the adapter needs a different board configuration, choose it with `boardfile=`.  Board configurations for other Morse Micro chips are refused.
+Some adapters have no board type programmed, or have a board type Kismet doesn't have a board configuration for.  For these, the MM8108 reference module's board configuration included with Kismet, `bcf_mf15457.bin`, is used, with a warning.  Only if it is missing from the Kismet directories does Kismet use the system's choice on Linux: `bcf_default.bin` in the system firmware directories, as with the Morse Micro Linux driver, then the reference module's configuration there.  If the adapter needs a different board configuration, choose it with `boardfile=`.  Board configurations for other Morse Micro chips are refused.
 
 On Linux, files which aren't found in the Kismet directories are loaded from the system firmware directories, in the order the kernel searches them (a directory set with the kernel `firmware_class.path` option, `/lib/firmware/updates/<kernel release>`, `/lib/firmware/updates`, `/lib/firmware/<kernel release>`, then `/lib/firmware`), in the Morse Micro driver's `morse` directory, or in the [linux-firmware](https://gitlab.com/kernel-firmware/linux-firmware) layout for the firmware interface this driver uses, `morsemicro/mm81x/v57`.  The linux-firmware names `mm8108.bin` and `bcf_mm8108_mf15457.bin` are also used.  linux-firmware currently provides firmware interface v56, which this driver can not use; Kismet reports this when it is the only firmware found.
 
@@ -70,6 +70,12 @@ The source UUID is generated from the MAC address of the adapter.
 Channels are 802.11ah channel numbers in the channel plan of the regulatory domain, named the same way Kismet names HaLow channels elsewhere, such as `27ah`.  Each channel number identifies one channel and width; in the US, for example, odd channels are 1MHz, and channels such as `8ah` are 4MHz.
 
 The channel list contains every channel and width in the regulatory domain which the board configuration allows; some boards disable the channels at the edges of the band.
+
+HaLow access points beacon much less often than Wi-Fi access points, and can go nearly 2 seconds between beacons.  The MM8108 source hops channels no faster than once every 2 seconds (`channel_hoprate` is limited to 0.5/sec), so it can see a beacon on each channel; with the 44 channels of the US band, a full pass takes about 90 seconds.  If the channel of a network is known, setting the source to it finds the network immediately:
+
+```
+source=mm8108-0:channel=28ah,channel_hop=false
+```
 
 ## Regulatory domain
 
