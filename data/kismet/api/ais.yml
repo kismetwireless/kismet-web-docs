@@ -1,0 +1,75 @@
+-
+  name: "AIS AIVDM websocket"
+  added: "2026-10"
+  methods: ["WEBSOCKET UPGRADE"]
+  uri: "/phy/AIS/raw"
+  types: ["ws"]
+  roles: ["readonly", "AIS"]
+  uriparameters:
+    - {auto: "wsuser"}
+    - {auto: "wspassword"}
+    - {auto: "wsapikey"}
+  docs: |
+    A streaming websocket endpoint which exports received AIS messages as NMEA `AIVDM` sentences,
+    for integration with OpenCPN and other AIS tools.
+
+    Each AIS message is sent as a websocket text message containing one or more `AIVDM` sentences,
+    each followed by `\r\n`.  Messages longer than one sentence are split into numbered sentence
+    groups, as in the NMEA standard.  Messages from all AIS datasources are included.  Messages
+    sent by the client are ignored.
+  example: |
+    ```bash
+    websocat ws://user:password@localhost:2501/phy/AIS/raw.ws
+    ```
+
+-
+  name: "AIS AIVDM by datasource"
+  added: "2026-10"
+  uri: "/datasource/by-uuid/{UUID}/ais_raw"
+  types: ["ws"]
+  methods: ["WEBSOCKET UPGRADE"]
+  roles: ["readonly", "AIS"]
+  uriparameters:
+    -
+      name: "UUID"
+      type: "string"
+      required: true
+      description: Datasource UUID
+    - {auto: "wsuser"}
+    - {auto: "wspassword"}
+    - {auto: "wsapikey"}
+  docs: |
+    Websocket stream of the AIS messages received by a single datasource, as NMEA `AIVDM`
+    sentences in the same format as the [AIS AIVDM websocket](#ais-aivdm-websocket).
+
+    Messages sent by the client are ignored.
+  responses:
+    failure:
+      - [500, "Invalid UUID"]
+
+-
+  name: "AIS map data"
+  added: "2026-10"
+  uri: "/phy/AIS/map_data"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    AIS stations seen in the past 30 minutes, with the bounding box of their locations, for drawing
+    a map.  This is the endpoint used by the AIS map in the Kismet web UI.  The window is longer
+    than for ADSB, because AIS stations report less often; anchored vessels can be minutes apart.
+  return: |
+    JSON object containing:
+
+    | Field | Content |
+    | ----- | ------- |
+    | `kismet.ais.map.min_lat`, `kismet.ais.map.max_lat` | Latitude range of the stations |
+    | `kismet.ais.map.min_lon`, `kismet.ais.map.max_lon` | Longitude range of the stations |
+    | `kismet.ais.map.devices` | List of device records |
+
+    If no AIS stations have been seen, an object with `kismet.common.error` is returned instead.
+  responses:
+    success:
+      - [200, "Success"]
