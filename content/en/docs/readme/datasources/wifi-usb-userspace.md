@@ -55,6 +55,8 @@ Compressed firmware support uses libzstd and liblzma, when they are available; `
 
 On Linux, if the kernel driver (`mt7921u`, `mt7925u`, or `mt76x2u`) is loaded and has claimed the adapter, Kismet will detach the kernel driver when the source is opened.  When the source closes, the kernel driver is re-attached.
 
+Adapters which combine Wi-Fi and Bluetooth, such as many MT7921AU adapters, are supported: Kismet only takes the Wi-Fi interface from the kernel, and the Bluetooth interfaces stay with the kernel Bluetooth driver, so Bluetooth keeps working while Kismet captures Wi-Fi.
+
 Kismet needs permission to access the USB device; either run the capture tool as root (it is installed suid-root with `make suidinstall`), or grant access to the device with a udev rule.
 
 ## Interfaces
