@@ -6,11 +6,13 @@ weight: 75
 
 ## Kismet on macOS
 
-Kismet on macOS supports the Airport internal WiFi NIC, the Hak5 WiFi Coconut USB device, the BladeRF2 SDR with WiPhy, and more, however it does *not* work with generic USB WiFi devices.  This is because there is a lack of monitor-mode capable drivers on macOS for third-party WiFi cards.
+Kismet on macOS supports the Airport internal WiFi NIC, the Hak5 WiFi Coconut USB device, the BladeRF2 SDR with WiPhy, and more.
+
+macOS has no monitor-mode capable drivers for third-party USB WiFi cards, so Kismet includes its own:  the [USB userspace Wi-Fi](/docs/readme/datasources/wifi-usb-userspace/) source runs the Linux drivers for many MediaTek (MT7921, MT7925, MT7612U) and Realtek (RTL8812AU, RTL8821AU, RTL8814AU, RTL8812BU, RTL8821CU, and others) USB adapters directly on macOS.  This is the preferred way to use a USB Wi-Fi adapter on macOS, and does not require a VM.
 
 ## Kismet in a VM
 
-Kismet may work in a VM which supports USB passthrough using a USB Wi-Fi card (or other USB capture types).  Parallels and VMWare Fusion are known to typically have good USB passthrough support, though not all devices will work.
+For USB devices which are not supported natively, Kismet may work in a VM which supports USB passthrough using a USB Wi-Fi card (or other USB capture types).  Parallels and VMWare Fusion are known to typically have good USB passthrough support, though not all devices will work.
 
 UTM and other virtual machines built on qemu may or may not work, as the libusb engine appears to have some problems with some devices and some versions of macOS.
 

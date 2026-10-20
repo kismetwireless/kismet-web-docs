@@ -15,6 +15,8 @@ toc: true
 
 The macOS CoreWLAN datasource works with the built-in Airport Wi-Fi interfaces on macOS.  It does not work with USB or Thunderbolt based devices.
 
+To capture from a USB Wi-Fi adapter on macOS, use the [USB userspace Wi-Fi](/docs/readme/datasources/wifi-usb-userspace/) source, which supports many MediaTek and Realtek adapters natively on macOS.  It is the preferred way to use a USB Wi-Fi adapter, and does not require a virtual machine.
+
 Packet capture on Wi-Fi is accomplished via "monitor mode", a special mode where the card is told to report all packets seen, and to report them at the 802.11 link layer instead of emulating an Ethernet device.
 
 The macOS CoreWLAN Wi-Fi source will auto-detect supported interfaces by querying the network interface list and checking for wireless configuration APIs.  It can be manually specified with `type=osxcorewlanwifi`:

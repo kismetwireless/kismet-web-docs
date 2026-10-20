@@ -19,6 +19,8 @@ The Linux Wi-Fi source captures from network interfaces in monitor mode which is
 
 The Linux Wi-Fi data source handles capturing from Wi-Fi interfaces using the two most recent Linux standards:  The new netlink/mac80211 standard present since approximately 2007, and the legacy ioctl-based IW extensions system present since approximately 2002.
 
+Many MediaTek and Realtek USB adapters can also be used with the [USB userspace Wi-Fi](/docs/readme/datasources/wifi-usb-userspace/) source, which runs the Linux kernel drivers inside Kismet instead of using the kernel driver.  It is an alternative to the Linux Wi-Fi source which may be more stable in some cases, and may provide more modern drivers than the running kernel.  The chipsets below note when it can be used.
+
 Packet capture on Wi-Fi is accomplished via "monitor mode", a special mode where the card is told to report all packets seen, and to report them at the 802.11 link layer instead of emulating an Ethernet device.
 
 The Linux Wi-Fi source will auto-detect supported interfaces by querying the network interface list and checking for wireless configuration APIs.  It can be manually specified with `type=linuxwifi`:
@@ -108,6 +110,8 @@ Not all hardware and drivers support monitor mode, but the majority do.  Typical
 
 * Mediatek mt7612u 802.11AC devices; these are some of the best supported devices.
 
+    These can also be used with the [USB userspace Wi-Fi](/docs/readme/datasources/wifi-usb-userspace/#mediatek) source (`mt76x2u`).
+
 * Almost all other drivers shipped with the Linux kernel
 
 ### Cards known to have significant issues
@@ -116,15 +120,19 @@ Not all hardware and drivers support monitor mode, but the majority do.  Typical
 
     Atheros 802.11AC cards have many problems, including floods of spurious packets in monitor mode.  These packets carry 'valid' checksum flags, making it impossible to programmatically filter them.  Expect large numbers of false devices.  It appears this will require a fix to the closed-source Atheros firmware to resolve.
 
-* rtl8812 and 8814 
+* rtl8812, 8811, 8821 and 8814 (RTL8812AU, RTL8811AU, RTL8821AU, RTL8814AU)
 
-    USB 802.11AC cards are known to have many strange problems.  While extremely common hardware, these cards use out-of-kernel drivers which do not support standard monitor mode vif configuration.  There are many flavors of these drivers, many of which cannot enter monitor mode, or silently fail to enable monitor mode.  Despite being a common and cheap chipset, these cards are best avoided because they will take a lot of work to get running.
+    **Use the [USB userspace Wi-Fi](/docs/readme/datasources/wifi-usb-userspace/#realtek) source for these cards** (`rtw8812au`, `rtw8821au`, `rtw8814au`).  It runs the Linux `rtw88` driver, a standard mac80211 driver with working monitor mode, inside Kismet, and does not need any out-of-kernel driver.
 
-* rtl88x2bu based cards 
+    With the Linux Wi-Fi source, these USB 802.11AC cards are known to have many strange problems.  While extremely common hardware, these cards have often needed out-of-kernel drivers which do not support standard monitor mode vif configuration.  There are many flavors of these drivers, many of which cannot enter monitor mode, or silently fail to enable monitor mode.  Recent kernels include the `rtw88` drivers for these chipsets, but the running kernel may not.
 
-    These devices have an out-of-kernel driver which doesn't support mac80211 VIFs or modern channel control.  Kismet will fall back to the old WEXT ioctl control method, but these drivers will not support setting HT channels.
+* rtl88x2bu, rtl88x2cu, and rtl8821cu based cards (RTL8812BU, RTL8822BU, RTL8812CU, RTL8822CU, RTL8811CU, RTL8821CU)
 
-Kismet generally *will not work* with most other out-of-kernel (drivers not shipped with Linux itself), specifically drivers such as the SerialMonkey RTL drivers used for many of the cheap, tiny cards shipped with devices like the Raspberry Pi and included in distributions like Raspbian.  Sometimes it's possible to find other, supported drivers for the same hardware, however some cards have no working solution.
+    **Use the [USB userspace Wi-Fi](/docs/readme/datasources/wifi-usb-userspace/#realtek) source for these cards** (`rtw8822bu`, `rtw8822cu`, `rtw8821cu`).  It runs the Linux `rtw88` driver inside Kismet, with full monitor mode and channel control.
+
+    With the Linux Wi-Fi source, these devices have often needed an out-of-kernel driver which doesn't support mac80211 VIFs or modern channel control.  Kismet will fall back to the old WEXT ioctl control method, but these drivers will not support setting HT channels.
+
+Kismet generally *will not work* with most other out-of-kernel (drivers not shipped with Linux itself), specifically drivers such as the SerialMonkey RTL drivers used for many of the cheap, tiny cards shipped with devices like the Raspberry Pi and included in distributions like Raspbian.  Many of the Realtek USB chipsets those drivers support (including the RTL8723DU) are supported by the [USB userspace Wi-Fi](/docs/readme/datasources/wifi-usb-userspace/#realtek) source instead.  Sometimes it's possible to find other, supported drivers for the same hardware, however some cards have no working solution.
 
 Many more devices should be supported - if yours isn't listed and works, let us know via Twitter (@kismetwireless).
 
