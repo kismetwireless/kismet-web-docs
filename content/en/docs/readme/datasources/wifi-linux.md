@@ -206,6 +206,32 @@ kismet -c 'wlan0:name=Foo,add_channels="1W5,2W5,6W10"'
 {{</configopt>}}
 
 
+{{<configopt block_channels "channel1,channel2,...,channelN">}}
+*Remove* channels from the detected list of channels, so Kismet never tunes to them.
+
+Use this to skip channels a driver reports but handles badly; for example, some RTL8812AU drivers log kernel warnings on `165HT40-`.
+
+Channels are matched by their full name, ignoring case: blocking `165` doesn't block `165HT40-`.  `block_channels` doesn't apply when `channels=` sets a fixed list, and a channel in `add_channels` is added even if it's blocked.
+
+The list of channels to block must be:
+
+* Comma separated 
+* Contained in quotes
+
+Example:
+
+```
+source=wlan0:name=Foo,block_channels="165HT40-,165HT40+"
+```
+
+If defining datasources on the command line when launching Kismet, be aware that most shells will elide the quotes, leading to a setup error.  You can avoid this by surrounding the definition in single quotes:
+
+```bash
+kismet -c 'wlan0:name=Foo,block_channels="165HT40-,165HT40+"'
+```
+{{</configopt>}}
+
+
 {{<configopt default_ht20 true false>}}
 Added `2019-04-git`
 
