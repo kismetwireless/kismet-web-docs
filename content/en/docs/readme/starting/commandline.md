@@ -20,19 +20,19 @@ Kismet loads the bulk of configuration from the configuration files, however it 
 ### Core Kismet options 
 
 {{<argument no-ncurses>}}
-By default, Kismet uses a small ncurses-based wrapper to remind users to visit the web-based UI.  When running Kismet in a script or as a service, it's probably desirable to disable this and use pure text output.
+By default, when started on a terminal, Kismet shows a console status display: the address of the web UI, a packet rate graph for each data source, device and memory graphs, and the server messages.  When running Kismet in a script or as a service, it's probably desirable to disable this and use pure text output.  The display is never shown when the output isn't a terminal, or with `--daemonize`.
 
-The wrapper can also be turned off permanently with `enable_ncurses=false` in `kismet.conf` or `kismet_site.conf`.  `--no-ncurses` always disables it, regardless of the config.
+The display can also be turned off permanently with `enable_ncurses=false` in `kismet.conf` or `kismet_site.conf`.  `--no-ncurses` always disables it, regardless of the config.
 {{</argument>}}
 
 
 {{<argument enable-ncurses>}}
-Enable the ncurses wrapper for this run even if `enable_ncurses=false` is set in the config.  Debug mode and `--daemonize` still disable the wrapper.
+Enable the console display for this run even if `enable_ncurses=false` is set in the config.  Debug mode and `--daemonize` still disable the display.
 {{</argument>}}
 
 
 {{<argument debug>}}
-Enable debug mode, primarily for running under GDB.  Debug mode disables the internal crash and backtrace code, turns off the ncurses wrapper, and sets up some other state for easier debugging.
+Enable debug mode, primarily for running under GDB.  Debug mode disables the internal crash and backtrace code, turns off the console display, and sets up some other state for easier debugging.
 {{</argument>}}
 
 
