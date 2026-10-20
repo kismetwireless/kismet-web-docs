@@ -41,9 +41,15 @@ More drivers may be added in the future.
 
 The MediaTek firmware required by these adapters is included with Kismet, from the [linux-firmware](https://gitlab.com/kernel-firmware/linux-firmware) project, and is installed into the Kismet `share/kismet/firmware` directory.  The firmware is redistributed under the MediaTek and Ralink licenses included with it.
 
+On Linux, firmware which isn't found in the Kismet directories is loaded from the system firmware directories, in the order the kernel searches them: a directory set with the kernel `firmware_class.path` option, `/lib/firmware/updates/<kernel release>`, `/lib/firmware/updates`, `/lib/firmware/<kernel release>`, then `/lib/firmware`.  Files are found by the names in the [linux-firmware](https://gitlab.com/kernel-firmware/linux-firmware) layout, such as `mediatek/WIFI_RAM_CODE_MT7961_1.bin`, so the distribution's linux-firmware package can be used.
+
+Many distributions install linux-firmware compressed.  Firmware compressed with zstd (`.zst`) or xz (`.xz`) is loaded when Kismet is built with libzstd or liblzma; in each directory, the uncompressed file is used first, then the `.zst` and `.xz` files.
+
 ## Compiling USB userspace Wi-Fi support
 
 USB userspace Wi-Fi requires libusb, and is built by default on Linux and macOS when libusb is available.  It can be disabled by passing `--disable-usbwifi` to `./configure`, or forced on for other platforms with `--enable-usbwifi`.
+
+Compressed firmware support uses libzstd and liblzma, when they are available; `./configure` warns if either is missing, and the summary reports which compressions are supported.  Compressed firmware support can be disabled with `--disable-firmware-compression`.
 
 ### Linux
 
@@ -103,7 +109,7 @@ Two-letter country code reported to the driver as the regulatory domain.
 ### Firmware options
 
 {{<configopt firmware "/path/to/firmware/dir">}}
-A directory searched first for the adapter firmware, before the Kismet share directory and the system firmware directory.  This is normally only needed when testing new firmware.
+A directory searched first for the adapter firmware, before the Kismet share directory and, on Linux, the system firmware directories.  This is normally only needed when testing new firmware.
 {{</configopt>}}
 
 ### Debugging options

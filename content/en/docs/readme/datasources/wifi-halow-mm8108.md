@@ -35,9 +35,17 @@ The MM8108 firmware and the board configuration files (BCFs) for Morse Micro and
 
 The firmware is selected by the chip revision, and the board configuration by the board type stored in the adapter.  Either can be overridden with the `firmware=` and `boardfile=` options.  Board configurations for modules from other vendors which are not included with Kismet can be placed in a directory given with the `firmwaredir=` option.
 
+Some adapters have no board type programmed.  For these, `bcf_default.bin` is used if it is present in the firmware directories, as with the Morse Micro Linux driver; otherwise the MM8108 reference module's board configuration, `bcf_mf15457.bin`, is used, with a warning.  If the adapter needs a different board configuration, choose it with `boardfile=`.  Board configurations for other Morse Micro chips are refused.
+
+On Linux, files which aren't found in the Kismet directories are loaded from the system firmware directories, in the order the kernel searches them (a directory set with the kernel `firmware_class.path` option, `/lib/firmware/updates/<kernel release>`, `/lib/firmware/updates`, `/lib/firmware/<kernel release>`, then `/lib/firmware`), in the Morse Micro driver's `morse` directory, or in the [linux-firmware](https://gitlab.com/kernel-firmware/linux-firmware) layout for the firmware interface this driver uses, `morsemicro/mm81x/v57`.  The linux-firmware names `mm8108.bin` and `bcf_mm8108_mf15457.bin` are also used.  linux-firmware currently provides firmware interface v56, which this driver can not use; Kismet reports this when it is the only firmware found.
+
+Firmware and board configurations compressed with zstd (`.zst`) or xz (`.xz`) are loaded when Kismet is built with libzstd or liblzma.
+
 ## Compiling MM8108 support
 
 MM8108 support requires libusb, and is built by default on Linux and macOS when libusb is available.  It can be disabled by passing `--disable-mm8108` to `./configure`, or forced on for other platforms with `--enable-mm8108`.
+
+Compressed firmware support uses libzstd and liblzma, when they are available; `./configure` warns if either is missing.  It can be disabled with `--disable-firmware-compression`.
 
 ### Linux
 
@@ -90,7 +98,7 @@ Only include channels of the listed widths, in MHz, in the channel list.  For ex
 ### Firmware options
 
 {{<configopt firmwaredir "/path/to/firmware/dir">}}
-A directory searched first for the firmware and board configuration files, before the Kismet share directory and `/lib/firmware/morse`.  A checkout of the morse-firmware repository can be used directly.
+A directory searched first for the firmware and board configuration files, before the Kismet share directory and, on Linux, the system firmware directories.  A checkout of the morse-firmware repository can be used directly.
 {{</configopt>}}
 
 {{<configopt firmware "firmware file name">}}
@@ -100,7 +108,7 @@ Load this firmware file instead of the one chosen by the chip revision, such as 
 {{<configopt boardfile "board config file name">}}
 Load this board configuration file instead of the one chosen by the board type in the adapter, such as `boardfile=bcf_mf15457.bin`.  This is a file name, not a path; the file is found in the firmware directories.
 
-The firmware and board configuration in use are reported in the Kismet messages when the source opens.
+The firmware and board configuration in use are reported in the Kismet messages when the source opens, and the module the board configuration is for is shown in the source's hardware information.
 {{</configopt>}}
 
 ### Debugging options
