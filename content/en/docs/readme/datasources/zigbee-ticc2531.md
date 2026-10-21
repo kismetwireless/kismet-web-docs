@@ -35,8 +35,8 @@ Detecting and classifying 802.15.4 networks can be challenging, as they may tran
 | Band | Channels | Description                   |
 | ---- | -------- | ----------                    |
 | 800  | 0        | European band, single channel |
-| 900  | 1-11     | US / International ISM band   |
-| 2400 | 12-26    | US / International ISM band   |
+| 900  | 1-10     | US / International ISM band   |
+| 2400 | 11-26    | US / International ISM band   |
 
 Channels are a fixed width and are identified only by channel number (ie 1, 12, 13, 14).  There are no options for wide or fast channels in 802.15.4.
 

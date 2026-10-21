@@ -38,13 +38,13 @@ Detecting and classifying 802.15.4 networks can be challenging, as they may tran
 | Band | Channels | Description                   |
 | ---- | -------- | ----------                    |
 | 800  | 0        | European band, single channel |
-| 900  | 1-11     | US / International ISM band   |
-| 2400 | 12-26    | US / International ISM band   |
+| 900  | 1-10     | US / International ISM band   |
+| 2400 | 11-26    | US / International ISM band   |
 
 
 Channels are a fixed width and are identified only by channel number (ie 1, 12, 13, 14).  There are no options for wide or fast channels in 802.15.4.
 
-The CatSniffer hardware supports only the 2.4GHz Zigbee channels (12-26).
+The CatSniffer hardware supports only the 2.4GHz Zigbee channels (11-26).
 
 Despite sharing the frequency range with Wi-Fi on the 2.4GHz band, 802.15.4 uses a different physical encoding standard; a Wi-Fi card is not able to see 802.15.4 packets or networks, and an 802.15.4 device is not able to see Wi-Fi packets.
 
@@ -213,7 +213,7 @@ Change the hop rate for this source.
 
 
 {{<configopt channel channel>}}
-Set the source to a specific channel; combine with channel_hop=false to set the capture to a single channel forever.
+Set the source to a specific channel; combine with channel_hop=false to set the capture to a single channel forever.  Valid channels are 11-26; an invalid channel fails the source.  Without `channel=`, the source starts on channel 11.
 
 Example:
 
