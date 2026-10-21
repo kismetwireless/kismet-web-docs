@@ -62,6 +62,8 @@ The 902-928MHz US/international ISM band supports two of the PHYs defined in IEE
 
 Both PHYs share the same channel plan, so no separate configuration is needed to pick between them; the decoder listens for both simultaneously on whichever channel is tuned.
 
+Kismet also decodes what it can of the network above 802.15.4: Zigbee and Thread beacons, the Zigbee network (NWK) header, 6LoWPAN and Thread MLE.  Devices are labelled as Zigbee coordinators, routers and devices, Zigbee Green Power devices, Thread devices or 6LoWPAN devices.  The device details show the network, role, PAN and short address, the device's IEEE (EUI-64) address when a Zigbee NWK header carries it, the extended PAN ID, the Thread network name and the Zigbee stack profile.  Green Power devices, which have no MAC address of their own, are tracked by their source ID.  Frames encrypted at the 802.15.4 MAC layer can't be read past their header.
+
 ### 900MHz channels
 
 | Channel | Frequency  |
