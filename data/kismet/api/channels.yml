@@ -2,8 +2,26 @@
   name: "Channel summary"
   uri: "/channels/channels"
   types: ["anyjson"]
-  methods: ["GET"]
+  methods: ["GET", "POST"]
   roles: ["readonly"]
+  jsonparameters:
+    - {auto: "fields"}
   docs: |
     Returns a summary of channels with observed traffic and devices, device counts per channel, 
     and total channel coverage information.
+
+    Records are listed both by channel name (`kismet.channeltracker.channel_map`) and by
+    frequency in kHz (`kismet.channeltracker.frequency_map`), for every phy that reports a
+    frequency.  Each record holds `kismet.channelrec.channel`, `kismet.channelrec.frequency`,
+    the last signal seen (`kismet.channelrec.signal`), and three RRDs covering the last
+    minute (per second), hour (per minute), and day (per hour):
+
+    | Field | Content |
+    | ----- | ------- |
+    | `kismet.channelrec.packets_rrd` | Packets per second |
+    | `kismet.channelrec.data_rrd` | Bytes of data per second |
+    | `kismet.channelrec.device_rrd` | Devices active on the frequency (heard in the last 30 seconds) |
+
+    The hour and day values are the average per second over each minute or hour.  Before
+    2026-10-R1, packet and data counts were averaged rather than added up, so they read as
+    about 1 per busy second, and device counts dropped each time the channels were read.

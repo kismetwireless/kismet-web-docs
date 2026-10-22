@@ -27,6 +27,8 @@ Over time, the Kismet endpoint API will change - while efforts are made to retai
 
 Clients which read the device location to place an aircraft, vessel, or drone must read `kismet.device.base.reported_location` instead.
 
+**Channel history fixed.**  The per-channel RRDs in [/channels/channels](/docs/api/channels/) now add up packets and bytes per second instead of averaging them, and device counts no longer drop when the channels are read.  Field renames in a `fields` request are now applied to channel records.
+
 #### Git
 
 * Added `crypt_bitfield` fields for modern Wi-Fi encryption options.  Added `crypt_string` for printable versions of the crypt bitfield.  Older crypset options remain, but are deprecated, and can not accurately represent the full modern encryption options.
