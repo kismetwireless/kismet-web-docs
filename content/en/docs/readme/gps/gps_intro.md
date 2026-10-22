@@ -23,7 +23,7 @@ The quality of the location estimates is determined in part by the quality of th
 
 GPS data is included in the log files, in PPI pcap files, and exported over the REST interface.
 
-Some datasources (such as ADSB) are able to self-source locational data; when absolute location information is available, Kismet will prefer that data.
+Some devices (such as ADS-B aircraft, AIS vessels, Remote ID drones, and MeshCore and Meshtastic nodes) report their own location.  As of 2026-10-R1, Kismet keeps this as a separate *reported location* (`kismet.device.base.reported_location`, and the `reported_` columns in the kismetdb log), and the normal device location is always where Kismet was when it heard the device.
 
 Remote datasources can be configured with static GPS coordinates, or paired with a remote GPS tool.
 

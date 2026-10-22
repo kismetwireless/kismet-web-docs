@@ -55,6 +55,10 @@ By default, `kismetdb_to_kml` computes a final average across all the packets se
 If packets were not logged, or to save time and processing, passing `--basic-location` will use the average location stored in the device record instead.
 {{</argument>}}
 
+{{<argumentshort H heard-at>}}
+Devices which report their own position (such as ADS-B, AIS, and Remote ID) are placed at the position they reported, when the log contains it (kismetdb version 11 and newer).  Passing `--heard-at` places them where Kismet heard them instead.
+{{</argumentshort>}}
+
 {{<argumentshort e exclude>}}
 Exclude records within `dist` *meters* of the location provided.  
 

@@ -28,6 +28,14 @@ This means that basic queries (time, signal levels, location, device identifiers
 ## Log Versions
 The log file version is stored in the `db_version` field of the `KISMET` table.  When changes to the base database structure are made, this version will be incremented.
 
+### Version 11
+
+Version 11 was added in October of 2026 (Kismet 2026-10-R1), and separates the location a device reports for itself (such as ADS-B, AIS, and Remote ID) from the location of Kismet when the device was seen:
+1. `reported_min_lat`, `reported_min_lon`, `reported_max_lat`, `reported_max_lon`, `reported_avg_lat`, and `reported_avg_lon` added to the `devices` table
+2. `reported_lat`, `reported_lon`, `reported_alt`, `reported_speed`, and `reported_heading` added to the `packets` and `data` tables
+
+This is a change in meaning for the existing location columns:  `lat`, `lon`, `min_lat`, `avg_lat`, and similar now *always* hold the location of Kismet, from the Kismet GPS.  In older logs, devices which report their own position stored that position in these columns instead.  The `reported_` columns are 0 when the device did not report a position.
+
 ### Version 10
 
 Version 10 was added in February of 2026, and contains one simple addition:
@@ -89,6 +97,8 @@ Be sure to specify a floating-point divisor (100000.0), otherwise the result wil
 
 GPS bounding coordinates are stored as 4 values, the minimum extreme latitude and longitude, and the maximum extreme latitude and longitude.  These values define a bounding box which encloses all instances where a device was seen.
 
+*As of KismetDB version 11*, devices which report their own position (such as ADS-B, AIS, and Remote ID) also have `reported_` bounding and average coordinates for the position the device reported; the standard coordinates are always the location of Kismet.
+
 The GPS average location is calculated by Kismet as a running average of all packets; this can be the least precise method of isolating the location of a device because it can be heavily influenced by the sampling pattern.  For more precise location calculations, post-processing of the GPS records in the `PACKET` or `DATA` tables will yield better results.
 
 ### Device Keys
@@ -139,6 +149,11 @@ The `data` section holds arbitrary data records which are *not* packets but whic
 | type       |        *text* | Type of data record, as text                           |
 | json       |        *json* | Arbitrary JSON record of event                         |
 | signal | *int* | Signal / RSSI level of event |
+| reported_lat | *real/double* | Latitude reported by the device, since database version 11 |
+| reported_lon | *real/double* | Longitude reported by the device, since database version 11 |
+| reported_alt | *real/double* | Altitude reported by the device, since database version 11 |
+| reported_speed | *real/double* | Speed reported by the device, since database version 11 |
+| reported_heading | *real/double* | Heading reported by the device, since database version 11 |
 
 ### Datasource
 
@@ -171,6 +186,12 @@ The `device` section holds complete Kismet device objects; the device object is 
 | max_lon          | *real/double* | GPS bounding rectangle, maximum longitude |
 | avg_lat          | *real/double* | GPS running average latitude          |
 | avg_lon          | *real/double* | GPS average running longitude        |
+| reported_min_lat | *real/double* | Reported location bounding rectangle, minimum latitude, since database version 11 |
+| reported_min_lon | *real/double* | Reported location bounding rectangle, minimum longitude, since database version 11 |
+| reported_max_lat | *real/double* | Reported location bounding rectangle, maximum latitude, since database version 11 |
+| reported_max_lon | *real/double* | Reported location bounding rectangle, maximum longitude, since database version 11 |
+| reported_avg_lat | *real/double* | Reported location running average latitude, since database version 11 |
+| reported_avg_lon | *real/double* | Reported location running average longitude, since database version 11 |
 | bytes_data       |     *integer* | Number of bytes of data seen related to this device          |
 | type             |        *text* | Phy-specific human-readable type, dependent on the phy       |
 | device           |        *json* | Full JSON export of the device record and all enclosed fields |
@@ -221,6 +242,11 @@ Packets are stored in the raw, original capture format; in the case of Wi-Fi thi
 | datarate   | *real*        | Datarate, in mbit/sec |
 | hash       | int         | CRC32 hash of the packet contents (not including radio headers), equivalent to the pcap-ng hash record. |
 | packetid   | *int*         | Unique packet ID, equivalent to the packet ID field in pcap-ng.  Can be used to correlate duplicate packets across multiple interfaces. |
+| reported_lat | *real/double* | Latitude reported by the device, since database version 11 |
+| reported_lon | *real/double* | Longitude reported by the device, since database version 11 |
+| reported_alt | *real/double* | Altitude reported by the device, since database version 11 |
+| reported_speed | *real/double* | Speed reported by the device, since database version 11 |
+| reported_heading | *real/double* | Heading reported by the device, since database version 11 |
 
 ### Snapshots
 

@@ -70,6 +70,10 @@
     | `kismet.ais.map.devices` | List of device records |
 
     If no AIS stations have been seen, an object with `kismet.common.error` is returned instead.
+
+    The bounding box comes from `kismet.device.base.reported_location`, the position the station
+    reports for itself, or `kismet.device.base.location` (where Kismet heard the station) when it
+    has not reported one (since 2026-10-R1).
   responses:
     success:
       - [200, "Success"]

@@ -15,6 +15,18 @@ toc: true
 
 Over time, the Kismet endpoint API will change - while efforts are made to retain compatibility whenever possible, some changes will require breaking older implementations.  These significant changes will be documented here.
 
+#### 2026-10-R1
+
+**Major change to device location data.**  Devices that report their own position (ADS-B aircraft, AIS vessels, Remote ID drones, MeshCore and Meshtastic nodes) previously had that position written into the device location.  The device location now always means where Kismet was when it heard the device, and the position the device reports is kept separately:
+
+* `kismet.device.base.location` and `kismet.device.base.location_cloud` hold Kismet's own GPS position for *all* devices.  Signal peak locations, seen-by locations, alerts, and PPI / pcap-ng GPS records also use Kismet's GPS.
+* New `kismet.device.base.reported_location` (the same min, max, average, and last structure as `kismet.device.base.location`) and `kismet.device.base.reported_location_cloud` (the location history) hold the position the device reports.  These fields are only present on devices which report their own location.
+* The [ADSB](/docs/api/adsb/) and [AIS](/docs/api/ais/) map endpoints compute their bounding boxes from the reported location.
+* The `rtladsb` and `rtlais` datasources now record Kismet's GPS position on their packets.
+* Updated to [version 11 of kismetdb](/docs/dev/kismetdb/#version-11), which adds reported location columns to the devices, packets, and data tables.
+
+Clients which read the device location to place an aircraft, vessel, or drone must read `kismet.device.base.reported_location` instead.
+
 #### Git
 
 * Added `crypt_bitfield` fields for modern Wi-Fi encryption options.  Added `crypt_string` for printable versions of the crypt bitfield.  Older crypset options remain, but are deprecated, and can not accurately represent the full modern encryption options.

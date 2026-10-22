@@ -92,6 +92,10 @@
     | `kismet.adsb.map.devices` | List of device records |
 
     If no ADSB devices have been seen, an object with `kismet.common.error` is returned instead.
+
+    The bounding box and device positions come from `kismet.device.base.reported_location`, the
+    position the device reports for itself; `kismet.device.base.location` is where Kismet heard
+    the device (since 2026-10-R1).
   responses:
     success:
       - [200, "Success"]
