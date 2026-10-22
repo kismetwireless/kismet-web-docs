@@ -101,3 +101,23 @@ Templates are defined with `%` codes:
 
 
 
+
+## Keeping data frame contents out of the logs
+
+When monitoring networks you do not own, Kismet can drop the contents of Wi-Fi data frames and keep only their headers, so the devices, traffic counts and handshakes are still recorded, but not what was sent.
+
+{{<configopt hidedata true false>}}
+Cut 802.11 data frames to their headers as soon as the frame type is known.  Only the headers are decoded, and only the headers are written to the `kismet`, `pcapng` and `pcapppi` logs and the pcap streams of the REST API; the original length of each frame is still recorded.
+
+Unencrypted EAPOL-Key frames (the WPA handshake) are kept whole, so handshakes remain usable.  All other EAPOL frames are cut as well, including EAP-Identity frames, which carry user names.
+
+Since Kismet 2026-10-R1.  Earlier versions stopped decoding data frames but still logged them in full.
+
+This option is set in `kismet.conf` (or `kismet_site.conf`), for example:
+
+```
+hidedata=true
+```
+{{</configopt>}}
+
+On Linux Wi-Fi sources the `truncate_data` source option cuts data frames in the kernel before they reach Kismet, which also saves bandwidth for remote capture; it keeps all EAPOL frames whole.  See the [Linux Wi-Fi datasource](/docs/readme/datasources/wifi-linux/) page.

@@ -390,6 +390,8 @@ This sets the capture size of the packet to the end of the 802.11 headers, allow
 
 This will disable any WIDS alerts that rely on the data content of packets (such as the DHCP alerts).
 
+To keep data frame contents out of the logs for every Wi-Fi source, including EAP-Identity frames, see the `hidedata` option in [Logging Basics](/docs/readme/logging/logging/).
+
 Enabling this filter will *drastically* reduce the amount of bandwidth required for remote capture, will reduce the size of logs significantly, and will reduce the overall processing requirement of Kismet, at the cost of comprehensive data content in the logs.
 {{</configopt>}}
 
