@@ -59,10 +59,17 @@ Disabling this will *not* disable tracking device locations, but *will* disable 
 {{</configopt>}}
 
 
-{{<configopt keep_datasource_signal_history true false>}}
-Kismet tracks signal history for each device, as seen by each datasource.  
+{{<configopt keep_per_datasource_stats true false>}}
+Kismet can track the signal and packets of each device as seen by each datasource, in addition to the totals for the device.
 
-This is used for tracking signal levels across many sensors, but uses more RAM.
+This is used for comparing signal levels across many sensors, such as remote capture sources spread over an area, and for the per-datasource signal graph in the web UI, but uses more RAM for each device and each datasource.  It is disabled by default.
+{{</configopt>}}
+
+
+{{<configopt track_device_rrds true false>}}
+Kismet keeps a short history of each device: packets, data, and packets sent and received over the past minute, hour, and day, and its signal.  Since Kismet 2026-10-R1 this includes the range of signal (the weakest and strongest reading) over the past minute, hour, and day, which adds roughly 2.5KB per device.
+
+These histories drive the graphs in the device details.  Disabling them saves RAM on very large captures, at the cost of those graphs; the device totals are still kept.
 {{</configopt>}}
 
 
