@@ -352,6 +352,15 @@
 
 
 -
+  name: "NRFPLAINTEXTKEYS"
+  class: "exploit"
+  phy: "nrfmousejack"
+  docs: |
+    An nRF24 wireless keyboard sends its keystrokes unencrypted (Logitech 0xC1 keystroke reports).  Anyone in radio range can read what is typed on it, and an attacker can usually inject keystrokes as well (the MouseJack attacks).
+
+    Raised once per keyboard.  Seen with nRF24 devices from an nRF24LU1+ dongle running the research firmware, or from an SDR receiver's capture file (see [Pcapfile](/docs/readme/datasources/pcapfile/#sdr-receiver-captures)).
+
+-
   name: "NULLPROBERESP"
   class: "fingerprint"
   phy: "dot11"
