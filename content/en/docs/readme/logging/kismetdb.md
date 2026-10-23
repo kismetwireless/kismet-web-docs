@@ -67,6 +67,20 @@ kis_log_ephemeral_dangerous=true
 
 An ephemeral log is removed from the filesystem upon creation; the log is not accessible on disk, and will be removed immediately upon Kismet exiting.  Ephemeral logs are most useful when deploying Kismet as a permanent fixed sensor with a time-limited history; for instance retaining the past day of devices, packets, etc, but where there is no need (or desire) to keep log files.
 
+## GPS snapshots
+
+When a GPS is configured, Kismet logs snapshots of the GPS status to the `snapshots` table of the kismetdb log:
+
+* `GPS`: The location and fix quality of each GPS, every 10 seconds.  This is controlled by `kis_log_gps_track`.
+* `GPSSATS`: The satellites each GPS has in view (constellation, number, elevation, azimuth, signal, and whether each is used in the fix), along with the satellite counts, DOP, and precision.  This is logged every `kis_log_gps_satellites_rate` seconds, only for GPS devices which list their satellites.
+
+```
+kis_log_gps_track=true
+kis_log_gps_satellites_rate=30
+```
+
+The satellites move slowly across the sky, and a satellite snapshot is larger than a location, so they are logged less often.  Each `GPSSATS` snapshot is a few kilobytes, usually well under 1MB per hour per GPS.  Setting `kis_log_gps_satellites_rate=0` turns off the satellite snapshots.
+
 ## Filtering
 
 Kismet can filter packets and devices logged in the `kismetdb` log file.  This can be used to exclude known devices, or include ONLY certain types of devices and packets.

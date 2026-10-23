@@ -38,6 +38,20 @@ Some GPS units support multiple GPS variants implemented by different countries;
 When testing GPS, be sure to give the receiver as much a view of the sky as possible.
 
 
+## Satellites
+
+As of 2026-10-R1, Kismet reports the satellites each GPS has in view, as well as the number used in the fix, the DOP, and the estimated precision.  Each satellite in `kismet.gps.satellites` lists:
+
+* `kismet.gps.satellite.constellation`: GPS, GLONASS, Galileo, BeiDou, QZSS, SBAS, or NavIC
+* `kismet.gps.satellite.id`: The satellite's number within its constellation
+* `kismet.gps.satellite.elevation` and `kismet.gps.satellite.azimuth`: Where the satellite is in the sky, in degrees, or `-1` if the receiver doesn't report it
+* `kismet.gps.satellite.cn0`: The signal strength, in dB-Hz, or `0` if the satellite is in view but not being tracked
+* `kismet.gps.satellite.used`: `1` if the satellite is used in the fix, `0` if not, or `-1` if the receiver doesn't report it
+
+The satellite list is filled in by NMEA GPS devices (serial or TCP), gpsd, and u-blox (UBX) and SiRF binary receivers.  GPS devices which only report a location (such as the web and virtual GPS) have no satellite list.
+
+The web UI shows the satellites, a sky plot, and the recent fix quality in the GPS window, opened by clicking the GPS status at the top of the page.  The satellites are also [logged to the kismetdb log](/docs/readme/logging/kismetdb/#gps-snapshots).
+
 ## Configuring GPS in Kismet
 
 Kismet can handle multiple GPS types.  Generally, you will only want to define a single GPS per Kismet instance, however if multiple GPS devices are defined, Kismet will use the location of the GPS with the most recent valid location report.

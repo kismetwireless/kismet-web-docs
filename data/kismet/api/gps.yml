@@ -16,6 +16,12 @@
   docs: |
     Fetch a list of all configured GPS devices
 
+    Each GPS includes its current location, the fix quality (`kismet.gps.satellites_used`, 
+    `kismet.gps.satellites_visible`, `kismet.gps.hdop`, `kismet.gps.vdop`, `kismet.gps.precision_h`, 
+    `kismet.gps.precision_v`, `kismet.gps.signal_cn0`, and `kismet.gps.signal_quality`), and, 
+    for receivers which report them, the [satellites in view](/docs/readme/gps/gps_intro/#satellites) 
+    in `kismet.gps.satellites`.
+
 - 
   name: "Add a GPS device"
   uri: "/gps/add_gps"
