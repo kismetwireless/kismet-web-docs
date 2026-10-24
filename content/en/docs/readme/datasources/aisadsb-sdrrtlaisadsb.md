@@ -28,6 +28,10 @@ AIS is broadcast around 162MHz and ADSB at 1090MHz, too far apart for one rtl-sd
 
 Anything sent on a band while the radio is on the other band is missed, so each band hears roughly its share of the time.  If you have two rtl-sdr radios, using one [rtlais](/docs/readme/datasources/ais-sdrrtlais/) and one [rtladsb](/docs/readme/datasources/adsb-sdrrtladsb/) source will always receive more than one combined source.
 
+This is a compromise: For total coverage, it's always better to have two radios, dedicated to each frequency.  Since ADSB and AIS are both relatively low bandwidth and long-term events (it's unlikely a plane or boat would enter and exit your coverage in under 20 seconds), this gives a chance to see both when only a single radio is available.
+
+Though hopping is adaptive between the bands, if you are not near an ocean or other environment with AIS data, you're much better off using the dedicated ADSB scanner.
+
 ### Channels
 
 The source has two channels, `AIS` and `ADSB`.  Setting the channel of the source, in the web UI or with the datasource API, locks the radio on that band.  Turning channel hopping back on returns to alternating between them.
@@ -51,6 +55,8 @@ With `hop_mode=fixed`, the source uses the `ais_dwell` and `adsb_dwell` times in
 The SDR RTLAISADSB source uses the same RTL-SDR hardware as the [rtlais](/docs/readme/datasources/ais-sdrrtlais/) and [rtladsb](/docs/readme/datasources/adsb-sdrrtladsb/) sources, and will not currently work with other SDR hardware.
 
 AIS and ADSB use very different frequencies; an antenna for one will usually work poorly for the other.  A wideband antenna, or a dual-band antenna for 162MHz and 1090MHz, gives the best results.
+
+Typically you'll find more success including something like a FM blocker to exclude the FM radio station bands; FM radio tends to be very loud and swamp everything else.
 
 ## Signal levels
 
