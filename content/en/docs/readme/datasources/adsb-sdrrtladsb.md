@@ -3,7 +3,7 @@ title: "ADSB - SDR RTLADSB"
 description: ""
 lead: ""
 date: 2022-09-14T17:43:04-04:00
-lastmod: 2022-09-14T17:43:04-04:00
+lastmod: 2026-10-24T10:50:00-07:00
 images: []
 menu:
   docs:
@@ -25,6 +25,14 @@ source=rtladsb-0:type=rtladsb
 ADSB is an international standard for aircraft identification.  ADSB packets contain information about the flight, such as current location coordinates, altitude, bearing, flight number, registered ICAO aircraft identifier ID, GPS signal fidelity, and more.
 
 Thanks to the altitude of aircraft, it's often possible to receive information from hundreds of miles (or kilometers) away.
+
+## Signal levels
+
+Since `2026-10`, the SDR RTLADSB source reports the signal level of each message, in dB relative to the full scale of the radio (dBFS).  This is a relative level, useful for comparing aircraft and antennas, not a calibrated power; it changes with the gain setting.
+
+## Sharing a radio with AIS
+
+The [SDR RTLAISADSB](/docs/readme/datasources/aisadsb-sdrrtlaisadsb/) source receives both ADSB and AIS with a single rtl-sdr, by tuning between them.
 
 ## Supported hardware
 

@@ -3,7 +3,7 @@ title: "AIS - SDR RTLAIS"
 description: ""
 lead: ""
 date: 2026-10-19T22:46:38-04:00
-lastmod: 2026-10-19T22:46:38-04:00
+lastmod: 2026-10-24T10:50:00-07:00
 images: []
 menu:
   docs:
@@ -41,6 +41,10 @@ The country of each station is derived from the maritime identification digits o
 ## AIS tools
 
 Received AIS messages are available as NMEA `AIVDM` sentences over a websocket, for use with OpenCPN and other AIS tools.  See the [AIS API](/docs/api/ais/) for details.
+
+## Sharing a radio with ADSB
+
+The [SDR RTLAISADSB](/docs/readme/datasources/aisadsb-sdrrtlaisadsb/) source receives both AIS and ADSB with a single rtl-sdr, by tuning between them.
 
 ## Supported hardware
 

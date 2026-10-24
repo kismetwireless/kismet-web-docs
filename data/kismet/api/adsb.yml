@@ -2,7 +2,7 @@
   name: "ADSB BEAST websocket"
   added: "2020-11"
   methods: ["WEBSOCKET UPGRADE"]
-  modified: "2026-10, moved from `/phy/RTLADSB/beast`"
+  modified: "2026-10, moved from `/phy/RTLADSB/beast`; carries the signal level"
   uri: "/phy/ADSB/beast"
   types: ["ws"]
   roles: ["readonly", "ADSB"]
@@ -16,8 +16,12 @@
 
     Each Mode-S message is sent as a binary websocket message containing one BEAST frame: the `0x1a`
     escape byte, the frame type (`2` for short and `3` for long Mode-S messages), a 6 byte 12MHz
-    timestamp taken from the packet time, a signal byte (always 0), and the 7 or 14 byte Mode-S
-    message.  Any `0x1a` byte after the frame type is doubled, as required by the BEAST format.
+    timestamp taken from the packet time, a signal byte, and the 7 or 14 byte Mode-S message.  Any
+    `0x1a` byte after the frame type is doubled, as required by the BEAST format.
+
+    The signal byte is the message amplitude relative to the full scale of the radio, from 0 to 255,
+    as the rtl-sdr ADSB sources report it.  It is 0 for messages from sources which don't report a
+    signal level.
 
     Messages from all ADSB datasources are included.  Messages sent by the client are ignored.
 
