@@ -268,7 +268,7 @@ If this is the case, those datasource types can be masked from discovery, using 
 
 ```
 mask_datasource_type=rtladsb
-mask_datasource_type=rtlamr
+mask_datasource_type=rtlais
 mask_datasource_type=rtl433
 ```
 

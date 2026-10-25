@@ -38,7 +38,6 @@ Every message received on the topic becomes a packet in Kismet, time-stamped as 
 | Mapping | Data |
 |---|---|
 | `RTL433` | `rtl_433` JSON; sensors become devices, as with the [rtl_433](/docs/readme/datasources/sensor-sdrrtl433/) source, and meter records are handled as meters |
-| `RTLamr` | `rtlamr` JSON, as with the [rtlamr](/docs/readme/datasources/meter-sdrrtlamr/) source |
 | `adsb` or `RTLadsb` | ADS-B, either raw hex messages in an `adsb` or `adsb_raw_msg` field, or `rtl_adsb` style JSON |
 | `antsdr-droneid` | DJI DroneID records, as with the [AntSDR DroneID](/docs/readme/datasources/drone-antsdr-droneid/) source |
 | `radview` | Radview radiation records |

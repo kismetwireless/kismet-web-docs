@@ -135,5 +135,5 @@ Set the initial channel. Defaults to channel 1 (906MHz) if not specified. This s
 ### Source identification
 
 {{<configopt uuid "uuid-value">}}
-Override the auto-generated source UUID. By default the UUID is derived from the targeted RTL-SDR device's own manufacturer, product, and serial strings, the same approach the `rtl433`/`rtlamr` datasources use, so it is already stable and distinct per physical device without needing this option set explicitly.
+Override the auto-generated source UUID. By default the UUID is derived from the targeted RTL-SDR device's own manufacturer, product, and serial strings, the same approach the `rtl433` datasource uses, so it is already stable and distinct per physical device without needing this option set explicitly.
 {{</configopt>}}
