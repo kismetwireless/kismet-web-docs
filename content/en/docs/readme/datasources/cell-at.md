@@ -125,9 +125,9 @@ $ socat PTY,raw,echo=0,link=/tmp/modem-at TCP:192.0.2.1:5555 &
 $ CELLAT_EXTRA_PORTS=/tmp/modem-at kismet -c cellat-<imei>
 ```
 
-### macOS
+### libusb (macOS and Linux)
 
-macOS has no driver for the serial interfaces of these modems; Kismet reaches supported Quectel modems directly over libusb.  See [cell modems over libusb](/docs/readme/datasources/cell-usb/).
+macOS has no driver for the serial interfaces of these modems; Kismet reaches supported Quectel modems directly over libusb.  The same method works on Linux, for a modem with no serial driver bound or, with `usb=force`, in place of the `option` driver.  See [cell modems over libusb](/docs/readme/datasources/cell-usb/).
 
 ### Linux permissions
 

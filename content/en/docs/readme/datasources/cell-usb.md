@@ -1,5 +1,5 @@
 ---
-title: "Cell: modems over libusb (macOS)"
+title: "Cell: modems over libusb"
 description: ""
 lead: ""
 date: 2026-10-26T12:00:00-04:00
@@ -17,7 +17,9 @@ Added: `2026-10`
 
 Quectel cell modems present their AT, DIAG, and NMEA ports as vendor-specific USB serial interfaces.  Linux binds them to the `option` driver and creates `/dev/ttyUSB*` ports, but macOS has no host driver for them: no `/dev/cu.*` ports appear when the modem is plugged in.
 
-The [cell AT](/docs/readme/datasources/cell-at/) and [cell DIAG](/docs/readme/datasources/cell-diag/) sources instead talk to the modem's interfaces directly over libusb, so these modems work on macOS with no driver or kernel extension.  The same support is used on Linux for a modem which no driver has claimed.
+The [cell AT](/docs/readme/datasources/cell-at/) and [cell DIAG](/docs/readme/datasources/cell-diag/) sources instead talk to the modem's interfaces directly over libusb, so these modems work on macOS with no driver or kernel extension.
+
+The libusb method works on Linux as well.  It is used automatically for a supported modem which no driver has claimed (for instance when the `option` driver isn't loaded, or doesn't know the modem's USB ID), and `usb=force` uses it even when the `option` driver has bound the modem.  This can be useful on a system where the serial driver is missing or misbehaves, or to avoid depending on `/dev/ttyUSB*` numbering.
 
 ## Supported modems
 
@@ -47,7 +49,7 @@ Which of these modems the cell sources can survey is listed under the [cell AT s
 
 ## USB port names
 
-A modem interface reached over libusb is named `usb:<bus>-<addr>:<interface>` anywhere a serial port path would be used.  On macOS the bus is numbered from 0, so a name may look like `usb:0-3:2`.
+A modem interface reached over libusb is named `usb:<bus>-<addr>:<interface>` anywhere a serial port path would be used.  On macOS the bus is numbered from 0, so a name may look like `usb:0-3:2`; on Linux buses are numbered from 1, matching `lsusb`, such as `usb:1-4:2`.
 
 The port scan of both cell sources includes these interfaces, `--list` shows the modems found this way, and the `atport=`, `diagport=`, and `gpsport=` options accept them:
 
@@ -74,7 +76,7 @@ Both cell sources take a `usb=` option:
 
 ## kismet_usbserial
 
-`kismet_usbserial` serves the serial interfaces of a supported modem as pseudo-terminals, so other serial tools (a terminal program, `minicom`, a GNSS tool reading NMEA) can open the modem like any tty.  It takes interfaces away from a host driver while it runs.
+`kismet_usbserial` serves the serial interfaces of a supported modem as pseudo-terminals, on macOS or Linux, so other serial tools (a terminal program, `minicom`, a GNSS tool reading NMEA) can open the modem like any tty.  It takes interfaces away from a host driver while it runs.
 
 ```
 $ kismet_usbserial --list
@@ -105,4 +107,10 @@ libusb support for the cell modems, and `kismet_usbserial`, are built by default
 
 ## Permissions
 
-On Linux, using a modem over libusb needs write access to its USB device; run the capture as root, or grant access to the device with a udev rule.
+On Linux, using a modem over libusb needs write access to its USB device (under `/dev/bus/usb/`); run the capture as root, or grant access to the device with a udev rule.  The Kismet packages install a rule which gives the `kismet` group access to Quectel modems:
+
+```
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="2c7c", MODE="0660", GROUP="kismet"
+```
+
+Taking an interface from its driver with `usb=force` needs no additional permission beyond access to the USB device.

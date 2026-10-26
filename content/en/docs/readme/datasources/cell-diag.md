@@ -60,7 +60,7 @@ source=celldiag-<imei>:atport=/dev/mhi_DUN,diagport=/dev/mhi_DIAG
 
 The `CELLDIAG_SCAN_PORTS` environment variable replaces the set of ports scanned for the AT port, as a space-separated list of paths or globs.
 
-On macOS, supported Quectel modems are reached over libusb; see [cell modems over libusb](/docs/readme/datasources/cell-usb/).
+On macOS, supported Quectel modems are reached over libusb.  The same method works on Linux, for a modem with no serial driver bound or, with `usb=force`, in place of the `option` driver; see [cell modems over libusb](/docs/readme/datasources/cell-usb/).
 
 ### Linux permissions
 
