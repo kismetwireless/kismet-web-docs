@@ -46,6 +46,8 @@ Complex service scanning and enumeration will be coming in a future revision.
 
 BLE service data from advertisements is passed to Kismet, which allows detecting Open Drone ID / Remote ID broadcasts from drones (see [Open Drone ID](/docs/readme/datasources/drone-opendroneid/)).  Linux de-duplicates repeated advertisements while scanning, so position updates from a drone may be reported less often than they are transmitted.
 
+Location trackers, advertised battery levels, and the transmit power used to estimate distance are also decoded from the advertisements the HCI source reports; see [Bluetooth trackers, battery, and distance](/docs/readme/datasources/bluetooth-trackers/).
+
 ## Linux HCI Bluetooth source parameters
 
 Linux Bluetooth sources support all the common configuration options such as name, information elements, and UUID.

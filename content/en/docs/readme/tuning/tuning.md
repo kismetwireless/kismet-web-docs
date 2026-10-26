@@ -112,6 +112,8 @@ When using multiple datasources, Kismet maintains a system to identify duplicate
 
 This system prevents multiple copies of the same packet triggering alerts incorrectly, and allows multiple datasources to contribute to the signal levels of the captured packet.
 
+Only copies which reach Kismet within a second of each other are treated as duplicates.  A device which repeats an identical frame more than a second later, such as an unchanging BTLE advertisement, ADS-B or AIS message, or sensor report, is counted as a new packet (since `2026-10`; earlier versions could count these repeats as duplicates).
+
 Tuning this value will save some RAM, but not a significant amount.
 {{</configopt>}}
 

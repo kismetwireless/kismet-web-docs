@@ -89,6 +89,68 @@
     Invalid or out-of-sequence BSS timestamps can indicate AP spoofing.  APs with fluctuating BSS timestamps could be an indication of spoofing or an "evil twin" attack.  Out-of-order packets from multiple datasources and some AP firmware can both lead to false positives.
 
 -
+  name: "CELL2GREDIRECT"
+  class: "fingerprint"
+  phy: "Cellular"
+  added: "2026-10"
+  docs: |
+    An LTE cell released the modem's connection and redirected it to a 2G (GERAN) carrier.  Downgrading a phone to 2G, where the network isn't authenticated and the encryption is weak, is a known cell-site simulator technique.
+
+    A network without VoLTE also redirects to 2G for a voice call (circuit switched fallback), which raises this alert as well.
+
+    Raised by the [cell DIAG](/docs/readme/datasources/cell-diag/) source, following the cell-site simulator ("IMSI catcher") heuristics of the EFF [Rayhunter](https://github.com/EFForg/rayhunter) project.
+
+-
+  name: "CELLIDREQNOAUTH"
+  class: "fingerprint"
+  phy: "Cellular"
+  added: "2026-10"
+  docs: |
+    An LTE cell requested the modem's identity (IMSI or IMEI), then disconnected it or rejected its attach without authenticating it.  This is often a roaming or inactive SIM, but is also how a cell-site simulator collects identities.
+
+    Requires `nas=true` on the DIAG source.  Raised by the [cell DIAG](/docs/readme/datasources/cell-diag/) source, following the cell-site simulator ("IMSI catcher") heuristics of the EFF [Rayhunter](https://github.com/EFForg/rayhunter) project.
+
+-
+  name: "CELLIDREQUEST"
+  class: "fingerprint"
+  phy: "Cellular"
+  added: "2026-10"
+  docs: |
+    An LTE cell requested the modem's identity (IMSI or IMEI) after authentication had completed, or after a disconnect with no new connection request.  A normal network has no need to ask for the identity at these points; a cell-site simulator collecting identities does.
+
+    Requires `nas=true` on the DIAG source.  Raised by the [cell DIAG](/docs/readme/datasources/cell-diag/) source, following the cell-site simulator ("IMSI catcher") heuristics of the EFF [Rayhunter](https://github.com/EFForg/rayhunter) project.
+
+-
+  name: "CELLINCOMPLETESIB"
+  class: "fingerprint"
+  phy: "Cellular"
+  added: "2026-10"
+  docs: |
+    An LTE cell broadcasts a SIB1 which schedules fewer than two system information messages.  Commercial networks broadcast more; minimal cell-site simulators often don't.  Raised once per cell per capture.
+
+    Raised by the [cell DIAG](/docs/readme/datasources/cell-diag/) source, following the cell-site simulator ("IMSI catcher") heuristics of the EFF [Rayhunter](https://github.com/EFForg/rayhunter) project.
+
+-
+  name: "CELLNULLCIPHER"
+  class: "fingerprint"
+  phy: "Cellular"
+  added: "2026-10"
+  docs: |
+    An LTE cell selected the null cipher (EEA0) in an RRC or NAS security mode command, leaving the connection unencrypted.  Commercial networks don't normally do this; cell-site simulators do.
+
+    The RRC check uses the default DIAG mask; the NAS check requires `nas=true` on the DIAG source.  Raised by the [cell DIAG](/docs/readme/datasources/cell-diag/) source, following the cell-site simulator ("IMSI catcher") heuristics of the EFF [Rayhunter](https://github.com/EFForg/rayhunter) project.
+
+-
+  name: "CELLNULLINTEGRITY"
+  class: "fingerprint"
+  phy: "Cellular"
+  added: "2026-10"
+  docs: |
+    An LTE cell selected null integrity protection (EIA0) in an RRC or NAS security mode command.  This is only valid for unauthenticated emergency calls.
+
+    The RRC check uses the default DIAG mask; the NAS check requires `nas=true` on the DIAG source.  Raised by the [cell DIAG](/docs/readme/datasources/cell-diag/) source, following the cell-site simulator ("IMSI catcher") heuristics of the EFF [Rayhunter](https://github.com/EFForg/rayhunter) project.
+
+-
   name: "CHANCHANGE"
   class: "trend"
   phy: "dot11"
@@ -438,6 +500,16 @@
   phy: "dot11"
   docs: |
     A vulnerability in the Linux RTLWIFI driver could lead to code execution or a denial of service, as described in CVE-2019-17666 and [the LKML mailing list](https://lkml.org/lkml/2019/10/16/1226).  This attack involves malformed Wi-Fi Direct P2P Notification of Absence frames.
+
+-
+  name: "TRACKERFOLLOW"
+  class: "trend"
+  phy: "bt"
+  added: "2026-10"
+  docs: |
+    A Bluetooth location tracker (AirTag, SmartTag, Google Find My Device network tag, or another tracker sending the DULT advertisement) which advertises that it is away from its owner has been seen continuously for at least 30 minutes, with no gap over 20 minutes, at three or more places at least 100 meters apart.  An unknown tracker moving with you may be used to follow you; check for it with the tracker's sound feature or a tracker detection app.
+
+    This alert needs a GPS with a fix, and works with BTLE sniffers and the Linux HCI Bluetooth source.  It is raised once per tracker, and again only after the tracker stops advertising that it is separated, or is not seen for over 20 minutes, and then meets the conditions again.  Trackers which do not advertise whether they are separated (Tile, Chipolo, Pebblebee) can not raise this alert.  See [Bluetooth trackers](/docs/readme/datasources/bluetooth-trackers/).
 
 -
   name: "VDOO202027301"
