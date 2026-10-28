@@ -30,7 +30,12 @@
   roles: ["readonly"]
   docs: |
     Retrive a list of all datasources, current running state, driver and configuration information,
-    packet counts, and historical data. 
+    packet counts, and historical data.
+
+    Datasources which know how much spectrum each channel takes in, such as the rtl433, rtladsb,
+    rtlais, rtlaisadsb and zigbee900 SDR sources, include `kismet.datasource.channel_spans`: a map
+    of each of the source's channels to the `[low, high]` frequencies it covers, in kHz.  Other
+    datasources leave the field out.
 
 - 
   name: "Datasource details"
