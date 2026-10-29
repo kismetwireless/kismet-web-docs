@@ -1,4 +1,12 @@
 -
+  date: "2026-10-29"
+  title: "Kismet 2026-10-R1 is out!"
+  content: |
+    A major release with big performance and memory improvements, new datasources for
+    cellular modems, userspace USB Wi-Fi, HaLow, AIS, and more, expanded Bluetooth,
+    Zigbee, and Meshtastic decoding, and lots of bug fixes.  Full
+    [release notes here](/releases/kismet-2026-10-R1/)
+-
   date: "2025-09-04"
   title: "Kismet 2025-09-R1 is out!"
   content: |
