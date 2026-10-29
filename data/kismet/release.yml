@@ -1,6 +1,7 @@
 kismet:
-  version: "2025-09-R1"
+  version: "2026-10-R1"
   changelog: |
-    Major release with a large number of bug fixes, new features, an
-    improved device viewer in the UI, upgraded support libraries, and
-    a new optimized datasource/ipc protocol, among other improvements.
+    Major release with large performance and memory improvements, new
+    datasources including cellular modems, userspace USB Wi-Fi, HaLow, and
+    AIS, expanded Bluetooth, Zigbee, and Meshtastic decoding, and many
+    bug fixes.
