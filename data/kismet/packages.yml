@@ -82,7 +82,7 @@
 
 -
   distro: "Ubuntu Resolute (26.04)"
-  platforms: ["amd64"]
+  platforms: ["amd64", "arm64"]
   name: "Ubuntu Resolute (26.04)"
   key: "resolute"
   builds: ["git"]
