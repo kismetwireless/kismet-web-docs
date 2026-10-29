@@ -15,6 +15,14 @@ toc: true
 
 Over time, the Kismet endpoint API will change - while efforts are made to retain compatibility whenever possible, some changes will require breaking older implementations.  These significant changes will be documented here.
 
+#### After 2026-10-R1
+
+**New web UI.**  The web UI served at `/` is the new UI; the previous UI is served from `/legacy/`.  Requests under `/legacy/` that aren't one of the legacy UI's own files are answered as the same path from the root, so `/legacy/devices/...` is the same as `/devices/...`, and plugins written for the previous UI keep working there.  Clients that use the REST API directly aren't affected.
+
+**Removed `kismet.common.signal.min_signal_rrd`.**  Devices no longer keep the weakest signal per second, minute, and hour.  `kismet.common.signal.max_signal_rrd` (the strongest) is still kept.
+
+**Device rules.**  [Device rules](/docs/readme/configuring/device_rules/) tag, color, sort, and collect devices into views, and raise alerts.  Devices that match a rule carry `kismet.device.base.rules`, with the names of the matching rules, their tags, and color.  Rules can be read and set with the [device rules API](/docs/api/device_rules/), rules with a `view` make a `rule-<name>` device view, and the [device view](/docs/api/device_views/) endpoint takes a `rule_sort` option.
+
 #### 2026-10-R1
 
 **Major change to device location data.**  Devices that report their own position (ADS-B aircraft, AIS vessels, Remote ID drones, MeshCore and Meshtastic nodes) previously had that position written into the device location.  The device location now always means where Kismet was when it heard the device, and the position the device reports is kept separately:

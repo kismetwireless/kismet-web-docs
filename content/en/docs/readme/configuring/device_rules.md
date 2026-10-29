@@ -1,0 +1,238 @@
+---
+title: "Device rules"
+description: ""
+lead: ""
+date: 2026-10-29T12:00:00-04:00
+lastmod: 2026-10-29T12:00:00-04:00
+images: []
+menu:
+  docs:
+    parent: ""
+    identifier: "device-rules-8c1d4e7a2b9f305d6e1a4c8b7f2d9e03"
+weight: 45
+toc: true
+---
+
+Added: `after 2026-10-R1`
+
+Device rules match devices on the server, as they're seen, and act on the devices which match: they can tag devices, give them a highlight color, collect them into a [device view](/docs/api/device_views/), and raise an alert when a device starts matching.  Sorts, written in the same language, order the devices in a device view.
+
+Rules are written in a small language, and are compiled to native code where the platform allows it, so a large number of rules can be checked against a large number of devices.
+
+Rules can be loaded from rules files, from the Kismet config, and from the [REST API](/docs/api/device_rules/).
+
+## Writing rules
+
+Each rule has a name, a condition, and what to do with devices which match it:
+
+```
+rule <name> {
+    when <condition>
+    tag "<text>"
+    color "#rrggbb"
+    view "<description>"
+    alert
+    live
+}
+```
+
+* `when` is the condition a device must match.
+* `tag` tags matching devices; a rule can have any number of tags.
+* `color` gives matching devices a highlight color.  When a device matches several rules with colors, the first rule wins.
+* `view` collects matching devices in the device view `rule-<name>`, with the description as the view name (or `Devices matching rule <name>` when it's empty).
+* `alert` raises a `DEVICERULE` alert when a device starts matching the rule.
+* `live` checks the rule on every packet which updates a device, as well as on the timer.
+
+### Fields
+
+Conditions compare device fields to values.  Fields are Kismet field names, such as `kismet.device.base.manuf`, or a path through nested fields joined with `/` (with no spaces), such as `kismet.device.base.signal/kismet.common.signal.last_signal`.  A path through a list or a map of records matches when any of the records match.
+
+The [devices API](/docs/api/devices/) shows which fields a device has.
+
+The common fields have short names:
+
+| Short name | Field |
+| ---------- | ----- |
+| `mac` | MAC address |
+| `name` | Device name |
+| `phy` | Phy name, such as `IEEE802.11` |
+| `type` | Device type, such as `Wi-Fi AP` |
+| `manuf` | Manufacturer |
+| `crypt` | Encryption |
+| `channel` | Channel |
+| `frequency` | Frequency |
+| `packets` | Total packets |
+| `datasize` | Total data |
+| `first_time` | Time first seen |
+| `last_time` | Time last seen |
+| `mod_time` | Time last changed |
+| `num_alerts` | Number of alerts |
+| `signal` | Last signal |
+| `min_signal` | Weakest signal |
+| `max_signal` | Strongest signal |
+| `seenby` | Data sources which saw the device |
+
+A comparison with a field the device doesn't have is false.
+
+### Values and operators
+
+* Numbers compare with `==`, `!=`, `<`, `<=`, `>`, and `>=`, and can be calculated with `+`, `-`, `*`, `/`, and `%`.  Put spaces around `/` for division, so it isn't read as a field path.
+* Durations such as `30s`, `5m`, `2h`, and `1d` are numbers of seconds.  `now` is the current time, and `age(field)` is `now - field`.
+* Strings compare with `==` and `!=`, or with `contains`, `icontains` (in any case), `startswith`, `endswith`, and `matches` (a PCRE regular expression), against a `"string"`.
+* MAC addresses are written `aa:bb:cc:dd:ee:ff`, with an optional mask as `/24` or `/ff:ff:ff:00:00:00`; a short address such as `aa:bb:cc` matches the prefix.
+* `x in [a, b, c]` and `x not in [a, b, c]` test against a list of values.
+* `exists(field)` tests that a field is present, and `count(field)` counts the entries in a list or map.
+* Conditions combine with `and`, `or`, `not`, and parentheses.
+
+### Including other files
+
+A rules file can read in other rules files, relative to itself:
+
+```
+include "<file>"
+include "<dir>/*.rules"
+```
+
+A pattern reads every matching file in natural order, so `2_x.rules` comes before `10_x.rules`.
+
+### Sorts
+
+Sorts order the devices in a device view:
+
+```
+sort <name> {
+    by <value> [asc|desc], <value> [asc|desc] ...
+}
+```
+
+A value is a field or a calculation on fields, a true / false condition (false sorts first), or `rule`, the position of the first rule the device matches.  Later values break ties in earlier ones, and devices missing a value sort after the rest in either direction.
+
+A device view is sorted by passing the sort name as [`rule_sort`](/docs/api/device_views/#view-based-device-lists), as in `/devices/views/all/devices.json?rule_sort=<name>`.
+
+### Examples
+
+```
+rule close-apple {
+    when manuf contains "Apple" and signal > -60
+    tag "close"
+}
+
+rule watchlist {
+    when mac in [00:11:22:33:44:55, aa:bb:cc/24]
+    tag "watchlist"
+    view "Devices on the watch list"
+    alert
+    live
+}
+
+rule open-ap {
+    when phy == "IEEE802.11" and type == "Wi-Fi AP" and crypt == "Open"
+    tag "open"
+}
+
+rule free-ssid {
+    when dot11.device/dot11.device.advertised_ssid_map/dot11.advertisedssid.ssid icontains "free"
+    tag "free wifi"
+}
+
+rule gone-quiet {
+    when age(last_time) > 10m and packets > 1000
+    tag "quiet"
+}
+
+sort loudest {
+    by signal desc, packets desc
+}
+
+sort by-rule {
+    by rule, last_time desc
+}
+```
+
+### Limits
+
+* An expression can have at most 256 operators, nested at most 64 deep.
+* Rules set over the API can be at most 256KB of text.
+* All of the rules together can make at most 256 views.
+
+## Loading rules
+
+Rules are read from rules files, then from directories of rules files, then from `device_rule` and `device_sort` lines in the config, and then from the REST API, in that order.  The order sets which rule's color wins and how `by rule` sorts.
+
+A rule or sort with the same name as one read earlier, from another file, replaces it in its place; the same name twice in one file is an error.  If any rule has an error, none of the rules are loaded, and the error is reported with its file and line.
+
+The device rules options are in `kismet_device_rules.conf`; as with other options, changes are best made in [kismet_site.conf](/docs/readme/configuring/configfiles/#customizing-configs-with-kismet_siteconf).
+
+{{<configopt device_rules_file path>}}
+Rules files, in order.  Use `+=` in `kismet_site.conf` to add a file, or `=` to replace the list.  Without any, `%E/kismet_device_rules.txt` is read if it exists; it describes the rules language, and holds examples which are commented out.
+
+```
+device_rules_file+=/etc/kismet/site.rules
+```
+{{</configopt>}}
+
+{{<configopt device_rules_dir path>}}
+A directory of rules files; every `*.rules` file in it is read, in natural order.
+
+```
+device_rules_dir=%E/device_rules.d
+```
+{{</configopt>}}
+
+{{<configopt device_rule rule>}}
+A rule on one line, written without its leading `rule`.  Long rules are better kept in a rules file; config lines can't be longer than 8190 characters.
+
+```
+device_rule=close-apple { when manuf contains "Apple" and signal > -60 tag "close" }
+```
+{{</configopt>}}
+
+{{<configopt device_sort sort>}}
+A sort on one line, written without its leading `sort`.
+
+```
+device_sort=loudest { by signal desc, packets desc }
+```
+{{</configopt>}}
+
+{{<configopt device_rule_disable name>}}
+Leave out a rule by name, such as one from a packaged rules file.
+{{</configopt>}}
+
+{{<configopt device_sort_disable name>}}
+Leave out a sort by name.
+{{</configopt>}}
+
+{{<configopt device_rules_api_save true false>}}
+Rules set over the REST API are kept in memory unless saved.  When saved, they're written to `device_rules_api_file` and loaded again at startup.  By default, they aren't saved.
+{{</configopt>}}
+
+{{<configopt device_rules_api_file path>}}
+Where rules set over the REST API are saved, by default `%h/.kismet/kismet_device_rules_api.txt`.
+{{</configopt>}}
+
+{{<configopt device_rules_interval seconds>}}
+How often rules are checked against the devices which changed since the last check, by default every second.  Rules marked `live` are also checked on every packet which updates a device.
+{{</configopt>}}
+
+{{<configopt device_rules_full_interval checks>}}
+Rules using `now` or `age()` can start or stop matching without the device changing, so every this many checks all devices are checked, by default 10.  `0` never checks unchanged devices.
+{{</configopt>}}
+
+{{<configopt device_rules_alert_backlog count>}}
+The most `DEVICERULE` alerts held back by the alert rate limit at once, by default 64.  Held-back alerts are raised as the limit allows, and when the queue is full the oldest is dropped.  `0` drops held-back alerts.
+
+The rate limit is set like other alerts, with `alert=DEVICERULE,...` in `kismet_alerts.conf`.
+{{</configopt>}}
+
+{{<configopt device_rules_jit true false>}}
+Compile rules to native code where the platform allows it (64-bit x86, ARM, RISC-V, PowerPC, MIPS, s390x, and LoongArch).  Elsewhere, or when the system forbids generated code, rules run in the bytecode interpreter with the same results.  By default, rules are compiled.
+{{</configopt>}}
+
+## Rules in the web UI
+
+The device list has a `Rule tags` column, and the device details show the rules a device matches and its tags.  Rows in the device list are highlighted by their tags; the colors for each tag are picked under `Settings`, `Rule tags`.  Views made by rules are listed with the other device views.
+
+## Rules in the REST API
+
+The [device rules API](/docs/api/device_rules/) lists, checks, sets, and tests rules, and devices which match rules carry `kismet.device.base.rules`.

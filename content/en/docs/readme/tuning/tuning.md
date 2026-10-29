@@ -67,7 +67,7 @@ This is used for comparing signal levels across many sensors, such as remote cap
 
 
 {{<configopt track_device_rrds true false>}}
-Kismet keeps a short history of each device: packets, data, and packets sent and received over the past minute, hour, and day, and its signal.  Since Kismet 2026-10-R1 this includes the range of signal (the weakest and strongest reading) over the past minute, hour, and day, which adds roughly 2.5KB per device.
+Kismet keeps a short history of each device: packets, data, and packets sent and received over the past minute, hour, and day, and its signal.  Since Kismet 2026-10-R1 this includes the range of signal (the weakest and strongest reading) over the past minute, hour, and day, which adds roughly 2.5KB per device.  After 2026-10-R1 only the strongest reading is kept, which adds roughly 1.2KB per device.
 
 These histories drive the graphs in the device details.  Disabling them saves RAM on very large captures, at the cost of those graphs; the device totals are still kept.
 {{</configopt>}}

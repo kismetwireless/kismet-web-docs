@@ -1,0 +1,128 @@
+- 
+  name: "Device rules"
+  uri: "/devices/rules/rules"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    The [device rules](/docs/readme/configuring/device_rules/) and sorts currently loaded, in order, and
+    how they are evaluated.
+
+    | Field | Content |
+    | ----- | ------- |
+    | `kismet.devicerules.backend` | `jit` when rules are compiled to native code, `vm` when they run in the bytecode interpreter, or `none` |
+    | `kismet.devicerules.jit_error` | Why the rules aren't using the JIT, when they aren't |
+    | `kismet.devicerules.rules` | The rules: `kismet.devicerules.rule.name`, `.source` (the rule text), `.tags`, `.color`, `.view` (the `rule-<name>` view, when the rule has one), `.alert`, `.live`, and `.origin` (the file and line the rule came from) |
+    | `kismet.devicerules.sorts` | The sorts: `kismet.devicerules.sort.name`, `.source`, and `.origin` |
+    | `kismet.devicerules.api_rules` | The rules text last set with `set.cmd` |
+    | `kismet.devicerules.api_save` | Rules set with `set.cmd` are saved and loaded at startup (`device_rules_api_save`) |
+    | `kismet.devicerules.passes` | Rule checks run so far |
+    | `kismet.devicerules.evaluated` | Devices checked by those passes |
+    | `kismet.devicerules.last_pass_us` | Duration of the last pass, in microseconds |
+  return: |
+    Dictionary of the rules and sorts
+  responses:
+    success:
+      - [200, "Success"]
+
+- 
+  name: "Check rules"
+  uri: "/devices/rules/check"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin"]
+  added: "after 2026-10-R1"
+  jsonparameters:
+    - 
+      name: "rules"
+      type: "string"
+      required: true
+      description: |
+        Rules and sorts, in the [device rules language](/docs/readme/configuring/device_rules/); at most 256KB.
+        Rules set over the API can't `include` other files.
+  docs: |
+    Check rules without loading them.  The rules are checked as `set.cmd` would load them: after the
+    configured rules, replacing the rules set earlier over the API.
+  return: |
+    On success, `{"ok": true, "backend": "jit" or "vm", "rules": [names], "sorts": [names], "replaced": [...]}`,
+    where `replaced` lists configured rules and sorts which these rules replace by name.
+
+    On an error in the rules, `{"ok": false, "error": "...", "line": N, "col": N}`.
+  responses:
+    success:
+      - [200, "Rules checked; see `ok`"]
+    failure:
+      - [400, "Missing or too large `rules`"]
+
+- 
+  name: "Set rules"
+  uri: "/devices/rules/set"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin"]
+  added: "after 2026-10-R1"
+  jsonparameters:
+    - 
+      name: "rules"
+      type: "string"
+      required: true
+      description: |
+        Rules and sorts, in the [device rules language](/docs/readme/configuring/device_rules/); at most 256KB.
+        An empty string removes the rules set over the API.
+  docs: |
+    Replace the rules set over the API.  They come after the rules from the Kismet config and replace
+    only the rules set earlier over the API; a rule with the same name as a configured rule replaces it.
+
+    If any rule has an error, nothing changes.  When `device_rules_api_save=true`, the rules are written
+    to `device_rules_api_file` and loaded again at startup.  Rules which would make more than 256 views
+    in all are an error.
+
+    Devices are checked against the new rules on the next pass, and join or leave rule views and raise
+    alerts as they start or stop matching.
+  return: |
+    On success, `{"ok": true, "rules": N, "sorts": N, "backend": "jit" or "vm", "replaced": [...], "saved": true or false}`,
+    with `save_error` when saving the rules failed.
+
+    On an error in the rules, `{"ok": false, "error": "...", "line": N, "col": N}`.
+  responses:
+    success:
+      - [200, "Rules set, or an error in the rules; see `ok`"]
+    failure:
+      - [400, "Missing or too large `rules`"]
+
+- 
+  name: "Test rules on a device"
+  uri: "/devices/rules/test"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin"]
+  added: "after 2026-10-R1"
+  jsonparameters:
+    - 
+      name: "rules"
+      type: "string"
+      required: true
+      description: |
+        Rules to test, in the [device rules language](/docs/readme/configuring/device_rules/).  Only
+        these rules are tested, without the configured rules.
+    - 
+      name: "device"
+      type: "string"
+      required: true
+      description: |
+        Device key
+  docs: |
+    Test which of the given rules match a device, without loading them.
+  return: |
+    On success, `{"ok": true, "matches": {"rule name": true or false, ...}}`.
+
+    On an error in the rules, `{"ok": false, "error": "...", "line": N, "col": N}`.
+  responses:
+    success:
+      - [200, "Rules tested; see `ok`"]
+    failure:
+      - [400, "Missing parameters or an invalid device key"]
+      - [404, "No such device"]

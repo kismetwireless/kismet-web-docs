@@ -45,6 +45,15 @@
       description: |
         Wrap output in a container suitable for connecting to a jquery-datatable 
         container in the web UI.
+    -
+      name: "rule_sort"
+      type: "string"
+      required: false
+      description: |
+        After 2026-10-R1.  Order the devices by a [device rules sort](/docs/readme/configuring/device_rules/#sorts),
+        by name, instead of by the datatables order.  The sort is applied after any search or regex filter
+        and before the window is taken, so paging follows it.  It may also be given as a `rule_sort`
+        variable in the request.  An unknown sort returns an error (400).
   parameters:
     -
       name: "start"

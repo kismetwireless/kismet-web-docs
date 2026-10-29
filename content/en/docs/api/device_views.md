@@ -19,6 +19,8 @@ Device views can be defined by PHY handlers, plugins, as part of the Kismet basi
 
 Kismet uses device views to organize devices by capture interface, phy type, specific device type (like the phy80211 access point view), and more. 
 
+After 2026-10-R1, each [device rule](/docs/readme/configuring/device_rules/) with a `view` makes a view named `rule-<name>` holding the devices which match it.  A rule view stays after its rule is removed, empty, and is filled again if a rule of the same name gets a `view`.
+
 All clients are strongly encouraged to use the device view API going forwards. 
 
 Device views are also designed to work with paginating user interfaces; as part of the request, a client can request a "page" of information; with each subsequent page (or scroll) the user interface fetches only the data it needs. 

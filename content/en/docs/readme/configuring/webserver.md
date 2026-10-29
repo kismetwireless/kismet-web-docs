@@ -90,15 +90,83 @@ By default, Kismet uses a JWT issuer of `kismet`.  If you wish to change this fo
 There is typically no benefit to changing this option.
 {{</configopt>}}
 
+## The web UI
+
+After 2026-10-R1, Kismet serves a new web UI at `/` (for instance `http://localhost:2501/`), and the previous UI at `/legacy/` (`http://localhost:2501/legacy/`).  The *Legacy UI* item in the new UI's top bar opens the previous UI.
+
+Plugins which add pages to the previous UI keep working in it from `/legacy/`; the new UI lists plugins which don't have a page for it yet.
+
+Both UIs use the same login, and settings in one don't change the other.
+
+### Installing the web UI as an app
+
+After 2026-10-R1, the web UI can be installed on a phone or desktop as an app, with its own icon and window.  Browsers only allow this over HTTPS they trust, so the Kismet server must either use [Kismet's own HTTPS](#kismet-and-ssl), with the Kismet CA installed on the phone, or be [behind an HTTPS proxy](#using-proxies-and-forwarding) with a trusted certificate.  The *Install as an app* settings in the web UI walk through it, and the installed app can switch between Kismet servers.
+
 ## Runtime censorship 
 
 Kismet can censor aspects of the UI to make it easier to share screenshots or demos without revealing your location via MAC addresses, SSIDs, or location data.
 
-Censorship mode can be enabled by adding `?censor=1` to the Kismet URL, for instance `http://localhost:2501?censor=1`
+Censorship mode can be enabled by adding `?censor=1` to the Kismet URL, for instance `http://localhost:2501?censor=1`.  After 2026-10-R1, censorship is available in the legacy UI, for instance `http://localhost:2501/legacy/?censor=1`.
 
 ## Kismet and SSL
 
-The best way to provide SSL support for Kismet is to wrap it with a HTTP proxy such as nginx.  This simplifies the process of obtaining public certificates from services like letsencrypt, which typically expect the webserver to be able to answer dynamic challenges.
+The best way to provide SSL support for a Kismet server reached over the Internet is to wrap it with a HTTP proxy such as nginx.  This simplifies the process of obtaining public certificates from services like letsencrypt, which typically expect the webserver to be able to answer dynamic challenges.
+
+After 2026-10-R1, Kismet can also serve HTTPS itself, on its own port alongside the plain HTTP port.  This is meant for a local network, such as reaching Kismet from a phone, and especially for installing the web UI as an app.
+
+{{<configopt httpd_ssl true false>}}
+Added after 2026-10-R1
+
+Serve HTTPS on `httpd_ssl_port`, in addition to plain HTTP on `httpd_port`.  Disabled by default.
+{{</configopt>}}
+
+{{<configopt httpd_ssl_port port>}}
+Added after 2026-10-R1
+
+Port for the HTTPS listener, by default 2502.  It listens on the same address as `httpd_bind_address`.
+{{</configopt>}}
+
+{{<configopt httpd_ssl_cert "/path/to/cert.pem">}}
+Added after 2026-10-R1
+
+Use your own certificate: a PEM file holding the server certificate first, then any intermediate certificates.  Requires `httpd_ssl_key`.
+{{</configopt>}}
+
+{{<configopt httpd_ssl_key "/path/to/key.pem">}}
+Added after 2026-10-R1
+
+The private key for `httpd_ssl_cert`, in PEM format.
+{{</configopt>}}
+
+{{<configopt httpd_ssl_dir "/path/to/ssl/dir">}}
+Added after 2026-10-R1
+
+Without `httpd_ssl_cert` and `httpd_ssl_key`, Kismet makes a small certificate authority (CA) of its own in this directory (by default `~/.kismet/ssl/`), and a server certificate signed by it for this host's name, `name.local`, and its private addresses.  The server certificate is valid for 397 days; Kismet makes a new one at startup when it's within 30 days of expiring, or when this host's names or addresses change.
+
+Install the CA (`kismet_ca.pem` in this directory, or download it from the *Install as an app* settings in the web UI, or from `/ssl/kismet_ca.crt`) on the phones and browsers which will use Kismet.  When installing it, check that its SHA-256 fingerprint matches the one Kismet logs at startup.
+
+The CA can only sign for local names (`.local`, `.lan`, `.home.arpa`, `.internal`, `localhost`, this host's name, and names given in `httpd_ssl_names`) and private addresses, so even if its key were copied it couldn't be used to impersonate other sites.
+
+To start over with a new CA, stop Kismet and remove the files in this directory.
+{{</configopt>}}
+
+{{<configopt httpd_ssl_names "name,address,...">}}
+Added after 2026-10-R1
+
+Extra names or addresses, comma separated, for the certificate Kismet makes, such as `httpd_ssl_names=kismet.lan,192.168.1.10`.
+{{</configopt>}}
+
+{{<configopt httpd_https_proxy true false>}}
+Added after 2026-10-R1
+
+Kismet is behind an HTTPS proxy with its own trusted certificate (such as one from Let's Encrypt).  Set `httpd_public_url` as well; the web UI then offers that address for installing the UI as an app, and there's no CA to install.
+{{</configopt>}}
+
+{{<configopt httpd_public_url "https://kismet.example.com/">}}
+Added after 2026-10-R1
+
+The address clients reach Kismet at through the proxy, for the web UI's install instructions.  Must start with `https://` or `http://`.
+{{</configopt>}}
 
 ### When should I use SSL?
 

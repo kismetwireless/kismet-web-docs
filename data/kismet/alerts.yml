@@ -223,6 +223,16 @@
     Devices are considered 'lost' if they have not been seen for at least the `devicelost_timeout=` duration.
 
 -
+  name: "DEVICERULE"
+  class: "fingerprint"
+  phy: "any"
+  added: "after 2026-10-R1"
+  docs: |
+    Raised when a device starts matching a [device rule](/docs/readme/configuring/device_rules/) with `alert` in it.
+
+    The alert rate is set with `alert=DEVICERULE,...` like other alerts (by default `10/min,1/sec`).  Alerts held back by the rate limit are queued and raised as the limit allows; `device_rules_alert_backlog=` sets how many are held at once (by default 64), and when the queue is full the oldest is dropped.
+
+-
   name: "DHCPCONFLICT"
   class: "trend"
   phy: "IP"
