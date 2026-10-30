@@ -27,6 +27,8 @@ Over time, the Kismet endpoint API will change - while efforts are made to retai
 
 **Device locations.**  The last location of a device (`kismet.common.location.last`) now has the time of the position in `kismet.common.location.time_sec` and `kismet.common.location.time_usec`.  Device locations no longer carry fields from Kismet's own GPS, such as `kismet.common.location.gps_uuid` or the GPS quality report, which could appear in them before.
 
+**ADS-B decoding.**  Aircraft speeds were converted as if they were mph and read 13% low; they're now correct km/h.  Altitude is no longer taken from velocity messages, which made it alternate with 0 or very large values.  Eastbound aircraft now have a heading.  An aircraft's reported location keeps the time its position was decoded, rather than the time of the last message heard from it.
+
 #### 2026-10-R1
 
 **Major change to device location data.**  Devices that report their own position (ADS-B aircraft, AIS vessels, Remote ID drones, MeshCore and Meshtastic nodes) previously had that position written into the device location.  The device location now always means where Kismet was when it heard the device, and the position the device reports is kept separately:
