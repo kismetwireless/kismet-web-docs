@@ -63,7 +63,7 @@ The AT source supports Quectel and Telit modems through their engineering comman
 * **Quectel RM500Q series** (5G NR and LTE, Qualcomm SDX55): RM500Q-AE, RM500Q-GL, RM502Q-AE, RM505Q-AE, RM510Q-GL, RG500Q-EA, and RG502Q-EA.  Serving cell (LTE, NR5G-SA, and NR5G-NSA), neighbor cells, and full band scans (`AT+QSCAN`).
 * **Quectel RM520N-GL series** (5G NR and LTE, Qualcomm SDX62): RM520N-GL, RM520N-CN, RM530N-GL, RG520N-NA, RG520N-EB, RG520N-EU, RG520N-LA, RG520N-GT, and RG525F-NA.  Serving cell, neighbor cells, and full band scans.  The RM520N-GL is the reference modem for the DIAG source.
 * **Quectel EG25-G series** (LTE Cat 4): EG25-G, EG25-GL, EC25-AF, EC25-AU, EC25-E, EG91, EG95, EM05-G, and EM05-CE.  Serving cell (LTE only) and neighbor cells.  These modems have no full band scan.
-* **Telit LM960** (LTE Cat 18): LM960 and LM960A18.  Serving cell from `AT#RFSTS` and `AT#SERVINFO`, and the `AT#CSURVC` cell survey as the full scan.
+* **Telit LM960** (LTE Cat 18): LM960 and LM960A18.  Serving cell from `AT#RFSTS` and `AT#SERVINFO` (after 2026-10-R1, with the RSSI and band from `AT#RFSTS`), and the `AT#CSURVC` cell survey as the full scan.
 
 The source also recognizes Sierra Wireless (EM9190, EM9291), SIMCom (SIM8202G-M2), and Orbic (RC400L) modems.
 
@@ -99,6 +99,8 @@ cellat supported data sources:
 ```
 
 The modems are also listed in the Kismet web UI datasources panel.  A modem which does not report an IMEI can't be used.
+
+After 2026-10-R1, a modem whose manufacturer isn't one the source supports, and which refuses every cell survey command the source would try, is left out of the list, with a `skip` line on stderr saying why, since a source could never open it.
 
 Add the source on the command line:
 

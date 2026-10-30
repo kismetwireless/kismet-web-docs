@@ -160,6 +160,8 @@ The DIAG port, instead of finding it from the modem's AT port.
 
 {{<configopt atport "/path/to/tty" "usb:bus-addr:if">}}
 The AT port used to identify the modem, instead of scanning for it.
+
+After 2026-10-R1, `atport=` and `diagport=` accept `/dev/serial/by-id/` links as well as the tty itself.  A by-id link is the stable way to name a port, since it survives the ports being renumbered, and it is the only stable name with two identical modems.
 {{</configopt>}}
 
 {{<configopt usb auto force off>}}

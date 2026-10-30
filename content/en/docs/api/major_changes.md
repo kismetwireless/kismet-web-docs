@@ -29,6 +29,10 @@ Over time, the Kismet endpoint API will change - while efforts are made to retai
 
 **ADS-B decoding.**  Aircraft speeds were converted as if they were mph and read 13% low; they're now correct km/h.  Altitude is no longer taken from velocity messages, which made it alternate with 0 or very large values.  Eastbound aircraft now have a heading.  An aircraft's reported location keeps the time its position was decoded, rather than the time of the last message heard from it.
 
+**Cell device names.**  A cell known only by its PCI is named with its RAT's channel number: `NR PCI <pci> NR-ARFCN <n>` for NR and `UARFCN` for WCDMA, instead of `EARFCN` for every RAT.  LTE names are unchanged.
+
+**celldiag status lines.**  The periodic `celldiag stats:` and `celldiag inventory:` messages start with the source's label, as other per-source messages do; the text after the label is unchanged.
+
 #### 2026-10-R1
 
 **Major change to device location data.**  Devices that report their own position (ADS-B aircraft, AIS vessels, Remote ID drones, MeshCore and Meshtastic nodes) previously had that position written into the device location.  The device location now always means where Kismet was when it heard the device, and the position the device reports is kept separately:

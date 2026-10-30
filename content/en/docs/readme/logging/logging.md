@@ -120,4 +120,37 @@ hidedata=true
 ```
 {{</configopt>}}
 
+### Per-device content filter
+
+After 2026-10-R1, the contents of only some devices' data frames can be cut, instead of every device's as with `hidedata`.  Data frames the content filter blocks are cut to their 802.11 headers before they are written to the `kismet`, `pcapng` and `pcapppi` logs and the pcap streams.  As with `hidedata`, unencrypted EAPOL-Key frames are kept whole.  With `hidedata=true` the content filter does nothing, since every data frame is cut already.
+
+The filter only applies to the logs and streams: devices are still tracked, and strings and other details are still taken from the whole frames.
+
+The content filter is a MAC address [packet filter](/docs/api/packet_filter/) with the filter ID `dot11_content`, set in `kismet_filter.conf`, and can be changed at runtime with the packet filter API.
+
+{{<configopt dot11_content_filter_default pass block>}}
+Added after 2026-10-R1
+
+What happens to the data frames of devices no filter matches; by default `pass`, which keeps their contents.
+{{</configopt>}}
+
+{{<configopt dot11_content_filter "addresstype,macaddress,value">}}
+Added after 2026-10-R1
+
+Cut (`block`) or keep (`pass`) the contents of data frames by address: `source`, `destination`, `network` (the BSSID), `other` (the WDS transmitter) or `any`, with a MAC address or MAC mask as in the [kismetdb packet filter](/docs/readme/logging/kismetdb/).
+
+To log the contents of only some devices, block by default and pass those devices:
+
+```
+dot11_content_filter_default=block
+dot11_content_filter=any,aa:bb:cc:dd:ee:ff,pass
+```
+
+To cut the contents of some devices, for example everything in one network, and keep the rest:
+
+```
+dot11_content_filter=network,11:22:33:44:55:66,block
+```
+{{</configopt>}}
+
 On Linux Wi-Fi sources the `truncate_data` source option cuts data frames in the kernel before they reach Kismet, which also saves bandwidth for remote capture; it keeps all EAPOL frames whole.  See the [Linux Wi-Fi datasource](/docs/readme/datasources/wifi-linux/) page.

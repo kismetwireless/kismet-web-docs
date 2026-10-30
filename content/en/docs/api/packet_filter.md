@@ -46,5 +46,10 @@ MAC filters can be applied to:
 
 Address filters are applied in the order:  `source`, `destination`, `network`, `other`, `any`, `default`.  If an address is accepted by the `source` stage and would be rejected by the `destination` stage, the filter will *accept* the packet, as this is the first operation.
 
+### Filter IDs
+
+* `kismetdb_packets` - Packets written to the [kismetdb log](/docs/readme/logging/kismetdb/).
+* `dot11_content` - After 2026-10-R1, Wi-Fi data frames whose contents are cut to their headers in the logs and streams; see the [per-device content filter](/docs/readme/logging/logging/#per-device-content-filter).  A *block* here cuts the frame's contents instead of dropping the frame.
+
 {{< kismet_api packet_filters >}}
 
