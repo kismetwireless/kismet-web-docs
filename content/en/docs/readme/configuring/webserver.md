@@ -98,6 +98,8 @@ Plugins which add pages to the previous UI keep working in it from `/legacy/`; t
 
 Both UIs use the same login, and settings in one don't change the other.
 
+The new UI's map can draw the [receiver range](/docs/readme/configuring/receiver_range/) for each kind of device on it: the furthest distance devices were heard at in each direction over all time, over the last day, or by altitude, with range rings.  Without Kismet's own location, it draws the area the devices were heard over.
+
 ### Installing the web UI as an app
 
 After 2026-10-R1, the web UI can be installed on a phone or desktop as an app, with its own icon and window.  Browsers only allow this over HTTPS they trust, so the Kismet server must either use [Kismet's own HTTPS](#kismet-and-ssl), with the Kismet CA installed on the phone, or be [behind an HTTPS proxy](#using-proxies-and-forwarding) with a trusted certificate.  The *Install as an app* settings in the web UI walk through it, and the installed app can switch between Kismet servers.

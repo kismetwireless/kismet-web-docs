@@ -23,6 +23,10 @@ Over time, the Kismet endpoint API will change - while efforts are made to retai
 
 **Device rules.**  [Device rules](/docs/readme/configuring/device_rules/) tag, color, sort, and collect devices into views, and raise alerts.  Devices that match a rule carry `kismet.device.base.rules`, with the names of the matching rules, their tags, and color.  Rules can be read and set with the [device rules API](/docs/api/device_rules/), rules with a `view` make a `rule-<name>` device view, and the [device view](/docs/api/device_views/) endpoint takes a `rule_sort` option.
 
+**Receiver range.**  Kismet records how far away devices which report their own position are heard in each direction, by kind of device and data source, over all time, the last day, and by altitude; see the [receiver range](/docs/readme/configuring/receiver_range/) and the [receiver range API](/docs/api/receiver_range/).
+
+**Device locations.**  The last location of a device (`kismet.common.location.last`) now has the time of the position in `kismet.common.location.time_sec` and `kismet.common.location.time_usec`.  Device locations no longer carry fields from Kismet's own GPS, such as `kismet.common.location.gps_uuid` or the GPS quality report, which could appear in them before.
+
 #### 2026-10-R1
 
 **Major change to device location data.**  Devices that report their own position (ADS-B aircraft, AIS vessels, Remote ID drones, MeshCore and Meshtastic nodes) previously had that position written into the device location.  The device location now always means where Kismet was when it heard the device, and the position the device reports is kept separately:

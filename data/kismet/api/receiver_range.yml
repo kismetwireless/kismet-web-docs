@@ -1,0 +1,104 @@
+-
+  name: "All ranges"
+  uri: "/range/all_ranges"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    The summary of every [range record](#range-records): each kind of device, for all data sources
+    together and for each data source, without the distances in each direction.
+  return: |
+    Dictionary with `kismet.range.records`, a list of range record summaries
+  responses:
+    success:
+      - [200, "Success"]
+
+-
+  name: "Range by kind"
+  uri: "/range/by-kind/{KIND}/range"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  uriparameters:
+    -
+      name: "KIND"
+      type: "string"
+      required: true
+      description: Kind of device, such as `ADSB`
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    The full [range record](#range-records) for a kind of device, from all data sources together.
+  return: |
+    Range record
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [404, "No range for this kind"]
+
+-
+  name: "Range by kind and data source"
+  uri: "/range/by-kind/{KIND}/by-source/{UUID}/range"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  uriparameters:
+    -
+      name: "KIND"
+      type: "string"
+      required: true
+      description: Kind of device, such as `ADSB`
+    -
+      name: "UUID"
+      type: "string"
+      required: true
+      description: Datasource UUID
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    The full [range record](#range-records) for a kind of device, from one data source.
+  return: |
+    Range record
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [404, "No range for this kind and data source"]
+      - [500, "Invalid UUID"]
+
+-
+  name: "Reset range"
+  uri: "/range/reset"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin"]
+  added: "after 2026-10-R1"
+  jsonparameters:
+    -
+      name: "kind"
+      type: "string"
+      required: false
+      description: |
+        Kind of device to clear; without it, every kind is cleared
+    -
+      name: "source"
+      type: "string"
+      required: false
+      description: |
+        Data source UUID; only that data source's record is cleared.  Without it, the records for all
+        data sources together and for each data source are cleared.
+  docs: |
+    Clear the receiver range, and save the result.
+  return: |
+    `{"ok": true, "removed": N}`, with the number of records cleared
+  responses:
+    success:
+      - [200, "Range cleared"]
+    failure:
+      - [400, "Invalid `kind` or `source`"]
