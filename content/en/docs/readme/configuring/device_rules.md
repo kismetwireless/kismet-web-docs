@@ -45,7 +45,7 @@ rule <name> {
 
 ### Fields
 
-Conditions compare device fields to values.  Fields are Kismet field names, such as `kismet.device.base.manuf`, or a path through nested fields joined with `/` (with no spaces), such as `kismet.device.base.signal/kismet.common.signal.last_signal`.  A path through a list or a map of records matches when any of the records match.
+Conditions compare device fields to values.  Fields are Kismet field names, such as `kismet.device.base.manuf`, or a path through nested fields joined with `/` (with no spaces), such as `kismet.device.base.signal/kismet.common.signal.last_signal`.  A path through a list or a map of records matches when any of the records match, including the records in a map of lists, such as `dot11.device/dot11.device.wpa_handshake_list/dot11.eapol.message_num`.  Field names may start with digits, as in `802154.device/802154.device.key_state`.
 
 The [devices API](/docs/api/devices/) shows which fields a device has.
 
@@ -155,6 +155,22 @@ sort by-rule {
 * Rules set over the API can be at most 256KB of text.
 * All of the rules together can make at most 256 views.
 
+## Shipped rules
+
+Kismet ships rules for notable devices in `kismet_device_rules_highlights.txt`, grouped by phy.  Each tags the devices it matches and collects them in a view:
+
+| Rule | Matches | Tag | View |
+| ---- | ------- | --- | ---- |
+| `wpa-handshake` | Wi-Fi networks with WPA handshake messages 1 and 2, or 2 and 3 (possibly from different clients) | `handshake` | WPA Handshakes |
+| `pmkid` | Wi-Fi networks with an RSN PMKID | `pmkid` | RSN PMKID |
+| `zigbee-known-key` | 802.15.4 devices using a known or exposed key | `zigbee key` | Zigbee Known Keys |
+| `adsb-government` | Aircraft owned by government agencies, police, and the military | `government` | ADS-B Government Aircraft |
+| `ais-emergency` | AIS search and rescue transponders, man overboard devices, and emergency beacons | `ais emergency` | AIS Emergency |
+| `uav` | Drones Kismet recognizes, on any phy | `uav` | UAV / Drones |
+| `bodycam` | Body cameras, by address or name | `bodycam` | Bodycams |
+
+A rule with the same name in a later file, such as `kismet_device_rules.txt`, replaces the shipped one; `device_rule_disable=<name>` leaves one out.
+
 ## Loading rules
 
 Rules are read from rules files, then from directories of rules files, then from `device_rule` and `device_sort` lines in the config, and then from the REST API, in that order.  The order sets which rule's color wins and how `by rule` sorts.
@@ -164,9 +180,11 @@ A rule or sort with the same name as one read earlier, from another file, replac
 The device rules options are in `kismet_device_rules.conf`; as with other options, changes are best made in [kismet_site.conf](/docs/readme/configuring/configfiles/#customizing-configs-with-kismet_siteconf).
 
 {{<configopt device_rules_file path>}}
-Rules files, in order.  Use `+=` in `kismet_site.conf` to add a file, or `=` to replace the list.  Without any, `%E/kismet_device_rules.txt` is read if it exists; it describes the rules language, and holds examples which are commented out.
+Rules files, in order.  Use `+=` in `kismet_site.conf` to add a file, or `=` to replace the list.  Without any, `%E/kismet_device_rules_highlights.txt` (the [shipped rules](#shipped-rules)) and then `%E/kismet_device_rules.txt` are read if they exist; `kismet_device_rules.txt` describes the rules language, and holds examples which are commented out.  Setting `device_rules_file` replaces both, so list them again to keep them:
 
 ```
+device_rules_file=%E/kismet_device_rules_highlights.txt
+device_rules_file+=%E/kismet_device_rules.txt
 device_rules_file+=/etc/kismet/site.rules
 ```
 {{</configopt>}}
@@ -231,7 +249,7 @@ Compile rules to native code where the platform allows it (64-bit x86, ARM, RISC
 
 ## Rules in the web UI
 
-The device list has a `Rule tags` column, and the device details show the rules a device matches and its tags.  Rows in the device list are highlighted by their tags; the colors for each tag are picked under `Settings`, `Rule tags`.  Views made by rules are listed with the other device views.
+The device list has a `Rule tags` column, and the device details show the rules a device matches and its tags.  Rows in the device list are highlighted by their tags; the colors for each tag are picked under `Settings`, `Rule tags`.  The web UI comes with colors for the tags of the [shipped rules](#shipped-rules); if the colors were already changed in the settings, the saved list is kept, and the new tags need to be added to it.  Views made by rules are listed with the other device views.
 
 ## Rules in the REST API
 
