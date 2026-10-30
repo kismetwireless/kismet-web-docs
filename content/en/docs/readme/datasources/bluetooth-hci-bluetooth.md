@@ -48,6 +48,24 @@ BLE service data from advertisements is passed to Kismet, which allows detecting
 
 Location trackers, advertised battery levels, and the transmit power used to estimate distance are also decoded from the advertisements the HCI source reports; see [Bluetooth trackers, battery, and distance](/docs/readme/datasources/bluetooth-trackers/).
 
+## BTLE and classic devices
+
+After 2026-10-R1, the LE devices the HCI source reports are BTLE devices: the same device record a BTLE sniffer (such as the WCH BLE Analyzer, nRF, or Sniffle) makes for the same address, decoded the same way, with every source which saw it listed in the device's seen-by sources.  LE advertising reports in HCI packet captures are handled the same way.  Classic (BR/EDR) devices from inquiry scans remain Bluetooth devices.
+
+Before then, a device heard by both an HCI source and a BTLE sniffer appeared twice, once as a Bluetooth device and once as a BTLE device.
+
+When a host connects to an LE device and reads its controller information, either in an HCI capture or by the HCI source's opt-in active probing, it is added to the BTLE device:
+
+| Field | Contents |
+| ----- | -------- |
+| `btle.device.lmp_version` | Bluetooth version of the device's controller |
+| `btle.device.chip_manufacturer` | Maker of the controller, and its company ID |
+| `btle.device.lmp_subversion` | Controller firmware subversion, specific to its maker |
+| `btle.device.le_features` | LE feature mask read from the device, in hex |
+| `btle.device.last_probed` | Last time active probing connected to the device |
+
+These are only recorded for a device which has been seen advertising.
+
 ## Linux HCI Bluetooth source parameters
 
 Linux Bluetooth sources support all the common configuration options such as name, information elements, and UUID.

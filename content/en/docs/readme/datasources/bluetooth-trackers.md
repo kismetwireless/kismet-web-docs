@@ -20,7 +20,7 @@ Kismet decodes several kinds of information which Bluetooth devices advertise in
 ## Sources which can see advertised data
 
 * Bluetooth LE sniffers which capture advertisements: [Sniffle](/docs/readme/datasources/bluetooth-sniffle-ble/), [nRF51822](/docs/readme/datasources/bluetooth-nrf51822/), [TI CC2540](/docs/readme/datasources/bluetooth-ticc2540/), [Ubertooth](/docs/readme/datasources/bluetooth-ubertooth/), and others.
-* The [Linux HCI Bluetooth](/docs/readme/datasources/bluetooth-hci-bluetooth/) source.  The HCI source reports the advertised service UUIDs, service data, manufacturer data, and transmit power level, rather than the raw packets, which is enough to decode everything on this page.
+* The [Linux HCI Bluetooth](/docs/readme/datasources/bluetooth-hci-bluetooth/) source.  The HCI source reports the advertised service UUIDs, service data, manufacturer data, and transmit power level, rather than the raw packets, which is enough to decode everything on this page.  After 2026-10-R1 its LE devices are BTLE devices, the same records a BTLE sniffer makes.
 
 ## Location trackers
 
@@ -42,7 +42,7 @@ A tracker may alternate between its vendor advertisement and the DULT advertisem
 
 Tile, Chipolo, and Pebblebee trackers are only identified; they do not advertise whether they are separated from their owner.
 
-Trackers become `BTLE Tracker` devices, with a tracker record (`btle.device.tracker` for BTLE sniffers, `bluetooth.device.tracker` for the HCI source).  Fields are only present when the tracker type advertises them:
+Trackers become `BTLE Tracker` devices, with a tracker record (`btle.device.tracker`; before 2026-10-R1, `bluetooth.device.tracker` for the HCI source).  Fields are only present when the tracker type advertises them:
 
 * **type**: `samsung_smarttag`, `apple_findmy`, `google_fmdn`, `dult`, `tile`, `chipolo`, or `pebblebee`
 * **state** and **state_name**: the operating state the tracker advertises
@@ -85,7 +85,7 @@ Kismet records the battery level from devices which advertise it without a conne
 * **battery_service**: devices which repeat the Battery Service level as service data
 * **ruuvi**: Ruuvi tags (data format 5), voltage only
 
-The battery record (`btle.device.battery` or `bluetooth.device.battery`) has the source, the percent (`-1` if not known), the charging state, the voltage in millivolts when it is advertised, and for earbuds the levels of each bud and the case.
+The battery record (`btle.device.battery`, or `bluetooth.device.battery` from the HCI source before 2026-10-R1) has the source, the percent (`-1` if not known), the charging state, the voltage in millivolts when it is advertised, and for earbuds the levels of each bud and the case.
 
 ## Estimated distance
 
@@ -96,7 +96,7 @@ Devices which say how much power they transmit get an estimated distance from th
 * the transmit power from Ruuvi tags
 * the TX Power Level record which many other devices advertise
 
-The ranging record (`btle.device.ranging` or `bluetooth.device.ranging`) has the source, the expected signal at 1 meter, the smoothed signal used for the estimate, and the estimated distance in meters (between 0.1 and 1000).
+The ranging record (`btle.device.ranging`, or `bluetooth.device.ranging` from the HCI source before 2026-10-R1) has the source, the expected signal at 1 meter, the smoothed signal used for the estimate, and the estimated distance in meters (between 0.1 and 1000).
 
 The estimate uses the log-distance path loss model, and is rough at best: walls, bodies, antenna orientation, and the receiving radio all change the signal.  It is most useful to tell near from far, or to see whether a device is getting closer.
 

@@ -63,7 +63,7 @@ dot11_link_randomized=true
 {{<configopt btle_link_randomized true false>}}
 Link the random addresses a BTLE device rotates through.  A device's advertising data and its address often change at different times, so when the first advertisement from a new address carries the same data (ignoring the flags and transmit power records) as the last one from an address which went quiet within the last 15 seconds, and the earlier address stays quiet for at least 30 seconds, the two are linked with the method **payload**.  If another device sending the same advertising data is active, no link is made.  Advertisements with too little data to be unique to one device are not linked.
 
-This applies to BTLE sniffer sources; it does not apply to the Linux HCI scanning source.  BTLE devices with random addresses which are dropped by `btle_ignore_random` are never linked.
+This applies to BTLE sniffer sources, and after 2026-10-R1 to the LE devices the Linux HCI scanning source reports; before then it did not apply to the HCI source.  BTLE devices with random addresses which are dropped by `btle_ignore_random` are never linked.
 
 This option is set in `kismet.conf` (or `kismet_site.conf`); it is off by default:
 
@@ -76,6 +76,8 @@ btle_link_randomized=true
 
 {{<configopt btle_ignore_random true false>}}
 Drop BTLE devices which use random addresses.  This prevents a flood of short-lived devices in the UI and logs, at the cost of not seeing them at all.  Drones broadcasting Remote ID and known location trackers (see [Bluetooth trackers](/docs/readme/datasources/bluetooth-trackers/)) are always kept.
+
+After 2026-10-R1 this also drops random address devices reported by the Linux HCI source, whose LE devices are BTLE devices.
 
 This option is set in `kismet_filter.conf` (or `kismet_site.conf`); it is off by default:
 
