@@ -127,7 +127,7 @@ sudo apt install kismet
 
 Individual tools can still be installed:
 ```bash
-sudo apt install kismet-core kismet-capture-linux-bluetooth kismet-capture-linux-wifi kismet-capture-nrf-mousejack python-kismetcapturertl433 python-kismetcapturefreaklabszigbee kismet-logtools
+sudo apt install kismet-core kismet-capture-linux-bluetooth kismet-capture-linux-wifi kismet-capture-nrf-mousejack kismet-capture-rtl433-v2 kismet-capture-freaklabs-zigbee-v2 kismet-logtools
 ```
 
 ## Installing piecemeal

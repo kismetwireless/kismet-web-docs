@@ -33,6 +33,10 @@
                     <p><i>Added:</i> <code>{{ . }}</code></p>
                 {{ end }}
 
+                {{ with .removed }}
+                    <p><i>Removed:</i> <code>{{ . }}</code></p>
+                {{ end }}
+
                 {{ .docs | markdownify }}
             </td>
         </tr>

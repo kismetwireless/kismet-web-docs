@@ -34,7 +34,7 @@ Kismet tracks each AIS station as a device, by its MMSI:
 * Base stations, with the UTC time they report
 * Aids to navigation (AtoN), including virtual aids and aids off position
 * Search and rescue aircraft, with altitude
-* AIS-SART, man-overboard, and EPIRB emergency beacons
+* AIS-SART, man-overboard, and EPIRB emergency beacons; after 2026-10-R1, these are tagged `ais emergency` and collected in the *AIS Emergency* view by the [shipped device rules](/docs/readme/configuring/device_rules/#shipped-rules)
 
 The country of each station is derived from the maritime identification digits of its MMSI.  Positions reported by AIS stations are used as the device location.
 

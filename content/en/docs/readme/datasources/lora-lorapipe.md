@@ -140,7 +140,7 @@ The common [channel and hopping](/docs/readme/datasources/channelhop/) options a
 
 ## Meshtastic
 
-Kismet decodes Meshtastic packets, including node info, position, and text messages.  Packets on encrypted channels are decrypted when the channel key is known; the default channel for every modem preset, with the default key, is always enabled.
+Kismet decodes Meshtastic packets, including node info, position, and text messages.  After 2026-10-R1, nodes also show their telemetry: battery level, voltage, channel and airtime use, and uptime.  Packets on encrypted channels are decrypted when the channel key is known; the default channel for every modem preset, with the default key, is always enabled.
 
 Additional channels and keys are set in `kismet_meshtastic.conf`, as `meshtastic_key=channelname,base64key`:
 

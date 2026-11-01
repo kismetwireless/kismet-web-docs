@@ -22,7 +22,7 @@ source=rtl433-0:type=rtl433
 
 ## Required software 
 
-The Kismet SDR RTL_433 source is a basic Python glue between the `rtl_433` tool and Kismet:  All the decoding, heavy work, and handling of protocols is done by `rtl_433`; Kismet collects the JSON output of the tool and turns it into device records. 
+The Kismet SDR RTL_433 source is a small C tool between the `rtl_433` tool and Kismet (after 2026-10-R1 the older Python version is removed):  All the decoding, heavy work, and handling of protocols is done by `rtl_433`; Kismet collects the JSON output of the tool and turns it into device records. 
 
 Kismet thus requires that `rtl_433` be available.  On some distributions this is available as the `rtl-433` package (Ubuntu Jammy )
 

@@ -28,7 +28,7 @@ Alerts are configured with the `alert=` configuration option, and the defaults a
 The throttle option controls how many alerts are allowed per time unit (seconds and minutes), and burst controls how many alerts are allowed in quick succession.  For instance:
 
 ```
-alert=NETSTUMBLER,5/min,1/sec
+alert=APSPOOF,5/min,1/sec
 ```
 
 Will allow at most one alert per second, and at most 5 alerts per minute.  Excess alerts will not be reported.

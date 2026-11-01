@@ -64,10 +64,6 @@ Sets the URI prefix - this prefix is an optional lead-in value to all the existi
 Path to static content web data to be served by Kismet.  This is typically set automatically to the directory installed by Kismet in the installation prefix. Typically the only reason to change this directory is to replace the Kismet web UI with alternate code or when doing development on the Kismet UI so that changes can be immediately reflected.
 {{</configopt>}}
 
-{{<configopt httpd_user_home "/path/to/user/httpd/data">}}
-Path to static content stored in the home directory of the user running Kismet.  This is typically set to the httpd directory inside the users .kismet directory. This allows plugins installed to the user directory to install web UI components. Typically there is no reason to change this directory. If you wish to disable serving content from the user directory entirely, comment this configuration option out.
-{{</configopt>}}
-
 {{<configopt httpd_session_db "/path/to/session/db">}}
 Path where API keys and session data is stored.  If you want to refresh the logins (and require browsers to log in again after each restart), comment this option. Typically there is no reason to change this option. 
 {{</configopt>}}
@@ -98,6 +94,13 @@ Plugins which add pages to the previous UI keep working in it from `/legacy/`; t
 
 Both UIs use the same login, and settings in one don't change the other.
 
+Other parts of the new UI:
+
+* *Packet rates*, in the menu or from the packets count in the top bar, graphs the packet rate of each data source, with dropped packets, errors, and events such as sources opening, and links to the channel heat map.
+* *Settings*, *Units* picks how speeds (km/h, mph, or knots) and lengths (meters and kilometers, or feet and miles) are shown, including the map's range rings.
+* *Settings*, *Appearance*, *Device Highlights* colors rows in the device list by [device rule](/docs/readme/configuring/device_rules/#rules-in-the-web-ui) tag, by the type of radio (phy), and by other phy-specific highlights.  Tags and other highlights can be dragged into priority order; picking a color turns its highlight on.
+* The device list has a *Tags* column, which can be searched and sorted, and the device details list a device's tags first, with the rules that set them.
+
 The new UI's map can draw the [receiver range](/docs/readme/configuring/receiver_range/) for each kind of device on it: the furthest distance devices were heard at in each direction over all time, over the last day, or by altitude, with range rings.  Without Kismet's own location, it draws the area the devices were heard over.
 
 ### Installing the web UI as an app
@@ -109,6 +112,19 @@ After 2026-10-R1, the web UI can be installed on a phone or desktop as an app, w
 Kismet can censor aspects of the UI to make it easier to share screenshots or demos without revealing your location via MAC addresses, SSIDs, or location data.
 
 Censorship mode can be enabled by adding `?censor=1` to the Kismet URL, for instance `http://localhost:2501?censor=1`.  After 2026-10-R1, censorship is available in the legacy UI, for instance `http://localhost:2501/legacy/?censor=1`.
+
+After 2026-10-R1, the new UI has censor mode under *Settings*, *Censor mode*, and also takes it from the page address, which wins over the settings for that page:
+
+| Parameter | Hides |
+| --------- | ----- |
+| `censor=1` | MAC addresses, names and identifiers, and locations, partly |
+| `censor_heavy=1` | All of them, completely |
+| `censor_macs=1` | MAC addresses, and names |
+| `censor_names=1` | Names and identifiers of devices and networks |
+| `censor_location=1` | Locations, and the map |
+| `censor_more=1` | Hides completely instead of partly |
+
+Partly hidden, a MAC address keeps its manufacturer half, a name its first and last two characters, and a location its whole degrees.
 
 ## Kismet and SSL
 

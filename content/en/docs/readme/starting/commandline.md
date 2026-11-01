@@ -74,7 +74,7 @@ Use an alternate home directory path instead of the users `${HOME}`.
 
 
 {{<argument confdir path>}}
-Use an alternative configuration directory instead of the value Kismet was compiled with.
+Use an alternative configuration directory instead of the value Kismet was compiled with.  After 2026-10-R1, both `kismet.conf` and the config files it includes are read from this directory, unless `-f` names a config file.  The `KISMET_CONF` environment variable sets the directory in the same way; `--confdir` wins over it.
 {{</argument>}}
 
 

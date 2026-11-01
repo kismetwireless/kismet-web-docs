@@ -79,7 +79,8 @@
       required: false 
       description: |
         When in datatables mode, the search term to be applied to all fields in the 
-        summary list.
+        summary list.  After 2026-10-R1, fields which are lists of strings, such as
+        device rule tags, are searched too, and sort as their values joined.
     - 
       name: "order[0][column]"
       type: "string"
@@ -160,7 +161,8 @@
       required: false 
       description: |
         When in datatables mode, the search term to be applied to all fields in the 
-        summary list.
+        summary list.  After 2026-10-R1, fields which are lists of strings, such as
+        device rule tags, are searched too, and sort as their values joined.
     - 
       name: "order[0][column]"
       type: "string"

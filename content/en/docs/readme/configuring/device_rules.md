@@ -28,6 +28,7 @@ Each rule has a name, a condition, and what to do with devices which match it:
 ```
 rule <name> {
     when <condition>
+    description "<text>"
     tag "<text>"
     color "#rrggbb"
     view "<description>"
@@ -37,9 +38,10 @@ rule <name> {
 ```
 
 * `when` is the condition a device must match.
+* `description` says what the rule finds, in at most 1024 characters; the web UI shows it with the rule's tags.
 * `tag` tags matching devices; a rule can have any number of tags.
-* `color` gives matching devices a highlight color.  When a device matches several rules with colors, the first rule wins.
-* `view` collects matching devices in the device view `rule-<name>`, with the description as the view name (or `Devices matching rule <name>` when it's empty).
+* `color` gives matching devices a highlight color, which the web UI also uses for the rule's tags.  When a device matches several rules with colors, the first rule wins.
+* `view` collects matching devices in the device view `rule-<name>`, with the description as the view name; without one, the view takes the rule's `description`, or `Devices matching rule <name>`.
 * `alert` raises a `DEVICERULE` alert when a device starts matching the rule.
 * `live` checks the rule on every packet which updates a device, as well as on the timer.
 
@@ -249,7 +251,11 @@ Compile rules to native code where the platform allows it (64-bit x86, ARM, RISC
 
 ## Rules in the web UI
 
-The device list has a `Rule tags` column, and the device details show the rules a device matches and its tags.  Rows in the device list are highlighted by their tags; the colors for each tag are picked under `Settings`, `Rule tags`.  The web UI comes with colors for the tags of the [shipped rules](#shipped-rules); if the colors were already changed in the settings, the saved list is kept, and the new tags need to be added to it.  Views made by rules are listed with the other device views.
+The device list has a `Tags` column, which can be searched and sorted, and the device details list a device's tags first, with the rules that set them and their descriptions.  Views made by rules are listed with the other device views, with how many devices they hold.
+
+Rows in the device list are highlighted by their tags, under `Settings`, `Appearance`, `Device Highlights`.  Each tag takes the color of its rule, or a default color for the tags of the [shipped rules](#shipped-rules) and the examples, and the color can be changed there.  Tags can be dragged into priority order: a device with several tags takes the color of the highest one.
+
+The legacy UI picks tag colors under `Settings`, `Rule tags`, with defaults for the tags of the shipped rules; if the colors were already changed there, the saved list is kept, and new tags need to be added to it.
 
 ## Rules in the REST API
 

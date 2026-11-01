@@ -236,6 +236,7 @@
   name: "DHCPCONFLICT"
   class: "trend"
   phy: "IP"
+  removed: "after 2026-10-R1"
   docs: |
     Clients which request a DHCP address and receive a response, but operate on a different IP address, may be misconfigured, or may be spoofed by an attacker trying to gain access by simulating an existing client.
 
@@ -345,6 +346,7 @@
   name: "LUCENTTEST"
   class: "fingerprint"
   phy: "dot11"
+  removed: "after 2026-10-R1"
   deprecated: true
   docs: |
     Very old 802.11b Lucent Orinoco cards generated identifiable packets in some scanning test modes.
@@ -391,6 +393,7 @@
   name: "NETSTUMBLER"
   class: "fingerprint"
   phy: "dot11"
+  removed: "after 2026-10-R1"
   deprecated: "true"
   docs: |
     The original Netstumbler tool on Windows could generate, in certain conditions, packets with identifiable content.
@@ -436,6 +439,7 @@
   name: "NULLPROBERESP"
   class: "fingerprint"
   phy: "dot11"
+  removed: "after 2026-10-R1"
   deprecated: true
   docs: |
     Probe response packets with a SSID element with a length of zero would cause the firmware in extremely old 802.11b network cards (Prism2, Orinoco, and the original Apple Airport) to crash.

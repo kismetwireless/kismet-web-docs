@@ -162,7 +162,7 @@
 
     * Generation
 
-        Published when a datasource is opened (or re-opened)
+        Published when a datasource is opened (or re-opened).  Through 2026-10-R1 this was only published when a source re-opened after an error; after 2026-10-R1, it is published for every open, at startup, from the API, or after an error.
 
     ##### DATASOURCE_CLOSED
 

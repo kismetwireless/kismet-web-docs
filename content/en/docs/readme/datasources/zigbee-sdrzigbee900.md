@@ -31,25 +31,19 @@ On most distributions these are available as packages (`gnuradio`, `gr-osmosdr`,
 
 ## Building and installing the datasource
 
-The SDR 900MHz capture helper is not currently part of Kismet's default `make` / `make install`, so it needs one extra manual step after building Kismet itself:
+After 2026-10-R1, the SDR 900MHz capture helper is built and installed with Kismet when `configure` finds librtlsdr and libusb (`RTL-SDR Zigbee 900M` in the `configure` summary), and is packaged as `kismet-capture-zigbee900`.  `make install` installs the GNU Radio decoder script as `<prefix>/share/kismet/zigbee900/zigbee900_live_rx.py` (`/usr/share/kismet/zigbee900/` for packages), where the capture helper looks for it.
+
+Through 2026-10-R1, the helper and script had to be built and copied by hand:
 
 ```bash
 cd capture_sdr_zigbee900
 make
 sudo cp kismet_cap_sdr_zigbee900 /usr/local/bin/
-```
-
-Adjust the destination to match wherever your Kismet install places its other capture helpers (typically the same directory as `kismet_cap_linux_wifi`, etc.) if you configured a different `--prefix`.
-
-The GNU Radio decoder script also needs to be somewhere Kismet's capture helper can find it. The default location it looks for is:
-
-```bash
 sudo mkdir -p /usr/share/kismet/zigbee900
-sudo cp capture_sdr_zigbee900/zigbee900_live_rx.py /usr/share/kismet/zigbee900/
-sudo chmod +x /usr/share/kismet/zigbee900/zigbee900_live_rx.py
+sudo cp zigbee900_live_rx.py /usr/share/kismet/zigbee900/
 ```
 
-If you'd rather keep the script somewhere else, point at it directly with the `script=` source option instead of installing it to the default path (see Source parameters, below).
+If you'd rather keep the script somewhere else, point at it directly with the `script=` source option (see Source parameters, below).
 
 ## Legacy 900MHz IEEE 802.15.4
 
@@ -119,7 +113,7 @@ All data sources accept the [common naming and description](/docs/readme/datasou
 ### Script location
 
 {{<configopt script "/path/to/zigbee900_live_rx.py">}}
-Override the decoder script path. Defaults to `/usr/share/kismet/zigbee900/zigbee900_live_rx.py`; only needed if the script has been placed somewhere other than the default install location described above.
+Override the decoder script path. Defaults to `<prefix>/share/kismet/zigbee900/zigbee900_live_rx.py` (through 2026-10-R1, always `/usr/share/kismet/zigbee900/zigbee900_live_rx.py`); only needed if the script has been placed somewhere other than the default install location described above.
 
 ```
 source=zigbee900sdr:name=zigbee900,script=/opt/kismet/zigbee900_live_rx.py

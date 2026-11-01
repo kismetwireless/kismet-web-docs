@@ -75,6 +75,14 @@ and
 ppi_log_duplicate_packets=false
 ```
 
+Duplicates can instead be truncated in the pcapng log, keeping only their radio headers, which saves space while keeping the signal levels from each source:
+
+```
+pcapng_truncate_duplicate_packets=true
+```
+
+Through 2026-10-R1, the shipped `kismet_logging.conf` named this option `pcspng_log_truncate_duplicates`, which Kismet doesn't read; after 2026-10-R1 it has the right name.
+
 ### Data packets
 
 Kismet typically logs all types of packets.  To discard data packets, retaining only management frames:

@@ -15,6 +15,8 @@ toc: true
 
 Added: `2021-07`
 
+Removed: `after 2026-10-R1`
+
 The Bluetooth Geiger source reads radiation data from a custom Bluetooth LE Geiger counter, connected over BLE GATT.
 
 ## !! WARNING !!!
@@ -23,10 +25,7 @@ Kismet interfaces with environmental sensors, including Geiger Counter / Radiati
 
 ## Status
 
-The Bluetooth Geiger source is incomplete:
-
-* The capture tool is not currently built or installed by the Kismet build.
-* Readings from the source are logged, but are not yet shown in the Kismet radiation display.
+After 2026-10-R1, the Bluetooth Geiger source is removed from Kismet.  It was never complete: the capture tool was not built or installed by the Kismet build, and readings were not shown in the Kismet radiation display.
 
 For supported Geiger counters, see the [Radiacode](/docs/readme/datasources/radiacode/) and [Radview](/docs/readme/datasources/radview/) sources.
 

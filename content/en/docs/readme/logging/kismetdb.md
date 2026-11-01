@@ -67,6 +67,21 @@ kis_log_ephemeral_dangerous=true
 
 An ephemeral log is removed from the filesystem upon creation; the log is not accessible on disk, and will be removed immediately upon Kismet exiting.  Ephemeral logs are most useful when deploying Kismet as a permanent fixed sensor with a time-limited history; for instance retaining the past day of devices, packets, etc, but where there is no need (or desire) to keep log files.
 
+## Log contents
+
+Each kind of record in the kismetdb log can be turned off:
+
+```
+kis_log_devices=true
+kis_log_packets=true
+kis_log_messages=true
+kis_log_alerts=true
+kis_log_datasources=true
+kis_log_datasources_rate=30
+```
+
+`kis_log_datasources_rate` is how often, in seconds, the data sources are logged.  Through 2026-10-R1, `kis_log_alerts=false` didn't stop alerts being logged, and the data source rate was only read by its old name, `kis_log_datasource_rate`; after 2026-10-R1, both options work, and the old name still works.
+
 ## GPS snapshots
 
 When a GPS is configured, Kismet logs snapshots of the GPS status to the `snapshots` table of the kismetdb log:

@@ -107,21 +107,12 @@ Alerts are still logged, and will not be lost from the log file.
 {{</configopt>}}
 
 
-{{<configopt packet_dedup_size packets>}}
-When using multiple datasources, Kismet maintains a system to identify duplicate packets captured from multiple sources. 
-
-This system prevents multiple copies of the same packet triggering alerts incorrectly, and allows multiple datasources to contribute to the signal levels of the captured packet.
-
-Only copies which reach Kismet within a second of each other are treated as duplicates.  A device which repeats an identical frame more than a second later, such as an unchanging BTLE advertisement, ADS-B or AIS message, or sensor report, is counted as a new packet (since `2026-10`; earlier versions could count these repeats as duplicates).
-
-Tuning this value will save some RAM, but not a significant amount.
-{{</configopt>}}
-
-
 {{<configopt packet_backlog_warning packets>}}
 Kismet will start raising warnings when the number of packets waiting to be processed is over this number; no action will be taken, but an alert will be generated.
 
 This can be set to zero to disable these warnings; Kismet defaults to zero.  Disabling these warnings will NOT disable the backlog limit warnings.
+
+Through 2026-10-R1, Kismet only read this option by its old name, `packet_log_warning`, and ignored `packet_backlog_warning`.  After 2026-10-R1, `packet_backlog_warning` is read, and the old name still works.
 {{</configopt>}}
 
 

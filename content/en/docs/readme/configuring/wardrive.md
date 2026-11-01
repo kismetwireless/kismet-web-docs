@@ -124,7 +124,6 @@ What does wardriving mode change?  You can see all the options in the `kismet_wa
     The kismetdb log can contain channel usage over time, datasource rates over time, and other info - we don't care about that for wardriving, turn it off.  This saves both disk space and IO time to slower disks, like microsd cards.
 
     ```
-    kis_log_channel_history=false
     kis_log_datasources=false
     ```
 
