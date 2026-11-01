@@ -38,10 +38,13 @@ and pivot into a read-only mount namespace.
 After 2026-10-R1:
 
 * Setuid helpers keep only the `CAP_NET_ADMIN` and `CAP_NET_RAW` capabilities.
-* Helpers which run an external tool (such as `rtl_433` for the rtl433 source,
-  or the decoder script for the zigbee900 source) drop back to the user who
-  launched them before running it, so the tool runs as that user, and needs
-  that user to have access to the USB device.
+* The helpers which run an external tool (`kismet_cap_sdr_rtl433`, which runs
+  `rtl_433`, and `kismet_cap_sdr_zigbee900`, which runs its decoder script)
+  are no longer installed setuid by `make suidinstall`.  They run as the user
+  who launched Kismet, which needs access to the RTL-SDR USB device through
+  udev rules instead.  The Kismet packages install and enable udev rules for
+  them which give the `kismet` group access, and remove the setuid bit left by
+  an older package when upgrading.
 * Helpers running as root, setuid or not, run in a read-only view of the
   filesystem (on Linux, a mount namespace): only `/dev`, `/proc`, `/sys`,
   `/run`, `/tmp`, `/var/tmp`, and the lock directories stay writable, and the

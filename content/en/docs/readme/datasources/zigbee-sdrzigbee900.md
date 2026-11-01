@@ -45,7 +45,7 @@ sudo cp zigbee900_live_rx.py /usr/share/kismet/zigbee900/
 
 If you'd rather keep the script somewhere else, point at it directly with the `script=` source option (see Source parameters, below).
 
-After 2026-10-R1, when the capture helper is installed suid-root, it runs the script as the user who launched Kismet, so that user needs permission to use the RTL-SDR USB device.  When the helper runs as root, `script=` is refused, and only the installed script is used.
+After 2026-10-R1, the capture helper is no longer installed suid-root; it, and the script, run as the user who launched Kismet, so that user needs permission to use the RTL-SDR USB device.  The `kismet-capture-zigbee900` package installs a udev rule which gives the `kismet` group access; otherwise, use the udev rules installed with `librtlsdr` or `rtl-sdr`.  If the helper is run as root (such as by running Kismet with `sudo`), `script=` is refused, and only the installed script is used.
 
 ## Legacy 900MHz IEEE 802.15.4
 

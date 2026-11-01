@@ -166,6 +166,8 @@ Generally, you should install Kismet as suid-root; Kismet will automatically add
 
 When installed suid-root, Kismet will launch the binaries which control the channels and interfaces with the needed privileges, but will keep the packet decoding and web interface running without root privileges.
 
+After 2026-10-R1, the rtl433 and zigbee900 SDR helpers are not installed suid-root, since they don't need root; the user running Kismet needs access to the RTL-SDR USB device through udev rules instead.
+
 ```bash
 sudo make suidinstall
 ```
