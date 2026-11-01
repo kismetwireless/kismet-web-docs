@@ -9,7 +9,7 @@ menu:
   docs:
     parent: ""
     identifier: "plugins-6ad66a12075981cb07bdfc2fc3711346"
-weight: 999
+weight: 1
 toc: true
 ---
 
@@ -31,7 +31,7 @@ UI plugins have seen much more community interest, and are being expanded.
 
 After the `2026-10-R1` release, Kismet has been gaining a new UI, with new capabilities, as well as new dynamic server-side back-end options for defining views, new columns in the UI, and more.  The plugin registry and documentation will be updated to reflect the new capabilities, but until the UI stabilizes, consider some of the options to likely be in flux.  Please, come chat with us on the [Kismet Discord server](https://discord.gg/5N4ME9a) if you'd like insight and input into the new UI plugin process!
 
-The new UI's plugin interface is described in [UI Plugins](/docs/dev/uiplugins/uiplugins_intro/).
+The new UI's plugin interface is described in [UI Plugins](/docs/dev/plugins/uiplugins_intro/).
 
 ## Plugin locations
 Plugins can be installed into one of two locations:
@@ -50,57 +50,10 @@ Plugins are mapped into the Kismet webserver under `/plugin/[plugin-directory-na
 To register a JS module for automatic loading (for instance, to interact with the normal Kismet web UI and add new tabs, details, etc), a plugin must either:
 
 * Register the module with the `kis_httpd_registry::register_js(...)` system
-* Define a plugin manifest stored in `[prefix]/plugins/[name]/manifest.conf`
+* Define a [plugin manifest](/docs/dev/plugins/plugins_manifest/) stored in `[prefix]/plugins/[name]/manifest.conf`
 
 ## Plugin external HTTP helpers
 An external HTTP helper plugin communicates with Kismet over the external API IPC channel.  The binary is launched by Kismet.  External API plugins can add new endpoints to the Kismet server and communicate with Kismet via the IPC channel and the Kismet web API.
 
 ## Plugin manifests
-The manifest file allows Kismet to automatically derive information about a plugin with no native code - this allows for simple HTTP-only plugins which enhance the web UI without requiring them to include compiled code to register the plugin.
-
-The manifest file should be placed in `[prefix]/plugins/[name]/manifest.conf`, and takes the form of a Kismet config file (name=value pairs):
-
-| Key          | Content                                              |
-| ----         | -------                                              |
-| name         | Plugin name                                          |
-| description  | Plugin description                                   |
-| author       | Plugin author                                        |
-| version      | Plugin version                                       |
-| object       | plugin shared object file name                       |
-| httpexternal | external API tool binary name                        |
-| js           | JS module and path as `module_name,/web/path/to/js`. |
-| ui2          | Module for the new web UI, as `module_name,web/path/to/js` (a path relative to the server root; after 2026-10-R1) |
-
-Example manifest:
-```
-name=Webplugin
-description=Trivial web-only plugin
-author=Joe Random <joerandom@random.foo>
-version=1.0.0
-
-js=new_web_module,/plugin/webplugin/js/new_web_module.js
-```
-
-Example manifest for plugin with C++ code:
-```
-name=Codeplugin
-description=Standard code-based plugin
-author=Joe Random <joerandom@random.foo>
-version=1.0.0
-
-object=kismet-codeplugin.so
-
-js=code_web_module,/plugin/codeplugin/js/code_web_module.js
-```
-
-Example manifest for plugin with an external binary:
-```
-name=ProxyDemo
-description=Demo of a plugin using the external API tool to create new endpoints
-author=Joe Random <joerandom@random.foo>
-version=1.0.0
-
-httpexternal=kismet_proxydemo
-js=proxied_web_module,/plugin/proxydemo/js/proxied_web_module.js
-```
-
+Every plugin has a `manifest.conf` in its directory, which names the plugin and what it loads: native code, an external helper, web UI modules, and device rules.  The keys and examples are in [Plugins Manifest](/docs/dev/plugins/plugins_manifest/).

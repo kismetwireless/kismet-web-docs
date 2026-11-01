@@ -5,6 +5,7 @@ lead: ""
 date: 2026-11-01T01:00:00-04:00
 lastmod: 2026-11-01T01:00:00-04:00
 images: []
+aliases: ["/docs/dev/uiplugins/uiplugins_insights/"]
 menu:
   docs:
     parent: ""

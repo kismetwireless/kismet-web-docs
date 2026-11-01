@@ -5,6 +5,7 @@ lead: ""
 date: 2026-11-01T01:00:00-04:00
 lastmod: 2026-11-01T01:00:00-04:00
 images: []
+aliases: ["/docs/dev/uiplugins/uiplugins_page/"]
 menu:
   docs:
     parent: ""
@@ -100,7 +101,7 @@ ui.addTable({
 });
 ```
 
-Columns and highlights take the same options as the [device list's](/docs/dev/uiplugins/uiplugins_devicelist/).  Each table keeps its own registries, so another module can add to someone else's table, before or after the table itself is added:
+Columns and highlights take the same options as the [device list's](/docs/dev/plugins/uiplugins_devicelist/).  Each table keeps its own registries, so another module can add to someone else's table, before or after the table itself is added:
 
 ```javascript
 kismet.ui.tableColumns('ssids').add({ id: 'myplugin_note', title: 'Note', ... });
@@ -114,7 +115,7 @@ kismet.ui.tableHighlights('ssids').add({ id: 'myplugin_open', name: 'Open networ
 | Option | |
 | ------ | - |
 | `id`, `title`, `priority` | The entry |
-| `icon` | An icon name (see [icons](/docs/dev/uiplugins/uiplugins_core/#icons)) |
+| `icon` | An icon name (see [icons](/docs/dev/plugins/uiplugins_core/#icons)) |
 | `onClick()` | What it does |
 | `section` | `'about'`, `'windows'` (the default), or `'settings'` |
 
@@ -158,7 +159,7 @@ ui.menuItems.add({
 | `create(el)` | Fills `el` and keeps it up to date; may return a cleanup function |
 | `defaultVisible` | Shown until the user changes the ribbon (default `true`) |
 
-Most stats subscribe to the [event bus](/docs/dev/uiplugins/uiplugins_core/#live-events).  The device count:
+Most stats subscribe to the [event bus](/docs/dev/plugins/uiplugins_core/#live-events).  The device count:
 
 ```javascript
 ui.ribbonStats.add({
@@ -183,7 +184,7 @@ ui.ribbonStats.add({
 | `create(el)` | Builds the section; may return a cleanup function |
 | `parent` | The id of the section this one is listed under |
 
-There is no save button: settings take effect as they change.  Settings kept in the browser use `kismet.settings` (see [settings](/docs/dev/uiplugins/uiplugins_core/#settings)):
+There is no save button: settings take effect as they change.  Settings kept in the browser use `kismet.settings` (see [settings](/docs/dev/plugins/uiplugins_core/#settings)):
 
 ```javascript
 ui.settingsPanes.add({

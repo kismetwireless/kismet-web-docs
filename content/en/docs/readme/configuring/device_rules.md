@@ -185,9 +185,11 @@ A rule with the same name in a later file, such as `kismet_device_rules.txt`, re
 
 ## Loading rules
 
-Rules are read from rules files, then from directories of rules files, then from `device_rule` and `device_sort` lines in the config, and then from the REST API, in that order.  The order sets which rule's color wins and how `by rule` sorts.
+Rules are read from rules files, then from directories of rules files, then from plugins, then from `device_rule` and `device_sort` lines in the config, and then from the REST API, in that order.  The order sets which rule's color wins and how `by rule` sorts.
 
 A rule or sort with the same name as one read earlier, from another file, replaces it in its place; the same name twice in one file is an error.  If any rule has an error, none of the rules are loaded, and the error is reported with its file and line.
+
+After 2026-10-R1, [plugins can ship rules files](/docs/dev/plugins/plugins_manifest/#device-rules), in the order the plugins load, after the rules files and directories.  Plugin rules are built in once every plugin has loaded, so they can use the fields plugins add, and each plugin's rules are checked on their own: a plugin whose rules have an error is left out, with the error logged, and the other rules still load.  A `device_rule` line or a rule set over the API can replace a plugin's rule by name.
 
 The device rules options are in `kismet_device_rules.conf`; as with other options, changes are best made in [kismet_site.conf](/docs/readme/configuring/configfiles/#customizing-configs-with-kismet_siteconf).
 
@@ -226,11 +228,11 @@ device_sort=loudest { by signal desc, packets desc }
 {{</configopt>}}
 
 {{<configopt device_rule_disable name>}}
-Leave out a rule by name, such as one from a packaged rules file.
+Leave out a rule by name, such as one from a packaged rules file or a plugin.  A name which matches no rule is reported in the log once the plugins have loaded.
 {{</configopt>}}
 
 {{<configopt device_sort_disable name>}}
-Leave out a sort by name.
+Leave out a sort by name, including a plugin's.
 {{</configopt>}}
 
 {{<configopt device_rules_api_save true false>}}
@@ -264,6 +266,8 @@ Compile rules to native code where the platform allows it (64-bit x86, ARM, RISC
 The device list has a `Tags` column, which can be searched and sorted, and the device details list a device's tags first, with the rules that set them and their descriptions.  Views made by rules are listed with the other device views, with how many devices they hold.
 
 Rows in the device list are highlighted by their tags, under `Settings`, `Appearance`, `Device Highlights`.  Each tag takes the color of its rule, or a default color for the tags of the [shipped rules](#shipped-rules) and the examples, and the color can be changed there.  Tags can be dragged into priority order: a device with several tags takes the color of the highest one.
+
+After 2026-10-R1, *Device rules* in the main menu lists the loaded rules and sorts, grouped by where they came from: each rules file, the config file, each plugin, and the rules set over the API.  Each rule can be opened to show its description, tags, color, whether it is `live`, raises an `alert` or makes a `view`, the file and line it came from, and its text.  Rules which replaced an earlier rule of the same name are noted, and *Reload* reads the list again.
 
 The legacy UI picks tag colors under `Settings`, `Rule tags`, with defaults for the tags of the shipped rules; if the colors were already changed there, the saved list is kept, and new tags need to be added to it.
 

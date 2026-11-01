@@ -5,6 +5,8 @@
   methods: ["GET"]
   roles: ["readonly"]
   docs: |
-    Fetch a JSON list of active plugins, including descriptions, authors, and relatefd data. 
+    Fetch a JSON list of active plugins, including descriptions, authors, and related data.
+
+    After 2026-10-R1, each plugin's `kismet.plugin.device_rules` lists the [device rules files](/docs/dev/plugins/plugins_manifest/#device-rules) it loads.
 
   

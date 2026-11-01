@@ -28,7 +28,7 @@
   name = "Development"
   weight = 50
   identifier = "development"
-  url = "/docs/dev/plugins/"
+  url = "/docs/dev/plugins/plugins/"
   parent = "docs"
 
 [[main]]

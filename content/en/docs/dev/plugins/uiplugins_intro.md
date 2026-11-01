@@ -5,6 +5,7 @@ lead: ""
 date: 2026-11-01T01:00:00-04:00
 lastmod: 2026-11-01T01:00:00-04:00
 images: []
+aliases: ["/docs/dev/uiplugins/uiplugins_intro/"]
 menu:
   docs:
     parent: ""
@@ -42,7 +43,7 @@ A module can `import` its own other files with relative paths, as the Wi-Fi modu
 
 ## Installing a UI plugin
 
-A UI plugin is a [web-only plugin](/docs/dev/plugins/#plugin-static-web-content): a directory in one of the [plugin locations](/docs/dev/plugins/#plugin-locations), with a `manifest.conf` and its files under `httpd/`, which Kismet serves at `/plugin/[plugin-directory-name]/`.
+A UI plugin is a [web-only plugin](/docs/dev/plugins/plugins/#plugin-static-web-content): a directory in one of the [plugin locations](/docs/dev/plugins/plugins/#plugin-locations), with a `manifest.conf` and its files under `httpd/`, which Kismet serves at `/plugin/[plugin-directory-name]/`.
 
 The new UI loads the module named by the `ui2=` key in the manifest, as `module_name,path`, where the path is relative to the Kismet server root (no leading `/`):
 
@@ -55,7 +56,7 @@ version=1.0.0
 ui2=myplugin,plugin/myplugin/js/myplugin.js
 ```
 
-with the module in `httpd/js/myplugin.js` in the plugin directory.  A plugin can have both a `js=` module for the [legacy UI](/docs/dev/webui/) and a `ui2=` module for the new one; each UI loads only its own.
+with the module in `httpd/js/myplugin.js` in the plugin directory.  The other manifest keys, such as `devicerules=` for device rules the plugin ships, are in [Plugins Manifest](/docs/dev/plugins/plugins_manifest/).  A plugin can have both a `js=` module for the [legacy UI](/docs/dev/webui/) and a `ui2=` module for the new one; each UI loads only its own.
 
 The server lists the modules to load at `/dynamic.json`.  Entries with a `ui2` path are loaded by the new UI; legacy entries for the phys the new UI already has a module for load that module instead, and any others are skipped and shown in About.
 
@@ -81,14 +82,14 @@ The comments at the top of each file in `http_data/js/registry/` are the full re
 
 | Registry | Page |
 | -------- | ---- |
-| `deviceColumns`, `deviceIcons`, `rowHighlights`, `phyColors`, `searchFields`, `filterHints`, `deviceViews` | [The device list](/docs/dev/uiplugins/uiplugins_devicelist/) |
-| `deviceDetails`, `deviceDetailFields` | [Device details](/docs/dev/uiplugins/uiplugins_details/) |
-| `panes`, `menuItems`, `ribbonStats`, `settingsPanes`, `colorSchemes`, and `addTable` | [Tabs, menus, and settings](/docs/dev/uiplugins/uiplugins_page/) |
-| `dashboardCards`, `mapSources` | [Overview and map](/docs/dev/uiplugins/uiplugins_overview_map/) |
-| `sourceSections`, `sourceFields`, `sourceTypes`, `channelPickers`, `channelNames`, `sourceChannels` | [Data sources and channels](/docs/dev/uiplugins/uiplugins_sources/) |
-| `insightRelations`, `linkKinds`, `insightFindings`, `insightViews` | [Insights](/docs/dev/uiplugins/uiplugins_insights/) |
+| `deviceColumns`, `deviceIcons`, `rowHighlights`, `phyColors`, `searchFields`, `filterHints`, `deviceViews` | [The device list](/docs/dev/plugins/uiplugins_devicelist/) |
+| `deviceDetails`, `deviceDetailFields` | [Device details](/docs/dev/plugins/uiplugins_details/) |
+| `panes`, `menuItems`, `ribbonStats`, `settingsPanes`, `colorSchemes`, and `addTable` | [Tabs, menus, and settings](/docs/dev/plugins/uiplugins_page/) |
+| `dashboardCards`, `mapSources` | [Overview and map](/docs/dev/plugins/uiplugins_overview_map/) |
+| `sourceSections`, `sourceFields`, `sourceTypes`, `channelPickers`, `channelNames`, `sourceChannels` | [Data sources and channels](/docs/dev/plugins/uiplugins_sources/) |
+| `insightRelations`, `linkKinds`, `insightFindings`, `insightViews` | [Insights](/docs/dev/plugins/uiplugins_insights/) |
 
-Talking to the server, live events, settings, themes, and the drawing helpers are on [the kismet object](/docs/dev/uiplugins/uiplugins_core/).
+Talking to the server, live events, settings, themes, and the drawing helpers are on [the kismet object](/docs/dev/plugins/uiplugins_core/).
 
 ## Fields
 

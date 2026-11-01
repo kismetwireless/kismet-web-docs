@@ -5,6 +5,7 @@ lead: ""
 date: 2026-11-01T01:00:00-04:00
 lastmod: 2026-11-01T01:00:00-04:00
 images: []
+aliases: ["/docs/dev/uiplugins/uiplugins_sources/"]
 menu:
   docs:
     parent: ""
@@ -38,7 +39,7 @@ With both, a source must have one of the drivers and pass the test.  `kismet.ui.
 | ------ | - |
 | `id`, `title`, `priority` | The section |
 | `drivers` or `match` | The sources it's for |
-| `fields` | Rows, as [field entries](/docs/dev/uiplugins/uiplugins_details/#field-entries) |
+| `fields` | Rows, as [field entries](/docs/dev/plugins/uiplugins_details/#field-entries) |
 | `render(source, el, ctx)` | Or draw the section yourself; called again about once a second with fresh data, so update in place |
 | `open` | Start expanded (default `true`) |
 | `running` | Only show it while the source is open and running |

@@ -5,6 +5,7 @@ lead: ""
 date: 2026-11-01T01:00:00-04:00
 lastmod: 2026-11-01T01:00:00-04:00
 images: []
+aliases: ["/docs/dev/uiplugins/uiplugins_devicelist/"]
 menu:
   docs:
     parent: ""
@@ -19,7 +20,7 @@ Added: `after 2026-10-R1`
 The UI plugin interface is changing quickly in the nightly builds, and may change before it is in a Kismet release.
 {{< /alert >}}
 
-The device list is built from the columns, icons, and row highlights modules register.  It asks the server only for the fields the visible columns, icon, and highlights list, so each of them says what it reads in `fields` (see [fields](/docs/dev/uiplugins/uiplugins_intro/#fields)).
+The device list is built from the columns, icons, and row highlights modules register.  It asks the server only for the fields the visible columns, icon, and highlights list, so each of them says what it reads in `fields` (see [fields](/docs/dev/plugins/uiplugins_intro/#fields)).
 
 ## Columns
 
@@ -115,7 +116,7 @@ ui.deviceIcons.add({
 });
 ```
 
-Icons are from `kismet.icons`, which a module can add to (see [icons](/docs/dev/uiplugins/uiplugins_core/#icons)).
+Icons are from `kismet.icons`, which a module can add to (see [icons](/docs/dev/plugins/uiplugins_core/#icons)).
 
 ## Row highlights
 

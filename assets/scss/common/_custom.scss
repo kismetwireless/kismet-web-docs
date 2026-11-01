@@ -1,1 +1,21 @@
 /** Custom styles */
+
+// Sub-categories in the docs sidebar read as entries of their category,
+// not as categories of their own
+.btn-toggle-nav .btn-toggle {
+  padding: 0.1875rem 0.5rem 0.1875rem 0;
+  font-weight: 400;
+  font-size: inherit;
+  font-style: italic;
+  text-transform: none;
+  opacity: 0.85;
+}
+
+.btn-toggle-nav .btn-toggle::before {
+  width: 1em;
+  transform: scale(0.8);
+}
+
+.btn-toggle-nav .btn-toggle[aria-expanded="true"]::before {
+  transform: rotate(90deg) scale(0.8);
+}

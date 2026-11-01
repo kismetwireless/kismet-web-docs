@@ -23,4 +23,4 @@ toc: true
 
 ## Kismet developer documentation 
 
-[Additional docs](/docs/dev/plugins/) on developing for Kismet.
+[Additional docs](/docs/dev/plugins/plugins/) on developing for Kismet.

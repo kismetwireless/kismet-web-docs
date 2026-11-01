@@ -26,7 +26,7 @@ Plugins which add pages to the previous UI keep working in it from `/legacy/`; t
 ## What's in it
 
 * *Overview*, *Devices*, *SSIDs*, *Alerts*, *Map*, and *Insights* tabs.
-* Windows for data sources, channel coverage and the channel heat map, packet rates, and GPS, from the menu and the top bar.
+* Windows for data sources, channel coverage and the channel heat map, [device rules](/docs/readme/configuring/device_rules/#rules-in-the-web-ui), packet rates, and GPS, from the menu and the top bar.
 * The device list's *Search or filter* box, which takes [device filters](/docs/readme/webui/webui_filters/) as well as plain searches.
 * A *Tags* column and row highlights from the server's [device rules](/docs/readme/configuring/device_rules/#rules-in-the-web-ui), set under *Settings*, *Appearance*, *Device Highlights*.
 * Display units for speeds and lengths, under *Settings*, *Units*.

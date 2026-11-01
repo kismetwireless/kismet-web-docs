@@ -15,8 +15,8 @@
     | ----- | ------- |
     | `kismet.devicerules.backend` | `jit` when rules are compiled to native code, `vm` when they run in the bytecode interpreter, or `none` |
     | `kismet.devicerules.jit_error` | Why the rules aren't using the JIT, when they aren't |
-    | `kismet.devicerules.rules` | The rules: `kismet.devicerules.rule.name`, `.description`, `.source` (the rule text), `.tags`, `.color`, `.view` (the `rule-<name>` view, when the rule has one), `.alert`, `.live`, and `.origin` (the file and line the rule came from) |
-    | `kismet.devicerules.sorts` | The sorts: `kismet.devicerules.sort.name`, `.source`, and `.origin` |
+    | `kismet.devicerules.rules` | The rules: `kismet.devicerules.rule.name`, `.description`, `.source` (the rule text), `.tags`, `.color`, `.view` (the `rule-<name>` view, when the rule has one), `.alert`, `.live`, `.origin` (the file and line the rule came from), and, after 2026-10-R1, `.from_type` and `.from_name` (what defined the rule, as in `sources`) |
+    | `kismet.devicerules.sorts` | The sorts: `kismet.devicerules.sort.name`, `.source`, `.origin`, and, after 2026-10-R1, `.from_type` and `.from_name` |
     | `kismet.devicerules.api_rules` | The rules text last set with `set.cmd` |
     | `kismet.devicerules.api_save` | Rules set with `set.cmd` are saved and loaded at startup (`device_rules_api_save`) |
     | `kismet.devicerules.passes` | Rule checks run so far |
@@ -24,6 +24,35 @@
     | `kismet.devicerules.last_pass_us` | Duration of the last pass, in microseconds |
   return: |
     Dictionary of the rules and sorts
+  responses:
+    success:
+      - [200, "Success"]
+
+- 
+  name: "Device rules by source"
+  uri: "/devices/rules/sources"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    The [device rules](/docs/readme/configuring/device_rules/) and sorts currently loaded, grouped by what
+    defined them, as the web UI's *Device rules* window shows them.
+
+    `kismet.devicerules.sources` is a list of groups, in the order their first rule or sort comes in:
+
+    | Field | Content |
+    | ----- | ------- |
+    | `kismet.devicerules.source.type` | `file` (a rules file or directory), `config` (`device_rule=` and `device_sort=` lines), `plugin`, or `api` |
+    | `kismet.devicerules.source.name` | The rules file, the config file, the plugin name, or `API` |
+    | `kismet.devicerules.source.files` | The files the group's rules and sorts came from |
+    | `kismet.devicerules.source.rules` | The group's rules, in rule order, as in `rules.json` |
+    | `kismet.devicerules.source.sorts` | The group's sorts, as in `rules.json` |
+    | `kismet.devicerules.source.replaced` | Notes on earlier rules and sorts of the same name which this group replaced |
+  return: |
+    Dictionary of the rules and sorts by source
   responses:
     success:
       - [200, "Success"]
