@@ -80,7 +80,7 @@ A comparison with a field the device doesn't have is false.
 
 * Numbers compare with `==`, `!=`, `<`, `<=`, `>`, and `>=`, and can be calculated with `+`, `-`, `*`, `/`, and `%`.  Put spaces around `/` for division, so it isn't read as a field path.
 * Durations such as `30s`, `5m`, `2h`, and `1d` are numbers of seconds.  `now` is the current time, and `age(field)` is `now - field`.
-* Strings compare with `==` and `!=`, or with `contains`, `icontains` (in any case), `startswith`, `endswith`, and `matches` (a PCRE regular expression), against a `"string"`.
+* Strings compare with `==` and `!=`, or with `contains`, `icontains` (in any case), `startswith`, `endswith`, and `matches` (a PCRE regular expression), against a `"string"`.  After 2026-10-R1, `==`, `!=`, and `in` on the device type (`type`) ignore case, so `type == "wi-fi ap"` matches `Wi-Fi AP`; other strings match exactly.
 * MAC addresses are written `aa:bb:cc:dd:ee:ff`, with an optional mask as `/24` or `/ff:ff:ff:00:00:00`; a short address such as `aa:bb:cc` matches the prefix.
 * `x in [a, b, c]` and `x not in [a, b, c]` test against a list of values.
 * `exists(field)` tests that a field is present, and `count(field)` counts the entries in a list or map.

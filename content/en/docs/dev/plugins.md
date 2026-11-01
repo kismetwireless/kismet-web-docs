@@ -17,10 +17,21 @@ Kismet can load additional code dynamically at runtime in the form of a plugin.
 
 Plugins are a double-edged sword: In their current implementation, plugins are full first-class citizens in the Kismet ecosystem;  a plugin can perform any action Kismet native code can perform, and are given a direct reference to the internal Kismet module system.
 
-## Plugin code
+## C++ plugin code
 
-Plugins are shared objects (.so files) with pre-defined functions, HTML and Javascript code, or external binaries launched over IPC which communicate with the Kismet server.  Plugins can combine all of these aspects.
+Kismet has long supported C++ plugins which load as `.so` shared object files.
 
+While still supported, this functionality has rarely if ever been used for third party plugins throughout decades of Kismet development.
+
+At this point, the C++ plugin API is likely not fully functional, and probably shouldn't be used for new plugins.
+
+## UI plugins
+
+UI plugins have seen much more community interest, and are being expanded.
+
+After the `2026-10-R1` release, Kismet has been gaining a new UI, with new capabilities, as well as new dynamic server-side back-end options for defining views, new columns in the UI, and more.  The plugin registry and documentation will be updated to reflect the new capabilities, but until the UI stabilizes, consider some of the options to likely be in flux.  Please, come chat with us on the [Kismet Discord server](https://discord.gg/5N4ME9a) if you'd like insight and input into the new UI plugin process!
+
+The new UI's plugin interface is described in [UI Plugins](/docs/dev/uiplugins/uiplugins_intro/).
 
 ## Plugin locations
 Plugins can be installed into one of two locations:
@@ -58,6 +69,7 @@ The manifest file should be placed in `[prefix]/plugins/[name]/manifest.conf`, a
 | object       | plugin shared object file name                       |
 | httpexternal | external API tool binary name                        |
 | js           | JS module and path as `module_name,/web/path/to/js`. |
+| ui2          | Module for the new web UI, as `module_name,web/path/to/js` (a path relative to the server root; after 2026-10-R1) |
 
 Example manifest:
 ```

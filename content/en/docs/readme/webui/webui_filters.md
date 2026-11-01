@@ -38,6 +38,9 @@ Filters are written in a short form in the box, and the web UI turns them into a
 | `ssid* ~ guest` | Devices advertising, responding with, or probing for an SSID containing `guest` |
 | `name =~ /^corp-/` | Devices whose name matches a regular expression |
 | `last_time < 5m` | Devices seen in the last 5 minutes |
+| `uptime > 1d` | Access points which have been up for more than a day |
+| `callsign ~ N1` | Aircraft and ships whose callsign contains `N1` |
+| `pan_id == 0x1A2B` | 802.15.4 devices on PAN `0x1A2B` |
 | `first_time < 1h && phy == BTLE` | Bluetooth LE devices first seen in the last hour |
 | `00:11:22` | Devices with `00:11:22` anywhere in any MAC address field |
 | `^00:11:22 \|\| 33:44$` | MAC addresses starting with `00:11:22`, or ending in `33:44` |
@@ -73,6 +76,8 @@ Text with spaces or operator characters goes in double quotes, as in `type == "W
 
 Comparing a time field with a duration (`30s`, `5m`, `2h`, `1d`) compares how long ago it was: `last_time < 5m` lists devices seen in the last 5 minutes, and `first_time > 1d` devices first seen more than a day ago.
 
+Fields which hold a length of time, such as `uptime` (a Wi-Fi access point's uptime, from its beacons), take a duration the same way: `uptime > 1d` lists access points up for more than a day.  A plain number is in the field's own units, which for `uptime` is microseconds.
+
 ### MAC addresses
 
 A MAC address, or a part of one from 1 to 6 octets (such as `00:11:22`, `aa:bb`, or `aa:`), separated by `:` or `-`, matches anywhere in the address, in every MAC address field the device list knows (the device MAC, BSSIDs, and others).  Starting it with `^` only matches the start of the address, and ending it with `$` only the end.
@@ -95,6 +100,38 @@ Some names have a wider form, written with `*`:
 | `ssid*` | Advertised, responded, and probed SSIDs |
 | `bssid*` | The last BSSID and the BSSIDs probed for |
 | `mac*` | Every MAC address field |
+
+### Names for device details
+
+After 2026-10-R1, many of the details shown in the device panel can be filtered on by name, even when they aren't columns in the list.  A name is only known when the server has the phy it belongs to.
+
+| Phy | Names |
+| --- | ----- |
+| Any | `altitude` / `alt` (reported altitude, in meters), `speed` (reported speed, in km/h) |
+| ADS-B | `icao`, `callsign`, `registration` / `reg`, `model`, `operator`, `aircraft_type` |
+| AIS | `mmsi`, `imo`, `ship_name` / `vessel`, `callsign`, `ship_type`, `destination`, `flag` / `country`, `nav_status`, `sog` / `knots` |
+| UAV / drones | `serial`, `drone_manufacturer`, `model`, `registration` / `reg`, `operator` / `operator_id`, `altitude` / `alt`, `height` |
+| Cell | `operator`, `mcc`, `mnc`, `plmn`, `tac`, `cell_id` / `cellid`, `pci`, `arfcn`, `band`, `rsrp`, `rsrq`, `sinr` |
+| 802.15.4 | `pan_id` / `pan`, `short_addr`, `ext_pan_id`, `network_name`, `role` |
+| Meshtastic | `node_id` / `nodeid`, `node_name` (long or short name), `long_name`, `short_name`, `battery`, `voltage`, `channel_use`, `uptime` |
+| MeshCore | `node_name`, `pubkey` / `public_key`, `hops` |
+| Meters | `meter_id`, `meter_type`, `consumption` |
+| Sensors | `model`, `sensor_id`, `battery`, `temperature` / `temp` (°C), `tire_temperature`, `moisture`, `wind_speed` / `wind` |
+| Z-Wave | `home_id`, `zwave_id` |
+| Bluetooth LE | `company_id`, `bt_version`, `chip` / `chip_maker` |
+| Location trackers | `tracker` / `tracker_network`, `battery`, `separated` |
+| Bluetooth | `services` |
+| Wi-Fi | `wps_manuf`, `wps_model`, `wps_device`, `serial` / `wps_serial`, `country`, `mesh_id` |
+
+A name used by more than one phy, such as `callsign`, `model`, `battery`, or `uptime`, matches the field of every phy which has it: `callsign ~ N1` finds aircraft and ships.  Durations convert to each field's own units, so `uptime > 1d` works for Wi-Fi access points and Meshtastic nodes alike.
+
+Numbers can be written in hex, as in `pan_id == 0x1A2B`.
+
+### More names for columns
+
+Some columns answer to more than one name: the Wi-Fi QBSS usage column also to `qbss`, `utilization`, and `usage`, and QBSS clients to `stations`.  A name used by more than one column or search group matches any of their fields; the short names above always keep their meaning.
+
+A comparison on a field skips devices which don't have data for it.  `uptime > 1d` doesn't list clients, or access points which never sent a beacon timestamp, and `usage > 50` only lists access points which report QBSS.  A device without data for a field matches neither a comparison on it nor its negation: `!(usage > 50)` lists access points reporting QBSS usage of 50% or less, not every device without QBSS.
 
 Numbers and times can only be compared with `==`, `!=`, `<`, `<=`, `>`, and `>=`; text and MAC addresses with `==`, `!=`, `~`, and (for text) `=~`.
 
