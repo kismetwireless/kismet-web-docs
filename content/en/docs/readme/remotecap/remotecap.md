@@ -174,7 +174,7 @@ Legacy remote capture does not support authentication, but can be protected with
 
 By default, Kismet will only listen on localhost:3501 for remote capture connections; this allows tunneling over SSH port forwarding or similar tricks, while not exposing your Kismet server.
 
-If you change this option, *make sure* that you are not exposing your remote capture port to an untrusted network!
+The TCP remote capture port has no authentication, and must **never** be exposed to an untrusted network.  Keep it bound to localhost and reach it from remote sources over an SSH tunnel or VPN, or use [websocket remote capture](#websockets), which authenticates.
 
 ### TCP options 
 
@@ -222,7 +222,17 @@ Or a single specific network interface:
 remote_capture_listen=192.168.1.2
 ```
 
-Remote capture should only be enabled on interfaces on a protected LAN.  Remember, there is no authentication on TCP remote capture! 
+Remote capture should only be enabled on interfaces on a protected LAN.  Remember, there is no authentication on TCP remote capture: anything which can reach the port can act as a data source.  Never expose it to an untrusted network; use an SSH tunnel, a VPN, or [websocket remote capture](#websockets) instead.
+
+### Web authentication tokens
+
+Capture helpers can ask Kismet for a web authentication token, so that they can use the REST API without the Kismet login.  After 2026-10-R1, only the helpers Kismet launches itself can fetch a token; sources connecting over the remote capture port or a websocket are refused, including sources on localhost.  No known public capture tools fetch a token, so remote capture is unchanged for them.
+
+To allow remote sources to fetch tokens as before (through 2026-10-R1, sources on localhost could):
+
+```
+remote_capture_allow_http_auth=true
+```
 
 ## Remote capture and GPS 
 

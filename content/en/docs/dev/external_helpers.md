@@ -129,6 +129,8 @@ The Kismet external protocol has hooks for extending the web server functionalit
 
 External tools may request a HTTP authorization token; instead of transmitting the Kismet admin username and password, a web session cookie is generated and returned in a `HTTPAUTH` response.
 
+After 2026-10-R1, only helpers Kismet launches itself are given a token; helpers connecting over the remote capture port or a websocket are refused, including on localhost, unless `remote_capture_allow_http_auth=true` is set.
+
 #### Content
 
 *None*

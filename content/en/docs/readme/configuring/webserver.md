@@ -64,6 +64,16 @@ Sets the URI prefix - this prefix is an optional lead-in value to all the existi
 Path to static content web data to be served by Kismet.  This is typically set automatically to the directory installed by Kismet in the installation prefix. Typically the only reason to change this directory is to replace the Kismet web UI with alternate code or when doing development on the Kismet UI so that changes can be immediately reflected.
 {{</configopt>}}
 
+{{<configopt httpd_max_connections count>}}
+After 2026-10-R1.  The most HTTP connections open at once, by default `512`.  Each open connection, including each web UI websocket, holds a thread and a socket until it closes; connections over the limit are refused at once.  `0` turns the limit off.
+{{</configopt>}}
+
+{{<configopt httpd_max_connections_per_ip count>}}
+After 2026-10-R1.  The most HTTP connections open at once from one client address, by default `128`.  `0` turns the limit off.
+
+Behind a [reverse proxy](#using-proxies-and-forwarding), every client shares the proxy's address, so raise this limit to cover all of them (or turn it off).
+{{</configopt>}}
+
 {{<configopt httpd_session_db "/path/to/session/db">}}
 Path where API keys and session data is stored.  If you want to refresh the logins (and require browsers to log in again after each restart), comment this option. Typically there is no reason to change this option. 
 {{</configopt>}}

@@ -35,6 +35,18 @@ Kismet supports two mechanisms for privilege separation:
 When installed suid-root, the Kismet helper utilities will drop capabilities
 and pivot into a read-only mount namespace.
 
+After 2026-10-R1:
+
+* Setuid helpers keep only the `CAP_NET_ADMIN` and `CAP_NET_RAW` capabilities.
+* Helpers which run an external tool (such as `rtl_433` for the rtl433 source,
+  or the decoder script for the zigbee900 source) drop back to the user who
+  launched them before running it, so the tool runs as that user, and needs
+  that user to have access to the USB device.
+* Helpers running as root, setuid or not, run in a read-only view of the
+  filesystem (on Linux, a mount namespace): only `/dev`, `/proc`, `/sys`,
+  `/run`, `/tmp`, `/var/tmp`, and the lock directories stay writable, and the
+  cell AT helper also keeps `~/.kismet` for its saved band locks.
+
 ### Building with Protobufs support
 
 Until `2025-09-R1` the Kismet IPC and remote capture datasource protocol was based on

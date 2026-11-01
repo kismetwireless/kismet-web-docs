@@ -26,6 +26,8 @@ The Kismet SDR RTL_433 source is a small C tool between the `rtl_433` tool and K
 
 Kismet thus requires that `rtl_433` be available.  On some distributions this is available as the `rtl-433` package (Ubuntu Jammy )
 
+After 2026-10-R1, when the capture helper is installed suid-root, it runs `rtl_433` as the user who launched Kismet, not as root, so that user needs permission to use the RTL-SDR USB device (usually from the udev rules installed with `librtlsdr` or `rtl-sdr`, and membership in the group they name, such as `plugdev`).
+
 ## Supported hardware
 
 While the `rtl_433` tool has some support for other SDR hardware via the `soapysdr` API, currently the Kismet implementation requires a RTL-SDR USB device.  

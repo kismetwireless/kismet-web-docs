@@ -45,6 +45,8 @@ sudo cp zigbee900_live_rx.py /usr/share/kismet/zigbee900/
 
 If you'd rather keep the script somewhere else, point at it directly with the `script=` source option (see Source parameters, below).
 
+After 2026-10-R1, when the capture helper is installed suid-root, it runs the script as the user who launched Kismet, so that user needs permission to use the RTL-SDR USB device.  When the helper runs as root, `script=` is refused, and only the installed script is used.
+
 ## Legacy 900MHz IEEE 802.15.4
 
 The 902-928MHz US/international ISM band supports two of the PHYs defined in IEEE 802.15.4-2006:
@@ -113,7 +115,7 @@ All data sources accept the [common naming and description](/docs/readme/datasou
 ### Script location
 
 {{<configopt script "/path/to/zigbee900_live_rx.py">}}
-Override the decoder script path. Defaults to `<prefix>/share/kismet/zigbee900/zigbee900_live_rx.py` (through 2026-10-R1, always `/usr/share/kismet/zigbee900/zigbee900_live_rx.py`); only needed if the script has been placed somewhere other than the default install location described above.
+Override the decoder script path. Defaults to `<prefix>/share/kismet/zigbee900/zigbee900_live_rx.py` (through 2026-10-R1, always `/usr/share/kismet/zigbee900/zigbee900_live_rx.py`); only needed if the script has been placed somewhere other than the default install location described above.  After 2026-10-R1, `script=` is refused when the capture helper runs as root.
 
 ```
 source=zigbee900sdr:name=zigbee900,script=/opt/kismet/zigbee900_live_rx.py
