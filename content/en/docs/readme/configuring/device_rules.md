@@ -47,7 +47,7 @@ rule <name> {
 
 ### Fields
 
-Conditions compare device fields to values.  Fields are Kismet field names, such as `kismet.device.base.manuf`, or a path through nested fields joined with `/` (with no spaces), such as `kismet.device.base.signal/kismet.common.signal.last_signal`.  A path through a list or a map of records matches when any of the records match, including the records in a map of lists, such as `dot11.device/dot11.device.wpa_handshake_list/dot11.eapol.message_num`.  Field names may start with digits, as in `802154.device/802154.device.key_state`.
+Conditions compare device fields to values.  Fields are Kismet field names, such as `kismet.device.base.manuf`, or a path through nested fields joined with `/` (with no spaces), such as `kismet.device.base.signal/kismet.common.signal.last_signal`.  A path through a list or a map of records matches when any of the records match, including the records in a map of lists, such as `dot11.device/dot11.device.wpa_handshake_list/dot11.eapol.message_num`.  Field names may start with digits, as in `802154.device/802154.device.key_state`, and paths can go through fields which point at another record, such as `dot11.device/dot11.device.last_beaconed_ssid_record/dot11.advertisedssid.ssid`.
 
 The [devices API](/docs/api/devices/) shows which fields a device has.
 
@@ -110,6 +110,16 @@ sort <name> {
 A value is a field or a calculation on fields, a true / false condition (false sorts first), or `rule`, the position of the first rule the device matches.  Later values break ties in earlier ones, and devices missing a value sort after the rest in either direction.
 
 A device view is sorted by passing the sort name as [`rule_sort`](/docs/api/device_views/#view-based-device-lists), as in `/devices/views/all/devices.json?rule_sort=<name>`.
+
+### Device view filters
+
+{{< alert icon="⚠️" context="warning" >}}
+Device view filters are a very new feature, and may change before they are in a Kismet release.
+{{< /alert >}}
+
+After 2026-10-R1, [device views](/docs/api/device_views/#view-based-device-lists) also take a condition and sort keys directly, without a named rule or sort, as `filter=<condition>` and `filter_sort=<value> [asc|desc], ...`.  The new web UI's device list search box sends these; see [device filters](/docs/readme/webui/webui_filters/) for the short form it takes.
+
+In a filter, `text("<s>")` matches devices where any text field the request asks for (its `fields` list) contains `s`, in any case.  `text()` can only be used in view filters, not in rules.
 
 ### Examples
 

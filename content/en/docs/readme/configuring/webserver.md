@@ -88,7 +88,7 @@ There is typically no benefit to changing this option.
 
 ## The web UI
 
-After 2026-10-R1, Kismet serves a new web UI at `/` (for instance `http://localhost:2501/`), and the previous UI at `/legacy/` (`http://localhost:2501/legacy/`).  The *Legacy UI* item in the new UI's top bar opens the previous UI.
+After 2026-10-R1, Kismet serves a [new web UI](/docs/readme/webui/webui_intro/) at `/` (for instance `http://localhost:2501/`), and the previous UI at `/legacy/` (`http://localhost:2501/legacy/`).  The *Legacy UI* item in the new UI's top bar opens the previous UI.
 
 Plugins which add pages to the previous UI keep working in it from `/legacy/`; the new UI lists plugins which don't have a page for it yet.
 
@@ -100,6 +100,7 @@ Other parts of the new UI:
 * *Settings*, *Units* picks how speeds (km/h, mph, or knots) and lengths (meters and kilometers, or feet and miles) are shown, including the map's range rings.
 * *Settings*, *Appearance*, *Device Highlights* colors rows in the device list by [device rule](/docs/readme/configuring/device_rules/#rules-in-the-web-ui) tag, by the type of radio (phy), and by other phy-specific highlights.  Tags and other highlights can be dragged into priority order; picking a color turns its highlight on.
 * The device list has a *Tags* column, which can be searched and sorted, and the device details list a device's tags first, with the rules that set them.
+* The device list's *Search or filter* box searches for plain words as before, and takes [device filters](/docs/readme/webui/webui_filters/).
 
 The new UI's map can draw the [receiver range](/docs/readme/configuring/receiver_range/) for each kind of device on it: the furthest distance devices were heard at in each direction over all time, over the last day, or by altitude, with range rings.  Without Kismet's own location, it draws the area the devices were heard over.
 

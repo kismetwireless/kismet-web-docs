@@ -135,7 +135,7 @@ External tools may request a HTTP authorization token; instead of transmitting t
 
 ### HTTPAUTH (KismetExternalHttp.HttpAuthToken) *Kismet -> Helper*
 
-Once Kismet has generated a HTTP authentication token it is sent to the helper in a `HTTPAUTH` response.  The session hash is suitable for use as the `KISMET` cookie in HTTP communication.
+Once Kismet has generated a HTTP authentication token it is sent to the helper in a `HTTPAUTH` response.  The session hash is suitable for use as the `KISMET` cookie in HTTP communication (after 2026-10-R1 Kismet names its own cookie `KISMET_<httpd_port>`, and still accepts `KISMET`).
 
 #### Content
 

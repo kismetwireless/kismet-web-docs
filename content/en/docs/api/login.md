@@ -23,15 +23,17 @@ As of `2022-10-git`, Kismet uses a JWT system internally to generate session tok
 
 A session will automatically be created during authentication to any endpoint which requires login information, and returned in the `KISMET` session cookie.
 
+After 2026-10-R1, the session cookie is named for the port Kismet serves on, `KISMET_<httpd_port>` (for instance `KISMET_2501`), so Kismet servers on different ports of the same host no longer log each other out in a browser.  A plain `KISMET` cookie is still accepted; when both are sent, the port-named cookie wins.  The `KISMET` URI parameter and bearer tokens are unchanged.
+
 Logins may be manually validated against the `/session/check_session` endpoint if validating user-supplied credentials.
 
 ## Providing logins
 
 Kismet accepts logins via HTTP Basic authentication, session cookie, and GET URI parameters.
 
-If the administrator username and password is provided via Basic auth or via get URI parameters, a session cookie is created (if one does not already exist) or found, and returned in the `KISMET` cookie parameter.
+If the administrator username and password is provided via Basic auth or via get URI parameters, a session cookie is created (if one does not already exist) or found, and returned in the `KISMET` cookie parameter (`KISMET_<httpd_port>` after 2026-10-R1).
 
-*Added 2020-10* API-token-only consumers of the API should provide *ONLY* the API token given, and supply it in the `KISMET` cookie or URI parameter.
+*Added 2020-10* API-token-only consumers of the API should provide *ONLY* the API token given, and supply it in the `KISMET` cookie (or, after 2026-10-R1, `KISMET_<httpd_port>`) or URI parameter.
 
 ## API Keys 
 

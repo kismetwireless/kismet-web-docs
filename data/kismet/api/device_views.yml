@@ -54,6 +54,28 @@
         by name, instead of by the datatables order.  The sort is applied after any search or regex filter
         and before the window is taken, so paging follows it.  It may also be given as a `rule_sort`
         variable in the request.  An unknown sort returns an error (400).
+    -
+      name: "filter"
+      type: "string"
+      required: false
+      description: |
+        After 2026-10-R1; a very new feature, which may change before release.  Only return devices matching a condition in the
+        [device rules language](/docs/readme/configuring/device_rules/#device-view-filters), such as
+        `packets > 100 and manuf icontains "apple"`.  The filter is applied after any search or regex
+        filter, and before the window is taken.  It may also be given as a `filter` variable in the
+        request.  At most 16KB.
+    -
+      name: "filter_sort"
+      type: "string"
+      required: false
+      description: |
+        After 2026-10-R1; a very new feature, which may change before release.  Order the devices by sort keys in the device rules language, written as in a
+        [sort](/docs/readme/configuring/device_rules/#sorts) without `by`, such as `signal desc, packets`.
+        A filter sort replaces the datatables column order.  It may also be given as a `filter_sort`
+        variable in the request.  At most 16KB.
+
+        An error in `filter` or `filter_sort` returns 400, with
+        `{"ok": false, "error": "...", "line": N, "col": N, "in": "filter" or "sort"}`.
   parameters:
     -
       name: "start"
