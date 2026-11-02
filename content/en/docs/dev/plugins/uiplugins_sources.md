@@ -195,12 +195,26 @@ Data sources report their channels in their own terms (`6`, `36HT40+`, `5W6e`, `
 | `match(source)` | Whether it applies to a source record |
 | `frequency(channel)` | The channel's frequency, in kHz, or null |
 | `span(channel)` | Optional: `{ low, high }` in kHz, for a wide channel |
+| `title` | Optional: a short name for the channels, or `title(channel)` returning one; the channel coverage window labels the frequencies these sources listen on with it and their own channel, such as `802.15.4 12` rather than the Bluetooth LE channel at the same frequency |
 
 ```javascript
 ui.sourceChannels.add({
     id: 'btle',
     match: (src) => /nrf|cc2540|sniffle|ble|wch/i.test(src['kismet.datasource.driver.type'] ?? ''),
     frequency: bleFrequency,
+});
+```
+
+The 802.15.4 entry (`js/phy/802154.js`) has priority `-10`, so it comes ahead of the Bluetooth LE entry, which also matches some of the same sources, and names its channels with `title`:
+
+```javascript
+const bleAdvertising = { 37: 2402000, 38: 2426000, 39: 2480000 };
+ui.sourceChannels.add({
+    id: '802154', priority: -10,
+    title: (channel) => (bleAdvertising[Number(channel)] ? 'BLE' : '802.15.4'),
+    match: (src) => /^(ticc2531|nrf52840|rzkillerbee|catsniffer_zigbee|freaklabszigbee|nxp_kw41z|zigbee900sdr)$/i
+        .test(src['kismet.datasource.driver.type'] ?? ''),
+    frequency: (channel) => channelFrequency(channel) ?? bleAdvertising[Number(channel)] ?? null,
 });
 ```
 

@@ -120,7 +120,7 @@ Icons are from `kismet.icons`, which a module can add to (see [icons](/docs/dev/
 
 ## Row highlights
 
-`kismet.ui.rowHighlights` colors the rows which match.  Users turn each highlight on and off, and pick its color, under Settings > Appearance > Device Highlights.
+`kismet.ui.rowHighlights` colors the rows which match.  Users turn each highlight on and off, and pick its color, under Settings > Device Highlights.
 
 | Option | |
 | ------ | - |

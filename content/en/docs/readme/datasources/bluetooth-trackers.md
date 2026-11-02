@@ -54,7 +54,7 @@ Trackers become `BTLE Tracker` devices, with a tracker record (`btle.device.trac
 * **network_id**: the finding network ID from the DULT advertisement
 * **follow_time** and **follow_locations**: how long a separated tracker has been seen, and at how many places (see below)
 
-Trackers normally use random BLE addresses; they are kept even when random BLE addresses are being ignored with `btle_ignore_random`.
+Trackers normally use random BLE addresses; they are kept even when rotating random BLE addresses are being ignored with `btle_ignore_random`.
 
 ### Trackers following you
 
@@ -111,6 +111,21 @@ This option is set in `kismet.conf` (or `kismet_site.conf`); the default is `2.0
 btle_distance_exponent=3.0
 ```
 {{</configopt>}}
+
+## Advertised data
+
+BTLE devices also record the services and manufacturer data they advertise:
+
+| Field | Contents |
+| ----- | -------- |
+| `btle.device.service_uuid_vec` | Service UUIDs the device advertises |
+| `btle.device.manuf_company_id` | Company ID of the manufacturer data, in hex |
+| `btle.device.manuf_data` | The manufacturer data, in hex |
+| `btle.device.service_data` | After 2026-10-R1: the most recent Service Data of each service UUID (16, 32, or 128 bit), in hex, for up to 8 UUIDs |
+
+Service data is not kept for location trackers, whose rotating identifiers are only kept hashed.
+
+After 2026-10-R1, the new web UI's device details name the services (*Name (hex)*), and decode the advertised data they know: companies, services, beacons, Matter, sensor readings, indoor position, Apple Continuity, mesh, LE Audio, and more.  Service UUID names come from the Bluetooth ID list, through [`/phy/bluetooth/uuid_names.json`](/docs/api/bluetooth/).
 
 ## Limitations
 

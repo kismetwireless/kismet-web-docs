@@ -63,7 +63,7 @@ Logs are rotated so that no packets should be lost during the creation of the ne
 
 ### Duplicate packets
 
-Kismet can record duplicate packets when multiple datasources capture the same data.  In some instances, keeping duplicate packets is desirable (such as remote captures used for device location), while in others, logging duplicates may be a waste of space.
+Kismet can record duplicate packets when multiple datasources capture the same data.  A packet is a duplicate when another data source delivered the same frame within the last second; after 2026-10-R1, a data source which hears the same frame again (such as a Bluetooth LE device repeating an unchanged advertisement) has seen a new transmission, which is not a duplicate.  In some instances, keeping duplicate packets is desirable (such as remote captures used for device location), while in others, logging duplicates may be a waste of space.
 
 ```
 pcapng_log_duplicate_packets=false

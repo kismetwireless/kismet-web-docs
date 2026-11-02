@@ -104,7 +104,7 @@ Filtering is most useful when coupled with other tools, and most users won't nee
 
 ### Duplicate packets
 
-Kismet can record duplicate packets when multiple datasources capture the same data.  In some instances, keeping duplicate packets is desirable (such as remote captures used for device location), while in others, logging duplicates may be a waste of space.
+Kismet can record duplicate packets when multiple datasources capture the same data.  A packet is a duplicate when another data source delivered the same frame within the last second; after 2026-10-R1, a data source which hears the same frame again (such as a Bluetooth LE device repeating an unchanged advertisement) has seen a new transmission, which is not a duplicate.  In some instances, keeping duplicate packets is desirable (such as remote captures used for device location), while in others, logging duplicates may be a waste of space.
 
 To exclude duplicate packets, set the following in your configuration:
 

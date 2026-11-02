@@ -21,6 +21,8 @@ Kismet uses device views to organize devices by capture interface, phy type, spe
 
 After 2026-10-R1, each [device rule](/docs/readme/configuring/device_rules/) with a `view` makes a view named `rule-<name>` holding the devices which match it.  A rule view stays after its rule is removed, empty, and is filled again if a rule of the same name gets a `view`.
 
+Some views also answer under a second path made from what they hold: the view of each phy (`phy-IEEE802.11`) under `/devices/views/phy/IEEE802.11/`, and the view of each data source (`seenby-<uuid>`) under `/devices/views/seenby-uuid/<uuid>/`.  The `devices`, `last-time`, `modified-since`, and `monitor` endpoints work the same under either path.  The second paths work after 2026-10-R1; earlier versions answered them with a 404.
+
 All clients are strongly encouraged to use the device view API going forwards. 
 
 Device views are also designed to work with paginating user interfaces; as part of the request, a client can request a "page" of information; with each subsequent page (or scroll) the user interface fetches only the data it needs. 

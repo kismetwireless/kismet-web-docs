@@ -78,6 +78,31 @@
       - [-1, "On error (typically for malformed simplification)"]
 
 -
+  name: "Map tile server"
+  uri: "/ui/map_tiles"
+  types: ["json"]
+  roles: ["none"]
+  methods: ["GET"]
+  added: "after 2026-10-R1"
+  docs: |
+    The tile server the web UI map uses for browsers which haven't set their own, from the
+    [map background](/docs/readme/configuring/webserver/#map-backgrounds) options.  None of it
+    is secret, so no login is needed.
+
+    | Key | Content |
+    | --- | ------- |
+    | `url` | `httpd_map_tile_url`, or empty for the UI's default (OpenStreetMap) |
+    | `attribution` | `httpd_map_tile_attribution`, or empty |
+    | `tiles` | `httpd_map_tiles`: `ask` or `deny` |
+
+    The UI always asks the user before loading tiles from a server they haven't agreed to.
+  return: |
+    Dictionary of the map tile settings
+  responses:
+    success:
+      - [200, "Success"]
+
+-
   name: "Dynamic Javascript import"
   uri: "/dynamic"
   types: ["js"]

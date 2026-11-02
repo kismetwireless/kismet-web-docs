@@ -74,3 +74,21 @@ Linux Bluetooth sources support all the common configuration options such as nam
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
 
+### Active probing
+
+After 2026-10-R1, the HCI source can ask the devices it hears for more information.  Probing makes the source transmit, and devices may log or show the connection, so it is off unless turned on.
+
+{{<configopt probe off name info>}}
+`off` (the default) only listens.  `name` asks classic (BR/EDR) devices for their names.  `info` also connects to devices to read their Bluetooth version, chip maker, and features, which are added to the [device](#btle-and-classic-devices).
+
+```
+source=hci0:name=linuxbt,probe=info
+```
+{{</configopt>}}
+
+{{<configopt probe_interval seconds>}}
+How long before the same device is probed again, from 60 to 86400 seconds; 600 by default.
+{{</configopt>}}
+
+Both can also be changed while the source runs, from the *Active probing* section of the source in the web UI's *Data sources* window, which says what the source will transmit and asks before probing is turned on.  It also shows how many devices have been probed, how many are waiting, and the last probe.  Changes made while the source runs last until it re-opens; options on the source line keep them.
+

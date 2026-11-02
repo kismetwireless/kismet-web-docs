@@ -53,6 +53,8 @@ When channel hopping, Kismet will automatically split the list of channels betwe
 
 Kismet will automatically divide the list so that the maximum number of unique channels are covered by the devices available.
 
+After 2026-10-R1, the *Time* view of the web UI's *Channel coverage* window estimates how much of the time each channel is listened to across all the sources, which shows how the split works out.
+
 ## Configuration 
 
 The global channel hopping controls affect all datasources, unless a source specifically changes the values.  

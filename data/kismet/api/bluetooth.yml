@@ -1,0 +1,24 @@
+-
+  name: "Bluetooth UUID names"
+  uri: "/phy/bluetooth/uuid_names"
+  types: ["anyjson"]
+  methods: ["POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  jsonparameters:
+    - {name: "uuids", type: "list", description: "Up to 64 service UUIDs"}
+  docs: |
+    Names Bluetooth service UUIDs from the Bluetooth ID list (`btoidfile`), as the web UI's device details
+    show them.  Each UUID is a 16-bit assigned number (`feaf`), the same number in 32 bits (`0000feaf`), or the
+    128-bit Bluetooth base form (`0000feaf-0000-1000-8000-00805f9b34fb`); other entries are ignored.
+
+    ```json
+    {"uuids": ["feaf", "0000180f-0000-1000-8000-00805f9b34fb"]}
+    ```
+  return: |
+    Dictionary of each known UUID, as it was given in lowercase, to its name; unknown UUIDs are left out.
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [400, "Missing `uuids`, not a list, or more than 64 entries"]

@@ -108,11 +108,36 @@ Other parts of the new UI:
 
 * *Packet rates*, in the menu or from the packets count in the top bar, graphs the packet rate of each data source, with dropped packets, errors, and events such as sources opening, and links to the channel heat map.
 * *Settings*, *Units* picks how speeds (km/h, mph, or knots) and lengths (meters and kilometers, or feet and miles) are shown, including the map's range rings.
-* *Settings*, *Appearance*, *Device Highlights* colors rows in the device list by [device rule](/docs/readme/configuring/device_rules/#rules-in-the-web-ui) tag, by the type of radio (phy), and by other phy-specific highlights.  Tags and other highlights can be dragged into priority order; picking a color turns its highlight on.
+* *Channel coverage*, in the menu, shows what the data sources are hearing on each frequency, in three views.  *Live* has a bar for each frequency, labeled with its channels and frequency, and a waterfall of the last minute.  *Heat map* shows activity on each frequency over the last minute, hour, or day.  *Time* estimates how much of the time each frequency is listened to, from each source's channel list and hop rate: a hopping source gives each channel in its list an equal share, and sources which [split a channel list](/docs/readme/datasources/channelhop/#channel-splitting) share it.  It shows the time each source spends in each band, how long each visit to a frequency lasts and how often it comes back, and highlights frequencies with traffic which are heard less than a quarter of the time.  A wide Wi-Fi channel counts at its primary frequency; an SDR source counts across its whole range.  The estimate leaves out the time taken to change channels and sources which have stalled.  802.15.4 and Zigbee sources are shown on their real frequencies, labeled with their own channel numbers.
+* *Settings*, *Device Highlights* colors rows in the device list by [device rule](/docs/readme/configuring/device_rules/#rules-in-the-web-ui) tag, by the type of radio (phy), and by other phy-specific highlights.  Tags and other highlights can be dragged into priority order; picking a color turns its highlight on.
 * The device list has a *Tags* column, which can be searched and sorted, and the device details list a device's tags first, with the rules that set them.
 * The device list's *Search or filter* box searches for plain words as before, and takes [device filters](/docs/readme/webui/webui_filters/).
 
 The new UI's map can draw the [receiver range](/docs/readme/configuring/receiver_range/) for each kind of device on it: the furthest distance devices were heard at in each direction over all time, over the last day, or by altitude, with range rings.  Without Kismet's own location, it draws the area the devices were heard over.
+
+### Map backgrounds
+
+After 2026-10-R1, the new UI's map draws its background from a tile server: OpenStreetMap, unless the Kismet server or the browser sets another.  Loading tiles tells the tile server what area is being looked at, so a browser never loads them without asking first.  The map asks *Load the map background from the internet?*, with *Load the map* and *Use a blank map*, and asks again whenever the tile server changes from the one agreed to.  *Don't ask me again for this server* remembers the answer for that tile server only; *Don't ask for any tile server* remembers it for any server.
+
+Under *Settings*, *Map*, a browser can set its own tile server.  *Fetch map tiles from a remote server* turns the background on, agreeing to the tile server shown, or off for a blank map, and *Ask before using a different tile server* can be cleared to stop asking when the tile server changes.
+
+The previous UI's ADS-B map also asks before loading tiles, and not asking again covers only the tile server it names.
+
+The Kismet server sets the tile server for browsers which haven't set their own, in `kismet_httpd.conf` (or `kismet_site.conf`):
+
+{{<configopt httpd_map_tile_url "https://tiles.example.lan/{z}/{x}/{y}.png">}}
+The tile server the map uses.  The address must start with `http://` or `https://` and contain `{z}`, `{x}`, and `{y}`; an address which doesn't is ignored, with an error.  Without one, the map uses OpenStreetMap.
+{{</configopt>}}
+
+{{<configopt httpd_map_tile_attribution "text">}}
+Plain text shown in the corner of the map, crediting the tiles from `httpd_map_tile_url`.
+{{</configopt>}}
+
+{{<configopt httpd_map_tiles ask deny>}}
+`ask`, the default, offers the map background, which each browser asks about before loading it.  `deny` shows a blank map until the background is turned on under *Settings*, *Map*.  The server can't agree to tiles for its users: `allow` is refused with an error, and Kismet uses `ask`.
+{{</configopt>}}
+
+The UI reads these from [`/ui/map_tiles.json`](/docs/api/system/).
 
 ### Installing the web UI as an app
 

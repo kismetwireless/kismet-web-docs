@@ -265,7 +265,7 @@ Compile rules to native code where the platform allows it (64-bit x86, ARM, RISC
 
 The device list has a `Tags` column, which can be searched and sorted, and the device details list a device's tags first, with the rules that set them and their descriptions.  Views made by rules are listed with the other device views, with how many devices they hold.
 
-Rows in the device list are highlighted by their tags, under `Settings`, `Appearance`, `Device Highlights`.  Each tag takes the color of its rule, or a default color for the tags of the [shipped rules](#shipped-rules) and the examples, and the color can be changed there.  Tags can be dragged into priority order: a device with several tags takes the color of the highest one.
+Rows in the device list are highlighted by their tags, under `Settings`, `Device Highlights`.  Each tag takes the color of its rule, or a default color for the tags of the [shipped rules](#shipped-rules) and the examples, and the color can be changed there.  Tags can be dragged into priority order: a device with several tags takes the color of the highest one.
 
 After 2026-10-R1, *Device rules* in the main menu lists the loaded rules and sorts, grouped by where they came from: each rules file, the config file, each plugin, and the rules set over the API.  Each rule shows the tags it sets and the view it makes; clicking the view opens the device list on it.  A rule can be opened to show its description, color, whether it is `live` or raises an `alert`, the file and line it came from, and its text.  *All*, *Tagging*, and *Views* list every rule, only the rules which tag devices, or only the rules which make views.  Rules which replaced an earlier rule of the same name are noted, and *Reload* reads the list again.
 
