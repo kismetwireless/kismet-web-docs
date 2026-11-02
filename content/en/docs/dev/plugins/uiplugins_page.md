@@ -101,7 +101,9 @@ ui.addTable({
 });
 ```
 
-Columns and highlights take the same options as the [device list's](/docs/dev/plugins/uiplugins_devicelist/).  Each table keeps its own registries, so another module can add to someone else's table, before or after the table itself is added:
+`pausable: true` adds a button beside the table's search box which pauses its updates: the rows on screen stay as they are, and scrolling still loads more.
+
+Columns and highlights take the same options as the [device list's](/docs/dev/plugins/uiplugins_devicelist/), including column `tooltip` and `variants`.  Each table keeps its own registries, so another module can add to someone else's table, before or after the table itself is added:
 
 ```javascript
 kismet.ui.tableColumns('ssids').add({ id: 'myplugin_note', title: 'Note', ... });

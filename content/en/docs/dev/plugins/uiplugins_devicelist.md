@@ -34,6 +34,8 @@ The device list is built from the columns, icons, and row highlights modules reg
 | `fields` | The fields the column reads |
 | `sortField` | The field path the server sorts on; leave it out for a column which can't be sorted |
 | `render(row)` | Returns a string or a DOM node for the cell |
+| `tooltip(row)` | Optional: a string or a DOM node shown while the pointer rests on a cell, worked out each time it's shown |
+| `variants` | Optional: ways to show the column, `[{ id, title, render(row), tooltip(row) }]`, which the user picks from the column's heading or the column chooser; the first is the default, a variant without `render` or `tooltip` uses the column's own, and the choice is saved per browser by `id` |
 | `group` | Heading in the column picker, such as `'Wi-Fi'` (default `'General'`) |
 | `width` | Starting CSS width, such as `'8em'`; users can resize it |
 | `align` | `'left'`, `'right'`, or `'center'` |
@@ -52,6 +54,27 @@ ui.deviceColumns.add({
     render: (row) => row.network_type || '',
 });
 ```
+
+The *Last seen* column (`js/base/columns.js`) shows a date and time, or how long ago the device was seen, with the other form as its tooltip:
+
+```javascript
+ui.deviceColumns.add({
+    id: 'last_time', title: 'Last seen', priority: 65, defaultVisible: true, width: '11.5em', align: 'right',
+    description: 'When the device was last seen, as a time or how long ago; hover a cell for the other',
+    fields: [`${base}.last_time`],
+    sortField: `${base}.last_time`,
+    render: (row) => format.time(row[`${base}.last_time`]),
+    tooltip: (row) => format.since(row[`${base}.last_time`], now()),
+    variants: [
+        { id: 'time', title: 'Date and time' },
+        { id: 'since', title: 'Time since last seen',
+            render: (row) => format.since(row[`${base}.last_time`], now()),
+            tooltip: (row) => format.time(row[`${base}.last_time`]) },
+    ],
+});
+```
+
+`format.since(seconds, now)` gives the time since as `now`, `40s ago`, `5m ago`, `1hr 4m ago`, or `2d 3hr ago`; `now` here is the server's clock (`kismet.clock`), so a replayed capture reads correctly.
 
 ### Columns in the search box
 
