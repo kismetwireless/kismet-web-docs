@@ -74,6 +74,20 @@ Linux Bluetooth sources support all the common configuration options such as nam
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
 
+### Scanning
+
+After 2026-10-R1, the HCI source can scan with only some of the controller's radios.  Scanning is passive in every mode.
+
+{{<configopt scan both le bredr>}}
+`both` (the default) scans for LE and classic (BR/EDR) devices, `le` for LE advertisements only, and `bredr` for classic devices only.  A controller without one of the radios asked for scans with what it has.
+
+```
+source=hci0:name=linuxbt,scan=le
+```
+{{</configopt>}}
+
+The source reports the mode asked for as `kismet.datasource.linuxbt.scan` (`both`, `le`, or `bredr`), and what the controller is scanning with as `kismet.datasource.linuxbt.scan_active` (`both`, `le`, `bredr`, or `none` when the controller supports neither).
+
 ### Active probing
 
 After 2026-10-R1, the HCI source can ask the devices it hears for more information.  Probing makes the source transmit, and devices may log or show the connection, so it is off unless turned on.
@@ -90,5 +104,12 @@ source=hci0:name=linuxbt,probe=info
 How long before the same device is probed again, from 60 to 86400 seconds; 600 by default.
 {{</configopt>}}
 
-Both can also be changed while the source runs, from the *Active probing* section of the source in the web UI's *Data sources* window, which says what the source will transmit and asks before probing is turned on.  It also shows how many devices have been probed, how many are waiting, and the last probe.  Changes made while the source runs last until it re-opens; options on the source line keep them.
+### Changing them while the source runs
+
+`scan`, `probe`, and `probe_interval` can also be changed while the source runs, from the source in the web UI's *Data sources* window:
+
+* *Scanning*, *Scan for* picks the scan mode, and warns when the controller can't scan with everything asked.
+* *Active probing* picks the probe mode, says what the source will transmit, and asks before probing is turned on.  It also sets the interval, and shows how many devices have been probed, how many are waiting, and the last probe.
+
+Changes made while the source runs last until it re-opens; options on the source line keep them.
 
