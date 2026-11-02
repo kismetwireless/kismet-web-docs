@@ -57,7 +57,7 @@ Both start each packet with a 12-byte header, then the packet as it was sent:
 
 Kismet relies on the receiver's "CRC ok" flag rather than checking the CRC itself.  Packets with the flag clear are counted as errors and make no device; packets without the header are ignored.  ANT packets whose length octet doesn't match their payload are ignored too, since they are usually another protocol's packet that passed the 16-bit CRC by chance.
 
-The receiver used for these is `wifi-rx` from [80211_iq_demod](https://github.com/thex1le/80211_iq_demod), with `--esb-pcap PATH` or `--ant-pcap PATH`, for example:
+A capture from such a receiver is read like any other pcap file, for example:
 
 ```bash
 $ kismet -c /tmp/ant.pcap:type=pcapfile,name=ant24
