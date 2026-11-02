@@ -17,7 +17,7 @@ toc: true
 
 The pcap-ng format does not currently define a standard block or option for GPS data; in the meantime, Kismet uses a standard pcap-ng custom extension under the Kismet IANA PEN to encode this data.
 
-You can follow the development of the GPS standard at [the pcap-ng github issue](https://github.com/pcapng/pcapng/issues/48)
+You can follow the development of the GPS standard at [the pcap-ng github issue](https://github.com/IETF-OPSAWG-WG/draft-ietf-opsawg-pcap/issues/48)
 
 Once the standard is adopted, Kismet will transition to using the standard options.
 

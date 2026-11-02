@@ -252,7 +252,7 @@ There are, however, options for tagging packets from a sensor with different coo
 
     For a dynamic remote GPS, the `meta-GPS` system can be used.  
 
-    Each "meta" GPS is identified by name, and the GPS location is updated by an external tool communicating updates via the [MetaGPS REST API](/path/to/new/docs) endpoint. 
+    Each "meta" GPS is identified by name, and the GPS location is updated by an external tool communicating updates via the [MetaGPS REST API](/docs/api/gps/#meta-gps) endpoint. 
 
     To set a meta-GPS name for a given source, use the `metagps` source option: 
 
@@ -272,7 +272,7 @@ kismet_cap_linux_wifi --connect 192.168.1.1:2501 --apikey foobarbaz --source wla
 
 ## Remote capture packages 
 
-The [packages on the Kismet site](/download/packages) bundle each capture driver independently.  Simply add the package repository per the instructions for your distribution, and install the tools you want:
+The [packages on the Kismet site](/packages/) bundle each capture driver independently.  Simply add the package repository per the instructions for your distribution, and install the tools you want:
 
 ```
 sudo apt install kismet-capture-linux-wifi kismet-capture-nrf-51822

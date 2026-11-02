@@ -233,7 +233,7 @@
       required: true
       description: |
         PHY handler name.  Information about PHY handlers can be found with the
-        [PHY handler endpoints](/docs/api/phy)
+        [PHY list endpoint](/docs/api/devices/#phy-list)
   docs: |
     A [device view](/docs/api/device_views/) endpoint which automatically sorts devices by phy
     layer type.
@@ -255,7 +255,7 @@
       required: true
       description: |
         PHY handler name.  Information about PHY handlers can be found with the
-        [PHY handler endpoints](/docs/api/phy)
+        [PHY list endpoint](/docs/api/devices/#phy-list)
     -
       auto: "timestamp"
   docs: |

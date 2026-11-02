@@ -73,7 +73,7 @@ Download the following firmware files:
 
 * [`sniffer_fw_CC1352P_7_v1.10.hex`](https://github.com/ElectronicCats/CatSniffer-Firmware/releases/download/board-v3.x-v1.2.2/sniffer_fw_CC1352P_7_v1.10.hex)
 
-Flashing the CC1352P firmware requires the [`cc2538-bsl`](https://github.com/ElectronicCats/CatSniffer-Tools/blob/main/cc2538-bsl/cc2538-bsl.py) utility from the CatSniffer Tools repository.
+Flashing the CC1352P firmware requires the [`cc2538-bsl`](https://github.com/ElectronicCats/CatSniffer-Tools/blob/main/Legacy/cc2538-bsl/cc2538-bsl.py) utility from the CatSniffer Tools repository.
 
 ---
 
@@ -165,7 +165,7 @@ After flashing, you may need to unplug and reconnect the device before it begins
 
 To validate that the device is working correctly, use the `cat_sniffer.py` tool from the CatSniffer Tools repository:
 
-* [https://github.com/ElectronicCats/CatSniffer-Tools/blob/main/pycatsniffer_bv3/cat_sniffer.py](https://github.com/ElectronicCats/CatSniffer-Tools/blob/main/pycatsniffer_bv3/cat_sniffer.py)
+* [https://github.com/ElectronicCats/CatSniffer-Tools/blob/main/Legacy/pycatsniffer_bv3/cat_sniffer.py](https://github.com/ElectronicCats/CatSniffer-Tools/blob/main/Legacy/pycatsniffer_bv3/cat_sniffer.py)
 
 A Zigbee device must be active nearby, and the correct channel must be known.
 

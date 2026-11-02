@@ -28,6 +28,7 @@ The Overview tab is a grid of cards from `kismet.ui.dashboardCards`.  Users arra
 | ------ | - |
 | `id`, `title`, `priority` | The card |
 | `w`, `h` | Its starting size on the 12-column grid, in columns and rows (3 × 5 if not given) |
+| `place` | Optional: `'top'` puts the card at the top left when it's first shown, even in a layout the user has already arranged; otherwise it takes the first free spot |
 | `needs` | The shared data it reads (below) |
 | `loading` | The outline shown until that data arrives: one or a list of `'stat'`, `'tabs'`, `'graph'`, `'histogram'`, `'bars'`, `'list'`, `'table'`, `'donut'`, `'text'` (the default), stacked top to bottom |
 | `create(body, { actions })` | Builds the card; returns `{ update(data), destroy() }` |
@@ -56,7 +57,7 @@ The Devices card, from `js/base/overview.js`:
 
 ```javascript
 ui.dashboardCards.add({
-    id: 'devices', title: 'Devices', loading: ['stat', 'tabs', 'graph'], priority: 0, w: 2, h: 5,
+    id: 'devices', title: 'Devices', loading: ['stat', 'tabs', 'graph'], priority: 0, w: 3, h: 6,
     needs: ['status'],
     create(body) {
         const total = stat('devices tracked');
@@ -87,7 +88,7 @@ The *Devices by type of radio* card shows a bar for each phy, and opens the devi
 const { barList, series } = kismet.widgets.charts;
 
 ui.dashboardCards.add({
-    id: 'phys', title: 'Devices by type of radio', loading: 'bars', priority: 30, w: 3, h: 5, needs: ['phys'],
+    id: 'phys', title: 'Devices by type of radio', loading: 'bars', priority: 30, w: 4, h: 6, needs: ['phys'],
     create(body, { actions }) {
         const bars = barList({ onPick: (item) => actions.showDevices(`phy-${item.id}`) });
         body.append(bars.node);
