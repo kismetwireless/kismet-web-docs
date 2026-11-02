@@ -32,10 +32,10 @@ The Ubertooth datasource works on Linux and macOS via libUSB and libUbertooth.
 
 ## Ubertooth interfaces
 
-The Ubertooth One in Kismet can be referred to as simply `ubertooth`:
+The first Ubertooth One is `ubertooth-0`:
 
 ```bash
-kismet -c ubertooth
+kismet -c ubertooth-0
 ```
 
 When using multiple Ubertooth (Uberteeth?) devices, each device is numbered, starting from 0.  The Ubertooth library indexes the devices automatically, and so is dependent on the order the devices were detected.
@@ -57,7 +57,7 @@ All data sources accept the [common naming and description](/docs/readme/datasou
 `mode=btle` (the default) captures BTLE advertisements.  `mode=classic` (Kismet 2026-10-R1 and newer) surveys classic Bluetooth (BR/EDR) piconets instead:
 
 ```bash
-kismet -c ubertooth:mode=classic
+kismet -c ubertooth-0:mode=classic
 ```
 
 Any other value is an error and the source won't open.
@@ -66,10 +66,10 @@ Any other value is an error and the source won't open.
 
 In BTLE mode, `channel=` takes a BTLE channel (0-39) or a frequency in MHz (an even value from 2402 to 2480).  The default is advertising channel 37.
 
-In classic mode, `channel=` takes a classic channel (0-78) or a frequency in MHz (2402 to 2480).  The default is 2441MHz.  Piconets hop across all 79 channels, so a single channel is enough to see them.
+In classic mode, `channel=` takes a classic channel (0-78) or a frequency in MHz (2402 to 2480).  The default is 2441MHz.  Piconets hop across all 79 channels, so a single channel is enough to see them, but only about one in 79 of a piconet's packets is heard.
 
 ```bash
-kismet -c ubertooth:mode=classic,channel=2441
+kismet -c ubertooth-0:mode=classic,channel=2441
 ```
 
 ## Classic Bluetooth piconets
@@ -87,7 +87,7 @@ Inquiry access codes (a host searching for devices, LAPs `9E8B00` to `9E8B3F`) a
 
 This is a survey of piconet activity.  Kismet doesn't follow a connection's hopping pattern, doesn't identify the slave devices in a piconet, and doesn't decrypt anything.
 
-Classic packets are logged with the `LINKTYPE_BLUETOOTH_BREDR_BB` (255) link type.  BTLE packets are converted to the BTLE radio link type on the host.
+Classic packets are logged with the `LINKTYPE_BLUETOOTH_BREDR_BB` (255) link type, which Wireshark shows as "Bluetooth BR/EDR Baseband RF".  Each logged packet holds only the pseudo-header (channel, signal, noise, LAP and the UAP once known); the baseband header and payload are not included.  BTLE packets are converted to the BTLE radio link type on the host.
 
 ## Limitations
 
@@ -98,7 +98,7 @@ The Ubertooth One firmware (as of 2019-12) appears to have issues setting channe
 Alternate channels can be set with the `channel=` source option;
 
 ```bash
-kismet -c ubertooth:channel=39
+kismet -c ubertooth-0:channel=39
 ```
 
 To try to mitigate firmware hangs in BTLE mode, Kismet resets the U1 every 30 seconds, which reboots the U1.  This does not prevent all firmware hangs, however, and you may find it necessary to remove and re-insert the Ubertooth One periodically.
