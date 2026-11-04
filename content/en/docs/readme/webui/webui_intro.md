@@ -26,7 +26,7 @@ Plugins which add pages to the previous UI keep working in it from `/legacy/`; t
 ## What's in it
 
 * *Overview*, *Devices*, *SSIDs*, *Alerts*, *Map*, and *Insights* tabs.
-* Windows for data sources, channel coverage and the channel heat map, [device rules](/docs/readme/configuring/device_rules/#rules-in-the-web-ui), packet rates, and GPS, from the menu and the top bar.
+* Windows for data sources, channel coverage and the channel heat map, [device rules](/docs/readme/configuring/device_rules/#rules-in-the-web-ui), packet rates, [memory](#memory-window), and GPS, from the menu and the top bar.
 * The device list's *Search or filter* box, which takes [device filters](/docs/readme/webui/webui_filters/) as well as plain searches.
 * A *Tags* column and row highlights from the server's [device rules](/docs/readme/configuring/device_rules/#rules-in-the-web-ui), set under *Settings*, *Device Highlights*.
 * Display units for speeds and lengths, under *Settings*, *Units*.
@@ -34,5 +34,24 @@ Plugins which add pages to the previous UI keep working in it from `/legacy/`; t
 * [Censor mode](/docs/readme/configuring/webserver/#runtime-censorship), for screenshots and demos.
 * The [receiver range](/docs/readme/configuring/receiver_range/) on the map.
 * [Installing the UI as an app](/docs/readme/configuring/webserver/#installing-the-web-ui-as-an-app) on a phone or desktop.
+
+## Memory window
+
+After 2026-10-R1, the *Memory* window, opened from the menu or by clicking the memory figure in the top bar, shows how much memory Kismet uses and why, over the last minute, hour, or day:
+
+* Kismet's memory and its peak, the device count, the memory per device, the system memory free, and how long Kismet has run.
+* A graph of Kismet's memory (the left axis) against the device count (the right axis), a graph of the tracked fields (every value Kismet keeps, in devices and everything else), and a graph of the system memory in use.
+* What the memory is: the heap and stacks, the program and libraries, shared memory, and swap.
+* The [memory settings](/docs/readme/tuning/tuning/) in effect, from `kismet_memory.conf` or `kismet_site.conf`.
+
+*Insights* flag what the memory is doing:
+
+* About how much memory each new device costs, once the device count has changed enough to tell.
+* Memory growing, at what rate, and when the system's free memory would run out at that rate, with a pointer to `tracker_device_timeout` and `tracker_max_devices` when devices are never forgotten.
+* Memory growing while the device count holds: when tracked fields grew too, data kept in the devices (clients, probed SSIDs, history); when they didn't, something outside device data, such as packet queues, web clients, or memory the allocator holds.
+* Low system memory, Kismet's share of it, memory swapped out, a peak far above the present, and freed memory the allocator holds for reuse.
+* Settings which cost memory (`keep_location_cloud_history` and `keep_per_datasource_stats`), and a phy type which holds most of the devices.
+
+The window reads the [`/system/memory`](/docs/api/system/) endpoint.  Against an older Kismet server without it, only the memory and device graphs are shown.  The process and system memory figures are only available on Linux, and the heap figures with glibc 2.33 or newer.
 
 Serving the UI, HTTPS, and proxies are covered in [the webserver configuration](/docs/readme/configuring/webserver/).

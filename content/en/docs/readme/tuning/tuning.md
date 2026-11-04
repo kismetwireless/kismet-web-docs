@@ -19,6 +19,8 @@ Kismet has several options which control how much memory and processing it uses.
 
 Generally it is not necessary to tune these values unless you are running on extremely limited hardware or have a very large number of devices.
 
+After 2026-10-R1, the web UI's [memory window](/docs/readme/webui/webui_intro/#memory-window) shows how much memory Kismet uses, how much each device costs, whether memory is growing, and the settings below which are in effect.
+
 Modern Kismet can typically support tens to hundreds of thousands of tracked devices on most platforms, however running Kismet on a system with 1 gig or less of RAM will certainly benefit from tuning some of these options.
 
 

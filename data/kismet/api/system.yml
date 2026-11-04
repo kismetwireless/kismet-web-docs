@@ -21,6 +21,55 @@
       - [-1, "On error (typically for malformed simplification)"]
 
 -
+  name: "Memory detail"
+  uri: "/system/memory"
+  methods: ["GET", "POST"]
+  types: ["anyjson"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  docs: |
+    The memory endpoint returns what the [memory window](/docs/readme/webui/webui_intro/#memory-window)
+    of the web UI shows: the process, heap, and system memory, their history, and the
+    [memory settings](/docs/readme/tuning/tuning/) in effect.  It has the memory and device
+    fields of `/system/status` (`kismet.system.memory.rss`, `kismet.system.memory.rrd`,
+    `kismet.system.devices.count`, `kismet.system.devices.rrd`, `kismet.system.num_fields`,
+    `kismet.system.num_components`, `kismet.system.num_http_connections`, and
+    `kismet.system.string_cache_sz`), and adds:
+
+    | Field | Contents |
+    | ----- | -------- |
+    | `kismet.system.memory.peak_rss` | The most memory Kismet has used, in kB |
+    | `kismet.system.memory.virtual` | Virtual memory size, in kB |
+    | `kismet.system.memory.rss_anon` | Memory in use for the heap and stacks, in kB |
+    | `kismet.system.memory.rss_file` | Memory in use for the program and libraries, in kB |
+    | `kismet.system.memory.rss_shmem` | Shared memory in use, in kB |
+    | `kismet.system.memory.swap` | Memory swapped out, in kB |
+    | `kismet.system.memory.threads` | Number of threads |
+    | `kismet.system.memory.system_total` | The system's memory, in kB |
+    | `kismet.system.memory.system_available` | System memory available, in kB |
+    | `kismet.system.memory.system_used_rrd` | History of system memory in use |
+    | `kismet.system.memory.heap_known` | 1 when the heap values are available |
+    | `kismet.system.memory.heap_used` | Heap in use, in kB |
+    | `kismet.system.memory.heap_free` | Heap freed and held by the allocator for reuse, in kB |
+    | `kismet.system.memory.heap_mmap` | Large allocations mapped on their own, in kB |
+    | `kismet.system.num_fields_rrd` | History of the number of tracked fields |
+    | `kismet.system.memory.settings` | The memory settings in effect: `tracker_device_timeout`, `tracker_device_packets`, `tracker_max_devices`, `track_device_rrds`, `track_device_seenby_views`, `track_device_phy_views`, `keep_per_datasource_stats`, and `keep_location_cloud_history` |
+
+    The process and system values are read from `/proc` and are only present on Linux.  The heap
+    values need glibc 2.33 or newer, and are read at most every 5 seconds.  `/system/status` and
+    the kismetdb `SYSTEM` snapshots are unchanged.
+  jsonparameters: 
+    -
+      auto: "fields"
+  return: | 
+    JSON object of memory detail.
+  responses:
+    success:
+      - [200, "Basic success and JSON object"]
+    failure:
+      - [-1, "On error (typically for malformed simplification)"]
+
+-
   name: "Timestamp"
   uri: "/system/timestamp"
   methods: ["GET"]
