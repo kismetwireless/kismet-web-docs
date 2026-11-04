@@ -6,6 +6,13 @@
   builds: ["release", "git"]
 
 -
+  distro: "Parrot OS 7 (Echo)"
+  platforms: ["amd64", "arm64"]
+  name: "Parrot OS 7 (Echo)"
+  key: "echo"
+  builds: ["git"]
+
+-
   distro: "Debian Bookworm"
   platforms: ["amd64", "arm64"]
   name: "Debian Bookworm"
@@ -85,6 +92,6 @@
   platforms: ["amd64", "arm64"]
   name: "Ubuntu Resolute (26.04)"
   key: "resolute"
-  builds: ["git"]
+  builds: ["release", "git"]
 
 
