@@ -21,6 +21,8 @@ Kismet log files (kismetdb) can be converted to the Wigle CSV format, but Kismet
 
 Wigle does not collect packet contents, so a `wiglecsv` log does not contain packets - it is a simplified CSV text file of WiFi Access Points and Bluetooth devices, and their locations.  If you want to save packet contents, be sure to also turn on `kismet` or `pcapng` logs!
 
+After 2026-10-R1, both the `wiglecsv` log and `kismetdb_to_wiglecsv` write Bluetooth LE devices seen by sniffers (nRF, TI, Ubertooth), and those from Bluetooth scan reports with a BTLE type such as `BTLE Tracker` or `BTLE Device`, as `BLE`, with only Wi-Fi written as `WIFI`, and Bluetooth rows in time order.  Cell rows are written for GSM, WCDMA, LTE, and NR cells only, with the channel left blank as WiGLE expects; other phys, which WiGLE has no type for, are left out.
+
 Since Wigle is designed for mapping wireless, Kismet will only create entries in the `wiglecsv` log when a GPS is connected and a location is available.  If you have no GPS location, the `wiglecsv` will be empty.
 
 

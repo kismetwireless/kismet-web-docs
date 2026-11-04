@@ -31,6 +31,8 @@ There are two main flavors of PCAP supported by Kismet:
 
     Whenever possible, the PCAP-NG log file will have richer content.
 
+    Some records have no frame, only the data Kismet decoded, such as Bluetooth scan reports from an HCI source.  After 2026-10-R1, these are written as exported PDUs (link type 252, `LINKTYPE_WIRESHARK_UPPER_PDU`) for Wireshark's `json` dissector, on an interface of their own, so Wireshark shows the JSON record instead of a malformed `NULL` frame.  Such records take about twice the space they did.
+
 ## When to enable PCAP
 
 Typically there is no need to enable both the `kismet` log type and the PCAP log types at the same time, since the PCAP log can be created using the `kismetdb_to_pcap` tool which is part of Kismet.

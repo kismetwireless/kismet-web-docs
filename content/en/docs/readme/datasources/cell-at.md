@@ -95,8 +95,17 @@ This probes the serial ports which look like cell modems and lists each one by I
 
 ```
 cellat supported data sources:
-    cellat-<imei> (Quectel EG25 IMEI:<imei>)
+    cellat-<imei> (Quectel EG25 IMEI:<imei> USB:1-5.1)
 ```
+
+After 2026-10-R1, the list shows the USB port of each modem, and two shorter names need no IMEI:
+
+| Name | The modem |
+| ---- | --------- |
+| `cellat` | The one attached modem.  With more than one, the open fails and lists each modem's names. |
+| `cellat-usb<bus-port>` | The modem on that USB port, the `USB:` value `--list` shows, such as `cellat-usb1-5.1`.  Only that USB device's ports are scanned.  The name follows the port, not the modem: a different modem plugged in there is used instead. |
+
+Both are resolved to the modem's IMEI when the source opens, and the source's UUID comes from the name, so it stays the same across restarts.
 
 The modems are also listed in the Kismet web UI datasources panel.  A modem which does not report an IMEI can't be used.
 
@@ -126,6 +135,47 @@ To use a specific port, set `atport=`; the IMEI is still checked, and a mismatch
 $ socat PTY,raw,echo=0,link=/tmp/modem-at TCP:192.0.2.1:5555 &
 $ CELLAT_EXTRA_PORTS=/tmp/modem-at kismet -c cellat-<imei>
 ```
+
+### Ports other programs are using
+
+After 2026-10-R1, the scan leaves alone the ports other programs are using, and says why with a `skip` message:
+
+| The port | |
+| -------- | - |
+| Has a UUCP lock file (`/run/lock/LCK..ttyUSB2`) whose process is alive, such as minicom, picocom, cu, or pppd | Not opened |
+| Is open in another process which takes no lock, such as screen or a script | Not opened |
+| Belongs to a modem ModemManager runs for, unless the port or its USB device has `ID_MM_PORT_IGNORE=1` or `ID_MM_DEVICE_IGNORE=1` | Not opened |
+| Has a stale lock file, whose process is gone | Probed |
+
+Running as a user other than root, only that user's processes are seen to have a port open.  A port named in `atport=`, `CELLAT_EXTRA_PORTS`, or `CELLAT_SCAN_PORTS` still has the lock and open checks, but not the ModemManager one.
+
+To keep ModemManager and give Kismet one modem, mark the modem in a udev rule and replug it (or run `udevadm trigger`):
+
+```
+# /etc/udev/rules.d/90-kismet-cell.rules
+ACTION=="add|change", SUBSYSTEM=="usb", ATTRS{idVendor}=="2c7c", ATTRS{idProduct}=="0125", ENV{ID_MM_DEVICE_IGNORE}="1"
+```
+
+To share one modem with a NetworkManager WWAN connection, ignore only the ports Kismet uses instead.  ModemManager keeps its AT port and the data connection, and the scan only takes the ignored ports.  On an EG25 this gives Kismet DIAG (interface 0, `ttyUSB0`) and the second AT port (interface 3, `ttyUSB3`), and leaves ModemManager `ttyUSB2`:
+
+```
+# /etc/udev/rules.d/90-kismet-cell.rules
+ACTION=="add|change", SUBSYSTEM=="tty", ATTRS{idVendor}=="2c7c", ATTRS{idProduct}=="0125", \
+    ATTRS{bInterfaceNumber}=="00|03", ENV{ID_MM_PORT_IGNORE}="1"
+```
+
+While the modem carries data, use `strategy=driving` or `serving_only`: the full band scan of `walking` and `stationary`, and a band lock, can stall or drop the connection.
+
+### Remote capture
+
+The AT and DIAG sources work as [remote capture](/docs/readme/remotecap/remotecap/) sources, and the simple names work there too:
+
+```bash
+$ kismet_cap_cell_at --connect host:2501 --user U --password P --source cellat-usb1-5.1
+$ kismet_cap_cell_diag --connect host:2501 --user U --password P --source celldiag-usb1-5.1
+```
+
+After 2026-10-R1, a remote cell source is never hopped automatically, like a local one.  Before then, the server tried to hop it with no channels, and the capture tool exited and reconnected every few seconds.
 
 ### libusb (macOS and Linux)
 

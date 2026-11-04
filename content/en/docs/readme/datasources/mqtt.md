@@ -115,6 +115,18 @@ The key for the client certificate.  Requires `tls_certfile`.
 The password for an encrypted client key.
 {{</configopt>}}
 
+### Signal options
+
+{{<configopt frequency "frequency">}}
+The frequency the data was received on, recorded with every packet from the source, such as the frequency `rtl_433` is tuned to.  A bare number is in kHz; a `Hz`, `kHz`, `MHz`, or `GHz` suffix may be given, with decimals, such as `433.92MHz`.  An invalid or negative frequency stops the source from opening.
+
+After 2026-10-R1, the frequency is applied to the packets again, and decimals and units are read correctly; since mid-2026 it had been ignored.
+{{</configopt>}}
+
+{{<configopt channel "channel">}}
+A channel name recorded with every packet from the source.  After 2026-10-R1, it is applied to the packets again.
+{{</configopt>}}
+
 ### Location options
 
 {{<configopt metagps "name">}}

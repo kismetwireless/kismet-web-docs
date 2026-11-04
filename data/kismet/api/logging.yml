@@ -26,11 +26,16 @@
   uriparameters: 
     - {name: "LOGCLASS", type: "string", description: "Log class / type to start"}
   jsonparameters: 
-    - {name: "title", type: "string", required: false, description: "Alternate file name / log title"}
+    - {name: "title", type: "string", required: false, description: "Title for this log's file name, in place of the session title; after 2026-10-R1"}
   docs: | 
     Open a new log; if the same type of log is closed and opened multiple times in one session, it 
     will have multipe log instances (such as `Kismet-foo-2022-10-03-1.pcap`, 
     `kismet-foo-2022-10-03-2.pcap` )
+
+    After 2026-10-R1, an optional `title`, sent as POST JSON, names only the log being opened; the
+    session title, and the other logs, are unchanged.  The title is 1 to 64 characters of `A-Z`,
+    `a-z`, `0-9`, `.`, `_`, and `-`, not starting with `.`; any other title is refused, and no log
+    is opened.
   notes: | 
     Some logs, like kismetdb, are only permitted a single logging instance. 
   return: |

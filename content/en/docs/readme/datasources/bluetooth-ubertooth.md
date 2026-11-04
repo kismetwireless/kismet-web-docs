@@ -42,13 +42,55 @@ When using multiple Ubertooth (Uberteeth?) devices, each device is numbered, sta
 kismet -c ubertooth-1
 ```
 
+After 2026-10-R1, the name is `ubertooth` (the first device), `ubertoothN`, or `ubertooth-N`, and opening it checks the number against the devices attached; with more than one Ubertooth, a bare `ubertooth` is turned down and the source must be numbered.  Before then, `ubertooth-N` above 0 failed with more than one device attached.  The fix changes the UUID of `ubertooth-N` sources numbered 1 and up, so a source pinned by UUID needs its new UUID.
+
 Kismet will list available Ubertooth devices automatically in the datasources list.
+
+## BTLE and classic modes
+
+Since Kismet 2026-10-R1, an Ubertooth source runs in one of two modes, set with `mode=`:
+
+* `btle` (the default) captures Bluetooth LE packets, as before.
+* `classic` surveys classic (BR/EDR) Bluetooth piconets.
+
+```bash
+kismet -c ubertooth:mode=classic
+```
+
+A source captures in one mode; to watch both, use two Ubertooth devices, such as `ubertooth-0:mode=btle` and `ubertooth-1:mode=classic`.
+
+### Classic piconets
+
+Classic Bluetooth hops across 79 channels, 1600 times a second, and its packets don't carry the full address of the devices sending them.  In classic mode the Ubertooth listens on one channel and finds the access code at the start of each packet, which holds the lower address part (LAP) of the piconet's master: the last three octets of its address.  Over time, the upper address part (UAP), one more octet, is worked out from the packet headers.  The first two octets of the address (the NAP) are never sent, so they can't be found this way.  This is the same survey `ubertooth-rx -z` does.
+
+Each piconet becomes a Bluetooth device:
+
+* It is keyed by its LAP, as `00:00:00:LL:LL:LL`, so working out the UAP doesn't make a new device.
+* It is named `Piconet LLLLLL`, with the type `BR/EDR` and an unknown manufacturer, since the NAP holds the manufacturer's OUI.
+* `bluetooth.device.partial_address` holds the part of the address known, with the unknown octets as `??`: `??:??:??:LL:LL:LL`, then `??:??:UU:LL:LL:LL` once the UAP is found.  The new web UI shows it as *Partial address*.
+* The signal, frequency, packet count, and location are recorded as for other devices.
+
+Packets using the general and dedicated inquiry access codes are hosts searching for devices, not piconets, and are ignored.  The packets are logged with link type 255 (`LINKTYPE_BLUETOOTH_BREDR_BB`), which Wireshark decodes.
+
+Piconets hop across every channel, so one channel is enough to find them.  A classic source listens on 2441 MHz (channel 39) unless `channel=` sets another, as a classic channel number from 0 to 78 or a frequency from 2402 to 2480 MHz, and is not channel hopped.
+
+Classic mode finds piconets which are active: devices connected to each other and exchanging packets.  A device which isn't connected to another is rarely seen this way; the [Linux HCI source](/docs/readme/datasources/bluetooth-hci-bluetooth/) finds those by scanning.
 
 ## Ubertooth source parameters
 
 ### Naming and description options
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
+
+### Mode and channel options
+
+{{<configopt mode btle classic>}}
+`btle` (the default) captures Bluetooth LE; `classic` surveys classic Bluetooth piconets; see [BTLE and classic modes](#btle-and-classic-modes).
+{{</configopt>}}
+
+{{<configopt channel channel>}}
+The channel to listen on.  In BTLE mode, a BTLE channel from 0 to 39, or a frequency in MHz; 37 by default.  In classic mode, a classic channel from 0 to 78, or a frequency from 2402 to 2480 MHz; 2441 MHz by default.
+{{</configopt>}}
 
 ## Limitations
 

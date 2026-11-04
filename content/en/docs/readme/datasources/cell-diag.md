@@ -46,6 +46,8 @@ Like the AT source, the DIAG source is named by the modem IMEI:
 $ kismet -c celldiag-<imei>
 ```
 
+After 2026-10-R1, `celldiag` names the one attached modem, and `celldiag-usb<bus-port>` the modem on that USB port, as [the AT source's simple names](/docs/readme/datasources/cell-at/#adding-the-source) do; both are resolved to the IMEI when the source opens.  The scan leaves alone the ports other programs or ModemManager are using, and refuses a DIAG port another program has open or locked; see [ports other programs are using](/docs/readme/datasources/cell-at/#ports-other-programs-are-using).
+
 The source type is `celldiag`.  To find the modem, the source sends `AT+CGSN` to the modem's AT ports and matches the IMEI, then opens the DIAG port of the same USB device.  To list the modems:
 
 ```bash

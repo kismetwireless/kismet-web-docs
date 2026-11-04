@@ -112,7 +112,7 @@ After 2026-10-R1, many of the details shown in the device panel can be filtered 
 | AIS | `mmsi`, `imo`, `ship_name` / `vessel`, `callsign`, `ship_type`, `destination`, `flag` / `country`, `nav_status`, `sog` / `knots` |
 | UAV / drones | `serial`, `drone_manufacturer`, `model`, `registration` / `reg`, `operator` / `operator_id`, `altitude` / `alt`, `height` |
 | Cell | `operator`, `mcc`, `mnc`, `plmn`, `tac`, `cell_id` / `cellid`, `pci`, `arfcn`, `band`, `rsrp`, `rsrq`, `sinr` |
-| 802.15.4 | `pan_id` / `pan`, `short_addr`, `ext_pan_id`, `network_name`, `role` |
+| 802.15.4 | `pan_id` / `pan`, `short_addr`, `ext_pan_id`, `network_name`, `role`, `thread_version`, `joining` / `thread_joining` (`joining > 1` finds open Thread networks), `router_id`, `child_id`, `children`, `polls`, `poll_interval` (a duration, such as `poll_interval > 30s`) |
 | Meshtastic | `node_id` / `nodeid`, `node_name` (long or short name), `long_name`, `short_name`, `battery`, `voltage`, `channel_use`, `uptime` |
 | MeshCore | `node_name`, `pubkey` / `public_key`, `hops` |
 | Meters | `meter_id`, `meter_type`, `consumption` |

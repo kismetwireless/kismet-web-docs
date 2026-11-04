@@ -516,6 +516,16 @@
     A vulnerability in the Linux RTLWIFI driver could lead to code execution or a denial of service, as described in CVE-2019-17666 and [the LKML mailing list](https://lkml.org/lkml/2019/10/16/1226).  This attack involves malformed Wi-Fi Direct P2P Notification of Absence frames.
 
 -
+  name: "THREADJOINABLE"
+  class: "Other"
+  phy: "IEEE802.15.4"
+  added: "after 2026-10-R1"
+  docs: |
+    A Thread network is accepting new devices: a router's Discovery Response or Thread 1.1 beacon shows that its commissioner lets any device, or the devices it lists, join with the network's joining credential.  Networks open for joining while a device is added; one left open, or opened unexpectedly, lets other devices join.
+
+    It is raised once each time a network opens, again if it widens from the devices its commissioner lists to any device, and is reset when the network closes.  The default rate is `10/min,5/sec`.  Matter devices usually join through Bluetooth instead, so a Matter network may not raise it while devices are added.
+
+-
   name: "TRACKERFOLLOW"
   class: "trend"
   phy: "bt"
@@ -554,6 +564,14 @@
     The WPS protocol has been shown to have numerous vulnerabilities, including errors in how the key exchanged is processed making it much weaker against brute force attacks.
 
     Excessive WPS negotiation attempts may indicate a brute force attack such as [Reaver](https://outpost24.com/blog/wps-cracking-with-reaver) against a WPS enabled Access Point.
+
+-
+  name: "ZIGBEEWEAKKEY"
+  class: "exploit"
+  phy: "IEEE802.15.4"
+  added: "2026-10"
+  docs: |
+    A Zigbee network uses a key anyone can know: its Trust Center sent a key in a Transport Key command without APS security, secured APS frames with a publicly known link key such as `ZigBeeAlliance09` (with which it also sends the network key to joining devices), or secured NWK frames with a publicly known network key such as the TI Z-Stack default.  Anyone who receives these frames can decrypt the network's traffic.
 
 -
   name: "WPSFRAGLEN"
