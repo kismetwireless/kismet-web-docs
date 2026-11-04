@@ -1,0 +1,53 @@
+-
+  name: "Webhook status"
+  uri: "/webhooks/status"
+  methods: ["GET", "POST"]
+  types: ["anyjson"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  jsonparameters: 
+    -
+      auto: "fields"
+  docs: |
+    The status of each [webhook endpoint](/docs/readme/configuring/webhooks/#endpoints), in
+    `kismet.webhooks.endpoints`, and of each device rule's webhooks, in `kismet.webhooks.rules`.
+
+    Each endpoint:
+
+    | Field | Contents |
+    | ----- | -------- |
+    | `kismet.webhooks.endpoint.name` | Endpoint name |
+    | `kismet.webhooks.endpoint.url` | The scheme, host, and port of the endpoint's URL; never the path or query |
+    | `kismet.webhooks.endpoint.queued` | Events waiting to be sent |
+    | `kismet.webhooks.endpoint.sent_requests` | Calls delivered |
+    | `kismet.webhooks.endpoint.sent_events` | Events delivered |
+    | `kismet.webhooks.endpoint.failed_requests` | Calls which failed |
+    | `kismet.webhooks.endpoint.dropped_events` | Events dropped, because the queue was full or they ran out of retries |
+    | `kismet.webhooks.endpoint.rejected_events` | Events the receiver refused |
+    | `kismet.webhooks.endpoint.suppressed_events` | Events a rate limit held back |
+    | `kismet.webhooks.endpoint.last_status` | HTTP status of the last call, 0 when it got no answer |
+    | `kismet.webhooks.endpoint.last_error` | The error of the last failed call |
+    | `kismet.webhooks.endpoint.last_success` | Time of the last delivered call |
+    | `kismet.webhooks.endpoint.last_failure` | Time of the last failed call |
+    | `kismet.webhooks.endpoint.backoff_until` | Time sending resumes after failures, or 0 |
+
+    Each rule's webhook:
+
+    | Field | Contents |
+    | ----- | -------- |
+    | `kismet.webhooks.rule.rule` | Device rule |
+    | `kismet.webhooks.rule.endpoint` | Endpoint the rule sends to |
+    | `kismet.webhooks.rule.trigger` | When the rule sends |
+    | `kismet.webhooks.rule.fired` | Events sent |
+    | `kismet.webhooks.rule.suppressed` | Events the rate limits held back |
+    | `kismet.webhooks.rule.primed` | Devices which already matched when the rule loaded, and weren't sent |
+    | `kismet.webhooks.rule.tracked` | Devices with webhook state |
+    | `kismet.webhooks.rule.untracked` | Devices skipped at `webhook_max_tracked` |
+    | `kismet.webhooks.rule.priming` | 1 while still recording the devices which matched when the rule loaded |
+  return: |
+    JSON object of webhook endpoint and rule status.
+  responses:
+    success:
+      - [200, "Basic success and JSON object"]
+    failure:
+      - [-1, "On error (typically for malformed simplification)"]

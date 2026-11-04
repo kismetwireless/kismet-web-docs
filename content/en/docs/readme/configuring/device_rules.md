@@ -15,7 +15,7 @@ toc: true
 
 Added: `after 2026-10-R1`
 
-Device rules match devices on the server, as they're seen, and act on the devices which match: they can tag devices, give them a highlight color, collect them into a [device view](/docs/api/device_views/), and raise an alert when a device starts matching.  Sorts, written in the same language, order the devices in a device view.
+Device rules match devices on the server, as they're seen, and act on the devices which match: they can tag devices, give them a highlight color, collect them into a [device view](/docs/api/device_views/), raise an alert when a device starts matching, and send matching devices to a [webhook](/docs/readme/configuring/webhooks/).  Sorts, written in the same language, order the devices in a device view.
 
 Rules are written in a small language, and are compiled to native code where the platform allows it, so a large number of rules can be checked against a large number of devices.
 
@@ -34,6 +34,7 @@ rule <name> {
     view "<description>"
     alert
     live
+    webhook "<endpoint>" { ... }
 }
 ```
 
@@ -44,6 +45,7 @@ rule <name> {
 * `view` collects matching devices in the device view `rule-<name>`, with the description as the view name; without one, the view takes the rule's `description`, or `Devices matching rule <name>`.
 * `alert` raises a `DEVICERULE` alert when a device starts matching the rule.
 * `live` checks the rule on every packet which updates a device, as well as on the timer.
+* `webhook` sends matching devices to a [webhook endpoint](/docs/readme/configuring/webhooks/#endpoints); see [webhooks](#webhooks) below.
 
 ### Fields
 
@@ -158,6 +160,60 @@ sort loudest {
 
 sort by-rule {
     by rule, last_time desc
+}
+```
+
+### Webhooks
+
+A `webhook` statement sends devices which match the rule to an endpoint defined by a [`webhook_endpoint`](/docs/readme/configuring/webhooks/#endpoints) line in the config.  By itself, it sends a device when it starts matching; terms in braces change when it sends, and what:
+
+```
+webhook "<endpoint>" {
+    trigger match | new | once | every <time> | change <field>, ... limit <time>
+    for <time>
+    stop
+    rate <n>/<period> [burst <n>]
+    batch <time> [max <n>]
+    fields <field>, ...
+    fire_existing
+}
+```
+
+| Term | |
+| ---- | - |
+| `trigger match` | When a device starts matching; the default.  It's sent again only after it stops matching and matches again. |
+| `trigger new` | When a device first seen after the rule loaded starts matching, once per device. |
+| `trigger once` | The first device to match, once until the rules are loaded again. |
+| `trigger every <time>` | While a device matches, each time it's updated, at most once per `<time>`, which must be 10 seconds or more. |
+| `trigger change <field>, ... limit <time>` | When the fields change while a device matches, at most once per `<time>` per device, which must be 1 second or more; the limit is required.  Changes within the limit are sent together when it's up, with the old and new values.  Up to 8 fields. |
+| `for <time>` | A device must keep matching this long before it's sent. |
+| `stop` | Also send when a device stops matching.  Not with `trigger once`. |
+| `rate <n>/<period> [burst <n>]` | The most events from this webhook per period, such as `10/1m` or `100/1h`.  Default `10/1m`. |
+| `batch <time> [max <n>]` | Hold events to send together: the first event opens a window, which is sent when `<time>` is up or `<n>` events are in it (default 100). |
+| `fields <field>, ...` | The device fields to send, as the short [field names](#fields) rules use (`mac`, `name`, `signal`) or full field names and paths, as in the REST API's `fields`; up to 32.  The default is the device key, MAC, name, phy, type, manufacturer, channel, frequency, first and last time, and last signal. |
+| `fire_existing` | Also send devices which already match when the rule loads; without it they're recorded and not sent. |
+
+A rule can have up to 4 `webhook` statements.  The endpoint's own rate, queue, and retry limits apply on top of the rule's, along with `webhook_global_rate`; [`/webhooks/status.json`](/docs/api/webhooks/) shows what each webhook sent and held back.
+
+`trigger new` goes by the time a device was first seen, so devices in an old pcap replayed into Kismet aren't new.
+
+```
+rule new-public-btle {
+    description "New BTLE devices with public addresses"
+    when phy == "BTLE" and not exists(btle.device.random_address_type)
+    webhook "ha" {
+        trigger new
+        batch 30s max 100
+        fields mac, name, signal
+    }
+}
+
+rule watchlist-signal {
+    when mac in [00:11:22:33:44:55]
+    webhook "ha" {
+        trigger change signal limit 30s
+        stop
+    }
 }
 ```
 
