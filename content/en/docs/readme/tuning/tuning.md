@@ -164,6 +164,15 @@ Turning this off will not affect associating SSIDs with access points or display
 {{</configopt>}}
 
 
+{{<configopt dot11_max_ssid_groups ssids>}}
+The most SSIDs the SSID view keeps (default 10000).  Probe requests can name any SSID, so in a busy area, or with someone sending random probes, the list can grow without limit.
+
+When there are more than this, Kismet drops the oldest-seen tenth of them.  Each SSID also tracks at most 4096 devices advertising, probing for, or answering for it.
+
+Set to `0` for no limit.
+{{</configopt>}}
+
+
 {{<configopt dot11_fingerprint_devices true false>}}
 Kismet does advanced fingerprinting of 802.11 devices. 
 

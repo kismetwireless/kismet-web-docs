@@ -23,8 +23,9 @@
     | Field | Content |
     | ----- | ------- |
     | `meshtastic.channel.channel` | Channel name |
-    | `meshtastic.channel.key` | Channel key, in base64, expanded to the full AES key |
     | `meshtastic.channel.messages` | List of messages, oldest first |
+
+    The channel key is not included; it stays in the Kismet config.
 
     Each message contains:
 
@@ -65,10 +66,11 @@
     | Field | Content |
     | ----- | ------- |
     | `meshcore.channel.channel` | Channel name; `Public`, the configured name, or the hashtag |
-    | `meshcore.channel.key` | Channel secret, in base64 |
     | `meshcore.channel.key_type` | Encryption type, `AES128` |
     | `meshcore.channel.hash` | Channel hash, the first byte of the SHA-256 of the secret |
     | `meshcore.channel.messages` | List of messages, oldest first |
+
+    The channel secret is not included; it stays in the Kismet config.
 
     Each message contains:
 
