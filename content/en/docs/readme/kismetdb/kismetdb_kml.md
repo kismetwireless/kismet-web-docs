@@ -27,6 +27,12 @@ KML is an XML-based markup language for use with Google Earth, or other utilitie
 
 The output KML from `kismetdb_to_kml` is quite basic; for more complex needs, we suggest either editing the `kismetdb_to_kml` source to extend it (patches welcome!) or creating a custom processor to meet your needs.
 
+## Cells
+
+[Cellular](/docs/readme/datasources/cell-at/) cells are exported as placemarks, with the cell key, the operator, the last RSRP, the identity level, and the number of observations in the description.  A cell never sends packets of its own, so it is placed at the average location Kismet stored for the cell device.
+
+`kismetdb_to_gpx` exports cells the same way, as waypoints.
+
 ## Arguments
 
 {{<argumentshort i in filename>}}
@@ -57,6 +63,10 @@ If packets were not logged, or to save time and processing, passing `--basic-loc
 
 {{<argumentshort H heard-at>}}
 Devices which report their own position (such as ADS-B, AIS, and Remote ID) are placed at the position they reported, when the log contains it (kismetdb version 11 and newer).  Passing `--heard-at` places them where Kismet heard them instead.
+{{</argumentshort>}}
+
+{{<argumentshort g group>}}
+Group placemarks into folders by type: Wi-Fi access points (Open, WEP, WPA), Wi-Fi clients, Bluetooth, 802.15.4, Cellular, and Other.
 {{</argumentshort>}}
 
 {{<argumentshort e exclude>}}
