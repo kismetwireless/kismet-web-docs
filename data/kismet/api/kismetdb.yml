@@ -206,10 +206,11 @@
         http://localhost:2501/logging/kismetdb/data/push.cmd
     ```
 
-    Records can be read from the log with `sqlite3`:
+    Records can be read back with the [tagged data records](#reading-tagged-data) endpoint, or
+    from a log file with `sqlite3`:
 
     ```bash
-    $ sqlite3 foo.kismet "SELECT ts_sec, lat, lon, json FROM snapshots WHERE snaptype = API:camera"
+    $ sqlite3 foo.kismet "SELECT ts_sec, lat, lon, json FROM snapshots WHERE snaptype = 'API:camera'"
     ```
 
     This endpoint is only available when the kismetdb log is enabled.
@@ -230,3 +231,107 @@
       - [401, "Not logged in, or the API key does not have the datalog role"]
       - [413, "Request is larger than kis_log_tagged_data_max_size"]
       - [500, "Record could not be written to the log"]
+
+-
+  name: "Listing tagged data"
+  uri: "/logging/kismetdb/data/tags"
+  types: ["json"]
+  added: "2026-11"
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  docs: |
+    List the tags of the records saved with the [tagged data push](#pushing-tagged-data) endpoint,
+    in the current kismetdb log, sorted by tag.
+
+    This endpoint is only available when the kismetdb log is enabled.
+  return: |
+    JSON list of tags:
+
+    | Field | Content |
+    | ----- | ------- |
+    | `tag` | Tag |
+    | `count` | Number of records with this tag |
+    | `first_ts_sec` | Timestamp of the oldest record, in seconds |
+    | `last_ts_sec` | Timestamp of the newest record, in seconds |
+  responses:
+    success:
+      - [200, "Success"]
+
+-
+  name: "Reading tagged data"
+  uri: "/logging/kismetdb/data/records"
+  types: ["json"]
+  added: "2026-11"
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  uriparameters:
+    - {name: "tag", type: "string", required: false, description: "Only records with this tag"}
+    - {name: "after", type: "number", required: false, description: "Only records after this record id"}
+    - {name: "ts_start", type: "number", required: false, description: "Only records at or after this time, in seconds"}
+    - {name: "ts_end", type: "number", required: false, description: "Only records at or before this time, in seconds"}
+    - {name: "limit", type: "number", required: false, description: "Return at most this many records, 1 to 1000; default 100"}
+    - {name: "data", type: "boolean", required: false, description: "`false` returns only the record details and size, without the data; default `true`"}
+  jsonparameters:
+    - {name: "tag", type: "string", required: false, description: "Only records with this tag"}
+    - {name: "after", type: "number", required: false, description: "Only records after this record id"}
+    - {name: "ts_start", type: "number", required: false, description: "Only records at or after this time, in seconds"}
+    - {name: "ts_end", type: "number", required: false, description: "Only records at or before this time, in seconds"}
+    - {name: "limit", type: "number", required: false, description: "Return at most this many records, 1 to 1000; default 100"}
+    - {name: "data", type: "boolean", required: false, description: "`false` returns only the record details and size, without the data; default `true`"}
+  docs: |
+    Read back the records saved with the [tagged data push](#pushing-tagged-data) endpoint from the
+    current kismetdb log, oldest first.  Without a `tag`, records of every tag are returned.
+
+    Options can be sent as URI parameters on a `GET` (ie
+    `/logging/kismetdb/data/records.json?tag=camera&limit=10`) or as a JSON command on a `POST`.
+
+    Records are returned in pages.  When `more` is `true`, there are more records; request them
+    by passing the `next` value of the reply as `after`.  A reply also stops early, with `more` set,
+    once it holds about 32MB of data; a reply always includes at least one record, so a single
+    large record can still be read.  To find records without fetching their data, use `data=false`.
+
+    For example, fetching every camera record:
+
+    ```bash
+    $ curl -H "Authorization: Bearer $KEY" \
+        "http://localhost:2501/logging/kismetdb/data/records.json?tag=camera&after=0"
+    ```
+
+    Then repeat with `after` set to the `next` value until `more` is `false`.
+
+    Record ids are only meaningful within the same kismetdb log.  A record whose stored data is
+    not valid JSON (for instance, if the log was edited by another tool) is returned with `data` set
+    to `null`.
+
+    Readonly logins and API keys can read records; `datalog` API keys can only push records, and
+    can not read them back.
+
+    This endpoint is only available when the kismetdb log is enabled.
+  return: |
+    JSON object:
+
+    | Field | Content |
+    | ----- | ------- |
+    | `ok` | `true` |
+    | `records` | List of records, below |
+    | `more` | `true` if there are more records after these |
+    | `next` | Id of the last record returned, to pass as `after`; missing when no records were returned |
+
+    Each record:
+
+    | Field | Content |
+    | ----- | ------- |
+    | `id` | Record id |
+    | `tag` | Tag |
+    | `ts_sec` | Timestamp, in seconds |
+    | `ts_usec` | Timestamp, microseconds |
+    | `lat` | Latitude, or 0 if there was no GPS location |
+    | `lon` | Longitude, or 0 if there was no GPS location |
+    | `size` | Size of the stored data, in bytes |
+    | `data` | The record data, as pushed; left out when `data` is `false` |
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [400, "Invalid option; the JSON error response describes the problem"]
+      - [401, "Not logged in, or the API key does not have the readonly role"]
