@@ -77,6 +77,7 @@ As of `2020-11`, Kismet supports the use of API tokens and roles to restrict the
 | readonly   | Read-only role with access to endpoints which do not modify any devices, state, or configuration                 |
 | scanreport | Role able to submit device/network scan reports, via the Wi-Fi and Bluetooth scanning-mode API                   |
 | datasource | Role for remote capture websocket sources                                                                        |
+| datalog    | Role able to push tagged records into the kismetdb log, via the [tagged data API](/docs/api/kismetdb/) (after 2026-10-R1) |
 
 Roles are not inherited or cascading; for instance a `readonly` role does not have access to reporting scans or acting as remote datasources.  The only role with access to all endpoints is `admin`.
 

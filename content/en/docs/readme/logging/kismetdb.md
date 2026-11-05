@@ -96,6 +96,18 @@ kis_log_gps_satellites_rate=30
 
 The satellites move slowly across the sky, and a satellite snapshot is larger than a location, so they are logged less often.  Each `GPSSATS` snapshot is a few kilobytes, usually well under 1MB per hour per GPS.  Setting `kis_log_gps_satellites_rate=0` turns off the satellite snapshots.
 
+## Tagged data from other tools
+
+After 2026-10-R1, other tools can save their own JSON records in the kismetdb log through the [tagged data API](/docs/api/kismetdb/), using an admin login or an API key with the `datalog` role.  Each record is saved to the `snapshots` table with the type `API:<tag>`, the time, and the GPS location if there is a fix.  Records can include images or other binary data as base64 strings.
+
+The largest request the API accepts, in bytes, is set by:
+
+```
+kis_log_tagged_data_max_size=8388608
+```
+
+The default is 8MB; the value is limited to between 100000 and 67108864 (64MB).  Each record is stored in full in the log, so large records, such as images, will grow the log quickly.
+
 ## Filtering
 
 Kismet can filter packets and devices logged in the `kismetdb` log file.  This can be used to exclude known devices, or include ONLY certain types of devices and packets.

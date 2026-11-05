@@ -170,3 +170,63 @@
     becoming unmanageable while retaining packet history, for instance by fetching all
     packets using the historic packet endpoint, then removing them from the kismetdb log.
 
+
+-
+  name: "Pushing tagged data"
+  uri: "/logging/kismetdb/data/push"
+  types: ["cmd"]
+  added: "2026-11"
+  methods: ["POST"]
+  roles: ["admin", "datalog"]
+  jsonparameters:
+    - {name: "tag", type: "string", required: true, description: "Record tag; 1 to 64 letters, digits, `.`, `_`, or `-`"}
+    - {name: "data", type: "json", required: true, description: "Any JSON value: an object, list, string, or number"}
+  docs: |
+    Save an arbitrary JSON record in the kismetdb log, under a tag of your choosing.  This can be
+    used to keep data from other tools, such as sensor readings or camera images, in the same log
+    and timeline as the Kismet data.  Binary data, such as images, can be sent as base64 strings
+    inside the JSON.
+
+    Records are saved to the `snapshots` table of the kismetdb log with the type `API:<tag>`, the
+    current time, and the current GPS location (if there is a GPS fix).  The JSON is stored as
+    sent, in compact form.
+
+    Admin logins and API keys with the `datalog` role can push records; a `datalog` API key has no
+    access to any other endpoint, which makes it suitable for giving to an external tool.
+
+    Requests to this endpoint may be up to `kis_log_tagged_data_max_size` bytes, 8MB by default
+    (all other endpoints remain limited to 100KB).  Larger requests are rejected with a `413`
+    error.  The larger limit only applies once the login has been accepted.
+
+    For example, saving an image from a camera:
+
+    ```bash
+    $ curl -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+        --data "{\"tag\": \"camera\", \"data\": {\"image\": \"$(base64 -w0 shot.jpg)\"}}" \
+        http://localhost:2501/logging/kismetdb/data/push.cmd
+    ```
+
+    Records can be read from the log with `sqlite3`:
+
+    ```bash
+    $ sqlite3 foo.kismet "SELECT ts_sec, lat, lon, json FROM snapshots WHERE snaptype = API:camera"
+    ```
+
+    This endpoint is only available when the kismetdb log is enabled.
+  return: |
+    JSON object:
+
+    | Field | Content |
+    | ----- | ------- |
+    | `ok` | `true` |
+    | `tag` | Tag of the saved record |
+    | `ts_sec` | Timestamp of the record, in seconds |
+    | `ts_usec` | Timestamp of the record, microseconds |
+  responses:
+    success:
+      - [200, "Record saved"]
+    failure:
+      - [400, "Invalid tag, missing data, or invalid JSON; the JSON error response describes the problem"]
+      - [401, "Not logged in, or the API key does not have the datalog role"]
+      - [413, "Request is larger than kis_log_tagged_data_max_size"]
+      - [500, "Record could not be written to the log"]
