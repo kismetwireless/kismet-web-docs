@@ -13,7 +13,7 @@ weight: 40
 toc: true
 ---
 
-The `kismetdb_to_kml` tool processes the unified [kismetdb](/docs/readme/logging/kismetdb/) log and exports the positional data as a basic KML.
+The `kismetdb_to_kml` tool processes the unified [kismetdb](/docs/readme/logging/kismetdb/) log and exports the positional data as a basic KML.  `kismetdb_to_gpx` writes the same devices as GPX waypoints, and takes the same arguments except `--group`.
 
 This tool is available as part of Kismet when built from source, or in the kismet-logtools package, as of `2019-02`.
 
@@ -29,7 +29,9 @@ The output KML from `kismetdb_to_kml` is quite basic; for more complex needs, we
 
 ## Cells
 
-[Cellular](/docs/readme/datasources/cell-at/) cells are exported as placemarks, with the cell key, the operator, the last RSRP, the identity level, and the number of observations in the description.  A cell never sends packets of its own, so it is placed at the average location Kismet stored for the cell device.
+Added: `after 2026-10-R1`
+
+[Cellular](/docs/readme/datasources/cell-at/) cells are exported as placemarks, with the cell key, the operator (or the PLMN when the name isn't known), the last RSRP, the identity level, and the number of observations in the description.  A cell never sends packets of its own, so it is placed at the average location Kismet stored for the cell device.  With `--basic-location`, every device, cells included, already uses the location in its device record.
 
 `kismetdb_to_gpx` exports cells the same way, as waypoints.
 
@@ -66,7 +68,7 @@ Devices which report their own position (such as ADS-B, AIS, and Remote ID) are 
 {{</argumentshort>}}
 
 {{<argumentshort g group>}}
-Group placemarks into folders by type: Wi-Fi access points (Open, WEP, WPA), Wi-Fi clients, Bluetooth, 802.15.4, Cellular, and Other.
+Group placemarks into folders by type: Wi-Fi access points (Open, WEP, WPA), Wi-Fi clients, Bluetooth, 802.15.4, Cellular, and Other (KML only).  `-g` works as of `after 2026-10-R1`; before, only `--group` did.
 {{</argumentshort>}}
 
 {{<argumentshort e exclude>}}

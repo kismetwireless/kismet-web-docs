@@ -61,6 +61,18 @@ Log size is specified in megabytes.  Logs are rotated when the size *exceeds* th
 
 Logs are rotated so that no packets should be lost during the creation of the new log file.
 
+After 2026-10-R1, the `pcapng` log can also be rotated by time:
+
+```
+pcapng_log_max_seconds=86400
+```
+
+The time is in seconds, up to a year (`31622400`); `0`, or leaving it unset, is no limit.  A new log is opened when the log has been open this long, even if no packets arrived, so `86400` makes a new file every 24 hours from when the log opened, not at midnight; it counts elapsed time, so changing the system clock doesn't make a file longer or shorter.  With `pcapng_log_max_mb` set too, whichever limit is reached first starts the next file.  A negative, non-numeric, or too large value is logged as an error and ignored, so there is no time limit.
+
+New files keep the name the log started with and count up its sequence number, so the [log template](/docs/readme/logging/logging/) needs `%i`.  A very short limit on a quiet system makes many files which hold only a header.
+
+After 2026-10-R1, rotating by size no longer hangs Kismet with `pcapng_log_blocking=true`, or when Kismet shuts down during a rotation.
+
 ## Filtering
 
 ### Duplicate packets

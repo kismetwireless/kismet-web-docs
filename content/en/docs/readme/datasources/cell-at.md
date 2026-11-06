@@ -245,7 +245,9 @@ Cells are tracked as devices in the `Cellular` phy:
 
 The key uses the downlink frequency instead of the raw channel number, so a cell reported as different bands by different modems (LTE band 4 and band 66, for instance) is still one device.
 
-The web UI shows the cell identity, the band and channel, the signal (RSRP, RSRQ, SINR), the range of RSRP seen, and the number of observations.  Quectel modems that report it also give the channel quality indicator (CQI, 0-15), but only while the modem is connected to the cell; it can be searched as `cqi`.  Cells are geotagged with the GPS location, and are included in the [WiGLE CSV](/docs/readme/logging/wiglecsv/) log and the [KML](/docs/readme/kismetdb/kismetdb_kml/) and GPX exports.
+The web UI shows the cell identity, the band and channel, the signal (RSRP, RSRQ, SINR), the range of RSRP seen, and the number of observations.  Cells are geotagged with the GPS location, and are included in the [WiGLE CSV](/docs/readme/logging/wiglecsv/) log and the [KML](/docs/readme/kismetdb/kismetdb_kml/) and GPX exports.
+
+As of `after 2026-10-R1`, Quectel modems whose LTE serving cell report has 20 fields (the RM500Q and RM520N series, EG12, and EG18) also give the CQI, the channel quality from 0 to 15, as `cellular.cell.cqi`.  The modem only reports it while it's connected to the cell, so it is -1 until the modem has reported one; the EG25-G, EG95, EM06, and EM12 don't report it.  The web UI shows it in the cell details once there is one, and the device search takes it as `cqi`, where `cqi = 0` matches only real readings.
 
 ## Logging
 

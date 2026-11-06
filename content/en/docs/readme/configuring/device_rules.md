@@ -183,9 +183,9 @@ webhook "<endpoint>" {
 | ---- | - |
 | `trigger match` | When a device starts matching; the default.  It's sent again only after it stops matching and matches again. |
 | `trigger new` | When a device first seen after the rule loaded starts matching, once per device. |
-| `trigger once` | The first device to match, once until the rules are loaded again. |
+| `trigger once` | The first device to match, once.  Loading the rules again keeps it used, as long as the rule keeps its name and the webhook keeps its trigger and its place in the rule. |
 | `trigger every <time>` | While a device matches, each time it's updated, at most once per `<time>`, which must be 10 seconds or more. |
-| `trigger change <field>, ... limit <time>` | When the fields change while a device matches, at most once per `<time>` per device, which must be 1 second or more; the limit is required.  Changes within the limit are sent together when it's up, with the old and new values.  Up to 8 fields. |
+| `trigger change <field>, ... limit <time>` | When the fields change while a device matches, at most once per `<time>` per device, which must be 1 second or more; the limit is required.  Fields are single values, such as `signal` or `name`; a field which is a record or a list, such as `dot11.device` or `seenby`, is refused.  Changes within the limit are sent together when it's up, with the old and new values.  Up to 8 fields. |
 | `for <time>` | A device must keep matching this long before it's sent. |
 | `stop` | Also send when a device stops matching.  Not with `trigger once`. |
 | `rate <n>/<period> [burst <n>]` | The most events from this webhook per period, such as `10/1m` or `100/1h`.  Default `10/1m`. |
