@@ -98,7 +98,7 @@ The satellites move slowly across the sky, and a satellite snapshot is larger th
 
 ## Tagged data from other tools
 
-After 2026-10-R1, other tools can save their own JSON records in the kismetdb log through the [tagged data API](/docs/api/kismetdb/), using an admin login or an API key with the `datalog` role.  Each record is saved to the `snapshots` table with the type `API:<tag>`, the time, and the GPS location if there is a fix.  Records can include images or other binary data as base64 strings.  Records can be read back through the API with an admin login or a `readonly` API key.
+After 2026-10-R1, other tools can save their own JSON records in the kismetdb log through the [tagged data API](/docs/api/kismetdb/), using an admin login or an API key with the `datalog` role.  Each record is saved to the `snapshots` table with the type `API:<tag>`, the time, and the GPS location if there is a fix.  Records can include images or other binary data as base64 strings.  Records can be read back through the API with an admin login or a `readonly` API key, and deleted with an admin login.  Deleting records does not make the log file smaller; run `kismetdb_clean` on the log after Kismet has closed it to reclaim the space and remove the deleted data from the file.
 
 The largest request the API accepts, in bytes, is set by:
 

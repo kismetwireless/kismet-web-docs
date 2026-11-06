@@ -335,3 +335,57 @@
     failure:
       - [400, "Invalid option; the JSON error response describes the problem"]
       - [401, "Not logged in, or the API key does not have the readonly role"]
+
+-
+  name: "Deleting tagged data"
+  uri: "/logging/kismetdb/data/delete"
+  types: ["cmd"]
+  added: "2026-11"
+  methods: ["POST"]
+  roles: ["admin"]
+  jsonparameters:
+    - {name: "tag", type: "string", required: false, description: "Only records with this tag"}
+    - {name: "ids", type: "list", required: false, description: "Only records with these record ids; a list of 1 to 1000 ids"}
+    - {name: "ts_start", type: "number", required: false, description: "Only records at or after this time, in seconds"}
+    - {name: "ts_end", type: "number", required: false, description: "Only records at or before this time, in seconds"}
+    - {name: "all", type: "boolean", required: false, description: "`true` to delete every tagged record"}
+  docs: |
+    Delete records saved with the [tagged data push](#pushing-tagged-data) endpoint from the
+    current kismetdb log.  Only tagged records are deleted; other data in the log, such as GPS
+    snapshots, POIs, devices, and packets, is never touched, even if its id is given in `ids`.
+
+    When more than one option is given, a record has to match all of them; for instance, `tag`
+    and `ts_end` together delete only the older records with that tag.  A request with no options
+    is refused, so that an empty or mistaken request can not delete everything; to delete every
+    tagged record, send `all` set to `true`.
+
+    For example, deleting the camera records older than a day:
+
+    ```bash
+    $ curl -H "Authorization: Bearer $KEY" -H "Content-Type: application/json" \
+        --data "{\"tag\": \"camera\", \"ts_end\": $(( $(date +%s) - 86400 ))}" \
+        http://localhost:2501/logging/kismetdb/data/delete.cmd
+    ```
+
+    Only admin logins can delete records; `readonly` and `datalog` API keys can not.
+
+    Deleting records frees space inside the kismetdb log for new data, but does not make the log
+    file smaller, and the deleted data may remain readable in the file until SQLite reuses that
+    space.  To remove it from the file for good, clean the log with `kismetdb_clean` or
+    `sqlite3 foo.kismet "VACUUM;"` after Kismet has closed it.
+
+    This endpoint is only available when the kismetdb log is enabled.
+  return: |
+    JSON object:
+
+    | Field | Content |
+    | ----- | ------- |
+    | `ok` | `true` |
+    | `deleted` | Number of records deleted |
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [400, "No options given, or an invalid option; the JSON error response describes the problem"]
+      - [401, "Not logged in as an admin"]
+      - [500, "The log could not be changed"]
