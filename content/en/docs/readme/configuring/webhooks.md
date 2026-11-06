@@ -54,7 +54,7 @@ The most webhook events from every rule together, per period.  Default `600/1m`.
 {{</configopt>}}
 
 {{<configopt webhook_max_tracked "count">}}
-The most devices each rule's webhook keeps state for, which `for`, `change`, `every`, `new`, and `stop` need.  Devices past this are skipped and counted in the [status](#status).  Default 100000.
+The most devices matching a rule that its webhook keeps state for, which `for`, `change`, `every`, `new`, and `stop` need.  Devices past this are skipped and counted in the [status](#status).  `new` also remembers up to 4 times as many devices which got their event and stopped matching, so they aren't sent again.  Reaching either limit is logged once per webhook.  Default 100000.
 {{</configopt>}}
 
 ## What is sent
@@ -120,7 +120,7 @@ The timestamp comes from the Kismet server's clock, so keep the clocks of both c
 ## Delivery and retries
 
 * A `2xx` answer delivers the call.
-* No answer, a timeout, or a `408`, `429`, or `5xx` answer is retried later, after 5 seconds and then longer, up to 5 minutes; a `429`'s `Retry-After`, in seconds, is honored, up to an hour.  Each event is tried 3 times, then dropped.
+* No answer, a timeout, or a `408`, `429`, or `5xx` answer is retried later, after 5 seconds and then longer, up to 5 minutes; a `Retry-After` on a `429` or `503`, in seconds or as an HTTP date, is honored, up to 5 minutes.  Each event is tried 3 times, then dropped.
 * Any other answer, such as a `401` or a redirect, drops the call's events.  Redirects aren't followed.
 
 Calls go out under the endpoint's `rate`, `burst`, and `queue` limits, the rule's own [`rate`](/docs/readme/configuring/device_rules/#webhooks), and `webhook_global_rate`; events which don't fit are counted as suppressed or dropped in the next call and in the status.

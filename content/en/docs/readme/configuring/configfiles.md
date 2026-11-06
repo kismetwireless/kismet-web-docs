@@ -46,6 +46,8 @@ Configuration options all take the form of:
 
    `option=value`
 
+After 2026-10-R1, an option which takes a number needs the whole value to be a number: a value such as `100k`, `4x`, or `-1` for an option which can't be negative is logged as an error, with the file and line it came from, and the option's default is used instead.
+
 Some configuration options support repeated definitions, such as the 
 `source` option which defines a Kismet datasource:
 
