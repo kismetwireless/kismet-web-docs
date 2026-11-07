@@ -184,6 +184,8 @@ This will save some CPU.
 
 {{<configopt dot11_keep_ietags true false>}}
 Off by default, Kismet can store and display the IE tag component of beacons at the cost of RAM and CPU per network. 
+
+As of `after 2026-10-R1`, the stored tags are refreshed when the beacon tags change, but not when only the contents of the TIM (tag 5) or the QBSS load (tag 11) change.  Those two change with almost every beacon, so the stored copies of them may be older than the last beacon seen; the QBSS station count and channel load in the SSID record are still updated from every beacon.
 {{</configopt>}}
 
 
