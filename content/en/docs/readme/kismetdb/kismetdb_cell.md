@@ -27,7 +27,7 @@ Records in the kismetdb `data` table, by `type`:
 |------|--------|----------|
 | `Cellular` | both | a decoded cell observation which Kismet matched to a cell device |
 | `CellModem` | both | a decoded observation Kismet could not key to a cell, such as a neighbor report with a channel but no PCI |
-| `RawAT` | AT | every AT command and its full response, one record per exchange |
+| `RawAT` | AT | every AT command and its full response, one record per exchange; the `AT+QGPSLOC` position polls of a [modem with no NMEA port](/docs/readme/gps/gps_cellmodem/#modems-with-no-nmea-port) only with `debug` on |
 | `ClockAnchor` | both | the modem clock read and paired with the host clock |
 | `CellLog` | both | one session record per capture (the port, the modem make, model, firmware and IMEI, and the options), and with `debug` on, extra detail such as each DIAG configuration request and its reply |
 | `CellSecurity` | DIAG | a security finding; see the [cell alerts](/docs/readme/datasources/cell-diag/#alerts) |

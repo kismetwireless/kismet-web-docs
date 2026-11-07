@@ -245,9 +245,13 @@ Cells are tracked as devices in the `Cellular` phy:
 
 The key uses the downlink frequency instead of the raw channel number, so a cell reported as different bands by different modems (LTE band 4 and band 66, for instance) is still one device.
 
+As of `after 2026-10-R1`, the band shown for such a cell (`cellular.cell.band`) is the widest of the bands reported for its carrier (band 66 over band 4), so it doesn't depend on which modem reported last.  `cellular.cell.arfcn` is still the channel number of the latest report, so the two can name different bands: band 66 with the band 4 channel 2300, for instance.
+
 The web UI shows the cell identity, the band and channel, the signal (RSRP, RSRQ, SINR), the range of RSRP seen, and the number of observations.  Cells are geotagged with the GPS location, and are included in the [WiGLE CSV](/docs/readme/logging/wiglecsv/) log and the [KML](/docs/readme/kismetdb/kismetdb_kml/) and GPX exports.
 
 As of `after 2026-10-R1`, Quectel modems whose LTE serving cell report has 20 fields (the RM500Q and RM520N series, EG12, and EG18) also give the CQI, the channel quality from 0 to 15, as `cellular.cell.cqi`.  The modem only reports it while it's connected to the cell, so it is -1 until the modem has reported one; the EG25-G, EG95, EM06, and EM12 don't report it.  The web UI shows it in the cell details once there is one, and the device search takes it as `cqi`, where `cqi = 0` matches only real readings.
+
+As of `after 2026-10-R1`, SIMCom modems also give the serving cell's SNR from `AT+CPSI?`, as `cellular.cell.snr` in dB.  It is a signal to noise ratio with no interference term, so it is kept apart from the SINR other modems report.  The web UI shows it in the cell details, and the device search takes it as `snr`.
 
 ## Logging
 
@@ -297,8 +301,8 @@ Lock the modem to this channel when the source opens, such as `channel=LTE-B66`.
 Use the modem's GNSS as the Kismet GPS `name`; `true` names the GPS after the source.  Quectel modems only.  See [GPS - Cell modem](/docs/readme/gps/gps_cellmodem/).
 {{</configopt>}}
 
-{{<configopt gpsport "/path/to/tty" "usb:bus-addr:if">}}
-The modem's NMEA port, when it isn't found automatically.
+{{<configopt gpsport "/path/to/tty" "usb:bus-addr:if" at>}}
+The modem's NMEA port, when it isn't found automatically.  `at` (in any case) reads the position with `AT+QGPSLOC` on the AT port instead, which is also what happens when no NMEA port is found.  See [modems with no NMEA port](/docs/readme/gps/gps_cellmodem/#modems-with-no-nmea-port).
 {{</configopt>}}
 
 ### Vendor options
@@ -318,5 +322,5 @@ How often the modem clock is read and paired with the host clock in the log, in 
 {{</configopt>}}
 
 {{<configopt debug true false>}}
-Extra per-poll messages, and extra detail in the session log.  Debug mode also reads the SIM IMSI and ICCID and logs them at debug level, so it is off by default.  Setting `KISMET_CELLAT_DEBUG=1` in the environment turns it on for every source.
+Extra per-poll messages, and extra detail in the session log.  Debug mode also reads the SIM IMSI and ICCID and logs them at debug level, so it is off by default.  Setting `KISMET_CELLAT_DEBUG=1` in the environment turns it on for every source.  With debug on, the `AT+QGPSLOC` position polls of a modem with no NMEA port are also kept in the `RawAT` log.
 {{</configopt>}}
