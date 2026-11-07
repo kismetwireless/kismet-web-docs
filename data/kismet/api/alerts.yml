@@ -290,3 +290,50 @@
       - [200, "Alert raised"]
     failure:
       - [400, "Unknown alert type, invalid MAC address, or alert throttle reached"]
+
+-
+  name: "All alerts (marked)"
+  uri: "/alerts/marked/all_alerts"
+  added: "2026-11"
+  methods: ["GET"]
+  roles: ["readonly"]
+  types: ["anyjson"]
+  docs: |
+    The same as `/alerts/all_alerts`; alerts whose text names something identifying also
+    carry `kismet.alert.text_marked`, the alert text with those parts marked.
+
+    Marked text holds the same text as the plain field, with each part that identifies a
+    device, network, person, or place wrapped in control characters:  `\u0001` (SOH), the
+    kind, `\u0002` (STX), the text, and `\u0003` (ETX).  The kinds are `mac` (a MAC
+    address), `key` (a device key), `ssid`, `name` (a device or user name), `id` (other
+    identifiers such as cell IDs), `ip`, and `loc` (a location).  Marker characters which
+    appear in untrusted text, such as an SSID, are replaced with the literal text `\u0001`,
+    `\u0002`, or `\u0003`, so markers can't be forged.  Removing the markers gives the
+    plain text exactly.  A client which doesn't recognize a kind should hide that part.
+
+    The web UI uses the marked text to censor messages and alerts by kind.
+
+    Every alert endpoint has a marked version under `/alerts/marked/`:  `all_alerts`,
+    `alerts_view`, `by-id/{ALERTID}/alert`, `last-time/{TIMESTAMP}/alerts`, and
+    `wrapped/last-time/{TIMESTAMP}/alerts`, each taking the same parameters as the plain
+    endpoint.  In `alerts_view`, searching and sorting use the plain text.
+
+    `kismet.alert.text`, the existing endpoints, the console, and the logs (including
+    kismetdb) always hold plain text.
+  return: |
+    JSON list of all currently stored alerts.
+
+-
+  name: "Recent alerts (marked)"
+  uri: "/alerts/marked/last-time/{TIMESTAMP}/alerts"
+  added: "2026-11"
+  methods: ["GET"]
+  roles: ["readonly"]
+  types: ["anyjson"]
+  uriparameters:
+    - {auto: "timestampms"}
+  docs: |
+    The same as `/alerts/last-time/{TIMESTAMP}/alerts`, with `kismet.alert.text_marked`
+    as described in the [marked alerts](#all-alerts-marked) endpoint.
+  return: |
+    JSON list of alerts since `TIMESTAMP.UTIMESTAMP`

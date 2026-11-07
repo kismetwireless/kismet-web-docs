@@ -19,3 +19,44 @@
     Return all messages since `TIMESTAMP`.
   return: |
     JSON list of messages since `TIMESTAMP`.
+
+-
+  name: "All messages (marked)"
+  uri: "/messagebus/marked/all_messages"
+  added: "2026-11"
+  methods: ["GET"]
+  roles: ["readonly"]
+  types: ["anyjson"]
+  docs: |
+    The same as `/messagebus/all_messages`; messages which name something identifying also
+    carry `kismet.messagebus.message_marked`, the message with those parts marked.
+
+    Marked text holds the same text as the plain field, with each part that identifies a
+    device, network, person, or place wrapped in control characters:  `\u0001` (SOH), the
+    kind, `\u0002` (STX), the text, and `\u0003` (ETX).  The kinds are `mac` (a MAC
+    address), `key` (a device key), `ssid`, `name` (a device or user name), `id` (other
+    identifiers such as cell IDs), `ip`, and `loc` (a location).  Marker characters which
+    appear in untrusted text, such as an SSID, are replaced with the literal text `\u0001`,
+    `\u0002`, or `\u0003`, so markers can't be forged.  Removing the markers gives the
+    plain text exactly.  A client which doesn't recognize a kind should hide that part.
+
+    The web UI uses the marked text to censor messages and alerts by kind.
+
+    `kismet.messagebus.message_string`, the existing endpoints, the console, and the logs
+    always hold plain text.
+
+-
+  name: "Recent messages (marked)"
+  uri: "/messagebus/marked/last-time/{TIMESTAMP}/messages"
+  added: "2026-11"
+  methods: ["GET"]
+  roles: ["readonly"]
+  types: ["anyjson"]
+  uriparameters:
+    - {auto: "timestamp"}
+  docs: |
+    The same as `/messagebus/last-time/{TIMESTAMP}/messages`, with
+    `kismet.messagebus.message_marked` as described in the
+    [marked messages](#all-messages-marked) endpoint.
+  return: |
+    JSON list of messages since `TIMESTAMP`.

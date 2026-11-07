@@ -44,6 +44,8 @@ kismetdb_statistics --in some-kismet-file.kismet
   Data with location: 8
 ```
 
+Logs from version 12 on also print `KismetDB UUID:`, the log's unique ID, after the version, and include it as `kismetdb_uuid` in the JSON output.
+
 ## Outputting to JSON
 
 `kismetdb_statistics` can also output a JSON record; this can be used to index log files programmatically based on log attributes.

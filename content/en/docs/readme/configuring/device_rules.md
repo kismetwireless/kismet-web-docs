@@ -236,6 +236,7 @@ Kismet ships rules for notable devices in `kismet_device_rules_highlights.txt`, 
 | `ais-emergency` | AIS search and rescue transponders, man overboard devices, and emergency beacons | `ais emergency` | AIS Emergency |
 | `uav` | Drones Kismet recognizes, on any phy | `uav` | UAV / Drones |
 | `bodycam` | Body cameras, by address or name | `bodycam` | Bodycams |
+| `apple-continuity` | Bluetooth devices sending Apple Continuity messages; the row highlight starts off in the web UI | `apple continuity` | Apple Continuity Devices |
 
 A rule with the same name in a later file, such as `kismet_device_rules.txt`, replaces the shipped one; `device_rule_disable=<name>` leaves one out.
 

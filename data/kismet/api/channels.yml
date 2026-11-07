@@ -22,6 +22,32 @@
     | `kismet.channelrec.data_rrd` | Bytes of data per second |
     | `kismet.channelrec.device_rrd` | Devices active on the frequency (heard in the last 30 seconds) |
 
+    Wi-Fi data and management frames also count retries (frames with the retry bit set;
+    control frames, duplicates, and frames with a bad checksum aren't counted):
+
+    | Field | Content |
+    | ----- | ------- |
+    | `kismet.channelrec.retry_frames` | Data and management frames counted |
+    | `kismet.channelrec.retry_count` | Of those, retries |
+    | `kismet.channelrec.retry_frames_rrd` | Counted frames per second |
+    | `kismet.channelrec.retry_rrd` | Retries per second |
+
+    The retry percentage over any period is `retry_rrd` divided by `retry_frames_rrd`.
+
+    Frequency records also flag likely interference (see `dot11_channel_noise` in
+    [tuning](/docs/readme/tuning/tuning/)); in channel records these are always 0:
+
+    | Field | Content |
+    | ----- | ------- |
+    | `kismet.channelrec.noise` | 1 while the frequency is flagged |
+    | `kismet.channelrec.noise_since` | When it was flagged |
+    | `kismet.channelrec.noise_score` | The last window's score |
+    | `kismet.channelrec.noise_retry_pct` | The last window's retry percentage, the worst transmitter left out |
+    | `kismet.channelrec.noise_frames` | Frames in the last window |
+    | `kismet.channelrec.noise_retries` | Retries in the last window |
+    | `kismet.channelrec.noise_retry_tx` | Transmitters with 2 or more retries in the last window |
+    | `kismet.channelrec.noise_baseline_pct` | The usual retry percentage, learned from windows which weren't flagged; -1 until learned |
+
     The hour and day values are the average per second over each minute or hour.  Before
     2026-10-R1, packet and data counts were averaged rather than added up, so they read as
     about 1 per busy second, and device counts dropped each time the channels were read.
