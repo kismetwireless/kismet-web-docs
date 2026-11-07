@@ -46,6 +46,14 @@
         Wrap output in a container suitable for connecting to a jquery-datatable 
         container in the web UI.
     -
+      name: "last_time"
+      type: "integer"
+      required: false
+      description: |
+        Only return devices seen at or after this time: a unix timestamp, or a negative number
+        of seconds before now (`-600` is the last ten minutes).  After 2026-10-R1, negative
+        values and timestamps past 2038 are honored; before, they returned every device.
+    -
       name: "rule_sort"
       type: "string"
       required: false

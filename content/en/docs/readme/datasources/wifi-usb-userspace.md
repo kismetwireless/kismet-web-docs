@@ -85,6 +85,8 @@ Many distributions install linux-firmware compressed.  Firmware compressed with 
 
 USB userspace Wi-Fi requires libusb, and is built by default on Linux and macOS when libusb is available.  It can be disabled by passing `--disable-usbwifi` to `./configure`, or forced on for other platforms with `--enable-usbwifi`.
 
+It needs a little-endian host, such as x86, arm64, or ppc64le.  As of `after 2026-10-R1`, `./configure` leaves it out on big-endian hosts (such as s390x), and `--enable-usbwifi` there is an error.
+
 Compressed firmware support uses libzstd and liblzma, when they are available; `./configure` warns if either is missing, and the summary reports which compressions are supported.  Compressed firmware support can be disabled with `--disable-firmware-compression`.
 
 ### Linux
