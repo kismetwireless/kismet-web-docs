@@ -229,6 +229,40 @@ Capture time, in seconds, between a station's first and last counted frame befor
 {{</configopt>}}
 
 
+{{<configopt dot11_channel_noise true false>}}
+On by default; added `after 2026-10-R1`.  Kismet counts retried Wi-Fi data and management frames per channel (`kismet.channelrec.retry_*` in [/channels/channels](/docs/api/channels/)), and flags channels that look noisy:  many retries, from several transmitters, can mean interference Kismet can't decode.
+
+Every `dot11_channel_noise_window` seconds, each frequency's retry percentage is worked out with its worst transmitter left out, so one station retrying to a far-away peer doesn't mark the channel.  The score is that percentage, scaled down while fewer than `dot11_channel_noise_min_frames` frames, or fewer than `dot11_channel_noise_min_transmitters` transmitters with 2 or more retries, are heard.  The channel is flagged, and the `CHANNOISE` alert raised, when the score reaches `dot11_channel_noise_retry_pct`; the flag clears when the score falls below `dot11_channel_noise_clear_pct`.  Windows with too few frames leave the flag as it is, and it clears after `dot11_channel_noise_hold` seconds without a full window.  The usual retry level (`noise_baseline_pct`) is learned only from windows that aren't flagged.
+
+The web UI shows the retry percentage and the flag in the Wi-Fi airspace view and the channel picker.
+
+A hopping source hears each channel only part of the time, so it needs a longer window.  Missed frames raise the retry percentage, so a busy channel or a weak capture radio can look noisier than it is.
+{{</configopt>}}
+
+{{<configopt dot11_channel_noise_window 10 30>}}
+Seconds per window, from 1 to 600.
+{{</configopt>}}
+
+{{<configopt dot11_channel_noise_min_frames 50 100>}}
+Frames in a window before the score counts in full; windows with fewer leave the flag as it is.
+{{</configopt>}}
+
+{{<configopt dot11_channel_noise_min_transmitters 3 5>}}
+Transmitters with 2 or more retries in a window before the score counts in full, from 1 to 32.
+{{</configopt>}}
+
+{{<configopt dot11_channel_noise_retry_pct 30 40>}}
+Score at which a channel is flagged.
+{{</configopt>}}
+
+{{<configopt dot11_channel_noise_clear_pct 15 20>}}
+Score below which the flag clears; no higher than `dot11_channel_noise_retry_pct`.
+{{</configopt>}}
+
+{{<configopt dot11_channel_noise_hold 60 300>}}
+Seconds without a full window before the flag clears; at least one window.
+{{</configopt>}}
+
 ## Runtime type checking
 
 Kismet uses a dynamic type system to store data in a way that can be serialized into JSON for logging, the web UI, etc.

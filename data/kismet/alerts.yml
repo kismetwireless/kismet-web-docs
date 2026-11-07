@@ -158,6 +158,15 @@
     A previously known Access Point has changed the advertised channel.  For a managed Access Point or one with automatic channel selection, this may be normal, however it may also indicate a spoofing attempt where an Access Point is cloned to another channel.
 
 -
+  name: "CHANNOISE"
+  class: "trend"
+  phy: "dot11"
+  docs: |
+    Many of the Wi-Fi frames on a channel are retries, from several transmitters, which can mean interference Kismet can't decode, such as a non-Wi-Fi device or a jammer.  The transmitter with the most retries is left out, so one station retrying to a peer that's out of range doesn't raise it.  It's raised once when a channel is flagged; see `dot11_channel_noise` in [tuning](/docs/readme/tuning/tuning/) for the thresholds.
+
+    Capture loss can also raise the retry percentage:  a busy channel or a weak capture radio can miss original frames and hear their retries.
+
+-
   name: "CRYPTODROP"
   class: "trend"
   phy: "dot11"

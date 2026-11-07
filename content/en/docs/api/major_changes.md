@@ -33,6 +33,14 @@ Over time, the Kismet endpoint API will change - while efforts are made to retai
 
 **celldiag status lines.**  The periodic `celldiag stats:` and `celldiag inventory:` messages start with the source's label, as other per-source messages do; the text after the label is unchanged.
 
+**Marked messages and alerts.**  New endpoints under `/messagebus/marked/` and `/alerts/marked/`, and the `/eventbus/marked/events` websocket, add `kismet.messagebus.message_marked` and `kismet.alert.text_marked`:  the text with the parts which identify a device, network, person, or place marked by kind, which the web UI uses to censor them.  See [messages](/docs/api/messages/) and [alerts](/docs/api/alerts/).  The existing endpoints and the logs are unchanged.
+
+**kismetdb log UUID.**  [kismetdb](/docs/dev/kismetdb/) logs are now version 12, with a per-file UUID in `KISMET.db_uuid`.  For the kismetdb log, `kismet.logfile.uuid` in the logging API is that UUID, made when the file is opened, rather than one made when Kismet started.
+
+**Channel retries.**  [/channels/channels](/docs/api/channels/) records add Wi-Fi retry counts (`kismet.channelrec.retry_*`) and, on frequency records, a noise flag and score (`kismet.channelrec.noise*`).
+
+**Apple Continuity.**  `bluetooth.adv.continuity` now also counts AirPods proximity pairing (`proximity_pairing`) and Find My (`findmy`) messages.
+
 #### 2026-10-R1
 
 **Major change to device location data.**  Devices that report their own position (ADS-B aircraft, AIS vessels, Remote ID drones, MeshCore and Meshtastic nodes) previously had that position written into the device location.  The device location now always means where Kismet was when it heard the device, and the position the device reports is kept separately:

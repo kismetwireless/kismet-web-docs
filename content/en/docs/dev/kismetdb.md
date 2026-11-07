@@ -28,6 +28,10 @@ This means that basic queries (time, signal levels, location, device identifiers
 ## Log Versions
 The log file version is stored in the `db_version` field of the `KISMET` table.  When changes to the base database structure are made, this version will be incremented.
 
+### Version 12
+
+Version 12 was added after Kismet 2026-10-R1, and adds `db_uuid` to the `KISMET` table:  a random (version 4) UUID made when the log file is created, unique to each file.  It's the same UUID as the log's `kismet.logfile.uuid` in the [logging API](/docs/api/logging/), and `kismetdb_strip_packets` and `kismetdb_clean` keep it.  Older logs don't have the column.
+
 ### Version 11
 
 Version 11 was added in October of 2026 (Kismet 2026-10-R1), and separates the location a device reports for itself (such as ADS-B, AIS, and Remote ID) from the location of Kismet when the device was seen:

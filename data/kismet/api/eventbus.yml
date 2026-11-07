@@ -291,3 +291,17 @@
         ws.send(JSON.stringify(req));
     }
     ```
+
+-
+  name: "Eventbus websocket (marked)"
+  uri: "/eventbus/marked/events"
+  added: "2026-11"
+  methods: ["WEBSOCKET UPGRADE"]
+  types: ["ws"]
+  roles: ["readonly"]
+  docs: |
+    The same as the eventbus websocket, except that `MESSAGE` and `ALERT` events carry the
+    marked text:  `kismet.messagebus.message_marked` and `kismet.alert.text_marked`, as
+    described in the [marked messages](/docs/api/messages/) and
+    [marked alerts](/docs/api/alerts/) endpoints.  It takes the same parameters and
+    subscription commands.  The plain `/eventbus/events` websocket is unchanged.
