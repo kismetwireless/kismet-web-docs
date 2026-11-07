@@ -205,11 +205,27 @@ On by default as of `after 2026-10-R1`.  Kismet counts the control frames (RTS, 
 
 Each access point also counts the stations it exchanged control frames with that aren't known devices, in `dot11.device.ctrl_only_stations`: likely clients that the capture can't hear directly.  Only frames with a verified checksum count, so sources that don't report the frame checksum never fill this in; at most 64 stations are kept per access point, and the count covers the 5 minutes (by capture time) before the newest one, whose time is in `dot11.device.ctrl_only_stations_last`.
 
-Control frames never create devices.  Most capture drivers don't pass control frames at all, so these fields only appear with sources that do.
+Control frames never create devices unless `dot11_infer_clients` is on.  Most capture drivers don't pass control frames at all, so these fields only appear with sources that do.
 
 The web UI shows these in a "Control frames" section of the Wi-Fi device details, a "Hidden stations" device list column, and an optional "Seen only in control frames" row highlight.
 
 Turning this off saves a device lookup per control frame and the per-device record.
+{{</configopt>}}
+
+{{<configopt dot11_infer_clients false true>}}
+Off by default; added `after 2026-10-R1`.  Needs `dot11_track_control`.  A station that is seen only in control frames with an access point, and never directly, becomes a "Wi-Fi Client (Inferred)" device linked to that access point.  To keep a corrupted address from becoming a device, the station has to appear in at least `dot11_infer_min_frames` frames (default 10) with a verified checksum, over at least `dot11_infer_min_seconds` seconds (default 10) of capture time.
+
+An inferred client takes its signal level only from frames it sent.  If it is later seen in a management or data frame, it becomes a normal "Wi-Fi Client".  Inferred clients aren't written to WiGLE logs.
+
+Stations waiting to reach the threshold are kept in a table of up to 4096 addresses; the least recently seen is dropped when it's full.  `/phy/phy80211/inferred_clients` reports whether inference is on, how many stations are waiting, and how many have been inferred or dropped.
+{{</configopt>}}
+
+{{<configopt dot11_infer_min_frames 10 20>}}
+Frames with a verified checksum a station needs before `dot11_infer_clients` makes it a device.  At least 2.
+{{</configopt>}}
+
+{{<configopt dot11_infer_min_seconds 10 30>}}
+Capture time, in seconds, between a station's first and last counted frame before `dot11_infer_clients` makes it a device.
 {{</configopt>}}
 
 
