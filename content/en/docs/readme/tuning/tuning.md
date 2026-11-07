@@ -200,6 +200,19 @@ Handshakes can still be extracted from the kismetdb and PCAP logs.
 {{</configopt>}}
 
 
+{{<configopt dot11_track_control true false>}}
+On by default as of `after 2026-10-R1`.  Kismet counts the control frames (RTS, CTS, ACK, block ACK, NDP announcement, and PS-Poll) that name a device it already knows, in `dot11.device.ctrl_activity`.  Control frames are sent at a basic rate, so they can be heard when a device's own data is at a rate or stream count the capture can't decode, or when the device is out of range.  A device with control frames but no data frames is flagged as `dot11.ctrl.control_only`.
+
+Each access point also counts the stations it exchanged control frames with that aren't known devices, in `dot11.device.ctrl_only_stations`: likely clients that the capture can't hear directly.  Only frames with a verified checksum count, so sources that don't report the frame checksum never fill this in; at most 64 stations are kept per access point, and the count covers the 5 minutes (by capture time) before the newest one, whose time is in `dot11.device.ctrl_only_stations_last`.
+
+Control frames never create devices.  Most capture drivers don't pass control frames at all, so these fields only appear with sources that do.
+
+The web UI shows these in a "Control frames" section of the Wi-Fi device details, a "Hidden stations" device list column, and an optional "Seen only in control frames" row highlight.
+
+Turning this off saves a device lookup per control frame and the per-device record.
+{{</configopt>}}
+
+
 ## Runtime type checking
 
 Kismet uses a dynamic type system to store data in a way that can be serialized into JSON for logging, the web UI, etc.
