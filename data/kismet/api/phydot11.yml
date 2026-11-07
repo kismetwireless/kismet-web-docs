@@ -122,3 +122,28 @@
 
     This endpoint will return an array of complete device records of the associated devices, 
     making it a single query to fetch the nested information.
+
+- 
+  name: "Inferred Wi-Fi clients"
+  uri: "/phy/phy80211/inferred_clients"
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  types: ["anyjson"]
+  jsonparameters: 
+    - {auto: "fields"}
+  docs: | 
+    Statistics for inferring Wi-Fi clients from control frames, when 
+    [`dot11_infer_clients`](/docs/readme/tuning/tuning/) is on.  A station seen only in control 
+    frames with an access point waits in a table until it has enough frames over enough time, then 
+    becomes a "Wi-Fi Client (Inferred)" device.
+
+    The response is a dictionary of:
+
+    | Field | Description |
+    | ----- | ----------- |
+    | dot11.inferred.enabled | 1 when inferring clients is on |
+    | dot11.inferred.candidates | Stations waiting to be inferred as clients |
+    | dot11.inferred.max_candidates | Most stations kept waiting |
+    | dot11.inferred.promoted | Stations that became inferred clients |
+    | dot11.inferred.evicted | Waiting stations dropped because the table was full |
