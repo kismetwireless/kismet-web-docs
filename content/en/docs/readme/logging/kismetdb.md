@@ -67,6 +67,25 @@ kis_log_ephemeral_dangerous=true
 
 An ephemeral log is removed from the filesystem upon creation; the log is not accessible on disk, and will be removed immediately upon Kismet exiting.  Ephemeral logs are most useful when deploying Kismet as a permanent fixed sensor with a time-limited history; for instance retaining the past day of devices, packets, etc, but where there is no need (or desire) to keep log files.
 
+## Rotating kismetdb logs
+
+After 2026-10-R1, the kismetdb log can start a new file after a time or a size, so finished files can be moved off the system while Kismet keeps running:
+
+```
+kis_log_max_seconds=86400
+kis_log_max_mb=4096
+```
+
+`kis_log_max_seconds` is in seconds, up to a year (`31622400`), and `kis_log_max_mb` is in megabytes, up to `1048576`; `0`, or leaving it unset, is no limit.  Whichever limit is reached first starts the next file.  A negative, non-numeric, or too large value is logged as an error and ignored.  The time counts from when the file opened, not from midnight, so `86400` makes a new file every 24 hours after Kismet started.  Limits are checked once a second; the size is that of the database, including what hasn't been written to the file yet.
+
+No packets are lost when the file changes.  Each file stands on its own: the old file gets a final update of the devices, and the new one gets every device, the datasources, the GPS position and a system snapshot right away.  Alerts and messages stay in the file they were logged to, and datasource packet counts are since Kismet started, not per file.
+
+New files keep the name the log started with and count up its sequence number, so the [log template](/docs/readme/logging/logging/) needs `%i`; without it, the log is not rotated and an error says so.  If a new file can't be opened, such as on a full disk, Kismet keeps logging to the current file and tries again a minute later.
+
+Because every new file starts with all the devices Kismet is tracking, a file has to gain a quarter of `kis_log_max_mb` in new data before its size starts the next one; Kismet warns when the devices alone take half the limit.  Raise the limit if you see that warning.
+
+A pcapng download from the kismetdb log (`/logging/kismetdb/pcap/`) keeps reading the file it started on and does not delay the change.  Each file which is closed and complete is announced with a `Finished kismetdb log '<path>'` message; that file can then be moved or compressed.
+
 ## Log contents
 
 Each kind of record in the kismetdb log can be turned off:
