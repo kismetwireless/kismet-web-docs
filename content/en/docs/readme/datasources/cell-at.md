@@ -245,7 +245,9 @@ Cells are tracked as devices in the `Cellular` phy:
 
 The key uses the downlink frequency instead of the raw channel number, so a cell reported as different bands by different modems (LTE band 4 and band 66, for instance) is still one device.
 
-As of `after 2026-10-R1`, the band shown for such a cell (`cellular.cell.band`) is the widest of the bands reported for its carrier (band 66 over band 4), so it doesn't depend on which modem reported last.  `cellular.cell.arfcn` is still the channel number of the latest report, so the two can name different bands: band 66 with the band 4 channel 2300, for instance.
+As of `after 2026-10-R1`, the band shown for such a cell (`cellular.cell.band`) doesn't depend on which modem reported last.  When modems report LTE bands of the same duplex mode (FDD, TDD, or downlink only) that all hold the carrier's frequency, the band with the widest downlink is shown (band 66 over band 4), and between equal widths the higher band number.  A band of another duplex mode, or one that doesn't hold the frequency, means the cell itself changed, so the latest report's band is shown.  An LTE report without a usable channel number keeps the band already shown.  `cellular.cell.arfcn` is still the channel number of the latest report, so the two can name different bands: band 66 with the band 4 channel 2300, for instance, and a band filter in the web UI matches the band shown.
+
+As of `after 2026-10-R1`, numbers from the cell sources which are the wrong type or out of range, such as a fractional or negative channel number, a band above 1024, or a TAC wider than 24 bits, are ignored, as if the modem hadn't sent them, both live and in `kismetdb_to_wiglecsv`.
 
 The web UI shows the cell identity, the band and channel, the signal (RSRP, RSRQ, SINR), the range of RSRP seen, and the number of observations.  Cells are geotagged with the GPS location, and are included in the [WiGLE CSV](/docs/readme/logging/wiglecsv/) log and the [KML](/docs/readme/kismetdb/kismetdb_kml/) and GPX exports.
 
