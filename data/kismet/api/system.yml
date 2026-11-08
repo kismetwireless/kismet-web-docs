@@ -9,6 +9,19 @@
     The status endpoint returns almost all data around the current system status, 
     load, system health, thermal and fan sensors (if any), memory use, battery state,
     runtime, and more.
+
+    After 2026-10-R1 it also has the CPU load, which the kismetdb `SYSTEM` snapshots log with
+    the rest of the status:
+
+    | Field | Contents |
+    | ----- | -------- |
+    | `kismet.system.cpu.available` | 1 when the CPU load can be read (Linux) |
+    | `kismet.system.cpu.count` | Number of CPUs online |
+    | `kismet.system.cpu.total` | CPU load of the system over the last second, as a percent of all the CPUs |
+    | `kismet.system.cpu.kismet` | CPU load of the Kismet server process over the last second, as a percent of all the CPUs |
+
+    `kismet.system.sensors.temp` holds every temperature sensor, after 2026-10-R1 including all
+    the Linux thermal zones (`system-thermal-0`, `system-thermal-1`, and so on).
   jsonparameters: 
     -
       auto: "fields"
@@ -63,6 +76,76 @@
       auto: "fields"
   return: | 
     JSON object of memory detail.
+  responses:
+    success:
+      - [200, "Basic success and JSON object"]
+    failure:
+      - [-1, "On error (typically for malformed simplification)"]
+
+-
+  name: "Temperatures"
+  uri: "/system/thermal"
+  methods: ["GET", "POST"]
+  types: ["anyjson"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  docs: |
+    The thermal endpoint returns what the [thermal window](/docs/readme/webui/webui_intro/#thermal-window)
+    of the web UI shows: every temperature sensor Kismet has read since it started, and its history.
+
+    | Field | Contents |
+    | ----- | -------- |
+    | `kismet.system.thermal.history` | 1 when history is kept (`system_thermal_history`) |
+    | `kismet.system.thermal.sensors` | The sensors, by name |
+
+    Each sensor has:
+
+    | Field | Contents |
+    | ----- | -------- |
+    | `kismet.system.thermal.sensor.name` | The sensor's name, as in `kismet.system.sensors.temp` of `/system/status` |
+    | `kismet.system.thermal.sensor.label` | What the sensor measures, such as the lm-sensors label and chip, or the thermal zone type |
+    | `kismet.system.thermal.sensor.temp` | The last temperature, in degrees C |
+    | `kismet.system.thermal.sensor.last_time` | When the sensor was last read; a sensor no longer read keeps its last values |
+    | `kismet.system.thermal.sensor.rrd` | History of the temperature, in degrees C, when history is kept.  Seconds, minutes, and hours with no reading hold the RRD's `kismet.common.rrd.blank_val` |
+
+    The current temperatures are also sent every second as the `THERMAL` [eventbus](/docs/api/eventbus/)
+    topic, with the field `kismet.system.sensors.temp`.
+  jsonparameters: 
+    -
+      auto: "fields"
+  return: | 
+    JSON object of the temperature sensors.
+  responses:
+    success:
+      - [200, "Basic success and JSON object"]
+    failure:
+      - [-1, "On error (typically for malformed simplification)"]
+
+-
+  name: "CPU load"
+  uri: "/system/cpu"
+  methods: ["GET", "POST"]
+  types: ["anyjson"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  docs: |
+    The CPU endpoint returns the CPU load fields of `/system/status` (`kismet.system.cpu.available`,
+    `kismet.system.cpu.count`, `kismet.system.cpu.total`, and `kismet.system.cpu.kismet`), and adds
+    their history:
+
+    | Field | Contents |
+    | ----- | -------- |
+    | `kismet.system.cpu.total_rrd` | History of the CPU load of the system, as a percent of all the CPUs |
+    | `kismet.system.cpu.kismet_rrd` | History of the CPU load of the Kismet server process, as a percent of all the CPUs |
+
+    The load is read from `/proc` and is only available on Linux.  The load of the capture tools,
+    which run as their own processes, isn't counted in Kismet's.  The current load is also sent
+    every second in the `STATISTICS` [eventbus](/docs/api/eventbus/) topic.
+  jsonparameters: 
+    -
+      auto: "fields"
+  return: | 
+    JSON object of the CPU load.
   responses:
     success:
       - [200, "Basic success and JSON object"]
