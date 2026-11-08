@@ -239,7 +239,11 @@ Divide channels between multiple datasources with the same coverage.
 
 Kismet can capture from multiple datasources at once; for example two, three, or more Wi-Fi cards.  To increase coverage, Kismet will split the channel list between datasources which have the same channel support and hopping rate.
 
-Generally there is no reason to disable this option.
+Generally there is no reason to disable this option.  To watch the same channels with several sources at once, put them in a [hop group](/docs/readme/datasources/channelhop/#hop-groups) instead.
+{{</configopt>}}
+
+{{<configopt channel_hop_sync true false>}}
+Keep the channel hopping of every source in step on one schedule; see [Synchronized hopping](/docs/readme/datasources/channelhop/#synchronized-hopping).  Defaults to `false`.
 {{</configopt>}}
 
 
