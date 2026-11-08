@@ -234,6 +234,16 @@
 
         Published when the kismetdb log is successfully opened
 
+    ##### LOG_FINISHED
+
+    * Content
+
+        JSON object with the log `kismet.logfile.uuid`, `kismet.logfile.class` (`kismetdb` or `pcapng`), the finished file's `kismet.logfile.path`, and `kismet.logfile.finished_reason`: `size`, `duration`, `api`, or `close`
+
+    * Generation
+
+        After 2026-10-R1, published once for each kismetdb or pcapng file which is closed and complete, and can be moved or compressed.  A kismetdb file which a pcapng download is still reading finishes when that download ends.  The last file, closed when Kismet shuts down, is finished after websocket clients have been disconnected, so they do not see it.
+
     ##### MESSAGE
 
     * Content

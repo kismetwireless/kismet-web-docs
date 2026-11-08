@@ -18,6 +18,9 @@
   docs: | 
     List enabled and active logs 
 
+    After 2026-10-R1, each log has `kismet.logfile.rotate_overdue_since`: the time (unix seconds)
+    the kismetdb log's next file was due but hasn't been started yet, or `0` when it isn't late.
+
 - 
   name: "Start a log"
   uri: "/logging/by-class/{LOGCLASS}/start"
@@ -56,4 +59,29 @@
   docs: | 
     Stop and close a current log.  
 
+- 
+  name: "Start a new log file"
+  uri: "/logging/by-uuid/{UUID}/rotate"
+  types: ["cmd"]
+  methods: ["POST"]
+  uriparameters: 
+    - {name: "UUID", type: "string", description: "Log UUID to start a new file for"}
+  docs: | 
+    After 2026-10-R1, closes the current file of a kismetdb or pcapng log and continues the log in
+    a new file, the same as when the log reaches `kis_log_max_mb` / `kis_log_max_seconds` or
+    `pcapng_log_max_mb` / `pcapng_log_max_seconds`.  The new file starts shortly after the
+    request returns, and no packets are lost.
 
+    The log template needs `%i`, so the new file gets the next sequence number.
+
+    When the old file is closed and complete, a `LOG_FINISHED` event is published on the
+    [eventbus](/docs/api/eventbus/) with the reason `api`.
+  notes: | 
+    Only kismetdb and pcapng logs can start a new file.
+  return: |
+    `OK` when the new file has been requested.
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [500, "Invalid UUID, no such log, a log type which can't start a new file, a log which isn't open, or a log template without `%i`"]

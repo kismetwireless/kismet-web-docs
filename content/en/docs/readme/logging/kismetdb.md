@@ -84,7 +84,15 @@ New files keep the name the log started with and count up its sequence number, s
 
 Because every new file starts with all the devices Kismet is tracking, a file has to gain a quarter of `kis_log_max_mb` in new data before its size starts the next one; Kismet warns when the devices alone take half the limit.  Raise the limit if you see that warning.
 
-A pcapng download from the kismetdb log (`/logging/kismetdb/pcap/`) keeps reading the file it started on and does not delay the change.  Each file which is closed and complete is announced with a `Finished kismetdb log '<path>'` message; that file can then be moved or compressed.
+A pcapng download from the kismetdb log (`/logging/kismetdb/pcap/`) keeps reading the file it started on and does not delay the change.  Each file which is closed and complete is announced with a `Finished kismetdb log '<path>'` message; that file can then be moved or compressed.  After 2026-10-R1, it is also published as a `LOG_FINISHED` [eventbus](/docs/api/eventbus/) event, and a new file can be started on request through the [logging API](/docs/api/logging/).
+
+After 2026-10-R1, when a very busy Kismet holds up the next file for 10 seconds or more, an error says so, and repeats every 30 seconds until the new file starts:
+
+```
+Starting the next kismetdb log is 40 seconds overdue: writing the devices to the old file (waits for a device log pass already running) (3 attempts); still logging to '<path>'
+```
+
+with what it is waiting for.  When the file does start, `Started the new kismetdb log 52 seconds after it was due, after 4 attempts` is logged.  While the next file is late, the log's `kismet.logfile.rotate_overdue_since` in `/logging/active` is the time it was due.  The current file keeps growing past the limit in the meantime.
 
 ## Log contents
 
