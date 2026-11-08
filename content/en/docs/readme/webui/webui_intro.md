@@ -26,10 +26,11 @@ Plugins which add pages to the previous UI keep working in it from `/legacy/`; t
 ## What's in it
 
 * *Overview*, *Devices*, *SSIDs*, *Alerts*, *Map*, and *Insights* tabs.
-* Windows for data sources, channel coverage and the channel heat map, [device rules](/docs/readme/configuring/device_rules/#rules-in-the-web-ui), packet rates, [memory](#memory-window), and GPS, from the menu and the top bar.
+* Windows for data sources, channel coverage and the channel heat map, [device rules](/docs/readme/configuring/device_rules/#rules-in-the-web-ui), packet rates, [memory](#memory-window), [thermal](#thermal-window), and GPS, from the menu and the top bar.
+* A top bar of stats, including the CPU load of the system and of Kismet (after 2026-10-R1), and the [temperatures](#thermal-window) of the system Kismet runs on.  Choose the stats it shows under *Settings*, *Ribbon*; stats Kismet can't read show `---`.
 * The device list's *Search or filter* box, which takes [device filters](/docs/readme/webui/webui_filters/) as well as plain searches.
 * A *Tags* column and row highlights from the server's [device rules](/docs/readme/configuring/device_rules/#rules-in-the-web-ui), set under *Settings*, *Device Highlights*.
-* Display units for speeds and lengths, under *Settings*, *Units*.
+* Display units for speeds, lengths and temperatures, under *Settings*, *Units*.
 * Bluetooth and BTLE device details with service names, battery, distance, beacon, and connection sections, the [advertised data](/docs/readme/datasources/bluetooth-trackers/#advertised-data) decoded, and the address type, linked addresses, class of device, and controller version and features.
 * [Censor mode](/docs/readme/configuring/webserver/#runtime-censorship), for screenshots and demos.
 * The [receiver range](/docs/readme/configuring/receiver_range/) on the map.
@@ -53,5 +54,27 @@ After 2026-10-R1, the *Memory* window, opened from the menu or by clicking the m
 * Settings which cost memory (`keep_location_cloud_history` and `keep_per_datasource_stats`), and a phy type which holds most of the devices.
 
 The window reads the [`/system/memory`](/docs/api/system/) endpoint.  Against an older Kismet server without it, only the memory and device graphs are shown.  The process and system memory figures are only available on Linux, and the heap figures with glibc 2.33 or newer.
+
+## Thermal window
+
+After 2026-10-R1, Kismet reads the temperature sensors of the system it runs on every second: the lm-sensors sensors, when Kismet is built with lm-sensors, and the Linux thermal zones.  It keeps a history of each, for the last minute, hour, and day.
+
+The *Thermal* window, opened from the menu or by clicking the temperature in the top bar, shows:
+
+* The hottest sensor, the average of the sensors, and how many are read.
+* A graph of the sensors over the last minute, hour, or day.  Check sensors in the list to graph them; with none checked, the four hottest are graphed.
+* Every sensor's temperature now, and its lowest, highest, and average over the time shown.
+
+The *Thermal* stat in the top bar shows the hottest sensor, or the sensors checked under *Settings*, *Ribbon*, *Thermal*.  Temperatures are shown in Celsius or Fahrenheit, set under *Settings*, *Units*.
+
+The window reads the [`/system/thermal`](/docs/api/system/) endpoint.  Against an older Kismet server without it, or a system with no sensors Kismet can read, the window says so and the top bar shows `---`.
+
+{{<configopt system_thermal_history true false>}}
+Keep a history of each temperature sensor (after 2026-10-R1).  Defaults to `true`; set to `false` to keep only the current temperatures.
+{{</configopt>}}
+
+{{<configopt system_thermal_max_sensors count>}}
+The most temperature sensors tracked (after 2026-10-R1); any past it are left out.  Defaults to `32`, and can be 1 to 1024.
+{{</configopt>}}
 
 Serving the UI, HTTPS, and proxies are covered in [the webserver configuration](/docs/readme/configuring/webserver/).
