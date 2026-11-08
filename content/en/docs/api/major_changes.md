@@ -39,6 +39,8 @@ Over time, the Kismet endpoint API will change - while efforts are made to retai
 
 **Channel retries.**  [/channels/channels](/docs/api/channels/) records add Wi-Fi retry counts (`kismet.channelrec.retry_*`) and, on frequency records, a noise flag and score (`kismet.channelrec.noise*`).
 
+**Cell bands and input checks.**  `cellular.cell.band` only treats bands of the same duplex mode as names for one carrier, and an LTE report without a frequency keeps the band shown; see [cell devices](/docs/readme/datasources/cell-at/#cell-devices).  Numeric fields from the cell sources that are the wrong type or out of range are now ignored instead of wrapped or truncated, so a malformed field no longer changes a cell's key, band, or WiGLE row.
+
 **Apple Continuity.**  `bluetooth.adv.continuity` now also counts AirPods proximity pairing (`proximity_pairing`) and Find My (`findmy`) messages.
 
 #### 2026-10-R1
