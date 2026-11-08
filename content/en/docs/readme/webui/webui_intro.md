@@ -43,7 +43,10 @@ After 2026-10-R1, the *Memory* window, opened from the menu or by clicking the m
 * Kismet's memory and its peak, the device count, the memory per device, the system memory free, and how long Kismet has run.
 * A graph of Kismet's memory (the left axis) against the device count (the right axis), a graph of the tracked fields (every value Kismet keeps, in devices and everything else), and a graph of the system memory in use.
 * What the memory is: the heap and stacks, the program and libraries, shared memory, and swap.
-* The [memory settings](/docs/readme/tuning/tuning/) in effect, from `kismet_memory.conf` or `kismet_site.conf`.
+* What the heap holds: what Kismet needed once it had loaded (before opening data sources), its data sources, recent packets kept to spot duplicates, freed packets kept for reuse, and devices.
+* The [memory settings](/docs/readme/tuning/tuning/) in effect, from `kismet_memory.conf`, `kismet_site.conf` and the other config files.
+
+The memory per device counts only the memory devices use: Kismet's memory once it had loaded, an estimate for each data source, and the packets it keeps are taken out first.  Dividing all of Kismet's memory by the device count overstates it, often several times over with few devices.
 
 *Insights* flag what the memory is doing:
 
