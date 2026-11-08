@@ -73,6 +73,8 @@ New files keep the name the log started with and count up its sequence number, s
 
 After 2026-10-R1, rotating by size no longer hangs Kismet with `pcapng_log_blocking=true`, or when Kismet shuts down during a rotation.
 
+After 2026-10-R1, each finished `pcapng` file is published as a `LOG_FINISHED` [eventbus](/docs/api/eventbus/) event, and a new file can be started on request through the [logging API](/docs/api/logging/).
+
 ## Filtering
 
 ### Duplicate packets
