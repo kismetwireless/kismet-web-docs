@@ -66,11 +66,27 @@
     | `kismet.system.memory.heap_free` | Heap freed and held by the allocator for reuse, in kB |
     | `kismet.system.memory.heap_mmap` | Large allocations mapped on their own, in kB |
     | `kismet.system.num_fields_rrd` | History of the number of tracked fields |
-    | `kismet.system.memory.settings` | The memory settings in effect: `tracker_device_timeout`, `tracker_device_packets`, `tracker_max_devices`, `track_device_rrds`, `track_device_seenby_views`, `track_device_phy_views`, `keep_per_datasource_stats`, and `keep_location_cloud_history` |
+    | `kismet.system.memory.startup_time` | When Kismet had loaded, before opening data sources (unix time); 0 until then |
+    | `kismet.system.memory.startup_rss` | Memory in use once Kismet had loaded, in kB |
+    | `kismet.system.memory.startup_rss_anon` | Heap and stacks once Kismet had loaded, in kB |
+    | `kismet.system.memory.startup_heap_used` | Heap in use once Kismet had loaded, in kB; 0 when unknown |
+    | `kismet.system.memory.startup_heap_mmap` | Large allocations mapped on their own once Kismet had loaded, in kB |
+    | `kismet.system.memory.startup_fields` | Tracked fields once Kismet had loaded |
+    | `kismet.system.memory.datasources` | Number of data sources |
+    | `kismet.system.memory.datasource_estimate` | Estimated heap each data source holds in Kismet, in kB, not counting its devices or its capture helper process |
+    | `kismet.system.memory.packet_pool` | Freed packets kept for reuse |
+    | `kismet.system.memory.packet_pool_estimate` | Estimated heap held by those packets, in kB |
+    | `kismet.system.memory.dedupe_packets` | Recent packets kept to recognize duplicates (up to 1,024 per packet thread, from the last second) |
+    | `kismet.system.memory.dedupe_estimate` | Estimated heap held by those packets, in kB |
+    | `kismet.system.memory.settings` | The settings in effect which change memory use, by their config names: the device tracker settings (`tracker_device_timeout`, `tracker_max_devices`, `tracker_device_presize`, and the rest of `kismet_memory.conf`), `alertbacklog`, `packet_backlog_warning`, `packet_backlog_limit`, `manuf_lookup`, the pcapng buffer and ring sizes, the 802.11 settings which keep data (`dot11_keep_eapol`, `dot11_keep_ietags`, `dot11_ap_only_survey`, and others), `kismet_packet_threads`, and `ulimit_mbytes` (the data size limit, 0 when unlimited) |
 
     The process and system values are read from `/proc` and are only present on Linux.  The heap
     values need glibc 2.33 or newer, and are read at most every 5 seconds.  `/system/status` and
     the kismetdb `SYSTEM` snapshots are unchanged.
+
+    The startup values are recorded once, after plugins and device rules have loaded and before the
+    data sources open, so the memory a running Kismet has added since (devices, sources, packets)
+    can be told apart from what it needs to run at all.
   jsonparameters: 
     -
       auto: "fields"
