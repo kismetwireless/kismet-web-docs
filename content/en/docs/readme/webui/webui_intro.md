@@ -26,7 +26,8 @@ Plugins which add pages to the previous UI keep working in it from `/legacy/`; t
 ## What's in it
 
 * *Overview*, *Devices*, *SSIDs*, *Alerts*, *Map*, and *Insights* tabs.
-* Windows for data sources, channel coverage and the channel heat map, [device rules](/docs/readme/configuring/device_rules/#rules-in-the-web-ui), packet rates, [memory](#memory-window), [thermal](#thermal-window), and GPS, from the menu and the top bar.
+* Windows for data sources, channel coverage and the channel heat map, [device rules](/docs/readme/configuring/device_rules/#rules-in-the-web-ui), packet rates, [memory](#memory-window), [thermal](#thermal-window), [CPU](#cpu-window), and GPS, from the menu and the top bar.
+* The *Messages* panel along the bottom.  Drag the bar above it to resize it, or minimize it to its tab bar with the `_` button at its right; it stays minimized in every tab and after a reload, until you click the button again, click one of its tabs, or drag the bar.
 * A top bar of stats, including the CPU load of the system and of Kismet (after 2026-10-R1), and the [temperatures](#thermal-window) of the system Kismet runs on.  Choose the stats it shows under *Settings*, *Ribbon*; stats Kismet can't read show `---`.
 * The device list's *Search or filter* box, which takes [device filters](/docs/readme/webui/webui_filters/) as well as plain searches.
 * A *Tags* column and row highlights from the server's [device rules](/docs/readme/configuring/device_rules/#rules-in-the-web-ui), set under *Settings*, *Device Highlights*.
@@ -56,6 +57,10 @@ The memory per device counts only the memory devices use: Kismet's memory once i
 * Low system memory, Kismet's share of it, memory swapped out, a peak far above the present, and freed memory the allocator holds for reuse.
 * Settings which cost memory (`keep_location_cloud_history` and `keep_per_datasource_stats`), and a phy type which holds most of the devices.
 
+Close an insight with its *×*; it stays closed until it becomes more serious (a note turning into a warning), and *Show closed insights* below the list brings them all back.
+
+The memory per device, and the cost of a new device, are estimates and can be well off, most of all soon after Kismet starts: the packet buffers are still filling, and with few devices the one-time costs are spread over too few of them.
+
 The window reads the [`/system/memory`](/docs/api/system/) endpoint.  Against an older Kismet server without it, only the memory and device graphs are shown.  The process and system memory figures are only available on Linux, and the heap figures with glibc 2.33 or newer.
 
 ## Thermal window
@@ -65,7 +70,7 @@ After 2026-10-R1, Kismet reads the temperature sensors of the system it runs on 
 The *Thermal* window, opened from the menu or by clicking the temperature in the top bar, shows:
 
 * The hottest sensor, the average of the sensors, and how many are read.
-* A graph of the sensors over the last minute, hour, or day.  Check sensors in the list to graph them; with none checked, the four hottest are graphed.
+* A graph of the sensors over the last minute, hour, or day.  Check sensors in the list to graph them; with none checked, the four hottest are graphed.  The CPU load of the system and of Kismet is graphed with them, against the right axis.
 * Every sensor's temperature now, and its lowest, highest, and average over the time shown.
 
 The *Thermal* stat in the top bar shows the hottest sensor, or the sensors checked under *Settings*, *Ribbon*, *Thermal*.  Temperatures are shown in Celsius or Fahrenheit, set under *Settings*, *Units*.
@@ -79,5 +84,14 @@ Keep a history of each temperature sensor (after 2026-10-R1).  Defaults to `true
 {{<configopt system_thermal_max_sensors count>}}
 The most temperature sensors tracked (after 2026-10-R1); any past it are left out.  Defaults to `32`, and can be 1 to 1024.
 {{</configopt>}}
+
+## CPU window
+
+After 2026-10-R1, the *CPU* window, opened from the menu or by clicking the CPU stat in the top bar, shows the CPU load of the system Kismet runs on, and of Kismet itself, as a percent of all the CPUs:
+
+* The load now, the number of CPUs, and the highest load over the time shown (its tooltip has the average).  The tooltip of Kismet's load also gives it as a share of one CPU, which shows a single busy thread.
+* A graph of both over the last minute, hour, or day.
+
+The window reads the [`/system/cpu`](/docs/api/system/) endpoint.  The CPU load is only read on Linux; elsewhere, and against an older Kismet server without it, the window says so.
 
 Serving the UI, HTTPS, and proxies are covered in [the webserver configuration](/docs/readme/configuring/webserver/).
