@@ -19,3 +19,91 @@
 .btn-toggle-nav .btn-toggle[aria-expanded="true"]::before {
   transform: rotate(90deg) scale(0.8);
 }
+
+// Screenshots in both UI themes (layouts/shortcodes/screenshot.html): the one
+// matching the site theme, unless its button picked the other
+.kshot {
+  margin: 1.25rem 0;
+}
+
+.kshot-frame {
+  border: 1px solid $gray-300;
+  border-radius: 0.375rem;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+
+.kshot-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.kshot-dark,
+[data-dark-mode] .kshot:not([data-theme]) .kshot-light,
+.kshot[data-theme="dark"] .kshot-light {
+  display: none;
+}
+
+[data-dark-mode] .kshot:not([data-theme]) .kshot-dark,
+.kshot[data-theme="dark"] .kshot-dark {
+  display: block;
+}
+
+.kshot-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+  font-size: 0.875rem;
+  color: $gray-600;
+}
+
+.kshot-caption {
+  flex: 1;
+}
+
+.kshot-btn {
+  padding: 0.1rem 0.6rem;
+  border: 1px solid $gray-300;
+  border-radius: 0.25rem;
+  background: transparent;
+  color: inherit;
+  font-size: 0.8125rem;
+}
+
+.kshot-btn:hover {
+  background: $gray-100;
+}
+
+[data-dark-mode] .kshot-frame,
+[data-dark-mode] .kshot-btn {
+  border-color: $gray-700;
+}
+
+[data-dark-mode] .kshot-bar {
+  color: $gray-400;
+}
+
+[data-dark-mode] .kshot-btn:hover {
+  background: $gray-800;
+}
+
+// The floating view
+.kshot-zoom {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.75);
+  cursor: zoom-out;
+}
+
+.kshot-zoom img {
+  display: block;
+  max-width: none;
+  border-radius: 0.375rem;
+  box-shadow: 0 0.5rem 2rem rgba(0, 0, 0, 0.5);
+}

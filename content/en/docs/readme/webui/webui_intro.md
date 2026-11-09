@@ -37,9 +37,85 @@ Plugins which add pages to the previous UI keep working in it from `/legacy/`; t
 * The [receiver range](/docs/readme/configuring/receiver_range/) on the map.
 * [Installing the UI as an app](/docs/readme/configuring/webserver/#installing-the-web-ui-as-an-app) on a phone or desktop.
 
+## A tour
+
+The screenshots here show made-up devices, networks, and locations.  Each is shown in the light or dark theme to match these pages; the button under it switches theme, and *Zoom*, or clicking the screenshot, shows it full size.
+
+The *Overview* tab sums up what Kismet sees in cards; the pencil at the top right moves, resizes, hides, and adds them back.  Every tab has the top bar of stats above it and the *Messages* panel below it.
+
+{{< screenshot name="webui-overview" alt="The Overview tab" >}}
+
+{{< screenshot name="webui-topbar" alt="The top bar" >}}
+
+The *Devices* tab lists every device, with the *Tags* column and the row highlights from the device rules.  The *Search or filter* box takes [device filters](/docs/readme/webui/webui_filters/).
+
+{{< screenshot name="webui-devices" alt="The Devices tab" >}}
+
+The *SSIDs* tab lists the Wi-Fi networks, and the *Alerts* tab the alerts:
+
+{{< screenshot name="webui-ssids" alt="The SSIDs tab" >}}
+
+{{< screenshot name="webui-alerts" alt="The Alerts tab" >}}
+
+The *Map* tab places devices by where they report themselves or where Kismet heard them, with a checkbox for each kind of device.  Without a map server, it draws them on a blank map:
+
+{{< screenshot name="webui-map" alt="The Map tab" >}}
+
+The *Insights* tab shows how devices relate: here, Wi-Fi clients and the access points they use.
+
+{{< screenshot name="webui-insights" alt="The Insights tab" >}}
+
+Clicking a device opens its details, in sections for each kind of device; this is a Bluetooth LE tag reporting its battery:
+
+{{< screenshot name="webui-btle-device" alt="Bluetooth LE device details" >}}
+
+### Windows
+
+The data sources, opened from the menu or the *Sources* stat in the top bar:
+
+{{< screenshot name="webui-sources" alt="The Data sources window" >}}
+
+Channel coverage, live, and as a heat map over time:
+
+{{< screenshot name="webui-coverage" alt="The Channel coverage window" >}}
+
+{{< screenshot name="webui-heatmap" alt="The channel heat map" >}}
+
+The server's [device rules](/docs/readme/configuring/device_rules/#rules-in-the-web-ui), by rules file:
+
+{{< screenshot name="webui-devicerules" alt="The Device rules window" >}}
+
+Packet rates, from the menu or the *Packets* stat:
+
+{{< screenshot name="webui-packets" alt="The Packet rates window" >}}
+
+The GPS, from the menu or the *GPS* stat: the fix, the satellites in view and their signal, and their history:
+
+{{< screenshot name="webui-gps" alt="The GPS window" >}}
+
+### Settings
+
+*Settings*, *Units*:
+
+{{< screenshot name="webui-settings-units" alt="Settings, Units" >}}
+
+*Settings*, *Device Highlights*:
+
+{{< screenshot name="webui-settings-highlights" alt="Settings, Device Highlights" >}}
+
+*Settings*, *Ribbon*:
+
+{{< screenshot name="webui-settings-ribbon" alt="Settings, Ribbon" >}}
+
+*Settings*, *Censor mode*:
+
+{{< screenshot name="webui-settings-censor" alt="Settings, Censor mode" >}}
+
 ## Memory window
 
 After 2026-10-R1, the *Memory* window, opened from the menu or by clicking the memory figure in the top bar, shows how much memory Kismet uses and why, over the last minute, hour, or day:
+
+{{< screenshot name="webui-memory" alt="The Memory window" >}}
 
 * Kismet's memory and its peak, the device count, the memory per device, the system memory free, and how long Kismet has run.
 * A graph of Kismet's memory (the left axis) against the device count (the right axis), a graph of the tracked fields (every value Kismet keeps, in devices and everything else), and a graph of the system memory in use.
@@ -73,6 +149,8 @@ The *Thermal* window, opened from the menu or by clicking the temperature in the
 * A graph of the sensors over the last minute, hour, or day.  Check sensors in the list to graph them; with none checked, the four hottest are graphed.  The CPU load of the system and of Kismet is graphed with them, against the right axis.
 * Every sensor's temperature now, and its lowest, highest, and average over the time shown.
 
+{{< screenshot name="webui-thermal" alt="The Thermal window" >}}
+
 The *Thermal* stat in the top bar shows the hottest sensor, or the sensors checked under *Settings*, *Ribbon*, *Thermal*.  Temperatures are shown in Celsius or Fahrenheit, set under *Settings*, *Units*.
 
 The window reads the [`/system/thermal`](/docs/api/system/) endpoint.  Against an older Kismet server without it, or a system with no sensors Kismet can read, the window says so and the top bar shows `---`.
@@ -92,8 +170,12 @@ After 2026-10-R1, the *CPU* window, opened from the menu or by clicking the CPU 
 * The load now, the number of CPUs, and the highest load over the time shown (its tooltip has the average).  The tooltip of Kismet's load also gives it as a share of one CPU, which shows a single busy thread.
 * A graph of both over the last minute, hour, or day.
 
+{{< screenshot name="webui-cpu" alt="The CPU window" >}}
+
 The window reads the [`/system/cpu`](/docs/api/system/) endpoint.  The CPU load is only read on Linux; elsewhere, and against an older Kismet server without it, the window says so.
 
 After 2026-10-R1, the *Overview* tab also has *CPU*, *Memory*, and *Temperatures* cards: each shows the reading now and a graph over the last minute, hour, or day, and opens its window when clicked.  The *Temperatures* card graphs the same sensors as the *Thermal* window; without temperature history it lists the hottest sensors now instead.  Against an older Kismet server without the CPU or thermal endpoints, the cards say so.
+
+{{< screenshot name="webui-overview-system" alt="The CPU, Memory, and Temperatures cards" >}}
 
 Serving the UI, HTTPS, and proxies are covered in [the webserver configuration](/docs/readme/configuring/webserver/).

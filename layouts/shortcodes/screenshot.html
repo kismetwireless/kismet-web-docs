@@ -1,0 +1,27 @@
+{{- /*
+  A screenshot taken in both web UI themes:
+    {{< screenshot name="webui-overview" alt="The Overview tab" >}}
+  reads assets/images/screenshot/<name>-light.png and -dark.png.  The one
+  matching the site theme is shown; the buttons switch it, and open it in a
+  floating view at full size (or as much as fits).
+*/ -}}
+{{- $name := .Get "name" -}}
+{{- $alt := .Get "alt" -}}
+{{- $light := resources.Get (printf "images/screenshot/%s-light.png" $name) -}}
+{{- $dark := resources.Get (printf "images/screenshot/%s-dark.png" $name) -}}
+{{- if not (and $light $dark) -}}
+  {{- errorf "screenshot %q: missing %s-light.png or %s-dark.png in assets/images/screenshot" $name $name $name -}}
+{{- end -}}
+{{- $lw := $light.Resize (printf "%dx webp q85" $light.Width) -}}
+{{- $dw := $dark.Resize (printf "%dx webp q85" $dark.Width) -}}
+<figure class="kshot">
+  <div class="kshot-frame">
+    <img class="kshot-img kshot-light" src="{{ $lw.RelPermalink }}" width="{{ $lw.Width }}" height="{{ $lw.Height }}" alt="{{ $alt }}" loading="lazy" decoding="async">
+    <img class="kshot-img kshot-dark" src="{{ $dw.RelPermalink }}" width="{{ $dw.Width }}" height="{{ $dw.Height }}" alt="{{ $alt }}, dark theme" loading="lazy" decoding="async">
+  </div>
+  <figcaption class="kshot-bar">
+    <span class="kshot-caption">{{ $alt }}</span>
+    <button type="button" class="kshot-btn" data-kshot-theme>Dark</button>
+    <button type="button" class="kshot-btn" data-kshot-zoom>Zoom</button>
+  </figcaption>
+</figure>

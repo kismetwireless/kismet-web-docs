@@ -26,6 +26,8 @@ The *Search or filter* box above the device list in the [new web UI](/docs/readm
 
 Filters are written in a short form in the box, and the web UI turns them into a condition in the [device rules](/docs/readme/configuring/device_rules/) language.  Hovering over the box shows the condition sent to the server.  When a filter has an error, it's shown next to the box, with where in the filter it is.
 
+{{< screenshot name="webui-filter" alt="The device list filtered to open access points" >}}
+
 ## Examples
 
 | In the search box | Lists |
