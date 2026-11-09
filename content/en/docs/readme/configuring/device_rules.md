@@ -3,7 +3,7 @@ title: "Device rules"
 description: ""
 lead: ""
 date: 2026-10-29T12:00:00-04:00
-lastmod: 2026-10-29T12:00:00-04:00
+lastmod: 2026-11-08T21:00:00-05:00
 images: []
 menu:
   docs:
@@ -75,6 +75,8 @@ The common fields have short names:
 | `min_signal` | Weakest signal |
 | `max_signal` | Strongest signal |
 | `seenby` | Data sources which saw the device |
+| `location` | Average location, as `[lon, lat]` (after 2026-10-R1) |
+| `last_location` | Last location, as `[lon, lat]` (after 2026-10-R1) |
 
 A comparison with a field the device doesn't have is false.
 
@@ -82,6 +84,7 @@ A comparison with a field the device doesn't have is false.
 
 * Numbers compare with `==`, `!=`, `<`, `<=`, `>`, and `>=`, and can be calculated with `+`, `-`, `*`, `/`, and `%`.  Put spaces around `/` for division, so it isn't read as a field path.
 * Durations such as `30s`, `5m`, `2h`, and `1d` are numbers of seconds.  `now` is the current time, and `age(field)` is `now - field`.
+* After 2026-10-R1, `lat(field)` and `lon(field)` are the latitude and longitude of a location, such as `lat(location)`.  A device without a location doesn't match.
 * Strings compare with `==` and `!=`, or with `contains`, `icontains` (in any case), `startswith`, `endswith`, and `matches` (a PCRE regular expression), against a `"string"`.  After 2026-10-R1, `==`, `!=`, and `in` on the device type (`type`) ignore case, so `type == "wi-fi ap"` matches `Wi-Fi AP`; other strings match exactly.
 * MAC addresses are written `aa:bb:cc:dd:ee:ff`, with an optional mask as `/24` or `/ff:ff:ff:00:00:00`; a short address such as `aa:bb:cc` matches the prefix.
 * `x in [a, b, c]` and `x not in [a, b, c]` test against a list of values.
@@ -152,6 +155,12 @@ rule free-ssid {
 rule gone-quiet {
     when age(last_time) > 10m and packets > 1000
     tag "quiet"
+}
+
+rule quad {
+    when lat(location) >= 10.0 and lat(location) <= 10.1 and lon(location) >= 20.0 and lon(location) <= 20.1
+    tag "quad"
+    view "Devices in the quad"
 }
 
 sort loudest {
