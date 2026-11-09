@@ -71,6 +71,8 @@ Clicking a device opens its details, in sections for each kind of device; this i
 
 ### Windows
 
+Windows open as panels which stay open while you use the rest of the UI; drag a title bar to move one and its corner to resize it.  After 2026-10-R1, the *Data sources*, *Channel coverage*, and *Packet rates* windows have a button in their title bar which makes them fill the browser window, and takes them back to their size when clicked again.
+
 The data sources, opened from the menu or the *Sources* stat in the top bar:
 
 {{< screenshot name="webui-sources" alt="The Data sources window" >}}
