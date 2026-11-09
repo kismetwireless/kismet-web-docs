@@ -94,4 +94,6 @@ After 2026-10-R1, the *CPU* window, opened from the menu or by clicking the CPU 
 
 The window reads the [`/system/cpu`](/docs/api/system/) endpoint.  The CPU load is only read on Linux; elsewhere, and against an older Kismet server without it, the window says so.
 
+After 2026-10-R1, the *Overview* tab also has *CPU*, *Memory*, and *Temperatures* cards: each shows the reading now and a graph over the last minute, hour, or day, and opens its window when clicked.  The *Temperatures* card graphs the same sensors as the *Thermal* window; without temperature history it lists the hottest sensors now instead.  Against an older Kismet server without the CPU or thermal endpoints, the cards say so.
+
 Serving the UI, HTTPS, and proxies are covered in [the webserver configuration](/docs/readme/configuring/webserver/).
