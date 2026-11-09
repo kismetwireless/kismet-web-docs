@@ -3,7 +3,7 @@ title: "Overview and map"
 description: ""
 lead: ""
 date: 2026-11-01T01:00:00-04:00
-lastmod: 2026-11-01T01:00:00-04:00
+lastmod: 2026-11-08T21:00:00-05:00
 images: []
 aliases: ["/docs/dev/uiplugins/uiplugins_overview_map/"]
 menu:
@@ -179,3 +179,66 @@ ui.mapSources.add({
 ```
 
 `legacy: true` is for servers older than 2026-10, where the device location is the position the device reported (ADS-B and AIS).
+
+### Map overlays
+
+Added: `after 2026-10-R1`
+
+A plugin can draw shapes of its own over the map, such as a survey area or a route, from `kismet.ui.mapOverlays`.  Overlays are drawn above the map background and under the devices, and each one has a checkbox in the map's list, with a button which zooms the map to it.
+
+| Option | |
+| ------ | - |
+| `id`, `title`, `priority`, `defaultVisible` | The overlay |
+| `icon` | The icon for the checkbox (default `'target'`) |
+| `shapes()` | Returns the shapes to draw; called whenever the overlay is drawn |
+| `watch(redraw)` | Optional: call `redraw()` when the shapes change; returns a function which stops watching |
+| `legend()` | Optional: a node shown on the map while the overlay is visible |
+
+Points are `[lon, lat]`, as in device locations.  A shape is one of:
+
+| Shape | |
+| ----- | - |
+| `{ type: 'polygon', points: [[lon, lat], ...] }` | A closed area, at least 3 points |
+| `{ type: 'line', points: [[lon, lat], ...] }` | A line, at least 2 points |
+| `{ type: 'rect', bounds: [[lon, lat], [lon, lat]] }` | A rectangle, from opposite corners |
+| `{ type: 'circle', center: [lon, lat], radius }` | A circle, with the radius in meters |
+| `{ type: 'marker', center: [lon, lat], icon }` | An icon |
+
+Any shape may also have `color` and `fillColor` (CSS colors, including the theme's, such as `var(--ok)`), `weight` (the line width in pixels), `dash` (such as `'4 4'`), `fill` (polygons, rectangles and circles are filled unless it's `false`), `fillOpacity`, `label` (text shown when the pointer is over it), and `className` (extra classes, of letters, digits, `-` and `_`).  Shapes which aren't valid, such as points out of range, are skipped; an overlay draws at most 1000 shapes, of up to 10000 points each.
+
+`kismet.widgets.map.zoomToOverlay(id)` zooms the map to an overlay; show the map tab with it, and a map which isn't drawn yet zooms there when it is:
+
+```javascript
+kismet.widgets.panes.showPane('map');
+kismet.widgets.map.zoomToOverlay('quad');
+```
+
+A box which turns red when Kismet is outside it:
+
+```javascript
+let quad = { s: 10, n: 11, w: -21, e: -20 };
+let inside = null;
+const redraws = new Set();
+
+ui.mapOverlays.add({
+    id: 'quad', title: 'Survey quad',
+    shapes: () => [{
+        type: 'rect', bounds: [[quad.w, quad.s], [quad.e, quad.n]],
+        color: inside === false ? 'var(--error)' : 'var(--ok)', weight: 3, fillOpacity: 0.05,
+        label: 'Survey quad',
+    }],
+    watch(redraw) {
+        redraws.add(redraw);
+        return () => redraws.delete(redraw);
+    },
+});
+
+kismet.eventbus.subscribe('GPS_LOCATION', ['kismet.common.location.geopoint'], (e) => {
+    const [lon, lat] = e['kismet.common.location.geopoint'] ?? [];
+    const now = lat >= quad.s && lat <= quad.n && lon >= quad.w && lon <= quad.e;
+    if (now !== inside) {
+        inside = now;
+        redraws.forEach((fn) => fn());
+    }
+});
+```
