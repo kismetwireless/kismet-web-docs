@@ -25,6 +25,8 @@ After 2026-10-R1, both the `wiglecsv` log and `kismetdb_to_wiglecsv` write Bluet
 
 After 2026-10-R1, Wi-Fi networks an access point hosts in its multiple BSSID element (IE 71), which may never send beacons of their own, are written as `WIFI` rows too, with the SSID and encryption from the hosting access point's beacon and its location.  A hosted network which also sends its own beacons is written from those, as before.
 
+After 2026-10-R1, the encryption column names WPA3 networks the way WiGLE expects: `[WPA3-SAE-CCMP]` for WPA3 personal, `[WPA3-OWE-CCMP]` for enhanced open, and `[WPA3-EAP_SUITE_B_192-GCMP-256]` for WPA3 enterprise suite B.  A network in WPA3 transition mode, offering both, is written as `[WPA2-PSK+SAE-CCMP]`, which WiGLE also counts as WPA3.  Earlier versions wrote many of these as `WPA2-UNKNOWN`.
+
 Since Wigle is designed for mapping wireless, Kismet will only create entries in the `wiglecsv` log when a GPS is connected and a location is available.  If you have no GPS location, the `wiglecsv` will be empty.
 
 
@@ -67,6 +69,10 @@ By default, `kismetdb_to_wiglecsv` will only emit one record per second per acce
 
 {{<argument cache-limit number-of-devices>}}
 `kismetdb_to_wiglecsv` will cache device information from the database to speed up looking up SSIDs and other device data.  By default, the last 1000 devices are cached, but if you have a very large number of devices, or a very small amount of ram, increasing or decreasing this cache may speed up processing.
+{{</argument>}}
+
+{{<argument exclude lat,lon,distance>}}
+Leave out every record within `distance` *meters* of `lat,lon`, such as around your home.  This option can be given more than once.  After 2026-10-R1, exclusion zones apply to every record, Wi-Fi, Bluetooth and cell, and distances are measured correctly; earlier versions could write some records from inside a zone, and measured distances slightly too large.
 {{</argument>}}
 
 ## Uploading to Wigle
