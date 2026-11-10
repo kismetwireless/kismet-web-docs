@@ -352,6 +352,28 @@
     Modern drivers should be immune to SSID length overflow attacks, but historically it has been used to trigger bugs, crashes, and possible code execution.
 
 -
+  name: "MBSSIDCORRUPT"
+  class: "exploit"
+  phy: "dot11"
+  added: "2026-11"
+  docs: |
+    An access point sent a malformed multiple BSSID element (IE 71), which lists the other networks it hosts on the same radio.  Kismet raises this alert for a truncated element, a malformed network profile (an over-long or repeated SSID, a nested multiple BSSID element, a bad or repeated index or capability), or two profiles with the same BSSID index.
+
+    Malformed multiple BSSID elements have been used to attack drivers which parse the hosted network profiles, such as the Linux cfg80211 issues CVE-2022-41674 and CVE-2022-42719 through CVE-2022-42721, but they can also come from a misbehaving access point.
+
+    The alert is raised once for each distinct malformed element an access point sends.
+
+-
+  name: "MBSSIDEXCESSIVE"
+  class: "denial"
+  phy: "dot11"
+  added: "2026-11"
+  docs: |
+    An access point advertised more than 64 hosted networks in one multiple BSSID element.  Real access points host far fewer; a frame listing more is usually meant to flood clients and monitoring tools with fake networks.
+
+    Kismet tracks the first 64 hosted networks in a frame and ignores the rest.
+
+-
   name: "LUCENTTEST"
   class: "fingerprint"
   phy: "dot11"

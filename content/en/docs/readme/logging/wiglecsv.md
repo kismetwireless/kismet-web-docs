@@ -23,6 +23,8 @@ Wigle does not collect packet contents, so a `wiglecsv` log does not contain pac
 
 After 2026-10-R1, both the `wiglecsv` log and `kismetdb_to_wiglecsv` write Bluetooth LE devices seen by sniffers (nRF, TI, Ubertooth), and those from Bluetooth scan reports with a BTLE type such as `BTLE Tracker` or `BTLE Device`, as `BLE`, with only Wi-Fi written as `WIFI`, and Bluetooth rows in time order.  Cell rows are written for GSM, WCDMA, LTE, and NR cells only, with the channel left blank as WiGLE expects; other phys, which WiGLE has no type for, are left out.
 
+After 2026-10-R1, Wi-Fi networks an access point hosts in its multiple BSSID element (IE 71), which may never send beacons of their own, are written as `WIFI` rows too, with the SSID and encryption from the hosting access point's beacon and its location.  A hosted network which also sends its own beacons is written from those, as before.
+
 Since Wigle is designed for mapping wireless, Kismet will only create entries in the `wiglecsv` log when a GPS is connected and a location is available.  If you have no GPS location, the `wiglecsv` will be empty.
 
 

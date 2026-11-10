@@ -49,6 +49,11 @@ After 2026-10-R1:
   filesystem (on Linux, a mount namespace): only `/dev`, `/proc`, `/sys`,
   `/run`, `/tmp`, `/var/tmp`, and the lock directories stay writable, and the
   cell AT helper also keeps `~/.kismet` for its saved band locks.
+* Where the helper isn't allowed a new mount namespace, such as root in a
+  container without `CAP_SYS_ADMIN` (a Docker container started with only
+  `--cap-add net_raw --cap-add net_admin`), the helper sends the warning
+  `datasource running without a read-only filesystem jail` and runs without
+  the read-only view.
 
 ### Building with Protobufs support
 
