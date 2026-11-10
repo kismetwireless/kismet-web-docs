@@ -71,7 +71,7 @@ By default, `kismetdb_to_wiglecsv` will only emit one record per second per acce
 `kismetdb_to_wiglecsv` will cache device information from the database to speed up looking up SSIDs and other device data.  By default, the last 1000 devices are cached, but if you have a very large number of devices, or a very small amount of ram, increasing or decreasing this cache may speed up processing.
 {{</argument>}}
 
-{{<argument exclude lat,lon,distance>}}
+{{<argument exclude "lat,lon,distance">}}
 Leave out every record within `distance` *meters* of `lat,lon`, such as around your home.  This option can be given more than once.  After 2026-10-R1, exclusion zones apply to every record, Wi-Fi, Bluetooth and cell, and distances are measured correctly; earlier versions could write some records from inside a zone, and measured distances slightly too large.
 {{</argument>}}
 
