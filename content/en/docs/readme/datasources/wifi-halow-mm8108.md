@@ -3,7 +3,7 @@ title: "Wi-Fi: HaLow MM8108"
 description: ""
 lead: ""
 date: 2026-10-15T20:45:33-04:00
-lastmod: 2026-10-15T20:45:33-04:00
+lastmod: 2026-11-09T22:30:00-05:00
 images: []
 menu:
   docs:
@@ -15,7 +15,7 @@ toc: true
 
 Added: `2026-10`
 
-The MM8108 source captures 802.11ah (Wi-Fi HaLow) from USB adapters based on the Morse Micro MM8108 chip, using a userspace driver on top of libusb.  The driver is a port of the Morse Micro Linux driver, reduced to what is needed for monitor mode capture, and runs inside the Kismet capture tool; no kernel driver is needed.
+The MM8108 source captures 802.11ah (Wi-Fi HaLow) from USB adapters based on the Morse Micro MM8108 chip, using a userspace driver on top of libusb.  The driver comes from the [userspace-wifi](https://github.com/kismetwireless/userspace-wifi) library, which Kismet includes: it is a port of the Morse Micro Linux driver, reduced to what is needed for monitor mode capture, and runs inside the Kismet capture tool on userspace-wifi's userspace mac80211; no kernel driver is needed.
 
 Wi-Fi HaLow operates in the sub-1GHz bands (902-928MHz in the US), with channel widths of 1, 2, 4, and 8MHz.
 
@@ -43,7 +43,7 @@ Firmware and board configurations compressed with zstd (`.zst`) or xz (`.xz`) ar
 
 ## Compiling MM8108 support
 
-MM8108 support requires libusb, and is built by default on Linux and macOS when libusb is available.  It can be disabled by passing `--disable-mm8108` to `./configure`, or forced on for other platforms with `--enable-mm8108`.
+MM8108 support requires libusb and a little-endian host, and is built by default on Linux and macOS when libusb is available.  It can be disabled by passing `--disable-mm8108` to `./configure`, or forced on for other platforms with `--enable-mm8108`; on big-endian hosts, such as s390x, it is not built.
 
 Compressed firmware support uses libzstd and liblzma, when they are available; `./configure` warns if either is missing.  It can be disabled with `--disable-firmware-compression`.
 
@@ -71,6 +71,10 @@ Channels are 802.11ah channel numbers in the channel plan of the regulatory doma
 
 The channel list contains every channel and width in the regulatory domain which the board configuration allows; some boards disable the channels at the edges of the band.
 
+A 1MHz channel is captured inside the widest usable channel which contains it, with the 1MHz channel as its primary channel.  This captures 1MHz networks on that channel, and also wider networks which use it as their primary channel.  Wider channels are tuned exactly, with their lowest usable 1MHz channel as the primary.
+
+A few channel plans include 4MHz and 8MHz channels offset from the plan's normal channel grid; in the `AU` plan (also used for `AR`, `CL`, `CO`, `EC`, `HT`, `SV`, and `UY`) these are `51ah`, `59ah`, and `55ah`.  These channels can not be tuned, and are not in the channel list.
+
 HaLow access points beacon much less often than Wi-Fi access points, and can go nearly 2 seconds between beacons.  The MM8108 source hops channels no faster than once every 2 seconds (`channel_hoprate` is limited to 0.5/sec), so it can see a beacon on each channel; with the 44 channels of the US band, a full pass takes about 90 seconds.  If the channel of a network is known, setting the source to it finds the network immediately:
 
 ```
@@ -81,7 +85,9 @@ source=mm8108-0:channel=28ah,channel_hop=false
 
 The regulatory domain is read from the adapter, if it has one programmed; adapters locked to a domain can not be changed.  Otherwise the domain is set with the `country=` option, and defaults to `US`.
 
-The supported domains are `US`, `CA`, `MX`, `BR`, `NZ`, `AU`, `AR`, `CL`, `CO`, `EU`, `GB`, `IN`, `JP`, `KR`, and `SG`.
+The channel plans are those of the Morse Micro Linux driver.  The supported domains are `AD`, `AL`, `AR`, `AT`, `AU`, `BA`, `BB`, `BE`, `BG`, `BR`, `BS`, `BZ`, `CA`, `CH`, `CL`, `CO`, `CR`, `CY`, `CZ`, `DE`, `DK`, `EC`, `EE`, `ES`, `EU`, `FI`, `FR`, `GB`, `GE`, `GF`, `GR`, `GY`, `HN`, `HR`, `HT`, `HU`, `IE`, `IN`, `IS`, `IT`, `JM`, `JP`, `KE`, `KR`, `LI`, `LT`, `LU`, `LV`, `MC`, `MD`, `ME`, `MK`, `MT`, `MX`, `NI`, `NL`, `NO`, `PA`, `PL`, `PT`, `RO`, `RS`, `SE`, `SG`, `SI`, `SK`, `SM`, `SV`, `TR`, `UA`, `UG`, `US`, `UY`, and `VA`.  An unsupported `country=` is refused, and the error lists the supported domains.
+
+Since `2026-11`, the `BR`, `JP`, and `KR` channel plans follow the Morse Micro driver, and differ from earlier Kismet releases, and `NZ` is no longer supported.
 
 ## MM8108 source parameters
 
@@ -114,7 +120,7 @@ Load this firmware file instead of the one chosen by the chip revision, such as 
 {{<configopt boardfile "board config file name">}}
 Load this board configuration file instead of the one chosen by the board type in the adapter, such as `boardfile=bcf_mf15457.bin`.  This is a file name, not a path; the file is found in the firmware directories.
 
-The firmware and board configuration in use are reported in the Kismet messages when the source opens, and the module the board configuration is for is shown in the source's hardware information.
+The chip, board type, firmware, board configuration, and region in use are reported in the Kismet messages when the source opens, and the firmware version is shown in the source's hardware information.  The driver's step by step boot messages are logged with `verbose=true`.
 {{</configopt>}}
 
 ### Debugging options
@@ -127,4 +133,6 @@ Enable logging from the userspace driver.
 
 NDP (null data packet) frames, which carry only PHY signal fields rather than an 802.11 frame, are not passed to Kismet.
 
-Packets include radiotap with the S1G radiotap field and the exact channel center frequency, which can be at half-MHz offsets that the standard radiotap channel field can not represent.
+Packets include radiotap with the S1G radiotap field and the exact channel center frequency, which can be at half-MHz offsets that the standard radiotap channel field can not represent, and the chip's timestamp of the frame.
+
+The MM8108 source does not report a noise level.
