@@ -32,6 +32,7 @@ Plugins which add pages to the previous UI keep working in it from `/legacy/`; t
 * The device list's *Search or filter* box, which takes [device filters](/docs/readme/webui/webui_filters/) as well as plain searches.
 * A *Tags* column and row highlights from the server's [device rules](/docs/readme/configuring/device_rules/#rules-in-the-web-ui), set under *Settings*, *Device Highlights*.
 * Display units for speeds, lengths and temperatures, under *Settings*, *Units*.
+* Wi-Fi device details with a *Multiple BSSID* section: for a network an access point hosts in its multiple BSSID element (after 2026-10-R1), the access point that advertises it and its index; for that access point, the networks it hosts.  The *Insights* views show the hosted networks as part of their access point.
 * Bluetooth and BTLE device details with service names, battery, distance, beacon, and connection sections, the [advertised data](/docs/readme/datasources/bluetooth-trackers/#advertised-data) decoded, and the address type, linked addresses, class of device, and controller version and features.
 * [Censor mode](/docs/readme/configuring/webserver/#runtime-censorship), for screenshots and demos.
 * The [receiver range](/docs/readme/configuring/receiver_range/) on the map.
