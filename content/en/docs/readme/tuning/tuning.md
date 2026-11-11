@@ -322,6 +322,8 @@ This determines how many sources will be brought up at a time.
 The number of seconds between launching each group of sources.
 {{</configopt>}}
 
+After 2026-10-R1, a configured source that no driver claims when it's first probed (often because the system is busy bringing up many sources at once) is probed twice more, 5 seconds apart, before Kismet gives up on it.  When it does give up, the error includes what the driver that found the interface said, such as why Kismet couldn't read its channels.
+
 
 While the default values may be sane for your application, adding this many local sources to Kismet implies an advanced configuration - you may find benefit to tuning these options for your specific configuration.
 
