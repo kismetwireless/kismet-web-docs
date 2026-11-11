@@ -314,7 +314,7 @@ How often rules are checked against the devices which changed since the last che
 {{</configopt>}}
 
 {{<configopt device_rules_full_interval checks>}}
-Rules using `now` or `age()` can start or stop matching without the device changing, so every this many checks all devices are checked, by default 10.  `0` never checks unchanged devices.
+Rules using `now` or `age()` can start or stop matching without the device changing, so every this many checks all devices are checked, by default 10.  `0` never checks unchanged devices.  After 2026-10-R1, devices which haven't changed are only checked against the rules using `now` or `age()`; the other rules keep their last result, and their webhooks with `every`, `change`, or `for` only repeat when the device changes.
 {{</configopt>}}
 
 {{<configopt device_rules_alert_backlog count>}}
