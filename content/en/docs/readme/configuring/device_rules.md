@@ -89,6 +89,7 @@ A comparison with a field the device doesn't have is false.
 * MAC addresses are written `aa:bb:cc:dd:ee:ff`, with an optional mask as `/24` or `/ff:ff:ff:00:00:00`; a short address such as `aa:bb:cc` matches the prefix.
 * `x in [a, b, c]` and `x not in [a, b, c]` test against a list of values.
 * `exists(field)` tests that a field is present, and `count(field)` counts the entries in a list or map.
+* After 2026-10-R1, `has_tag("name")` tests that a device has the user tag `name`, as set from the device details or with `/devices/by-key/<key>/set_tag.cmd` (`tagname` and `tagvalue`).  Tags are saved with a device's name and notes, so they last across restarts.
 * Conditions combine with `and`, `or`, `not`, and parentheses.
 
 ### Including other files
@@ -248,6 +249,25 @@ Kismet ships rules for notable devices in `kismet_device_rules_highlights.txt`, 
 | `apple-continuity` | Bluetooth devices sending Apple Continuity messages; the row highlight starts off in the web UI | `apple continuity` | Apple Continuity Devices |
 
 A rule with the same name in a later file, such as `kismet_device_rules.txt`, replaces the shipped one; `device_rule_disable=<name>` leaves one out.
+
+### Device baseline
+
+After 2026-10-R1, the device details in the web UI have a *Baseline* row: *Add to baseline* marks a device as one you know, with the user tag `baseline` (its value is the time it was added), and *Remove from baseline* takes it out.  Two rules in `kismet_device_rules.txt` use it:
+
+| Rule | Matches | View |
+| ---- | ------- | ---- |
+| `baseline` | Devices in the baseline | Baseline devices |
+| `unknown` | Devices not in the baseline | Unknown devices |
+
+The views change as soon as a device is added or removed, as do rules that test a device's name, when it's renamed.  To alert when a device outside the baseline appears, add a rule of your own to `kismet_device_rules.txt`, such as:
+
+```
+rule unknown-ap {
+    description "Access points not in the baseline"
+    when type == "Wi-Fi AP" and not has_tag("baseline")
+    alert
+}
+```
 
 ## Loading rules
 
