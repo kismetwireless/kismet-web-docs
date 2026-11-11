@@ -315,7 +315,7 @@ This determines when Kismet will start staggering local source bring-up - if you
 
 
 {{<configopt source_launch_group number>}}
-This determines how many sources will be brought up at a time.
+This determines how many sources will be brought up at a time.  After 2026-10-R1, each group holds exactly this many; earlier versions brought up one more in each group.
 {{</configopt>}}
 
 {{<configopt source_launch_delay seconds>}}

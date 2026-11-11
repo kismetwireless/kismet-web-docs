@@ -349,7 +349,7 @@ Compile rules to native code where the platform allows it (64-bit x86, ARM, RISC
 
 ## Rules in the web UI
 
-The device list has a `Tags` column, which can be searched and sorted, and the device details list a device's tags first, with the rules that set them and their descriptions.  Views made by rules are listed with the other device views, with how many devices they hold.
+The device list has a `Tags` column, which can be searched and sorted, and the device details list a device's tags first, with the rules that set them and their descriptions; rules which only make a view, with no tag, color, or alert, aren't listed there.  Views made by rules are listed with the other device views, with how many devices they hold.
 
 Rows in the device list are highlighted by their tags, under `Settings`, `Device Highlights`.  Each tag takes the color of its rule, or a default color for the tags of the [shipped rules](#shipped-rules) and the examples, and the color can be changed there.  Tags can be dragged into priority order: a device with several tags takes the color of the highest one.
 
