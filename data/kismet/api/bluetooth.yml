@@ -22,3 +22,26 @@
       - [200, "Success"]
     failure:
       - [400, "Missing `uuids`, not a list, or more than 64 entries"]
+
+-
+  name: "BTLE related devices"
+  uri: "/phy/btle/related-of/{DEVICEKEY}/devices"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    The devices in the same [related group](/docs/readme/configuring/randomized_macs/#btle-related-devices) as
+    the BTLE device `{DEVICEKEY}`, the device itself included: the random addresses advertising the same payload,
+    as the web UI's *BTLE Related Devices* timeline shows them.
+
+    The list is empty when related devices are off (`btle_related`), or the device isn't in a group.
+  return: |
+    Array of devices
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [500, "Invalid device key"]

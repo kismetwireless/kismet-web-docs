@@ -3,7 +3,7 @@ title: "The device list"
 description: ""
 lead: ""
 date: 2026-11-01T01:00:00-04:00
-lastmod: 2026-11-01T01:00:00-04:00
+lastmod: 2026-11-12T10:30:00-05:00
 images: []
 aliases: ["/docs/dev/uiplugins/uiplugins_devicelist/"]
 menu:
@@ -31,6 +31,7 @@ The device list is built from the columns, icons, and row highlights modules reg
 | `id` | Unique id, also saved in the user's column settings |
 | `title` | Header text |
 | `description` | Longer text shown in the column picker |
+| `help` | What the column's filter name means, for the search help window; after 2026-10-R1.  Without it, the help shows the `description`, then the `title` |
 | `fields` | The fields the column reads |
 | `sortField` | The field path the server sorts on; leave it out for a column which can't be sorted |
 | `render(row)` | Returns a string or a DOM node for the cell |
@@ -192,7 +193,7 @@ ui.searchFields.add({
 });
 ```
 
-`filterKind`, `filterConvert`, `filterEmpty`, and `filterPresent` work as they do for columns, either one for all the fields or as `{ path: value }`; `filterNames` gives more names.
+`filterKind`, `filterConvert`, `filterEmpty`, and `filterPresent` work as they do for columns, either one for all the fields or as `{ path: value }`; `filterNames` gives more names.  After 2026-10-R1, `help` describes the search group in the search help window, and `phy` (the phy, as the server names it) puts it under that phy there.
 
 ## Filter hints
 
@@ -205,6 +206,7 @@ ui.searchFields.add({
 | `fields` | The fields |
 | `phy` | The phy, as the server names it, whose fields these are; the hint is left out when the server doesn't have the phy |
 | `filterKind`, `filterConvert`, `filterEmpty`, `filterPresent` | As for search fields |
+| `help` | What the names mean, for the search help window; after 2026-10-R1 |
 
 The AIS module names the vessel details:
 
@@ -212,7 +214,8 @@ The AIS module names the vessel details:
 const filterHint = (id, names, fields, more = {}) =>
     ui.filterHints.add({ id, phy: 'AIS', names, fields, ...more });
 
-filterHint('ais_mmsi', ['mmsi'], [`${ais}/${ais}.mmsi`], { filterKind: 'number', filterEmpty: 0 });
+filterHint('ais_mmsi', ['mmsi'], [`${ais}/${ais}.mmsi`],
+    { filterKind: 'number', filterEmpty: 0, help: 'Maritime Mobile Service Identity' });
 filterHint('ais_ship_name', ['ship_name', 'vessel'], [`${ais}/${ais}.name`], { filterEmpty: '' });
 filterHint('ais_callsign', ['callsign'], [`${ais}/${ais}.callsign`], { filterEmpty: '' });
 // Speed over ground, in knots
