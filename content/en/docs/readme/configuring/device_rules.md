@@ -76,7 +76,8 @@ The common fields have short names:
 | `mac` | MAC address |
 | `name` | Device name |
 | `phy` | Phy name, such as `IEEE802.11` |
-| `type` | Device type, such as `Wi-Fi AP` |
+| `type` | Device type, the type of its phy, such as `Wi-Fi` or `BTLE` |
+| `display_type` | What the device is shown as, such as `Wi-Fi AP` or `Apple Watch`, when that says more than its type |
 | `manuf` | Manufacturer |
 | `crypt` | Encryption |
 | `channel` | Channel |
@@ -101,7 +102,8 @@ A comparison with a field the device doesn't have is false.
 * Numbers compare with `==`, `!=`, `<`, `<=`, `>`, and `>=`, and can be calculated with `+`, `-`, `*`, `/`, and `%`.  Put spaces around `/` for division, so it isn't read as a field path.
 * Durations such as `30s`, `5m`, `2h`, and `1d` are numbers of seconds.  `now` is the current time, and `age(field)` is `now - field`.
 * After 2026-10-R1, `lat(field)` and `lon(field)` are the latitude and longitude of a location, such as `lat(location)`.  A device without a location doesn't match.
-* Strings compare with `==` and `!=`, or with `contains`, `icontains` (in any case), `startswith`, `endswith`, and `matches` (a PCRE regular expression), against a `"string"`.  After 2026-10-R1, `==`, `!=`, and `in` on the device type (`type`) ignore case, so `type == "wi-fi ap"` matches `Wi-Fi AP`; other strings match exactly.
+* Strings compare with `==` and `!=`, or with `contains`, `icontains` (in any case), `startswith`, `endswith`, and `matches` (a PCRE regular expression), against a `"string"`.  After 2026-10-R1, `==`, `!=`, and `in` on the device type (`type` and `display_type`) ignore case, so `display_type == "wi-fi ap"` matches `Wi-Fi AP`; other strings match exactly.
+* After 2026-10-R1, `type` is the type of the device's phy, such as `Wi-Fi`, and names like `Wi-Fi AP` are display types.  A rule comparing `type` to a display type, such as `type == "Wi-Fi AP"`, never matches, and Kismet logs an error naming the rule when it loads; use `display_type` instead.
 * MAC addresses are written `aa:bb:cc:dd:ee:ff`, with an optional mask as `/24` or `/ff:ff:ff:00:00:00`; a short address such as `aa:bb:cc` matches the prefix.
 * `x in [a, b, c]` and `x not in [a, b, c]` test against a list of values.
 * `exists(field)` tests that a field is present, and `count(field)` counts the entries in a list or map.
@@ -160,7 +162,7 @@ rule watchlist {
 }
 
 rule open-ap {
-    when phy == "IEEE802.11" and type == "Wi-Fi AP" and crypt == "Open"
+    when type == "Wi-Fi" and display_type == "Wi-Fi AP" and crypt == "Open"
     tag "open"
 }
 
@@ -216,7 +218,7 @@ webhook "<endpoint>" {
 | `stop` | Also send when a device stops matching.  Not with `trigger once`. |
 | `rate <n>/<period> [burst <n>]` | The most events from this webhook per period, such as `10/1m` or `100/1h`.  Default `10/1m`. |
 | `batch <time> [max <n>]` | Hold events to send together: the first event opens a window, which is sent when `<time>` is up or `<n>` events are in it (default 100). |
-| `fields <field>, ...` | The device fields to send, as the short [field names](#fields) rules use (`mac`, `name`, `signal`) or full field names and paths, as in the REST API's `fields`; up to 32.  The default is the device key, MAC, name, phy, type, manufacturer, channel, frequency, first and last time, and last signal. |
+| `fields <field>, ...` | The device fields to send, as the short [field names](#fields) rules use (`mac`, `name`, `signal`) or full field names and paths, as in the REST API's `fields`; up to 32.  The default is the device key, MAC, name, phy, type, display type, manufacturer, channel, frequency, first and last time, and last signal. |
 | `fire_existing` | Also send devices which already match when the rule loads; without it they're recorded and not sent. |
 
 A rule can have up to 4 `webhook` statements.  The endpoint's own rate, queue, and retry limits apply on top of the rule's, along with `webhook_global_rate`; [`/webhooks/status.json`](/docs/api/webhooks/) shows what each webhook sent and held back.
@@ -284,7 +286,7 @@ The views change as soon as a device is added or removed, as do rules that test 
 ```
 rule unknown-ap {
     description "Access points not in the baseline"
-    when type == "Wi-Fi AP" and not has_tag("baseline")
+    when display_type == "Wi-Fi AP" and not has_tag("baseline")
     alert
 }
 ```

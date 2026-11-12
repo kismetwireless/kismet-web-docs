@@ -93,7 +93,8 @@ With a field, `mac == 00:11:22:33:44:55` matches the whole address, and `bssid ~
 
 A field can be named in several ways:
 
-* The short names from the device rules language: `mac`, `name`, `phy`, `type`, `manuf`, `crypt`, `channel`, `frequency`, `packets`, `datasize`, `first_time`, `last_time`, `mod_time`, `num_alerts`, `signal`, `min_signal`, and `max_signal`.
+* The short names from the device rules language: `mac`, `name`, `phy`, `type`, `display_type`, `manuf`, `crypt`, `channel`, `frequency`, `packets`, `datasize`, `first_time`, `last_time`, `mod_time`, `num_alerts`, `signal`, `min_signal`, and `max_signal`.
+  In the web UI, `type` matches both the device's type, such as `Wi-Fi` or `BTLE`, and what it's shown as, such as `Wi-Fi AP` or `Apple Watch`, so `type == "Wi-Fi AP"` and `type == "Wi-Fi"` both work; `display_type` matches only what it's shown as.  Sorting by `type` sorts by the device's type.
 * Device list columns, by their name or title, in lowercase with spaces as `_`, and without a group name: `ssid`, `bssid`, `clients`, `encryption`, `last_seen`, and so on.
 * Search groups, such as `adsb`, `ais`, `uav`, `cell`, `base`, or `rule_tags`, which match when any of their fields do.
 * Full Kismet field paths, such as `kismet.device.base.manuf` or `dot11.device/dot11.device.last_bssid`.
