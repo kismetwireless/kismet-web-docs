@@ -47,6 +47,7 @@ After 2026-10-R1, the help button next to the box opens a guide to the filter sy
 | `pan_id == 0x1A2B` | 802.15.4 devices on PAN `0x1A2B` |
 | `first_time < 1h && phy == BTLE` | Bluetooth LE devices first seen in the last hour |
 | `related > 1` | BTLE random addresses sharing their payload with another address ([BTLE related devices](/docs/readme/configuring/randomized_macs/#btle-related-devices)) |
+| `similar > 1` | BTLE random addresses whose advertisements have the same structure as another address's |
 | `00:11:22` | Devices with `00:11:22` anywhere in any MAC address field |
 | `^00:11:22 \|\| 33:44$` | MAC addresses starting with `00:11:22`, or ending in `33:44` |
 | `!(phy == IEEE802.11)` | Everything but Wi-Fi |
@@ -124,7 +125,7 @@ After 2026-10-R1, many of the details shown in the device panel can be filtered 
 | Meters | `meter_id`, `meter_type`, `consumption` |
 | Sensors | `model`, `sensor_id`, `battery`, `temperature` / `temp` (°C), `tire_temperature`, `moisture`, `wind_speed` / `wind` |
 | Z-Wave | `home_id`, `zwave_id` |
-| Bluetooth LE | `company_id`, `bt_version`, `chip` / `chip_maker`, `related` / `related_count` (addresses in the device's [related group](/docs/readme/configuring/randomized_macs/#btle-related-devices)) |
+| Bluetooth LE | `company_id`, `bt_version`, `chip` / `chip_maker`, `related` / `related_count` (addresses in the device's [related group](/docs/readme/configuring/randomized_macs/#btle-related-devices)), `similar` / `similar_count` (addresses in its similar group) |
 | Location trackers | `tracker` / `tracker_network`, `battery`, `separated` |
 | Bluetooth | `services` |
 | Wi-Fi | `wps_manuf`, `wps_model`, `wps_device`, `serial` / `wps_serial`, `country`, `mesh_id` |
