@@ -3,7 +3,7 @@ title: "ADSB - SDR RTLADSB"
 description: ""
 lead: ""
 date: 2022-09-14T17:43:04-04:00
-lastmod: 2026-10-24T10:50:00-07:00
+lastmod: 2026-11-11T20:00:00-05:00
 images: []
 menu:
   docs:
@@ -85,29 +85,37 @@ A unique ID can be set using the `rtl_eeprom` tool to assign a proper serial num
 
 All data sources accept the [common naming and description](/docs/readme/datasources/datasources/#naming-and-describing-datasources) options.
 
-### Channel control options
+### Frequency
 
-* channel={xyz}
-
-    By default, SDR RTLADSB will tune to 1090MHz, the international standard frequency for ADSB.  To manually set the frequency, in Hz;
-
-    ```
-    source=rtladsb-0:channel=512000000
-    ```
+SDR RTLADSB always tunes to 1090MHz, the international standard frequency for ADSB; it has no channel option.
 
 ### Radio control options
 
-* biastee={true} / {false}
+Option names must be spelled exactly as shown; Kismet ignores an option it doesn't recognize, without a warning.
 
-    Enable bias-tee power on supported radios.
+* biast={true} / {false}
 
-    Bias-tee is used to supply power to external amplifiers or other equipment in the antenna chain, and requires that your radio hardware has power injection support.
+    Enable bias-tee power on supported radios.  The option is `biast`; older versions of this page called it `biastee`, which is ignored, so bias-tee stays off.
+
+    Bias-tee is used to supply power to external amplifiers, powered antennas, or other equipment in the antenna chain, and requires that your radio hardware has power injection support and that librtlsdr was built with bias-tee support.  If an LNA or powered antenna is in the antenna chain and bias-tee is off, it gets no power and the radio hears few or no aircraft.
+
+    ```
+    source=rtladsb-0:biast=true
+    ```
+
+* biastgpio={gpio}
+
+    Enable bias-tee power using a specific GPIO on the radio, for hardware that doesn't use the default.  This requires a version of librtlsdr with bias-tee GPIO support.
 
 * gain={value}
 
-    Specify a fixed gain level for the radio; by default, the hardware automatic gain control is used.
+    Specify a fixed gain level for the radio, in tenths of a dB (for example `gain=496` for 49.6dB); Kismet uses the nearest gain the tuner supports.  By default, the hardware automatic gain control is used.
 
 * ppm={error_value}
 
     Specify a PPM error offset for fine-tuning your radio, if your hardware has a known offset.
+
+* uuid={uuid}
+
+    Set the source UUID, when multiple radios don't report unique serial numbers; see [Multiple RTL-SDR devices](#multiple-rtl-sdr-devices).
 
