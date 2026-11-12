@@ -3,7 +3,7 @@ title: "Device filters"
 description: ""
 lead: ""
 date: 2026-11-01T01:00:00-04:00
-lastmod: 2026-11-01T01:00:00-04:00
+lastmod: 2026-11-12T10:30:00-05:00
 images: []
 menu:
   docs:
@@ -26,6 +26,8 @@ The *Search or filter* box above the device list in the [new web UI](/docs/readm
 
 Filters are written in a short form in the box, and the web UI turns them into a condition in the [device rules](/docs/readme/configuring/device_rules/) language.  Hovering over the box shows the condition sent to the server.  When a filter has an error, it's shown next to the box, with where in the filter it is.
 
+After 2026-10-R1, the help button next to the box opens a guide to the filter syntax and every field name the device list knows, grouped by phy, with a *Find* box to look up a name.
+
 {{< screenshot name="webui-filter" alt="The device list filtered to open access points" >}}
 
 ## Examples
@@ -44,6 +46,7 @@ Filters are written in a short form in the box, and the web UI turns them into a
 | `callsign ~ N1` | Aircraft and ships whose callsign contains `N1` |
 | `pan_id == 0x1A2B` | 802.15.4 devices on PAN `0x1A2B` |
 | `first_time < 1h && phy == BTLE` | Bluetooth LE devices first seen in the last hour |
+| `related > 1` | BTLE random addresses sharing their payload with another address ([BTLE related devices](/docs/readme/configuring/randomized_macs/#btle-related-devices)) |
 | `00:11:22` | Devices with `00:11:22` anywhere in any MAC address field |
 | `^00:11:22 \|\| 33:44$` | MAC addresses starting with `00:11:22`, or ending in `33:44` |
 | `!(phy == IEEE802.11)` | Everything but Wi-Fi |
@@ -120,7 +123,7 @@ After 2026-10-R1, many of the details shown in the device panel can be filtered 
 | Meters | `meter_id`, `meter_type`, `consumption` |
 | Sensors | `model`, `sensor_id`, `battery`, `temperature` / `temp` (°C), `tire_temperature`, `moisture`, `wind_speed` / `wind` |
 | Z-Wave | `home_id`, `zwave_id` |
-| Bluetooth LE | `company_id`, `bt_version`, `chip` / `chip_maker` |
+| Bluetooth LE | `company_id`, `bt_version`, `chip` / `chip_maker`, `related` / `related_count` (addresses in the device's [related group](/docs/readme/configuring/randomized_macs/#btle-related-devices)) |
 | Location trackers | `tracker` / `tracker_network`, `battery`, `separated` |
 | Bluetooth | `services` |
 | Wi-Fi | `wps_manuf`, `wps_model`, `wps_device`, `serial` / `wps_serial`, `country`, `mesh_id` |

@@ -3,7 +3,7 @@ title: "Device rules"
 description: ""
 lead: ""
 date: 2026-10-29T12:00:00-04:00
-lastmod: 2026-11-08T21:00:00-05:00
+lastmod: 2026-11-12T10:30:00-05:00
 images: []
 menu:
   docs:
@@ -34,6 +34,7 @@ rule <name> {
     view "<description>"
     alert
     live
+    exclude
     webhook "<endpoint>" { ... }
 }
 ```
@@ -45,7 +46,22 @@ rule <name> {
 * `view` collects matching devices in the device view `rule-<name>`, with the description as the view name; without one, the view takes the rule's `description`, or `Devices matching rule <name>`.
 * `alert` raises a `DEVICERULE` alert when a device starts matching the rule.
 * `live` checks the rule on every packet which updates a device, as well as on the timer.
+* `exclude` leaves matching devices out of the [default view](#the-default-view).  Added after 2026-10-R1.
 * `webhook` sends matching devices to a [webhook endpoint](/docs/readme/configuring/webhooks/#endpoints); see [webhooks](#webhooks) below.
+
+### The default view
+
+After 2026-10-R1, the device view `default` holds every device which no `exclude` rule matches, and the web UI lists it as *Default*, the view the device list opens on.  New devices are in it until the rules have checked them.  Devices carry `kismet.device.rules.excluded` while an `exclude` rule matches them, and leave the default view; every device stays in *All devices* and the other views.
+
+A rule which only excludes needs no tag or view.  For example, to hide the devices you tag `hide` in the web UI:
+
+```
+rule hidden {
+    description "Devices tagged 'hide' in the web UI"
+    when has_tag("hide")
+    exclude
+}
+```
 
 ### Fields
 
@@ -247,6 +263,10 @@ Kismet ships rules for notable devices in `kismet_device_rules_highlights.txt`, 
 | `uav` | Drones Kismet recognizes, on any phy | `uav` | UAV / Drones |
 | `bodycam` | Body cameras, by address or name | `bodycam` | Bodycams |
 | `apple-continuity` | Bluetooth devices sending Apple Continuity messages; the row highlight starts off in the web UI | `apple continuity` | Apple Continuity Devices |
+| `btle-related-old-address` | BTLE random addresses replaced by a newer address with the same payload; excluded from the default view | `old address` | |
+| `btle-related-unmatched` | BTLE rotating random addresses whose payload no other address shares; excluded from the default view | | |
+
+The two `btle-related` rules, added after 2026-10-R1, only match when [BTLE related devices](/docs/readme/configuring/randomized_macs/#btle-related-devices) are turned on; `btle-related-unmatched` also needs `btle_random=hide_unmatched`.
 
 A rule with the same name in a later file, such as `kismet_device_rules.txt`, replaces the shipped one; `device_rule_disable=<name>` leaves one out.
 
@@ -321,6 +341,12 @@ Leave out a rule by name, such as one from a packaged rules file or a plugin.  A
 Leave out a sort by name, including a plugin's.
 {{</configopt>}}
 
+{{<configopt device_rules_disabled_file path>}}
+Rules switched off from the web UI or the [REST API](/docs/api/device_rules/) are kept off across restarts: their names are saved in this file, one per line, by default `%h/.kismet/kismet_device_rules_disabled.txt`.  A rule that's switched off isn't checked, and its tags, color, view, alerts, and webhooks go with it; it's still listed, as off.  A name stays in the file while its rule is missing, so the rule is off again when it comes back.  Added after 2026-10-R1.
+
+To leave a rule out from the config instead, use `device_rule_disable`.
+{{</configopt>}}
+
 {{<configopt device_rules_api_save true false>}}
 Rules set over the REST API are kept in memory unless saved.  When saved, they're written to `device_rules_api_file` and loaded again at startup.  By default, they aren't saved.
 {{</configopt>}}
@@ -354,6 +380,8 @@ The device list has a `Tags` column, which can be searched and sorted, and the d
 Rows in the device list are highlighted by their tags, under `Settings`, `Device Highlights`.  Each tag takes the color of its rule, or a default color for the tags of the [shipped rules](#shipped-rules) and the examples, and the color can be changed there.  Tags can be dragged into priority order: a device with several tags takes the color of the highest one.
 
 After 2026-10-R1, *Device rules* in the main menu lists the loaded rules and sorts, grouped by where they came from: each rules file, the config file, each plugin, and the rules set over the API.  Each rule shows the tags it sets and the view it makes; clicking the view opens the device list on it.  A rule can be opened to show its description, color, whether it is `live` or raises an `alert`, the file and line it came from, and its text.  *All*, *Tagging*, and *Views* list every rule, only the rules which tag devices, or only the rules which make views.  Rules which replaced an earlier rule of the same name are noted, and *Reload* reads the list again.
+
+After 2026-10-R1, each rule in the window shows how many devices it matches, kept up to date while the window is open, and has a switch to turn it off and back on; rules switched off stay listed, and stay off across restarts (see [`device_rules_disabled_file`](#loading-rules)).  The device list opens on the *Default* view, which leaves out the devices `exclude` rules match; *All devices* still lists everything.
 
 The legacy UI picks tag colors under `Settings`, `Rule tags`, with defaults for the tags of the shipped rules; if the colors were already changed there, the saved list is kept, and new tags need to be added to it.
 

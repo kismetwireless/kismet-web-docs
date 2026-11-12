@@ -3,7 +3,7 @@ title: "Randomized MAC addresses"
 description: ""
 lead: ""
 date: 2026-10-26T12:00:00-04:00
-lastmod: 2026-10-26T12:00:00-04:00
+lastmod: 2026-11-12T10:30:00-05:00
 images: []
 menu:
   docs:
@@ -63,7 +63,7 @@ dot11_link_randomized=true
 {{<configopt btle_link_randomized true false>}}
 Link the random addresses a BTLE device rotates through.  A device's advertising data and its address often change at different times, so when the first advertisement from a new address carries the same data (ignoring the flags and transmit power records) as the last one from an address which went quiet within the last 15 seconds, and the earlier address stays quiet for at least 30 seconds, the two are linked with the method **payload**.  If another device sending the same advertising data is active, no link is made.  Advertisements with too little data to be unique to one device are not linked.
 
-This applies to BTLE sniffer sources, and after 2026-10-R1 to the LE devices the Linux HCI scanning source reports; before then it did not apply to the HCI source.  BTLE devices with rotating random addresses which are dropped by `btle_ignore_random` are never linked.
+This applies to BTLE sniffer sources, and after 2026-10-R1 to the LE devices the Linux HCI scanning source reports; before then it did not apply to the HCI source.  BTLE devices with rotating random addresses which are dropped by `btle_random=ignore` (or `btle_ignore_random`) are never linked.
 
 This option is set in `kismet.conf` (or `kismet_site.conf`); it is off by default:
 
@@ -72,7 +72,66 @@ btle_link_randomized=true
 ```
 {{</configopt>}}
 
+## BTLE related devices
+
+After 2026-10-R1, Kismet can group the rotating random addresses of BTLE devices by their advertising payload.  The addresses a device moves through advertise the same payload, and so do identical devices, such as several of the same model of tag or headphones; addresses with the same payload are *related*.  This is **off by default**, for the same reason linking is.
+
+Related devices differ from [linking](#btle): linking only joins an address to the one it directly replaced, and makes no link when two devices sending the same payload are active at once.  Related devices put every address with the same payload in one group, whether it came from one device or several, and mark the addresses which have gone quiet since a newer one appeared, so they can be hidden.  Each address is still a separate device.
+
+{{<configopt btle_related true false>}}
+Group rotating random BTLE addresses which advertise the same payload.  Each address in a group gets:
+
+| Field | Content |
+| ----- | ------- |
+| `btle.device.related_group` | The group, shared by the related addresses |
+| `btle.device.related_count` | How many addresses are in the group, this one included |
+| `btle.device.related_newest` | The device key of the most recent address in the group |
+| `btle.device.old_address` | Set once the address has gone quiet and a newer address with the same payload has appeared |
+| `btle.device.related_truncated` | Older addresses were left out of the group to save memory |
+| `btle.device.unmatched_random` | With `btle_random=hide_unmatched`, a rotating random address whose payload no other address has shared |
+
+The addresses in a device's group are listed by `/phy/btle/related-of/<device key>/devices.json`.  The web UI shows them in the *BTLE Related Devices* section of the device details, with a timeline of when each address was seen, and the device list search can find them with `related > 1`.
+
+The `btle-related-old-address` and `btle-related-unmatched` rules shipped in `kismet_device_rules_highlights.txt` tag old addresses and leave old and unmatched addresses out of the [default view](/docs/readme/configuring/device_rules/#the-default-view).
+
+Related devices are not tracked when random addresses are ignored (`btle_random=ignore`).
+
+This option is set in `kismet_filter.conf` (or `kismet_site.conf`); it is off by default:
+
+```
+btle_related=true
+```
+{{</configopt>}}
+
+{{<configopt btle_related_quiet seconds>}}
+An address is old after this many seconds without being heard, if a newer address with the same payload has appeared; the default is 60, between 1 and 3600.
+{{</configopt>}}
+
+{{<configopt btle_related_max_groups count>}}
+Groups are kept until a limit is reached, not by time.  At most this many groups are tracked, by default 128, between 1 and 65536; past that, the group heard least recently is forgotten.  Addresses in a forgotten group keep their last group fields.
+{{</configopt>}}
+
+{{<configopt btle_related_max_addresses count>}}
+Each group holds at most this many addresses, by default 64, between 2 and 1024; past that, the address quiet the longest is dropped from the group, which is marked with `btle.device.related_truncated`.  A dropped address keeps its last group fields.
+{{</configopt>}}
+
 ## Ignoring random BTLE devices
+
+{{<configopt btle_random track hide_unmatched ignore>}}
+What happens to BTLE devices with rotating random addresses, after 2026-10-R1:
+
+* `track` tracks every one; this is the default.
+* `hide_unmatched` tracks every one, and marks those whose advertising payload no other address shares with `btle.device.unmatched_random`, which the shipped `btle-related-unmatched` device rule leaves out of the web UI's *Default* device view.  This turns on [`btle_related`](#btle-related-devices).  An address stays matched once another address has shared its payload.
+* `ignore` drops them, as `btle_ignore_random=true` does.
+
+When `btle_random` is set, `btle_ignore_random` is not used.
+
+This option is set in `kismet_filter.conf` (or `kismet_site.conf`):
+
+```
+btle_random=hide_unmatched
+```
+{{</configopt>}}
 
 {{<configopt btle_ignore_random true false>}}
 Drop BTLE devices which use rotating random addresses (resolvable and non-resolvable private addresses, which change every few minutes).  This prevents a flood of short-lived devices in the UI and logs, at the cost of not seeing them at all.  Their packets are still logged.  Drones broadcasting Remote ID and known location trackers (see [Bluetooth trackers](/docs/readme/datasources/bluetooth-trackers/)) are always kept.
@@ -80,6 +139,8 @@ Drop BTLE devices which use rotating random addresses (resolvable and non-resolv
 After 2026-10-R1, devices with a static random address are kept: they keep the address until they are reset, and fixed devices such as smoke alarms, sensors, and beacons often use one.  Before then, every device with a random address was dropped.
 
 After 2026-10-R1 this also drops random address devices reported by the Linux HCI source, whose LE devices are BTLE devices.
+
+After 2026-10-R1, `btle_random=ignore` is the same option under its newer name.
 
 This option is set in `kismet_filter.conf` (or `kismet_site.conf`); it is off by default:
 
