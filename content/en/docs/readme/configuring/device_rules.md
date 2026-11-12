@@ -274,12 +274,15 @@ A rule with the same name in a later file, such as `kismet_device_rules.txt`, re
 
 ### Device baseline
 
-After 2026-10-R1, the device details in the web UI have a *Baseline* row: *Add to baseline* marks a device as one you know, with the user tag `baseline` (its value is the time it was added), and *Remove from baseline* takes it out.  Two rules in `kismet_device_rules.txt` use it:
+After 2026-10-R1, the device details in the web UI have a *Baseline* row: *Add to baseline* marks a device as one you know, with the user tag `baseline` (its value is the time it was added), and *Remove from baseline* takes it out.  Rules in `kismet_device_rules.txt` use it:
 
 | Rule | Matches | View |
 | ---- | ------- | ---- |
 | `baseline` | Devices in the baseline | Baseline devices |
 | `unknown` | Devices not in the baseline | Unknown devices |
+| `baseline-hide` | Devices in the baseline; excluded from the [default view](#the-default-view) | |
+
+`baseline-hide` leaves the devices in the baseline out of the *Default* view, so it shows the devices you haven't seen before; they stay in *All devices* and *Baseline devices*.  To keep them in *Default*, switch `baseline-hide` off in the [rules window](#rules-in-the-web-ui), or leave it out with `device_rule_disable=baseline-hide` in `kismet_site.conf`.
 
 The views change as soon as a device is added or removed, as do rules that test a device's name, when it's renamed.  To alert when a device outside the baseline appears, add a rule of your own to `kismet_device_rules.txt`, such as:
 
