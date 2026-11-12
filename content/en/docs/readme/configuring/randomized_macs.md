@@ -61,11 +61,13 @@ dot11_link_randomized=true
 ### BTLE
 
 {{<configopt btle_link_randomized true false>}}
-Link the random addresses a BTLE device rotates through.  A device's advertising data and its address often change at different times, so when the first advertisement from a new address carries the same data (ignoring the flags and transmit power records) as the last one from an address which went quiet within the last 15 seconds, and the earlier address stays quiet for at least 30 seconds, the two are linked with the method **payload**.  If another device sending the same advertising data is active, no link is made.  Advertisements with too little data to be unique to one device are not linked.
+Link the random addresses a BTLE device rotates through.  A device's advertising data and its address often change at different times, so when the first advertisement from a new address carries the same data (ignoring the flags and transmit power records) as the last one from an address which went quiet within the last 15 seconds, and the earlier address stays quiet for at least 30 seconds, the two are linked with the method **payload**.  Advertisements with too little data to be unique to one device are not linked.
+
+When another device sending the same advertising data is active, such as a second tag of the same model, after 2026-10-R1 the signal decides: the new address is linked with the method **signal** to the earlier address whose last signal on the same data source is within 8 dB of the new address's first, and at least 4 dB closer than any other earlier address that could be the one.  If an earlier address that could be the one was last heard on another data source, or no address is clearly closest, no link is made.  Before then, no link was made when another device sending the same data was active.
 
 This applies to BTLE sniffer sources, and after 2026-10-R1 to the LE devices the Linux HCI scanning source reports; before then it did not apply to the HCI source.  BTLE devices with rotating random addresses which are dropped by `btle_random=ignore` (or `btle_ignore_random`) are never linked.
 
-This option is set in `kismet.conf` (or `kismet_site.conf`); it is off by default:
+This option is set in `kismet.conf` (or `kismet_site.conf`).  It is off by default, unless [`btle_related`](#btle-related-devices) is on; set it to `false` to keep linking off then:
 
 ```
 btle_link_randomized=true
@@ -88,9 +90,22 @@ Group rotating random BTLE addresses which advertise the same payload.  Each add
 | `btle.device.related_newest` | The device key of the most recent address in the group |
 | `btle.device.old_address` | Set once the address has gone quiet and a newer address with the same payload has appeared |
 | `btle.device.related_truncated` | Older addresses were left out of the group to save memory |
+| `btle.device.related_active` | How many addresses in the group were heard within `btle_related_quiet`: about how many devices with this payload are around now |
 | `btle.device.unmatched_random` | With `btle_random=hide_unmatched`, a rotating random address whose payload no other address has shared |
 
 The addresses in a device's group are listed by `/phy/btle/related-of/<device key>/devices.json`.  The web UI shows them in the *BTLE Related Devices* section of the device details, with a timeline of when each address was seen, and the device list search can find them with `related > 1`.
+
+Some devices change their whole payload each time they change address, as Apple Continuity, Google Fast Pair, and Microsoft Swift Pair advertisements do, so their addresses never share a payload.  Kismet also groups addresses whose advertisements have the same *structure*: the same kinds of records, with the same lengths, company ID, Apple Continuity message types, service UUIDs, and name, whatever the changing bytes are.  These are *similar* addresses.  Many devices of the same model look alike this way, so a similar group is a weaker match than a related group, and addresses are never marked old from it.  Each address in a similar group gets:
+
+| Field | Content |
+| ----- | ------- |
+| `btle.device.similar_group` | The similar group, shared by the similar addresses |
+| `btle.device.similar_count` | How many addresses are in the similar group, this one included |
+| `btle.device.similar_active` | How many of them were heard within `btle_related_quiet` |
+
+Similar groups have the same limits as related groups.  The addresses in one are listed by `/phy/btle/similar-of/<device key>/devices.json`; the web UI shows them in the *BTLE Similar Devices* section of the device details, and the search can find them with `similar > 1`.
+
+With `btle_related` on, Kismet also [links](#btle) each address to the one it replaced, unless `btle_link_randomized=false`.
 
 The `btle-related-old-address` and `btle-related-unmatched` rules shipped in `kismet_device_rules_highlights.txt` tag old addresses and leave old and unmatched addresses out of the [default view](/docs/readme/configuring/device_rules/#the-default-view).
 
