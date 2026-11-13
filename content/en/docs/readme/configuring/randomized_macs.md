@@ -3,7 +3,7 @@ title: "Randomized MAC addresses"
 description: ""
 lead: ""
 date: 2026-10-26T12:00:00-04:00
-lastmod: 2026-11-13T17:30:00-05:00
+lastmod: 2026-11-13T18:00:00-05:00
 images: []
 menu:
   docs:
@@ -63,7 +63,9 @@ dot11_link_randomized=true
 {{<configopt btle_link_randomized true false>}}
 Link the random addresses a BTLE device rotates through.  A device's advertising data and its address often change at different times, so when the first advertisement from a new address carries the same data (ignoring the flags and transmit power records) as the last one from an address which went quiet within the last 15 seconds, and the earlier address stays quiet for at least 30 seconds, the two are linked with the method **payload**.  Advertisements with too little data to be unique to one device are not linked.
 
-When another device sending the same advertising data is active, such as a second tag of the same model, after 2026-10-R1 the signal decides: the new address is linked with the method **signal** to the earlier address whose last signal on the same data source is within 8 dB of the new address's first, and at least 4 dB closer than any other earlier address that could be the one.  If an earlier address that could be the one was last heard on another data source, or no address is clearly closest, no link is made.  Before then, no link was made when another device sending the same data was active.
+When another device sending the same advertising data is active, such as a second tag of the same model, after 2026-10-R1 the signal decides: the new address is linked with the method **signal** to the earlier address whose signal on the same data source is within 8 dB of the new address's, and at least 4 dB closer than any other earlier address that could be the one.  One frame's signal changes by several dB from one advertising channel to the next, so the signals compared are averages, and the choice is made once the link settles, 30 seconds after the new address appears: by then the new address has an average of its own, and earlier addresses heard again, or already linked to another new address, are no longer in the running.  If an earlier address that could be the one was last heard on another data source, or no address is clearly closest, no link is made.  Before then, no link was made when another device sending the same data was active.
+
+Apple devices sending *Find My* use a static random address made from a key, which changes every 15 minutes, on the quarter hour; every such device nearby changes at the same moment.  After 2026-10-R1 their addresses are treated as rotating, and their Find My advertisements are compared without the key bits, which change with the address.  Their advertisements are otherwise the same on every device of the kind, so they are linked by **payload** when only one is around, and by **signal** when several are; devices which change at the same moment at a similar signal are not linked.
 
 This applies to BTLE sniffer sources, and after 2026-10-R1 to the LE devices the Linux HCI scanning source reports; before then it did not apply to the HCI source.  BTLE devices with rotating random addresses which are dropped by `btle_random=ignore` (or `btle_ignore_random`) are never linked.
 
@@ -195,7 +197,7 @@ btle_random=hide_unmatched
 {{<configopt btle_ignore_random true false>}}
 Drop BTLE devices which use rotating random addresses (resolvable and non-resolvable private addresses, which change every few minutes).  This prevents a flood of short-lived devices in the UI and logs, at the cost of not seeing them at all.  Their packets are still logged.  Drones broadcasting Remote ID and known location trackers (see [Bluetooth trackers](/docs/readme/datasources/bluetooth-trackers/)) are always kept.
 
-After 2026-10-R1, devices with a static random address are kept: they keep the address until they are reset, and fixed devices such as smoke alarms, sensors, and beacons often use one.  Before then, every device with a random address was dropped.
+After 2026-10-R1, devices with a static random address are kept: they keep the address until they are reset, and fixed devices such as smoke alarms, sensors, and beacons often use one.  Apple devices sending *Find My* are the exception: their static random address changes with its key every 15 minutes, so they are dropped like rotating addresses (Find My accessories, such as AirTags, are trackers and are kept).  Before then, every device with a random address was dropped.
 
 After 2026-10-R1 this also drops random address devices reported by the Linux HCI source, whose LE devices are BTLE devices.
 
