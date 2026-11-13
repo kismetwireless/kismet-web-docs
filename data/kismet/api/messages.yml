@@ -60,3 +60,48 @@
     [marked messages](#all-messages-marked) endpoint.
   return: |
     JSON list of messages since `TIMESTAMP`.
+
+-
+  name: "Post a message"
+  uri: "/messagebus/post"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin"]
+  added: "after 2026-10-R1"
+  jsonparameters:
+    -
+      name: "msg"
+      type: "string"
+      required: true
+      description: |
+        The message, 1 to 512 bytes, with no control characters (no newlines).
+    -
+      name: "source"
+      type: "string"
+      required: true
+      description: |
+        Who sent it, shown before the message (`source: msg`); 1 to 32 letters, digits, `-`, `_` and `.`.
+    -
+      name: "level"
+      type: "string"
+      required: false
+      description: |
+        `info` (the default), `error` or `alert`.
+    -
+      name: "mac"
+      type: "string"
+      required: false
+      description: |
+        A device MAC address the message is about, as `AA:BB:CC:DD:EE:FF`.  It's shown after the
+        message in parentheses, and marked as a MAC, so censor mode hides it.
+  docs: |
+    Put a message on the message console, for API clients such as helper tools to report what they
+    do.  The message goes to the console, the logs and the eventbus like Kismet's own messages.
+
+    Untrusted text in the message can't forge marked spans; only `mac` is marked.  Messages over
+    the info rate limit are dropped like Kismet's own.
+  responses:
+    success:
+      - [200, "Message posted"]
+    failure:
+      - [500, "A parameter is missing, too long, or not allowed"]
