@@ -3,7 +3,7 @@ title: "Randomized MAC addresses"
 description: ""
 lead: ""
 date: 2026-10-26T12:00:00-04:00
-lastmod: 2026-11-12T10:30:00-05:00
+lastmod: 2026-11-13T12:30:00-05:00
 images: []
 menu:
   docs:
@@ -73,6 +73,38 @@ This option is set in `kismet.conf` (or `kismet_site.conf`).  It is off by defau
 btle_link_randomized=true
 ```
 {{</configopt>}}
+
+Apple devices, and others which change their whole payload with the address, never send the same data from two addresses, so after 2026-10-R1 Kismet has two more ways to link them.  Both need `btle_link_randomized` on.
+
+{{<configopt btle_link_handoff true false>}}
+Link Apple devices by the counter in their Continuity *Handoff* advertisements.  The rest of a Handoff message is encrypted and changes with the address, but the counter carries on across the change:
+
+* **handoff**: the first counter from a new address is 1 to 4 past the last one from an address which went quiet.  When addresses from more than one device match, the counter links nothing.
+* **concurrent**: two addresses send the same counter at the same time, on the same data source within 8 dB, and still do 5 seconds later.  A device sending two advertising sets at once does this; the two addresses are linked to each other.
+
+The counter itself is not stored or shown.  A device copying another's counter can join its group, so treat these links as a best guess too.
+
+This option is set in `kismet.conf` (or `kismet_site.conf`); it is on by default, and does nothing unless `btle_link_randomized` is on:
+
+```
+btle_link_handoff=false
+```
+{{</configopt>}}
+
+{{<configopt btle_link_corotation true false>}}
+A device sending several advertising sets, such as a phone sending Handoff, Nearby, and AirPlay advertisements, changes all of their addresses at the same moment.  When one of the device's addresses is linked to its next (by any method), its other addresses which went quiet within 1 second of it, and the new addresses which started within 1 second of the new one, on the same data source within 8 dB of its signal, are its other advertising sets; they are linked with the method **corotation**.
+
+* A set's old and new addresses are paired by the [structure](#btle-related-devices) of their advertisements, so each kind of advertisement must show up exactly once among the old addresses and once among the new.  Otherwise, nothing is linked at that rotation.
+* Another device can change its address at the same moment by chance, so a set is only linked once it has rotated with the device at two rotations in a row.  The address it had before the first of those is not linked.
+
+This option is set in `kismet.conf` (or `kismet_site.conf`); it is on by default, and does nothing unless `btle_link_randomized` is on:
+
+```
+btle_link_corotation=false
+```
+{{</configopt>}}
+
+The **handoff**, **concurrent**, and **corotation** methods, and the **signal** method, compare when packets arrived.  When replaying a capture file, use `realtime=true` on the [pcapfile source](/docs/readme/datasources/pcapfile/); replayed as fast as possible, packets are processed slightly out of order, and these links are missed or wrong.
 
 ## BTLE related devices
 
