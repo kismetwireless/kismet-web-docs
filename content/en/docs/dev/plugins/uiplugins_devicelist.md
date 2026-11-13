@@ -38,7 +38,9 @@ The device list is built from the columns, icons, and row highlights modules reg
 | `tooltip(row)` | Optional: a string or a DOM node shown while the pointer rests on a cell, worked out each time it's shown |
 | `variants` | Optional: ways to show the column, `[{ id, title, render(row), tooltip(row) }]`, which the user picks from the column's heading or the column chooser; the first is the default, a variant without `render` or `tooltip` uses the column's own, and the choice is saved per browser by `id` |
 | `group` | Heading in the column picker, such as `'Wi-Fi'` (default `'General'`) |
-| `width` | Starting CSS width, such as `'8em'`; users can resize it |
+| `width` | Starting CSS width, such as `'8em'`, or `'fit'` (after 2026-10-R1) for the width of its heading and contents; users can resize it |
+| `minWidth` | For a column without a `width`, which takes the room left over: the least it starts at, such as `'32ch'`; after 2026-10-R1 |
+| `shorten` | `true` to shorten text which doesn't fit the column, the way *Settings*, *Appearance* says, with the full text in a tooltip; the column doesn't grow to fit it.  After 2026-10-R1 |
 | `align` | `'left'`, `'right'`, or `'center'` |
 | `defaultVisible` | Shown until the user changes their columns |
 
