@@ -110,6 +110,20 @@ const row = el('div', { class: ['card', active && 'active'], onclick: () => open
 | `format.frequency(khz)`, `format.signal(dbm)` | A frequency, and a signal level |
 | `format.speed(kmh)`, `format.height(m)`, `format.distance(m)` | In metric or imperial units, as the user chose |
 
+### Shortening text
+
+`kismet.shorten` shortens text to fit the space it's shown in, the way the user picks under *Settings*, *Appearance* (after 2026-10-R1):
+
+```javascript
+const { shorten } = kismet;
+shorten.fitText(cell, name);          // shows name in cell, shortened if it doesn't fit; true when shortened
+shorten.fitTexts(cells, names);       // the same for cells of one width and font, measured once
+const whole = shorten.fullText(cell); // the text it was given, for a tooltip
+const stop = shorten.watch((how) => redraw(how));
+```
+
+`shorten.shorten(text, fits)` gives the longest shortened text for which `fits(s)` is true, for drawing other than into an element; `shorten.mode()` is `'middle'` or `'end'`.  In censor mode, `fitText` and `fitTexts` censor the text before they shorten it, since the page's censoring only recognizes whole names; `fullText` returns the censored text.  A device list column only needs `shorten: true`.
+
 ### Themes
 
 Colors come from CSS variables (`--bg`, `--surface`, `--text`, `--muted`, `--accent`, `--ok`, `--warn`, `--error`, and others), so plain DOM follows the theme on its own.  Code which draws on a canvas reads them with `kismet.theme.themeColor('--accent')`, and redraws on `kismet.theme.onChange(fn)`, which returns a function to stop.
@@ -134,4 +148,5 @@ Icon markup is trusted, fixed text: never build it from server data.
 Censor mode hides MAC addresses, names, and locations on the page, for screenshots and streams.  Data read from the server is censored on the page without anything more from a module, since the page's text is rewritten as it's drawn.  Two things need a module's help:
 
 * Text drawn on a canvas, which the page can't rewrite, should go through `kismet.censor.text(s)`.
+* Text shortened by the module itself should be censored first, with `kismet.censor.text(s)`, or shortened with `kismet.shorten`, which does it.
 * A view which shows locations should check `kismet.censor.hidesMaps()`, as the map tab does.
