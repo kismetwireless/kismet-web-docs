@@ -3,7 +3,7 @@ title: "Randomized MAC addresses"
 description: ""
 lead: ""
 date: 2026-10-26T12:00:00-04:00
-lastmod: 2026-11-13T15:30:00-05:00
+lastmod: 2026-11-13T17:30:00-05:00
 images: []
 menu:
   docs:
@@ -79,7 +79,7 @@ Apple devices, and others which change their whole payload with the address, nev
 {{<configopt btle_link_handoff true false>}}
 Link Apple devices by the counter in their Continuity *Handoff* advertisements.  The rest of a Handoff message is encrypted and changes with the address, but the counter carries on across the change:
 
-* **handoff**: the first counter from a new address is 1 to 4 past the last one from an address which went quiet.  When addresses from more than one device match, the counter links nothing.
+* **handoff**: the first counter from a new address is 1 to 4 past the last one from an address which went quiet.  When addresses from more than one device match, the counter links nothing.  Devices only send Handoff now and then, so the addresses are timed by all of their advertising: the new address must start within 15 seconds of the old one going quiet, and send its first counter within 2 minutes of that.
 * **concurrent**: two addresses send the same counter at the same time, on the same data source within 8 dB, and still do 5 seconds later.  A device sending two advertising sets at once does this; the two addresses are linked to each other.
 
 The counter itself is not stored or shown.  A device copying another's counter can join its group, so treat these links as a best guess too.
@@ -92,10 +92,14 @@ btle_link_handoff=false
 {{</configopt>}}
 
 {{<configopt btle_link_corotation true false>}}
-A device sending several advertising sets, such as a phone sending Handoff, Nearby, and AirPlay advertisements, changes all of their addresses at the same moment.  When one of the device's addresses is linked to its next (by any method), its other addresses which went quiet within 1 second of it, and the new addresses which started within 1 second of the new one, on the same data source within 8 dB of its signal, are its other advertising sets; they are linked with the method **corotation**.
+A device sending several advertising sets, such as a phone sending Handoff, Nearby, and AirPlay advertisements, changes all of their addresses at the same moment.  When two or more addresses go quiet and as many new addresses start, all within 1 second of each other on the same data source, they are one device's sets rotating.  Nothing has to carry across the change, so this links devices whose whole payload changes with the address.  The addresses are linked with the method **corotation**:
 
-* A set's old and new addresses are paired by the [structure](#btle-related-devices) of their advertisements, so each kind of advertisement must show up exactly once among the old addresses and once among the new.  Otherwise, nothing is linked at that rotation.
-* Another device can change its address at the same moment by chance, so a set is only linked once it has rotated with the device at two rotations in a row.  The address it had before the first of those is not linked.
+* The old and new addresses must have the same kinds of advertisement, by the [structure](#btle-related-devices) of their advertisements, and a signal within 8 dB of each other.  The signal is averaged over a few seconds, since it changes from one advertising channel to the next.
+* An old address heard again on any data source after the moment didn't rotate, and nothing is linked at that rotation.
+* Another device can change its address at the same moment by chance, so a rotation only counts once the addresses which started together go quiet together at the next rotation too; then all of them are linked into one group, and each rotation after that is linked as it happens.  The addresses from before the first of those rotations are not linked.
+* When one of the addresses is already in a group, from another method, the others join that group.
+
+A rotation is timed on each data source by itself, and only on sources which report a signal; the Linux HCI scanning source does not.
 
 This option is set in `kismet.conf` (or `kismet_site.conf`); it is on by default, and does nothing unless `btle_link_randomized` is on:
 
