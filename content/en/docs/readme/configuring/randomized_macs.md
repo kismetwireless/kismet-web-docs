@@ -3,7 +3,7 @@ title: "Randomized MAC addresses"
 description: ""
 lead: ""
 date: 2026-10-26T12:00:00-04:00
-lastmod: 2026-11-13T12:30:00-05:00
+lastmod: 2026-11-13T15:30:00-05:00
 images: []
 menu:
   docs:
@@ -160,6 +160,14 @@ Groups are kept until a limit is reached, not by time.  At most this many groups
 
 {{<configopt btle_related_max_addresses count>}}
 Each group holds at most this many addresses, by default 64, between 2 and 1024; past that, the address quiet the longest is dropped from the group, which is marked with `btle.device.related_truncated`.  A dropped address keeps its last group fields.
+{{</configopt>}}
+
+{{<configopt btle_related_steady seconds>}}
+After 2026-10-R1: some devices change their payload every few seconds while keeping their address, as many Apple devices do.  No payload of theirs lasts, so they would hop from group to group.  Once an address's payload changes, it is left out of related and similar groups (its group is 0) until it has sent one payload for this many seconds, then it joins that payload's group again.  An address quiet for this long starts over.  The default is 60, up to 3600; 0 groups an address with its new payload at once, as before.
+
+Scan responses, which a device sends only to a scanner and which differ from its advertising, and payloads too short to fingerprint never move an address between groups.
+
+This applies to related and similar groups separately: a device whose payload changes but whose structure doesn't stays in its similar group.  Addresses left out of groups are still [linked](#btle).
 {{</configopt>}}
 
 ## Ignoring random BTLE devices

@@ -3,7 +3,7 @@ title: "The new web UI"
 description: ""
 lead: ""
 date: 2026-11-01T01:00:00-04:00
-lastmod: 2026-11-01T01:00:00-04:00
+lastmod: 2026-11-13T15:30:00-05:00
 images: []
 menu:
   docs:
@@ -181,5 +181,15 @@ The window reads the [`/system/cpu`](/docs/api/system/) endpoint.  The CPU load 
 After 2026-10-R1, the *Overview* tab also has *CPU*, *Memory*, and *Temperatures* cards: each shows the reading now and a graph over the last minute, hour, or day, and opens its window when clicked.  The *Temperatures* card graphs the same sensors as the *Thermal* window; without temperature history it lists the hottest sensors now instead.  Against an older Kismet server without the CPU or thermal endpoints, the cards say so.
 
 {{< screenshot name="webui-overview-system" alt="The CPU, Memory, and Temperatures cards" >}}
+
+## API keys window
+
+After 2026-10-R1, the *API keys* window, opened from the menu just above *Settings*, manages the API keys of the server in use.  Programs and [remote capture](/docs/readme/remotecap/remotecap/) use a key in place of a login.  Managing keys needs an admin login.
+
+* Each key is listed with its name, role, and when it expires.  Keys are hidden until *Show* is pressed, and hidden again when the window closes; *Copy* copies a key without showing it.  Over plain HTTP the browser has no clipboard, so *Copy* shows and selects the key to copy by hand.
+* *Revoke* removes a key, after asking.  Anything using the key loses access.  If the key is the one the app uses for another server, the app asks to log in again.
+* *Create a key* takes a name, a role (*readonly*, *admin*, *datasource*, *scanreport*, *ADSB*, *datalog* for saving [tagged data](/docs/readme/logging/kismetdb/) to the kismetdb log, or another role a plugin defines), and how long until it expires.  The new key opens in a window with a *Copy* button.
+
+When the server sets `httpd_allow_auth_view=false`, it never sends keys back, so a key can only be copied when it's made.  With `httpd_allow_auth_creation=false`, keys can't be made or revoked from the UI.
 
 Serving the UI, HTTPS, and proxies are covered in [the webserver configuration](/docs/readme/configuring/webserver/).
