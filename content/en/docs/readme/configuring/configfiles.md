@@ -30,6 +30,8 @@ The config files are broken into several smaller files for readability:
 | kismet_logging.conf | Log file options and filters |
 | kismet_filter.conf | Packet and device filter configuration |
 | kismet_webhooks.conf | [Webhook](/docs/readme/configuring/webhooks/) endpoints, which device rules send matching devices to (after 2026-10-R1) |
+| kismet_device_rules.conf | [Device rules](/docs/readme/configuring/device_rules/) options: which rules files are read, how often rules are checked, and the JIT (after 2026-10-R1) |
+| kismet_baseline_rules.conf | [Device baseline](/docs/readme/configuring/baseline/) options: the baseline filters, which are off by default (after 2026-10-R1) |
 | kismet_uav.conf | Parsing rules for detecting UAV / Drones or similar devices; compiled from the `kismet_uav.yaml` file |
 | kismet_80211.conf | Configuration settings for Wi-Fi (IEEE80211) specific options |
 | kismet_site.conf | Optional configuration override; Kismet will load any options in the `kismet_site.conf` file last and they will take precedence over all other configs. |

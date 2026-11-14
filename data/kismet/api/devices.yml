@@ -294,19 +294,72 @@
       required: true
       description: |
         Tag value to set
+    -
+      name: "ephemeral"
+      type: "boolean"
+      required: false
+      description: |
+        After 2026-10-R1: keep the tag until Kismet restarts, without saving it.  An ephemeral tag
+        can't replace a saved tag of the same name.
   docs: |
     Kismet devices contain a collection of arbitrary tag fields which are held in the
     `kismet.device.base.tags` tree.
 
     These tags can be used to store persistent notes or other data, either user-supplied or
-    auto-generated.
+    auto-generated.  Tags are saved, and loaded again when the device is seen after a restart.
+
+    After 2026-10-R1:
+
+    * `tagname` and `tagvalue` must be strings; the name is 1 to 256 characters, and the value
+      at most 65536 bytes.
+    * An `ephemeral` tag is held in memory only, and listed in the device's
+      `kismet.device.base.ephemeral_tags`.  Rules and views see it the same as a saved tag.
+      Setting a saved tag over an ephemeral one saves it.
+    * Setting `baseline` adds the device to the [baseline](/docs/readme/configuring/baseline/) by
+      hand: it also sets `baseline-by` to `user`, and clears `baseline-hold` and
+      `baseline-expired`, so baseline filters may add it again.
   return: |
     Empty document, state communicated via status code.
   responses:
     success:
       - [200, "Success"]
     failure:
-      - [-1, "Request error, such as a malformed device key"]
+      - [-1, "Request error, such as a malformed device key, a missing or oversized tag, or an
+        ephemeral tag over a saved one"]
+
+-
+  name: "Removing device tags"
+  uri: "/devices/by-key/{DEVICEKEY}/delete_tag"
+  types: ["cmd"]
+  methods: ["POST"]
+  roles: ["admin"]
+  uriparameters:
+    -
+      name: "DEVICEKEY"
+      type: "string"
+      required: true
+      description: |
+        Key of target device
+  jsonparameters:
+    -
+      name: "tagname"
+      type: "string"
+      required: true
+      description: |
+        Device tag to remove
+  docs: |
+    Removes a tag set with `set_tag`, saved or ephemeral.
+
+    After 2026-10-R1, removing `baseline` takes the device out of the
+    [baseline](/docs/readme/configuring/baseline/) by hand: it clears `baseline-by` and sets
+    `baseline-hold` to `user`, so baseline filters don't add it back until it's added by hand.
+  return: |
+    Empty document, state communicated via status code.
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [-1, "Request error, such as a malformed device key, or no tag by that name"]
 
 -
   name: "Device presence alerts (view)"
