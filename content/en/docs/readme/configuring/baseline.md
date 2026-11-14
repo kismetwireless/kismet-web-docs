@@ -101,11 +101,12 @@ An ephemeral tag never replaces a saved one: a filter can't make a device you ad
 
 ### Shipped filters
 
-`kismet_baseline_rules.txt` ships six filters.  They all run once `device_rules_baseline=true` is set; leave out any you don't want with `device_rule_disable=<name>`.
+`kismet_baseline_rules.txt` ships seven filters.  They all run once `device_rules_baseline=true` is set; leave out any you don't want with `device_rule_disable=<name>`.
 
 | Filter | Does | Every |
 | ------ | ---- | ----- |
 | `one-off-random` | Adds random addresses seen briefly once, until restart, for a day | 5m |
+| `traffic` | Adds aircraft (ADS-B) and ships (AIS), until restart | 1m |
 | `startup` | Adds fixed addresses here since Kismet started | 10m |
 | `alerts` | Takes out devices which sent an alert | 10s |
 | `steady` | Adds fixed addresses heard most of the day or most days | 15m |
@@ -125,12 +126,23 @@ baseline one-off-random {
 }
 ```
 
+**traffic** adds aircraft and ships, heard by an [ADS-B](/docs/readme/datasources/adsb-sdrrtladsb/) or [AIS](/docs/readme/datasources/ais-sdrrtlais/) receiver, as soon as they're seen.  They're passing traffic rather than part of the site, so its tags are ephemeral, and `startup` and `steady` leave them out: an airframe on a regular route, heard most days, never goes into the saved baseline.  Disable `traffic` with `device_rule_disable=traffic` to keep aircraft and ships in *Unknown devices* and the Default view.
+
+```
+baseline traffic {
+    when phy in ["ADSB", "AIS"]
+    every 1m
+    add
+    ephemeral
+}
+```
+
 **startup** adds devices with fixed addresses which were heard within 5 minutes of Kismet starting and are still being heard an hour later.  Waiting the hour keeps the rush of devices heard at startup, some only passing, from all going in.
 
 ```
 baseline startup {
     when uptime > 1h and first_time < start_time + 5m and age(last_time) < 10m and
-        not random_address
+        not random_address and phy not in ["ADSB", "AIS"]
     every 10m
     add
 }
@@ -150,7 +162,8 @@ baseline alerts {
 
 ```
 baseline steady {
-    when not random_address and (hours_active >= 18 or days_active >= 4)
+    when not random_address and phy not in ["ADSB", "AIS"] and
+        (hours_active >= 18 or days_active >= 4)
     every 15m
     add
 }
