@@ -57,6 +57,12 @@ Deprecated attacks in Kismet are typically disabled by default in the config fil
 
 *Generally* speaking, it is unlikely that most users will encounter cutting edge attacks in the wild.  Many things are possible - which is why Kismet provides the alerts - but often unlikely.  When given an unusual alert, consider taking the step of examining the PCAP log directly with a tool like [Wireshark](https://wireshark.org).
 
+## Alerts on devices
+
+After 2026-10-R1, alerts are linked to the devices they name, in each device's `kismet.device.base.alerts` record: how many alerts the device sent, how many only named it, their names, classes, and highest severity, and when the last one came.  The device which sent an alert is its source, or its BSSID when it has no source.  Alerts which only name a device, such as the victim of a deauthentication attack, are counted apart, since a spoofed attack can claim to come from the device it attacks.
+
+[Device rules](/docs/readme/configuring/device_rules/#alerts) can match on them, and the shipped `alerts` [baseline filter](/docs/readme/configuring/baseline/#shipped-filters) takes devices which send alerts out of the baseline.
+
 ## Alerts
 
 {{< kismet_alert_list >}}

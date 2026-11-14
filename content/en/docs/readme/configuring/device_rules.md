@@ -3,7 +3,7 @@ title: "Device rules"
 description: ""
 lead: ""
 date: 2026-10-29T12:00:00-04:00
-lastmod: 2026-11-12T10:30:00-05:00
+lastmod: 2026-11-14T12:00:00-05:00
 images: []
 menu:
   docs:
@@ -35,6 +35,7 @@ rule <name> {
     alert
     live
     exclude
+    recheck <time>
     webhook "<endpoint>" { ... }
 }
 ```
@@ -47,6 +48,7 @@ rule <name> {
 * `alert` raises a `DEVICERULE` alert when a device starts matching the rule.
 * `live` checks the rule on every packet which updates a device, as well as on the timer.
 * `exclude` leaves matching devices out of the [default view](#the-default-view).  Added after 2026-10-R1.
+* `recheck` sets how often devices which haven't changed are checked against a rule whose condition [changes over time](#conditions-that-change-over-time), from 1 second to 7 days.  Added after 2026-10-R1.
 * `webhook` sends matching devices to a [webhook endpoint](/docs/readme/configuring/webhooks/#endpoints); see [webhooks](#webhooks) below.
 
 ### The default view
@@ -97,6 +99,28 @@ The common fields have short names:
 
 A comparison with a field the device doesn't have is false.
 
+#### Alerts
+
+After 2026-10-R1, alerts are linked to the devices they name, in `kismet.device.base.alerts`.  The device which sent an alert (its source, or its BSSID when it has no source) is counted apart from the devices the alert only names, since an alert can name its victim: a spoofed deauthentication flood names the access point it claims to be.
+
+| Short name | Field |
+| ---------- | ----- |
+| `num_alerts` | Alerts naming the device, sent or not |
+| `alerts_sent` | Alerts the device sent |
+| `alerts_named` | Alerts naming the device which another device sent |
+| `alerts` | Names of the alerts naming the device, such as `DEAUTHCODEINVALID` |
+| `sent_alerts` | Names of the alerts the device sent |
+| `sent_alert_classes` | Classes of the alerts the device sent, such as `EXPLOIT` or `DENIAL` |
+| `alert_severity` | Highest severity of the alerts the device sent: 0 info, 5 low, 10 medium, 15 high, 20 critical |
+| `alert_time` | Time of the last alert naming the device |
+| `sent_alert_time` | Time of the last alert the device sent |
+| `own_alerts` | Alerts the device sent outside the classes in [`device_rules_alert_ignore_classes`](/docs/readme/configuring/baseline/#options) (`DENIAL` and `SYSTEM` by default) |
+| `own_alert_severity` | Highest severity of those alerts |
+
+Alert names and classes match in any case.  Up to 32 names and classes are kept per device.
+
+`alert_severity` and `sent_alert_classes` are kept over all of a device's alerts, so a condition on both can't tell a device which sent a high-severity `DENIAL` alert and a low `EXPLOIT` one from a device which sent a high `EXPLOIT` alert.  `own_alerts` and `own_alert_severity` count each alert's severity with its own class, leaving out the ignored classes.
+
 ### Values and operators
 
 * Numbers compare with `==`, `!=`, `<`, `<=`, `>`, and `>=`, and can be calculated with `+`, `-`, `*`, `/`, and `%`.  Put spaces around `/` for division, so it isn't read as a field path.
@@ -105,10 +129,33 @@ A comparison with a field the device doesn't have is false.
 * Strings compare with `==` and `!=`, or with `contains`, `icontains` (in any case), `startswith`, `endswith`, and `matches` (a PCRE regular expression), against a `"string"`.  After 2026-10-R1, `==`, `!=`, and `in` on the device type (`type` and `display_type`) ignore case, so `display_type == "wi-fi ap"` matches `Wi-Fi AP`; other strings match exactly.
 * After 2026-10-R1, `type` is the type of the device's phy, such as `Wi-Fi`, and names like `Wi-Fi AP` are display types.  A rule comparing `type` to a display type, such as `type == "Wi-Fi AP"`, never matches, and Kismet logs an error naming the rule when it loads; use `display_type` instead.
 * MAC addresses are written `aa:bb:cc:dd:ee:ff`, with an optional mask as `/24` or `/ff:ff:ff:00:00:00`; a short address such as `aa:bb:cc` matches the prefix.
-* `x in [a, b, c]` and `x not in [a, b, c]` test against a list of values.
+* `x in [a, b, c]` and `x not in [a, b, c]` test against a list of values.  A field which holds several values, such as `sent_alert_classes`, is `in` a list when any of its values is, so `not in` means none of them are.
 * `exists(field)` tests that a field is present, and `count(field)` counts the entries in a list or map.
-* After 2026-10-R1, `has_tag("name")` tests that a device has the user tag `name`, as set from the device details or with `/devices/by-key/<key>/set_tag.cmd` (`tagname` and `tagvalue`).  Tags are saved with a device's name and notes, so they last across restarts.
+* After 2026-10-R1, `has_tag("name")` tests that a device has the user tag `name`, as set from the device details or with `/devices/by-key/<key>/set_tag.cmd` (`tagname` and `tagvalue`).  Tags are saved with a device's name and notes, so they last across restarts; [ephemeral tags](/docs/readme/configuring/baseline/#ephemeral-tags), which last until Kismet restarts, count the same.
+* After 2026-10-R1, `tag_time("name")` is the number in the user tag `name`, such as the time in `baseline`.  A device without the tag, or whose tag isn't a number, doesn't match.
+* After 2026-10-R1, `start_time` is when Kismet started, and `uptime` is `now - start_time`.
+* After 2026-10-R1, `hours_active` counts the hours of the last 24 the device was heard, from 0 to 24, and `days_active` the days of the last 7, from 0 to 7.  Both only count the time Kismet has been running.  `hours_active` reads the device's packet history (`track_device_rrds`, on by default); `days_active` is only recorded with `device_rules_baseline=true`.
+* After 2026-10-R1, `in_baseline(field)` tests that the device whose MAC address is in `field` is in the [baseline](/docs/readme/configuring/baseline/), such as `in_baseline(dot11.device/dot11.device.last_bssid)` for clients of access points in the baseline.  An access point is its own last BSSID, so it matches too.
+* After 2026-10-R1, `random_address` matches Wi-Fi devices with a randomized MAC address and BTLE devices with a resolvable or non-resolvable random address, and `linked` matches devices [linked](/docs/readme/configuring/randomized_macs/) to another address of the same device.
 * Conditions combine with `and`, `or`, `not`, and parentheses.
+
+### Conditions that change over time
+
+Rules are checked against the devices which changed since the last check, every `device_rules_interval`.  Only changed devices are read, so this costs little however many devices there are.
+
+A condition using `now`, `age()`, `uptime`, `hours_active`, `days_active`, or `in_baseline()` can start or stop matching without the device changing, so devices which haven't changed are checked against those rules again every `device_rules_full_interval`, or as often as the rule's `recheck` says:
+
+```
+rule gone-quiet {
+    when age(last_time) > 10m and packets > 1000
+    recheck 1m
+    tag "quiet"
+}
+```
+
+`recheck` is only allowed on rules with such a condition; on any other rule it's an error.
+
+These checks read every device.  On 100,000 devices a pass takes about 80 ms on a fast desktop and roughly half a second on a Raspberry Pi 4, so on large or slow systems use the longest `recheck` and `device_rules_full_interval` that work.  Checks happen on the `device_rules_interval` timer, so a time shorter than that acts as that.
 
 ### Including other files
 
@@ -274,17 +321,9 @@ A rule with the same name in a later file, such as `kismet_device_rules.txt`, re
 
 ### Device baseline
 
-After 2026-10-R1, the device details in the web UI have a *Baseline* row: *Add to baseline* marks a device as one you know, with the user tag `baseline` (its value is the time it was added), and *Remove from baseline* takes it out.  Rules in `kismet_device_rules.txt` use it:
+After 2026-10-R1, the device details in the web UI have a *Baseline* row: *Add to baseline* marks a device as one you know, with the user tag `baseline` (its value is the time it was added), and *Remove from baseline* takes it out.  The rules which use it, making the *Baseline devices* and *Unknown devices* views, leaving the baseline out of the [default view](#the-default-view), and highlighting it, are in `kismet_baseline_rules.txt`, with the baseline filters which can build the baseline on their own; see [device baseline](/docs/readme/configuring/baseline/).
 
-| Rule | Matches | View |
-| ---- | ------- | ---- |
-| `baseline` | Devices in the baseline | Baseline devices |
-| `unknown` | Devices not in the baseline | Unknown devices |
-| `baseline-hide` | Devices in the baseline; excluded from the [default view](#the-default-view) | |
-
-`baseline-hide` leaves the devices in the baseline out of the *Default* view, so it shows the devices you haven't seen before; they stay in *All devices* and *Baseline devices*.  To keep them in *Default*, switch `baseline-hide` off in the [rules window](#rules-in-the-web-ui), or leave it out with `device_rule_disable=baseline-hide` in `kismet_site.conf`.
-
-The views change as soon as a device is added or removed, as do rules that test a device's name, when it's renamed.  To alert when a device outside the baseline appears, add a rule of your own to `kismet_device_rules.txt`, such as:
+Rules see a device join or leave the baseline at once, as do rules that test a device's name, when it's renamed.  To alert when a device outside the baseline appears, add a rule of your own, such as:
 
 ```
 rule unknown-ap {
@@ -305,11 +344,12 @@ After 2026-10-R1, [plugins can ship rules files](/docs/dev/plugins/plugins_manif
 The device rules options are in `kismet_device_rules.conf`; as with other options, changes are best made in [kismet_site.conf](/docs/readme/configuring/configfiles/#customizing-configs-with-kismet_siteconf).
 
 {{<configopt device_rules_file path>}}
-Rules files, in order.  Use `+=` in `kismet_site.conf` to add a file, or `=` to replace the list.  Without any, `%E/kismet_device_rules_highlights.txt` (the [shipped rules](#shipped-rules)) and then `%E/kismet_device_rules.txt` are read if they exist; `kismet_device_rules.txt` describes the rules language, and holds examples which are commented out.  Setting `device_rules_file` replaces both, so list them again to keep them:
+Rules files, in order.  Use `+=` in `kismet_site.conf` to add a file, or `=` to replace the list.  Without any, `%E/kismet_device_rules_highlights.txt` (the [shipped rules](#shipped-rules)), `%E/kismet_device_rules.txt`, and, after 2026-10-R1, `%E/kismet_baseline_rules.txt` (the [baseline](/docs/readme/configuring/baseline/) views and filters) are read, in that order, if they exist; `kismet_device_rules.txt` describes the rules language, and holds examples which are commented out.  Setting `device_rules_file` replaces all of them, so list them again to keep them:
 
 ```
 device_rules_file=%E/kismet_device_rules_highlights.txt
 device_rules_file+=%E/kismet_device_rules.txt
+device_rules_file+=%E/kismet_baseline_rules.txt
 device_rules_file+=/etc/kismet/site.rules
 ```
 {{</configopt>}}
@@ -360,12 +400,16 @@ Rules set over the REST API are kept in memory unless saved.  When saved, they'r
 Where rules set over the REST API are saved, by default `%h/.kismet/kismet_device_rules_api.txt`.
 {{</configopt>}}
 
-{{<configopt device_rules_interval seconds>}}
-How often rules are checked against the devices which changed since the last check, by default every second.  Rules marked `live` are also checked on every packet which updates a device.
+{{<configopt device_rules_interval time>}}
+How often rules are checked against the devices which changed since the last check, by default every second.  Rules marked `live` are also checked on every packet which updates a device.  After 2026-10-R1, this is a time such as `1s` or `5s`, from 1 second to an hour (a bare number is seconds), and only the changed devices are read.
 {{</configopt>}}
 
-{{<configopt device_rules_full_interval checks>}}
-Rules using `now` or `age()` can start or stop matching without the device changing, so every this many checks all devices are checked, by default 10.  `0` never checks unchanged devices.  After 2026-10-R1, devices which haven't changed are only checked against the rules using `now` or `age()`; the other rules keep their last result, and their webhooks with `every`, `change`, or `for` only repeat when the device changes.
+{{<configopt device_rules_full_interval time>}}
+How often devices which haven't changed are checked against the rules whose conditions [change over time](#conditions-that-change-over-time), by default every 10 seconds; a rule's `recheck` sets its own time.  `0` never checks unchanged devices.  Devices which haven't changed are only checked against those rules; the other rules keep their last result, and their webhooks with `every`, `change`, or `for` only repeat when the device changes.
+
+It's a time such as `10s` or `5m`, from 1 second to 7 days; a bare number is seconds.  Earlier development builds took a number of `device_rules_interval` checks instead.  Each of these checks reads every device, so on large or slow systems keep it long.
+
+A value which isn't a valid time, or is out of range, is reported in the log, and the default is used.
 {{</configopt>}}
 
 {{<configopt device_rules_alert_backlog count>}}
@@ -386,7 +430,7 @@ Rows in the device list are highlighted by their tags, under `Settings`, `Device
 
 After 2026-10-R1, *Device rules* in the main menu lists the loaded rules and sorts, grouped by where they came from: each rules file, the config file, each plugin, and the rules set over the API.  Each rule shows the tags it sets and the view it makes; clicking the view opens the device list on it.  A rule can be opened to show its description, color, whether it is `live` or raises an `alert`, the file and line it came from, and its text.  *All*, *Tagging*, and *Views* list every rule, only the rules which tag devices, or only the rules which make views.  Rules which replaced an earlier rule of the same name are noted, and *Reload* reads the list again.
 
-After 2026-10-R1, each rule in the window shows how many devices it matches, kept up to date while the window is open, and has a switch to turn it off and back on; rules switched off stay listed, and stay off across restarts (see [`device_rules_disabled_file`](#loading-rules)).  The device list opens on the *Default* view, which leaves out the devices `exclude` rules match; *All devices* still lists everything.
+After 2026-10-R1, each rule in the window shows how many devices it matches, kept up to date while the window is open, and has a switch to turn it off and back on; rules switched off stay listed, and stay off across restarts (see [`device_rules_disabled_file`](#loading-rules)).  The device list opens on the *Default* view, which leaves out the devices `exclude` rules match; *All devices* still lists everything.  The *Baseline* tab lists the [baseline filters](/docs/readme/configuring/baseline/#baseline-filters), with how many devices each has added to or removed from the baseline, in place of a match count.
 
 The legacy UI picks tag colors under `Settings`, `Rule tags`, with defaults for the tags of the shipped rules; if the colors were already changed there, the saved list is kept, and new tags need to be added to it.
 
