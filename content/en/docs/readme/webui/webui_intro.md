@@ -67,7 +67,7 @@ The *Insights* tab shows how devices relate: here, Wi-Fi clients and the access 
 
 {{< screenshot name="webui-insights" alt="The Insights tab" >}}
 
-After 2026-10-R1, the flow graph stays readable in a busy area.  Each column shows its busiest entries, up to 25 access points and 30 networks, and every entry with a finding; the rest are merged into one *more* entry, which shows them all when clicked.  *Show all* switches between everything and the busiest.  Clicking a network, or *Show only what links through this* on an access point or a group of devices, shows only that entry and what links through it, and the search box does the same for a network, access point, or device name or MAC address.
+After 2026-10-R1, the flow graph stays readable in a busy area.  Each column shows its busiest entries, and every entry with a finding: up to 15 access points, 20 networks and 20 groups of connected devices, or about half that on a phone.  The rest are merged into one *more* entry.  Clicking a *more* access point or network entry pages through that column, busiest first, with the page shown in the bar; clicking a *more* group of devices lists them.  *Back* returns to the view before, and *Show all* switches between everything and the busiest.  Clicking a network, or *Show only what links through this* on an access point or a group of devices, shows only that entry and what links through it, and the search box does the same for a network, access point, or device name or MAC address; these views are trimmed the same way.  The flow table shows up to 80 columns and 120 access point addresses.
 
 Clicking a device opens its details, in sections for each kind of device; this is a Bluetooth LE tag reporting its battery:
 
