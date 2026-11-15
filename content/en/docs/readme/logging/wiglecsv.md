@@ -27,6 +27,8 @@ After 2026-10-R1, Wi-Fi networks an access point hosts in its multiple BSSID ele
 
 After 2026-10-R1, the encryption column names WPA3 networks the way WiGLE expects: `[WPA3-SAE-CCMP]` for WPA3 personal, `[WPA3-OWE-CCMP]` for enhanced open, and `[WPA3-EAP_SUITE_B_192-GCMP-256]` for WPA3 enterprise suite B.  A network in WPA3 transition mode, offering both, is written as `[WPA2-PSK+SAE-CCMP]`, which WiGLE also counts as WPA3.  Earlier versions wrote many of these as `WPA2-UNKNOWN`.
 
+After 2026-10-R1, an SSID, Bluetooth name or cell operator name that begins with `=`, `+`, `-` or `@` has that first character written as an octal escape (`\075` for `=`), as commas and quotes already are, so a spreadsheet opening the file doesn't read it as a formula.  `kismetdb_to_wiglecsv` also skips records whose MAC address is malformed.
+
 Since Wigle is designed for mapping wireless, Kismet will only create entries in the `wiglecsv` log when a GPS is connected and a location is available.  If you have no GPS location, the `wiglecsv` will be empty.
 
 
