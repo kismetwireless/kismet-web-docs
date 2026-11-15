@@ -166,7 +166,7 @@ To override the UUID generation, the `uuid=...` parameter can be set:
 source=wlan0:name=foo,uuid=AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE
 ```
 
-If you are assigning custom UUIDs, you **must ensure** that every UUID is **unique**.  Each data source **must have** its own unique identifier.
+If you are assigning custom UUIDs, you **must ensure** that every UUID is **unique**.  Each data source **must have** its own unique identifier.  After 2026-10-R1, a source whose UUID is already in use isn't opened, and adding one through the REST API returns an error.
 
 You can generate a UUID using the `uuidgen` tool.
 
@@ -238,6 +238,8 @@ channel_hop_speed=10/min
 Divide channels between multiple datasources with the same coverage.
 
 Kismet can capture from multiple datasources at once; for example two, three, or more Wi-Fi cards.  To increase coverage, Kismet will split the channel list between datasources which have the same channel support and hopping rate.
+
+Sources which don't hop, because of `channel_hop=false` or because they were set to one channel, are left out of the split.  Through 2026-10-R1, they could start hopping again when another source of the same type opened.
 
 Generally there is no reason to disable this option.  To watch the same channels with several sources at once, put them in a [hop group](/docs/readme/datasources/channelhop/#hop-groups) instead.
 {{</configopt>}}
