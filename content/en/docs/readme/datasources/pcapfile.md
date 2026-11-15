@@ -15,6 +15,8 @@ toc: true
 
 Kismet can replay previously recorded data in `pcap` and `pcap-ng` formats, including capture files with the `ppi` headers.
 
+After 2026-10-R1, Kismet reads the GPS positions from its own `pcapppi` logs, and from other captures with version 1 or 2 PPI GPS fields, so replayed devices get their locations.
+
 Kismet replay is useful for testing, debugging, demo, or reprocessing previous sessions (with some caveats).
 
 ### Example source

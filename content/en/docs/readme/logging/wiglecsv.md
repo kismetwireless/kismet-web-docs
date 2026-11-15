@@ -64,6 +64,8 @@ By default, `kismetdb_to_wiglecsv` performs a database cleanup and optimization 
 
 {{<argument rate-limit limit-in-seconds>}}
 By default, `kismetdb_to_wiglecsv` will only emit one record per second per access point.  This prevents overloading the Wigle servers with insane quantities of data with no useful positional updates.  If you find you are generating extremely large data sets, you can increase this time.
+
+After 2026-10-R1, Wi-Fi rows are read in time order too, so a log from several sources keeps a record for every second a device was seen, instead of dropping the ones that were logged out of order.
 {{</argument>}}
 
 

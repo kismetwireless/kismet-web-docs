@@ -23,6 +23,8 @@ There are two main flavors of PCAP supported by Kismet:
 
     `pcapppi` is the legacy PCAP format, which uses PPI packet headers.  This version of the pcap log can only handle Wi-Fi packets, and manipulates the packet headers to fit the PPI standard (only one antenna signal value and other limitations).  Generally the `pcapng` format should be used, but not all tools understand the new format.
 
+    After 2026-10-R1, a frame captured short (by the snap length or `truncate_data`) or cut by `hidedata` keeps its size on the air as its original length, as in `pcapng`.
+
 2. `pcapng`
 
     `pcapng` is the modern pcap standard supported by Wireshark, Tshark, and other tools.
