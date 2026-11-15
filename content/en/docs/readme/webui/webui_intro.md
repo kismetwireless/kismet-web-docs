@@ -49,7 +49,7 @@ The *Overview* tab sums up what Kismet sees in cards; the pencil at the top righ
 
 {{< screenshot name="webui-topbar" alt="The top bar" >}}
 
-The *Devices* tab lists every device, with the *Tags* column and the row highlights from the device rules.  The *Search or filter* box takes [device filters](/docs/readme/webui/webui_filters/).
+The *Devices* tab lists every device, with the *Tags* column and the row highlights from the device rules.  The *Search or filter* box takes [device filters](/docs/readme/webui/webui_filters/).  Searching in a smaller view also shows how many devices match in all devices; clicking that count shows them.  It can be turned off under *Settings*, *Device list*.
 
 {{< screenshot name="webui-devices" alt="The Devices tab" >}}
 

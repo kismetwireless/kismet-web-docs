@@ -103,6 +103,8 @@ ui.addTable({
 
 `pausable: true` adds a button beside the table's search box which pauses its updates: the rows on screen stay as they are, and scrolling still loads more.
 
+`countIn` counts a search's matches in a second, wider list as well, the way the device list counts them in all devices.  It's a function giving `{ endpoint, label, open }`, or `null` when there's nothing to count, such as when the table already shows the wider list.  The count shows beside the table's own as `N in <label>`, and `open()`, if given, runs when it's clicked.  The search runs over the whole of the wider list, so the count is fetched again only every `countSeconds` (10 by default), or when the search or the `endpoint` changes.
+
 Columns and highlights take the same options as the [device list's](/docs/dev/plugins/uiplugins_devicelist/), including column `tooltip` and `variants`.  Each table keeps its own registries, so another module can add to someone else's table, before or after the table itself is added:
 
 ```javascript
