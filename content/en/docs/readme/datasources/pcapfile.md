@@ -83,5 +83,7 @@ Limit the replay to a packets-per-second maximum.  Without this option, pcapfile
 
 {{<configopt realtime true false>}}
 Replay a pcapfile in real time, using the time offsets between packets in the original log.
+
+After 2026-10-R1, the replay keeps to the original timing over the whole file: a capture merged from several sources is no longer slowed by packets out of time order, and a clock step in the capture restarts the timing instead of stalling it.
 {{</configopt>}}
 
