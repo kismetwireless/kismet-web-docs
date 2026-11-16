@@ -212,7 +212,7 @@ Some examples:
 # Your own network, by name, as soon as it's seen
 baseline home-network {
     description "Access points of the home network"
-    when display_type == "Wi-Fi AP" and
+    when type == "Wi-Fi AP" and
         dot11.device/dot11.device.advertised_ssid_map/dot11.advertisedssid.ssid == "home-network"
     every 1m
     add
