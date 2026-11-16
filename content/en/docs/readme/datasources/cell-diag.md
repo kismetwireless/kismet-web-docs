@@ -22,7 +22,7 @@ From the DIAG stream, Kismet gets:
 * Every LTE and NR serving and neighbor cell measurement the modem makes (LTE ML1 serving, idle and connected neighbor, and per-cell measurements; NR ML1).
 * The LTE RRC messages the modem receives, including each cell's SIB1.  The identity in a SIB1 (MCC, MNC, TAC, and cell ID) is added to later measurements of that cell, so cells the AT commands only report by PCI and channel get their full identity.
 * NR RRC, and the serving cell bandwidth and number of antennas.
-* The modem's GNSS position reports.
+* The modem's GNSS position reports.  After 2026-10-R1 this includes the version 30 reports of SDX72 modems, such as the Inseego FX4200, whose positions were dropped before.
 * The security signalling, which raises the [cell security alerts](#alerts).
 
 For how this compares to the AT source, and running both on one modem, see [AT and DIAG](/docs/readme/datasources/cell-at/#at-and-diag).
