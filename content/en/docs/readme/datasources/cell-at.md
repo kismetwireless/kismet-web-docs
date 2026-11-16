@@ -231,7 +231,7 @@ The lock is set like a Wi-Fi channel: lock the source to a channel in the web UI
 **Band locking is off by default because it changes the modem's saved settings.**  A lock is written to the modem's non-volatile configuration and survives a reboot of the modem:
 
 * Nothing is written when the source opens.
-* Before the first lock, the settings as found are saved to `~/.kismet/cellat-lock-<imei>.state` in the home directory of the user running the capture tool.  If this file can't be written, locking is refused.
+* Before the first lock, the settings as found are saved to `~/.kismet/cellat-lock-<imei>.state` in the home directory of the user running the capture tool.  If this file can't be written, locking is refused.  After 2026-10-R1, when `$HOME` is unset, as for a systemd service without `User=`, the home directory is taken from the password database, the same way the Kismet server finds its own `~/.kismet`.
 * Setting `AUTO`, or closing the source, restores the saved settings and removes the file.
 * If the capture tool was killed with a lock in place, the next open of that modem restores the settings from the file, even with `bandlock=false`.
 
@@ -252,7 +252,11 @@ As of `after 2026-10-R1`, the band shown for such a cell (`cellular.cell.band`) 
 
 As of `after 2026-10-R1`, numbers from the cell sources which are the wrong type or out of range, such as a fractional or negative channel number, a band above 1024, or a TAC wider than 24 bits, are ignored, as if the modem hadn't sent them, both live and in `kismetdb_to_wiglecsv`.
 
-The web UI shows the cell identity, the band and channel, the signal (RSRP, RSRQ, SINR), the range of RSRP seen, and the number of observations.  Cells are geotagged with the GPS location, and are included in the [WiGLE CSV](/docs/readme/logging/wiglecsv/) log and the [KML](/docs/readme/kismetdb/kismetdb_kml/) and GPX exports.
+The web UI shows the cell identity, the band and channel, the signal (RSRP, RSRQ, SINR), the range of RSRP seen, and the number of observations.
+
+As of `after 2026-10-R1`, a cell also keeps the range of RSRQ, SINR, SNR, RSSI, and CQI it was seen with (`cellular.cell.min_rsrq`, `cellular.cell.max_rsrq`, and so on), and `cellular.cell.signal_seen` records which signal values a modem has reported for it, as bits: RSRP 1, RSRQ 2, SINR 4, SNR 8, RSSI 16, CQI 32.  A field whose bit is clear was never reported and reads 0, while a reading of 0 dB, common at a cell edge, sets the bit.  The web UI shows a 0 dB RSRQ, SINR, or SNR instead of hiding it, and shows the RSRQ, SINR, and SNR ranges after the RSRP range.  An RSRP of 0, which modems send for no reading, no longer counts as the strongest signal seen.
+
+Cells are geotagged with the GPS location, and are included in the [WiGLE CSV](/docs/readme/logging/wiglecsv/) log and the [KML](/docs/readme/kismetdb/kismetdb_kml/) and GPX exports.
 
 As of `after 2026-10-R1`, Quectel modems whose LTE serving cell report has 20 fields (the RM500Q and RM520N series, EG12, and EG18) also give the CQI, the channel quality from 0 to 15, as `cellular.cell.cqi`.  The modem only reports it while it's connected to the cell, so it is -1 until the modem has reported one; the EG25-G, EG95, EM06, and EM12 don't report it.  The web UI shows it in the cell details once there is one, and the device search takes it as `cqi`, where `cqi = 0` matches only real readings.
 

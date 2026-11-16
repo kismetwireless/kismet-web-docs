@@ -34,8 +34,10 @@ The libusb method works on Linux as well.  It is used automatically for a suppor
 | Quectel EG12 / EM12 / EG18 | `2c7c:0512` |
 | Quectel RM500Q / RM502Q | `2c7c:0800` |
 | Quectel RM520N | `2c7c:0801` |
+| Telit LM960A18 (after 2026-10-R1) | `1bc7:1040` |
+| Fibocom FM350-GL (after 2026-10-R1) | `0e8d:7127` |
 
-The interfaces are given their roles from Quectel's usual layout.  On the EG25-G, for instance:
+The Quectel interfaces are given their roles from Quectel's usual layout.  On the EG25-G, for instance:
 
 | Interface | Role |
 |-----------|------|
@@ -44,6 +46,25 @@ The interfaces are given their roles from Quectel's usual layout.  On the EG25-G
 | 2 | AT |
 | 3 | modem (also answers AT) |
 | 4 | QMI / RmNet; not a serial port, and not used |
+
+The other two have their own measured layouts:
+
+* **Telit LM960A18:** interface 0 is DIAG, 3 NMEA, 4 AT, and 5 the modem port (which also answers AT).  On a USB 2.0 link with hardware link power management (LPM) on, this modem can drop or hold a command sent after an idle gap, through libusb and the Linux serial driver alike; the cell AT source asks its identity commands again when the first try gets no reply.
+* **Fibocom FM350-GL:** only interface 6, its AT port, is used.  Every serial interface of this modem has the same interface class, so the log port (interface 2) and the factory META port (interface 4) are never claimed, and interface 3, which answers AT only beside the GNSS service, is left to the host driver.  This modem has no DIAG port.
+
+### Other modems
+
+After 2026-10-R1, other models from modem vendors (Quectel, Qualcomm, Novatel / Inseego, Fibocom, Sierra Wireless, Telit, SIMCom, Dell, and Foxconn) are used too, with each interface's role taken from its USB interface class, subclass, and protocol where those have only one meaning across the modems measured so far:
+
+| Class / subclass / protocol | Role |
+|-----------------------------|------|
+| `ff/ff/30` | DIAG |
+| `ff/ff/40` | AT |
+| `ff/00/40` | NMEA |
+
+Interfaces of class `ff/ff/ff` or `ff/00/00` are never used on an unlisted model, since they are DIAG, QMI, AT, a PPP port, or a vendor tool port depending on the modem.  A device from one of these vendors with none of the triples above, such as a Dell keyboard, isn't listed or opened, and MediaTek devices other than the FM350-GL aren't used at all.
+
+This widens what `usb=auto` reaches: an unlisted device from these vendors with one of these interfaces unclaimed by a host driver is now listed and probed, for instance a Qualcomm (`05c6`) device in DIAG mode, which can include a phone with its diagnostic port enabled.  Use `usb=off` to keep the cell sources to host serial ports.
 
 Which of these modems the cell sources can survey is listed under the [cell AT supported hardware](/docs/readme/datasources/cell-at/#supported-hardware).
 
@@ -111,6 +132,12 @@ On Linux, using a modem over libusb needs write access to its USB device (under 
 
 ```
 SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="2c7c", MODE="0660", GROUP="kismet"
+```
+
+After 2026-10-R1, the packaged rules also cover Telit (`1bc7`), Sierra Wireless (`1199`), SIMCom (`1e0e`), Fibocom (`2cb7`), and Novatel / Inseego (`1410`) modems, and the FM350-GL by its full USB ID.  Qualcomm, Dell, Foxconn, and MediaTek also make devices other than modems, such as phones, keyboards, and Bluetooth and Wi-Fi adapters, so the packaged rules leave those vendors out; add a rule naming your modem's full USB ID to use one of them without root:
+
+```
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="05c6", ATTR{idProduct}=="<pid>", MODE="0660", GROUP="kismet"
 ```
 
 Taking an interface from its driver with `usb=force` needs no additional permission beyond access to the USB device.
