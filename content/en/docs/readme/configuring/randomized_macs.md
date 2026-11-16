@@ -3,7 +3,7 @@ title: "Randomized MAC addresses"
 description: ""
 lead: ""
 date: 2026-10-26T12:00:00-04:00
-lastmod: 2026-11-13T18:00:00-05:00
+lastmod: 2026-11-16T13:00:00-05:00
 images: []
 menu:
   docs:
@@ -208,4 +208,31 @@ This option is set in `kismet_filter.conf` (or `kismet_site.conf`); it is off by
 ```
 btle_ignore_random=true
 ```
+{{</configopt>}}
+
+## Expiring short-lived random BTLE devices
+
+Most rotating random addresses are heard once or twice and never again.  Tracking all of them keeps the links between the addresses of Apple Continuity, Find My and other rotating devices, but they fill memory and the device list.  After 2026-10-R1, Kismet can track every address and then forget the small ones that nothing could tie to another address.
+
+{{<configopt btle_random_expire seconds>}}
+Forget a BTLE device with a rotating random address (a resolvable or non-resolvable private address, or a device sending Find My) once it hasn't been heard for this many seconds, if it has `btle_random_expire_packets` packets or fewer, and only if:
+
+* it was never [linked](#btle) to another address (`btle.device.alias_group`);
+* no other address shares its payload (`btle.device.related_count` is under 2);
+* it isn't a [location tracker](/docs/readme/datasources/bluetooth-trackers/) or a drone sending Remote ID;
+* it raised no alerts, and has no name or saved tag set by the user.  Ephemeral tags, such as those the baseline filters set, don't keep it.
+
+While random addresses are linked (`btle_link_randomized`, which `btle_related` turns on), a quiet address can still be linked to a new one for about 2 minutes, so values under 150 seconds are raised to 150.  Devices with static random or public addresses are never expired this way.
+
+Packets are still logged, and the kismetdb log keeps the device's last record.  If the address is heard again, it's a new device.
+
+This is off (0) by default, and set to 300 in `kismet_wardrive.conf`.  It is set in `kismet_filter.conf` (or `kismet_site.conf`):
+
+```
+btle_random_expire=300
+```
+{{</configopt>}}
+
+{{<configopt btle_random_expire_packets count>}}
+Devices with more than this many packets are kept by `btle_random_expire`.  The default is 2, between 1 and 1000.
 {{</configopt>}}

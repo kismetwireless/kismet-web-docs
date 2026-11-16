@@ -3,7 +3,7 @@ title: "Tuning"
 description: ""
 lead: ""
 date: 2022-09-30T11:59:56-04:00
-lastmod: 2022-09-30T11:59:56-04:00
+lastmod: 2026-11-16T13:00:00-05:00
 images: []
 menu:
   docs:
@@ -37,7 +37,11 @@ This is primarily useful on long-running fixed Kismet installs.
 Kismet will start forgetting the oldest devices when more than the specified number of devices are seen.
 
 There is no terribly efficient way to handle this, so typically, leaving this option unset is the right idea.  Memory use can be tuned over time using the `tracker_device_timeout` option.
+
+After 2026-10-R1, a device forgotten by either option frees all of its memory; before then, each forgotten device left a small entry behind for the life of the server, and adding a data source after devices had been forgotten could crash Kismet.
 {{</configopt>}}
+
+Bluetooth LE devices using rotating random addresses are often heard only once or twice; after 2026-10-R1 these can be forgotten on their own, sooner, with [`btle_random_expire`](/docs/readme/configuring/randomized_macs/#expiring-short-lived-random-btle-devices).
 
 
 {{<configopt tcp_buffer_kb kb>}}
