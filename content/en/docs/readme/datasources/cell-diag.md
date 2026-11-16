@@ -60,6 +60,8 @@ If the DIAG port can't be found, name it with `diagport=`; if the AT port can't 
 source=celldiag-<imei>:atport=/dev/mhi_DUN,diagport=/dev/mhi_DIAG
 ```
 
+After 2026-10-R1, a `celldiag-<imei>` source with a ttyUSB `diagport=` looks for its IMEI only on that modem's own ports, so it never sends `AT` to another modem on the host.  If the IMEI isn't found there, for example because a paired `cellat` source holds the AT port, the source opens on the named DIAG port without AT identity.
+
 The `CELLDIAG_SCAN_PORTS` environment variable replaces the set of ports scanned for the AT port, as a space-separated list of paths or globs.
 
 On macOS, supported Quectel modems are reached over libusb.  The same method works on Linux, for a modem with no serial driver bound or, with `usb=force`, in place of the `option` driver; see [cell modems over libusb](/docs/readme/datasources/cell-usb/).

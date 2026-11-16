@@ -132,6 +132,8 @@ Not all hardware and drivers support monitor mode, but the majority do.  Typical
 
     With the Linux Wi-Fi source, these devices have often needed an out-of-kernel driver which doesn't support mac80211 VIFs or modern channel control.  Kismet will fall back to the old WEXT ioctl control method, but these drivers will not support setting HT channels.
 
+    After 2026-10-R1, the Linux Wi-Fi source doesn't create a VIF with the out-of-kernel `rtl8821cu` driver, which hangs the host on current kernels; it puts the interface itself into monitor mode and keeps nl80211 channel control.
+
 Kismet generally *will not work* with most other out-of-kernel (drivers not shipped with Linux itself), specifically drivers such as the SerialMonkey RTL drivers used for many of the cheap, tiny cards shipped with devices like the Raspberry Pi and included in distributions like Raspbian.  Many of the Realtek USB chipsets those drivers support (including the RTL8723DU) are supported by the [USB userspace Wi-Fi](/docs/readme/datasources/wifi-usb-userspace/#realtek) source instead.  Sometimes it's possible to find other, supported drivers for the same hardware, however some cards have no working solution.
 
 Many more devices should be supported - if yours isn't listed and works, let us know via Twitter (@kismetwireless).

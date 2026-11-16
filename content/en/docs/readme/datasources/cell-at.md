@@ -58,12 +58,13 @@ kismet -c cellat-<imei>:gps=modem -c celldiag-<imei>
 
 ## Supported hardware
 
-The AT source supports Quectel and Telit modems through their engineering commands:
+The AT source supports Quectel, Telit, and Fibocom modems through their engineering commands:
 
 * **Quectel RM500Q series** (5G NR and LTE, Qualcomm SDX55): RM500Q-AE, RM500Q-GL, RM502Q-AE, RM505Q-AE, RM510Q-GL, RG500Q-EA, and RG502Q-EA.  Serving cell (LTE, NR5G-SA, and NR5G-NSA), neighbor cells, and full band scans (`AT+QSCAN`).
 * **Quectel RM520N-GL series** (5G NR and LTE, Qualcomm SDX62): RM520N-GL, RM520N-CN, RM530N-GL, RG520N-NA, RG520N-EB, RG520N-EU, RG520N-LA, RG520N-GT, and RG525F-NA.  Serving cell, neighbor cells, and full band scans.  The RM520N-GL is the reference modem for the DIAG source.
 * **Quectel EG25-G series** (LTE Cat 4): EG25-G, EG25-GL, EC25-AF, EC25-AU, EC25-E, EG91, EG95, EM05-G, and EM05-CE.  Serving cell (LTE only) and neighbor cells.  These modems have no full band scan.
 * **Telit LM960** (LTE Cat 18): LM960 and LM960A18.  Serving cell from `AT#RFSTS` and `AT#SERVINFO` (after 2026-10-R1, with the RSSI and band from `AT#RFSTS`), and the `AT#CSURVC` cell survey as the full scan.
+* **Fibocom FM350-GL** (5G NR and LTE, MediaTek T700): after 2026-10-R1, serving and neighbor cells, LTE and NR, from `AT+GTCCINFO?`, with the LTE serving cell's SNR.  These modems have no full band scan.  Other Fibocom modems are used if they answer `AT+GTCCINFO?`; the Dell-packaged FM101-GL and the Intel-based L8x0-GL don't.
 
 The source also recognizes Sierra Wireless (EM9190, EM9291), SIMCom (SIM8202G-M2), and Orbic (RC400L) modems.
 
@@ -76,12 +77,14 @@ Modems are identified by their manufacturer (`AT+CGMI`), and the commands each o
 | Quectel RM500Q-AE | RM500QAEAAR11A21M4G | NR5G-SA, LTE |
 | Quectel EG25-G | EG25GGBR07A08M2G | LTE |
 | Telit LM960A18 | 32.01.110 (Generic) | LTE |
+| Fibocom FM350-GL | 81600.0000.00.29.22.06 | LTE |
 
 ### Model notes
 
 * **EG25-G / EC2x:** `AT+COPS=?` (operator scan) has been seen to hang the EG25-G until it is power cycled; Kismet never sends it.
 * **RM520N-GL:** band configuration uses `AT+QNWPREFCFG`; `AT+QCFG="band"` returns an error on this firmware.
 * **Telit LM960:** `AT#CSURVC` is used for the full scan; `AT#CSURV` is broken on the Generic and TMUS firmware.
+* **FM350-GL:** every serial port has the same interface class, so the log port (interface 2) and the factory META port (interface 4) are skipped by number and never probed.
 
 ## Adding the source
 
@@ -253,7 +256,7 @@ The web UI shows the cell identity, the band and channel, the signal (RSRP, RSRQ
 
 As of `after 2026-10-R1`, Quectel modems whose LTE serving cell report has 20 fields (the RM500Q and RM520N series, EG12, and EG18) also give the CQI, the channel quality from 0 to 15, as `cellular.cell.cqi`.  The modem only reports it while it's connected to the cell, so it is -1 until the modem has reported one; the EG25-G, EG95, EM06, and EM12 don't report it.  The web UI shows it in the cell details once there is one, and the device search takes it as `cqi`, where `cqi = 0` matches only real readings.
 
-As of `after 2026-10-R1`, SIMCom modems also give the serving cell's SNR from `AT+CPSI?`, as `cellular.cell.snr` in dB.  It is a signal to noise ratio with no interference term, so it is kept apart from the SINR other modems report.  The web UI shows it in the cell details, and the device search takes it as `snr`.
+As of `after 2026-10-R1`, SIMCom modems also give the serving cell's SNR from `AT+CPSI?`, and Fibocom modems from `AT+GTCCINFO?`, as `cellular.cell.snr` in dB.  It is a signal to noise ratio with no interference term, so it is kept apart from the SINR other modems report.  The web UI shows it in the cell details, and the device search takes it as `snr`.
 
 ## Logging
 
