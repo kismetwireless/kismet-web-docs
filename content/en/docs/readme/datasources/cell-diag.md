@@ -3,7 +3,7 @@ title: "Cell: Qualcomm DIAG"
 description: ""
 lead: ""
 date: 2026-10-26T12:00:00-04:00
-lastmod: 2026-10-26T12:00:00-04:00
+lastmod: 2026-11-16T23:00:00-05:00
 images: []
 menu:
   docs:
@@ -19,7 +19,7 @@ The cell DIAG source (`celldiag`) reads the Qualcomm diagnostic (DIAG) port of a
 
 From the DIAG stream, Kismet gets:
 
-* Every LTE and NR serving and neighbor cell measurement the modem makes (LTE ML1 serving, idle and connected neighbor, and per-cell measurements; NR ML1).
+* Every LTE and NR serving and neighbor cell measurement the modem makes (LTE ML1 serving, idle and connected neighbor, and per-cell measurements; NR ML1).  After 2026-10-R1 the LTE serving cell measurement also gives the cell's wideband RSSI, on modems up to the SDX50 generation; SDX55 and newer modems don't report it there.
 * The LTE RRC messages the modem receives, including each cell's SIB1.  The identity in a SIB1 (MCC, MNC, TAC, and cell ID) is added to later measurements of that cell, so cells the AT commands only report by PCI and channel get their full identity.
 * NR RRC, and the serving cell bandwidth and number of antennas.
 * The modem's GNSS position reports.  After 2026-10-R1 this includes the version 30 reports of SDX72 modems, such as the Inseego FX4200, whose positions were dropped before.
