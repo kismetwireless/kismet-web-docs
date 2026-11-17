@@ -23,6 +23,8 @@ Over time, the Kismet endpoint API will change - while efforts are made to retai
 
 For about a week in November 2026, development builds put the phy's type in `kismet.device.base.type` and the specific type in `kismet.device.base.display_type`; that field is gone, and `kismetdb_to_wiglecsv` doesn't read logs from those builds.
 
+**Probed interface options.**  In the interface lists from `/datasource/list_interfaces`, `kismet.datasource.probed.options_vec` now holds the flags the capture tool reported for the interface; it was always empty before.  No capture tool included with Kismet reports flags yet.
+
 **Removed `kismet.common.signal.min_signal_rrd`.**  Devices no longer keep the weakest signal per second, minute, and hour.  `kismet.common.signal.max_signal_rrd` (the strongest) is still kept.
 
 **Device rules.**  [Device rules](/docs/readme/configuring/device_rules/) tag, color, sort, and collect devices into views, and raise alerts.  Devices that match a rule carry `kismet.device.base.rules`, with the names of the matching rules, their tags, and color.  Rules can be read and set with the [device rules API](/docs/api/device_rules/), rules with a `view` make a `rule-<name>` device view, and the [device view](/docs/api/device_views/) endpoint takes a `rule_sort` option.
