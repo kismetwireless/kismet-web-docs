@@ -19,6 +19,8 @@ Kismet does not have a default username or password.  *The first time Kismet is 
 
 The password is stored in `~/.kismet/kismet_httpd.conf` which is in the home directory of **the user which started Kismet**.
 
+After 2026-10-R1, the username and password can each be up to 256 characters, and can't contain control characters or start or end with a space.  Kismet only reads the username and password from this file; `include` and override lines in it are ignored.
+
 You will need this password to log into Kismet in the future, and to give scripts and tools which need administrative access to Kismet the login.
 
 The webserver is configured via the `kismet_httpd.conf` file.  These options may be included in the base kismet.conf file, but are broken out for clarity.  We recommend you use `kismet_site.conf` to make changes to the configuration.
@@ -74,6 +76,20 @@ After 2026-10-R1.  The most HTTP connections open at once from one client addres
 Behind a [reverse proxy](#using-proxies-and-forwarding), every client shares the proxy's address, so raise this limit to cover all of them (or turn it off).
 {{</configopt>}}
 
+{{<configopt httpd_max_websockets count>}}
+After 2026-10-R1.  The most websockets (the web UI, remote capture, GPS and event feeds) open at once, by default `256`.  This limit is inside `httpd_max_connections`, so long-lived websockets can't take every connection; websockets over it are refused with a `503`.  `0` turns the limit off.
+{{</configopt>}}
+
+{{<configopt httpd_max_websockets_per_ip count>}}
+After 2026-10-R1.  The most websockets open at once from one client address, by default `64`.  `0` turns the limit off.  As with `httpd_max_connections_per_ip`, raise it when Kismet is behind a reverse proxy.
+{{</configopt>}}
+
+{{<configopt httpd_websocket_max_queue_mb megabytes>}}
+After 2026-10-R1.  A websocket whose client can't keep up is closed once this much data is waiting to be sent to it, by default `64`.  `0` turns the limit off.
+{{</configopt>}}
+
+After 2026-10-R1, an open websocket closes when its login expires, or as soon as its API key is revoked.  A login with a username and password lasts 24 hours, so a script that keeps a websocket open with one needs to reconnect at least once a day; an API key lasts until its own expiration.
+
 {{<configopt httpd_session_db "/path/to/session/db">}}
 Path where API keys and session data is stored.  If you want to refresh the logins (and require browsers to log in again after each restart), comment this option. Typically there is no reason to change this option. 
 {{</configopt>}}
@@ -88,6 +104,8 @@ Kismet uses JWT tokens to maintain session state.
 By default, Kismet generates a random JWT key on startup, each time Kismet is started.  This key is used to protect the session tokens, but is lost when Kismet exits or restarts, requiring sessions re-authenticate. 
 
 If you wish JWT sessions to persist, set a persistent key here, however this typically is not needed.
+
+After 2026-10-R1, a key set here must be at least 32 characters; Kismet won't start with a shorter one.  Remove the option to go back to a random key for each run.
 {{</configopt>}}
 
 {{<configopt httpd_jwt_issuer issuer>}}
@@ -210,6 +228,12 @@ To start over with a new CA, stop Kismet and remove the files in this directory.
 Added after 2026-10-R1
 
 Extra names or addresses, comma separated, for the certificate Kismet makes, such as `httpd_ssl_names=kismet.lan,192.168.1.10`.
+{{</configopt>}}
+
+{{<configopt httpd_ssl_ciphers "cipher:cipher:...">}}
+Added after 2026-10-R1
+
+TLS 1.2 cipher suites, as an OpenSSL cipher list.  By default only forward-secret AEAD suites are allowed (ECDHE with AES-GCM or ChaCha20-Poly1305).  TLS 1.3 always uses the OpenSSL defaults.  If none of the listed ciphers can be used, Kismet won't start.
 {{</configopt>}}
 
 {{<configopt httpd_https_proxy true false>}}
