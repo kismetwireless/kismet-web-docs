@@ -34,10 +34,10 @@ The Overview tab is a grid of cards from `kismet.ui.dashboardCards`.  Users arra
 | `needs` | The shared data it reads (below) |
 | `loading` | The outline shown until that data arrives: one or a list of `'stat'`, `'tabs'`, `'graph'`, `'histogram'`, `'bars'`, `'list'`, `'table'`, `'donut'`, `'text'` (the default), stacked top to bottom |
 | `settings` | Optional: the card's own settings (below), as a list or a function returning one |
-| `create(body, { actions, settings })` | Builds the card; returns `{ update(data), show(), hide(), destroy() }`, all optional |
+| `create(body, { actions, settings, dashboard })` | Builds the card; returns `{ update(data), show(), hide(), destroy() }`, all optional |
 | `onClick(actions)` | Optional: called when the card is clicked (anywhere but its own buttons and links) |
 
-`actions.showTab(id)` switches to a tab (a pane id, or the id given to `addTable`), and `actions.showDevices(viewId)` to the device list on a view.  `show()` and `hide()` are called as the card comes on and off screen: when the Overview tab is shown or hidden, the user switches dashboards, or the card is added or hidden; a card that refreshes on its own timer can stop while it's hidden.
+`actions.showTab(id)` switches to a tab (a pane id, or the id given to `addTable`), and `actions.showDevices(viewId)` to the device list on a view.  `dashboard` is the id of the dashboard the card is on, for a card that keeps state of its own in each one: the map card keeps its view in the setting `overview.map.view.<dashboard>`.  `show()` and `hide()` are called as the card comes on and off screen: when the Overview tab is shown or hidden, the user switches dashboards, or the card is added or hidden; a card that refreshes on its own timer can stop while it's hidden.
 
 ### Card settings
 
