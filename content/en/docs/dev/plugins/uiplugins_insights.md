@@ -34,7 +34,7 @@ The Insights tab draws a graph of how devices relate, their activity over time, 
 | `g.link(a, b, { kind, weight, title })` | A line between two nodes; `kind` is a `linkKinds` id |
 | `g.flag(node, text)` | Marks a node as unusual, drawn with a ring |
 | `g.role(node, role)` | `'ap'`, `'client'`, `'probe'`, `'bridge'`, or `'other'` |
-| `g.same(a, b)` | Two device nodes are one device, such as an access point's addresses for each network and band |
+| `g.same(a, b, kind)` | Two device nodes are one device, such as an access point's addresses for each network and band.  After 2026-10-R1, an optional `linkKinds` id puts `b` in a set led by `a`, such as the networks of a multiple BSSID set, led by the address sending it |
 | `g.drop(node)` | Takes a node and its links out again |
 
 The tracker module labels location trackers, and flags the ones which say they're away from their owner:
@@ -70,6 +70,7 @@ ui.insightRelations.add({
 | `live` | True to show packets moving along it |
 | `names` | True when the node at its far end names the device, so the device needs no label of its own |
 | `groupTitle` | What several devices at one end are called (`'clients'`), for the Flow and Access points views |
+| `short` | For a kind given to `g.same`, its tag on the access point (`'MBSSID'`); such a kind names a set of addresses instead of a line |
 
 ```javascript
 ui.linkKinds.add({
