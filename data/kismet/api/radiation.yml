@@ -13,11 +13,11 @@
 
     Count and dose history is kept as RRD (round robin database) records, reporting the past 60
     seconds, the past hour per minute, and the past day per hour; see the
-    [RRD documentation](/docs/api/rrd/).  The aggregated energy spectrum is kept for the number of
-    samples set by `geiger_spectrum_history` (by default `86400`).
+    [RRD documentation](/docs/api/rrd/).  After 2026-10-R1, the energy spectrum of a sensor which
+    sends one is read from the [spectrum endpoint](#radiation-sensor-spectrum).
 
     Radiation data is also logged to the kismetdb log as `RADIATION` snapshots, and sent to the
-    [eventbus](/docs/api/eventbus/).
+    [eventbus](/docs/api/eventbus/) as `RADIATION` events.
   return: |
     JSON object keyed by datasource UUID, of sensor records:
 
@@ -27,9 +27,74 @@
     | `radiation.sensor.datasource` | Datasource record |
     | `radiation.sensor.cps_rrd` | RRD of counts per second |
     | `radiation.sensor.usv_rrd` | RRD of dose rate, in microsieverts per hour, for sensors which report it |
-    | `radiation.sensor.aggregate_spectrum` | Aggregated energy spectrum, for sensors which report it |
-    | `radiation.sensor.aggregate_spectrum_start` | Timestamp of the first spectrum sample |
-    | `radiation.sensor.aggregate_spectrum_end` | Timestamp of the last spectrum sample |
+    | `radiation.sensor.cps_err` | Statistical error of the count rate, percent, for sensors which report it |
+    | `radiation.sensor.usv_err` | Statistical error of the dose rate, percent, for sensors which report it |
+    | `radiation.sensor.dose_total` | Accumulated dose the sensor has counted, microsieverts |
+    | `radiation.sensor.dose_total_duration` | Time the accumulated dose covers, seconds |
+    | `radiation.sensor.temperature` | Sensor temperature, Celsius |
+    | `radiation.sensor.battery` | Sensor battery charge, percent |
+    | `radiation.sensor.last_status_time` | Time of the last dose, temperature, and battery report; `0` if the sensor sends none |
+    | `radiation.sensor.spectrum_channels` | Number of spectrum channels; `0` if the sensor sends no spectrum |
+    | `radiation.sensor.spectrum_time` | Time of the last spectrum update |
+    | `radiation.sensor.spectrum_session_duration` | Counting time in the spectrum since Kismet started, seconds |
+    | `radiation.sensor.spectrum_session_total` | Total counts in the spectrum since Kismet started |
+
+    The `cps_err` and later fields, other than the RRDs, are after 2026-10-R1; before it, sensor
+    records had `radiation.sensor.aggregate_spectrum`, `aggregate_spectrum_start`, and
+    `aggregate_spectrum_end` instead.
   responses:
     success:
       - [200, "Success"]
+
+-
+  name: "Radiation sensor spectrum"
+  uri: "/radiation/sensors/by-uuid/{UUID}/spectrum"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  uriparameters:
+    -
+      name: "UUID"
+      type: "string"
+      required: true
+      description: Datasource UUID of the radiation sensor
+  jsonparameters:
+    - {auto: "fields"}
+  parameters:
+    -
+      name: "minutes"
+      type: "string"
+      required: false
+      description: |
+        `1` or `true` adds the spectrum of each of the past 60 minutes.
+  docs: |
+    After 2026-10-R1, the gamma energy spectrum of one radiation sensor, in several windows:
+
+    * `radiation.spectrum.device`: the spectrum the sensor has accumulated itself (Radiacode),
+    * `radiation.spectrum.session`: counted since Kismet started tracking the sensor,
+    * `radiation.spectrum.hour`: counted over the past hour,
+    * `radiation.spectrum.minutes`: with `minutes=1`, a list of the per-minute spectra over the past
+      hour, oldest first.
+
+    A window is left out when the sensor has sent nothing for it.  Each finished minute is also
+    logged to the kismetdb log as a `RADIATION_SPECTRUM` snapshot, with the GPS location when
+    there is a fix.
+  return: |
+    JSON object with the sensor UUID in `radiation.spectrum.sensor`, and a spectrum record for
+    each window:
+
+    | Field | Content |
+    | ----- | ------- |
+    | `radiation.spectrum.window` | `device`, `session`, `hour`, or `minute` |
+    | `radiation.spectrum.channels` | Number of channels |
+    | `radiation.spectrum.calibration` | Energy calibration `[a0, a1, a2]`: channel `n` is `a0 + a1*n + a2*n^2` keV; empty if unknown |
+    | `radiation.spectrum.start_time` | Start of the window |
+    | `radiation.spectrum.end_time` | End of the window |
+    | `radiation.spectrum.duration` | Counting time in the window, seconds |
+    | `radiation.spectrum.total` | Total counts in the window |
+    | `radiation.spectrum.counts` | Counts per channel |
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [500, "Invalid UUID, or no radiation sensor with that UUID"]

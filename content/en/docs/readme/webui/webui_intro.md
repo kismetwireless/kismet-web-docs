@@ -190,6 +190,22 @@ After 2026-10-R1, the *Overview* tab also has *CPU*, *Memory*, and *Temperatures
 
 {{< screenshot name="webui-overview-system" alt="The CPU, Memory, and Temperatures cards" >}}
 
+## Radiation window
+
+After 2026-10-R1, the *Radiation* window, opened from the menu or by clicking a radiation stat in the top bar, shows the radiation sensors, such as the [Radiacode](/docs/readme/datasources/radiacode/).  With more than one sensor, pick which one to show.
+
+* The count rate (counts per second) and dose rate, and for sensors which report them, the accumulated dose the sensor has counted, its temperature, and its battery.
+* *History*: the count rate, and the dose rate against the right axis, over the last minute, hour, or day.
+* *Spectrum*, for sensors which send one: the gamma energy spectrum since Kismet started (*Session*), over the past hour, or as the sensor has accumulated it (*Device*), on a log or linear scale.  *Gamma lines* marks the energies of common isotopes, and *Waterfall* adds the past hour minute by minute, newest at the top and brighter for more counts.  For a sensor without a spectrum, the section says so.
+
+Both sections fold away, and the window fits its height to what it shows until you resize it.
+
+**Never** rely on radiation readings shown by Kismet for safety: they depend on the detector, its calibration, and how it is held.
+
+The top bar has *Radiation counts* and *Radiation dose rate* stats, shown once the server has a radiation sensor, and hidden or shown again under *Settings*, *Ribbon*.  The *Overview* tab offers a *Radiation* card (the dose and count rates, with the last minute of counts) and a *Radiation spectrum* card, with its own window, scale, and gamma line settings; neither is on a dashboard until added with *Edit layout*.
+
+The window reads the [radiation endpoints](/docs/api/radiation/).
+
 ## API keys window
 
 After 2026-10-R1, the *API keys* window, opened from the menu just above *Settings*, manages the API keys of the server in use.  Programs and [remote capture](/docs/readme/remotecap/remotecap/) use a key in place of a login.  Managing keys needs an admin login.
