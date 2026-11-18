@@ -3,7 +3,7 @@ title: "The new web UI"
 description: ""
 lead: ""
 date: 2026-11-01T01:00:00-04:00
-lastmod: 2026-11-13T15:30:00-05:00
+lastmod: 2026-11-18T09:00:00-05:00
 images: []
 menu:
   docs:
@@ -46,6 +46,10 @@ The screenshots here show made-up devices, networks, and locations.  Each is sho
 The *Overview* tab sums up what Kismet sees in cards; the pencil at the top right moves, resizes, hides, and adds them back.  Every tab has the top bar of stats above it and the *Messages* panel below it.
 
 {{< screenshot name="webui-overview" alt="The Overview tab" >}}
+
+After 2026-10-R1, the *Overview* tab can hold several dashboards, picked from the *Dashboard* list at its top.  Each dashboard has its own cards, layout, and card settings, and can hide the top bar of stats and the *Messages* panel while it's showing; the pencil also names a dashboard, sets those two, and adds or deletes dashboards.  While arranging, a card with settings of its own has a gear button: the *Devices*, *Active devices*, and *New devices* cards can leave out their graphs, and the *Map* card picks which kinds of device and map overlays it draws, whether it shows paths and the receiver range, and whether it keeps Kismet's GPS location in view.  The *Map* card is the map tab without its list, and isn't on the Overview until it's added.
+
+The *Wardriving* dashboard is made for a phone: the *Active devices* and *New devices* counts above a map that follows Kismet's location, without the stats bar or the messages.  *Reset layout* puts the *Overview* and *Wardriving* dashboards back as they started; dashboards you make can be deleted.
 
 {{< screenshot name="webui-topbar" alt="The top bar" >}}
 

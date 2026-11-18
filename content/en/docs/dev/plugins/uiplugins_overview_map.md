@@ -3,7 +3,7 @@ title: "Overview and map"
 description: ""
 lead: ""
 date: 2026-11-01T01:00:00-04:00
-lastmod: 2026-11-08T21:00:00-05:00
+lastmod: 2026-11-18T09:00:00-05:00
 images: []
 aliases: ["/docs/dev/uiplugins/uiplugins_overview_map/"]
 menu:
@@ -22,19 +22,51 @@ The UI plugin interface is changing quickly in the nightly builds, and may chang
 
 ## Overview cards
 
-The Overview tab is a grid of cards from `kismet.ui.dashboardCards`.  Users arrange, resize, hide, and add back cards with *Edit layout*; the layout is kept per browser.
+The Overview tab is a grid of cards from `kismet.ui.dashboardCards`.  Users arrange, resize, hide, and add back cards with *Edit layout*; the layout is kept per browser.  After 2026-10-R1 the user can keep several dashboards, each with its own layout and card settings; a card is made again for each dashboard it's on.
 
 | Option | |
 | ------ | - |
 | `id`, `title`, `priority` | The card |
 | `w`, `h` | Its starting size on the 12-column grid, in columns and rows (3 × 5 if not given) |
 | `place` | Optional: `'top'` puts the card at the top left when it's first shown, even in a layout the user has already arranged; otherwise it takes the first free spot |
+| `defaultHidden` | Optional: `true` leaves the card off a dashboard until the user adds it |
+| `fill` | Optional: `true` for a card whose content fills whatever height it has, such as a map; stacked on a phone, it's given a height of its own |
 | `needs` | The shared data it reads (below) |
 | `loading` | The outline shown until that data arrives: one or a list of `'stat'`, `'tabs'`, `'graph'`, `'histogram'`, `'bars'`, `'list'`, `'table'`, `'donut'`, `'text'` (the default), stacked top to bottom |
-| `create(body, { actions })` | Builds the card; returns `{ update(data), destroy() }` |
+| `settings` | Optional: the card's own settings (below), as a list or a function returning one |
+| `create(body, { actions, settings })` | Builds the card; returns `{ update(data), show(), hide(), destroy() }`, all optional |
 | `onClick(actions)` | Optional: called when the card is clicked (anywhere but its own buttons and links) |
 
-`actions.showTab(id)` switches to a tab (a pane id, or the id given to `addTable`), and `actions.showDevices(viewId)` to the device list on a view.
+`actions.showTab(id)` switches to a tab (a pane id, or the id given to `addTable`), and `actions.showDevices(viewId)` to the device list on a view.  `show()` and `hide()` are called as the card comes on and off screen: when the Overview tab is shown or hidden, the user switches dashboards, or the card is added or hidden; a card that refreshes on its own timer can stop while it's hidden.
+
+### Card settings
+
+A card's settings are kept for each dashboard.  While arranging, a card with settings has a gear button; the card is made again when one changes, and `settings.get(id)` in `create()` gives the value on this dashboard, or the default.
+
+| Field | |
+| ----- | - |
+| `id`, `title` | The setting |
+| `type` | `'bool'` (a checkbox) or `'choice'` (a list) |
+| `options` | For a choice: `[{ id, title }]` |
+| `default` | The value until the user picks one |
+| `group` | Optional: a heading the setting is listed under |
+
+Give `settings` as a function when the choices come and go, as the map card does with the kinds of device and overlays plugins add.  The Devices, Active devices, and New devices cards have one setting, whether to draw the graph:
+
+```javascript
+const graphSetting = [{ id: 'graph', title: 'Show the graph', type: 'bool', default: true }];
+
+ui.dashboardCards.add({
+    id: 'active', title: 'Active devices', priority: 10, w: 3, h: 6, needs: ['channels'],
+    settings: graphSetting,
+    create(body, { settings }) {
+        const now = stat('heard in the last 30 seconds');
+        const graph = settings.get('graph') ? historyGraph({ type: 'line', unit: 'devices', height: null }) : null;
+        body.append(...[now.node, graph?.node].filter(Boolean));
+        // ...
+    },
+});
+```
 
 ### Shared data
 
@@ -109,7 +141,7 @@ ui.dashboardCards.add({
 
 ## The map
 
-The map tab draws the devices which have a place on it, in layers from `kismet.ui.mapSources`; each layer has a checkbox in the map's list.  A layer reads a device view every couple of seconds while the map is showing (and every 15 seconds while it's hidden, to keep paths going).
+The map tab draws the devices which have a place on it, in layers from `kismet.ui.mapSources`; each layer has a checkbox in the map's list.  The Overview's *Map* card draws the same layers and overlays, each with a switch in the card's settings instead.  A layer reads a device view every couple of seconds while the map is showing (and every 15 seconds while it's hidden, to keep paths going).
 
 What to read:
 
