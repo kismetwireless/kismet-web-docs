@@ -22,6 +22,10 @@ A collection of 3d-printable cases for various radios and tools is available in 
 The docker environment and build scripts for the [Kismet packages](/packages/) is in the 
 [Kismet packaging Github](https://github.com/kismetwireless/kismet-packages)
 
+## Userspace USB Wi-Fi
+
+[Userspace USB Wi-Fi](/userspace-wifi/) runs Linux USB Wi-Fi drivers in userspace, for monitor mode capture, injection and SDR on systems without a kernel driver.  The code is in the [userspace-wifi Github](https://github.com/kismetwireless/userspace-wifi).
+
 ## LORCON 
 
 [LORCON](https://github.com/kismetwireless/lorcon) (Loss Of Radio CONtrol) is a packet creation and injection library.
