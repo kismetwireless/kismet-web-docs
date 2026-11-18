@@ -27,6 +27,7 @@ The Overview tab is a grid of cards from `kismet.ui.dashboardCards`.  Users arra
 | Option | |
 | ------ | - |
 | `id`, `title`, `priority` | The card |
+| `description` | Optional: shown as a tooltip on the card's entry in the *Add a card* list (after 2026-10-R1) |
 | `w`, `h` | Its starting size on the 12-column grid, in columns and rows (3 × 5 if not given) |
 | `place` | Optional: `'top'` puts the card at the top left when it's first shown, even in a layout the user has already arranged; otherwise it takes the first free spot |
 | `defaultHidden` | Optional: `true` leaves the card off a dashboard until the user adds it |
@@ -35,9 +36,10 @@ The Overview tab is a grid of cards from `kismet.ui.dashboardCards`.  Users arra
 | `loading` | The outline shown until that data arrives: one or a list of `'stat'`, `'tabs'`, `'graph'`, `'histogram'`, `'bars'`, `'list'`, `'table'`, `'donut'`, `'text'` (the default), stacked top to bottom |
 | `settings` | Optional: the card's own settings (below), as a list or a function returning one |
 | `create(body, { actions, settings, dashboard })` | Builds the card; returns `{ update(data), show(), hide(), destroy() }`, all optional |
+| `forget(dashboard)` | Optional: called when the user deletes a dashboard, so the card can drop what it kept for that one (after 2026-10-R1) |
 | `onClick(actions)` | Optional: called when the card is clicked (anywhere but its own buttons and links) |
 
-`actions.showTab(id)` switches to a tab (a pane id, or the id given to `addTable`), and `actions.showDevices(viewId)` to the device list on a view.  `dashboard` is the id of the dashboard the card is on, for a card that keeps state of its own in each one: the map card keeps its view in the setting `overview.map.view.<dashboard>`.  `show()` and `hide()` are called as the card comes on and off screen: when the Overview tab is shown or hidden, the user switches dashboards, or the card is added or hidden; a card that refreshes on its own timer can stop while it's hidden.
+`actions.showTab(id)` switches to a tab (a pane id, or the id given to `addTable`), and `actions.showDevices(viewId)` to the device list on a view.  `dashboard` is the id of the dashboard the card is on, for a card that keeps state of its own in each one: the map card keeps its view in the setting `overview.map.view.<dashboard>`, and removes it in `forget(dashboard)`.  `show()` and `hide()` are called as the card comes on and off screen: when the Overview tab is shown or hidden, the user switches dashboards, or the card is added or hidden; a card that refreshes on its own timer can stop while it's hidden.
 
 ### Card settings
 
