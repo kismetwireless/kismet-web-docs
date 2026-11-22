@@ -35,6 +35,8 @@ Added: `after 2026-10-R1`
 
 `kismetdb_to_gpx` exports cells the same way, as waypoints.
 
+After 2026-10-R1, both tools leave out wired [Ethernet devices](/docs/readme/datasources/wired-linux/): they have no location of their own, and their packets only carry the sensor's.
+
 ## Arguments
 
 {{<argumentshort i in filename>}}

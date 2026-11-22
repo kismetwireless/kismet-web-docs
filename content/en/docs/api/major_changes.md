@@ -55,6 +55,22 @@ For about a week in November 2026, development builds put the phy's type in `kis
 
 **Apple Continuity.**  `bluetooth.adv.continuity` now also counts AirPods proximity pairing (`proximity_pairing`) and Find My (`findmy`) messages.
 
+**Ethernet phy.**  The new `IEEE802.3` phy tracks wired devices, with `ethernet.device` records and the `phy-IEEE802.3` device view; flows, VLANs, devices by IP, and status are under `/phy/ethernet/`.  See the [Ethernet API](/docs/api/ethernet/) and the [wired data source](/docs/readme/datasources/wired-linux/), whose sources carry `kismet.datasource.wired.*` status fields.
+
+**Environmental sensors.**  [`/system/environment`](/docs/api/system/) lists the temperatures, fans, and batteries of the host and of data sources, in `kismet.system.environment.*` records, and the `ENVIRONMENT` eventbus topic and kismetdb snapshots carry their current values.  `/system/thermal` now returns the same records for the temperature sensors only, instead of the `kismet.system.thermal.*` records of earlier development builds.  The options `system_thermal_history` and `system_thermal_max_sensors` are now `environment_history` and `environment_max_sensors`; the old names are still read.
+
+**SSID hashes with embedded NULs.**  SSIDs are hashed and shown in full, embedded NUL bytes included (escaped when shown), so SSIDs which differ only after a NUL are no longer merged into one record.  The hash of such an SSID changes, in the API, in kismetdb logs, and in `/phy/phy80211/ssids/by-hash/`.
+
+**Per-device SSID limits.**  The advertised, responded, and probed SSID lists of a Wi-Fi device keep at most [`dot11_max_device_ssids`](/docs/readme/tuning/tuning/) (128) entries each.
+
+**Karma detection.**  Wi-Fi access points carry `dot11.device.karma` once they answer for networks they don't beacon, or beacon a pool of networks, and suspected ones are listed in the `phydot11_karma` view; see [DOT11KARMA](/docs/readme/alerts/alerts/#dot11karma) and the [Wi-Fi API](/docs/api/wifi_dot11/).
+
+**Radiation track.**  [`/radiation/sensors/by-uuid/{UUID}/track`](/docs/api/radiation/) returns a sensor's readings at GPS locations.
+
+**Bad requests are 400.**  A malformed JSON request body is answered with `400` instead of `500`; see [command parameters](/docs/api/command_param/).  The web and meta GPS `update` POST endpoints refuse out-of-range positions with `400`, as their websockets already did.
+
+**Cell DIAG replays.**  A cell DIAG `replay=` source which has read its file stays open and idle instead of being re-opened and replaying the file again; `kismet.datasource.celldiag.replay_state` says `reading`, `complete`, or `incomplete`.
+
 #### 2026-10-R1
 
 **Major change to device location data.**  Devices that report their own position (ADS-B aircraft, AIS vessels, Remote ID drones, MeshCore and Meshtastic nodes) previously had that position written into the device location.  The device location now always means where Kismet was when it heard the device, and the position the device reports is kept separately:

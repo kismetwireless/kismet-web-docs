@@ -177,6 +177,20 @@ Set to `0` for no limit.
 {{</configopt>}}
 
 
+{{<configopt dot11_max_device_ssids ssids>}}
+The most advertised, responded, and probed SSIDs kept per device, for each list (after 2026-10-R1; default `128`), so a device answering for endless SSIDs, or forged frames from one address, can't grow it forever.
+
+When a list is full, the SSID seen longest ago makes room for a new one only if it hasn't been seen for 60 seconds.  Otherwise the new SSID is handled once (alerts and karma detection) but not kept: it doesn't appear in the device or the SSID view, and sends no new SSID events.  Once a device's advertised or responded list is full, the "advertising new SSID" messages stop for that device.
+
+Set to `0` for no limit.
+{{</configopt>}}
+
+
+{{<configopt dot11_view_karma true false>}}
+Keep a device view of suspected karma access points, `phydot11_karma` (after 2026-10-R1; default `true`).  See the [DOT11KARMA](/docs/readme/alerts/alerts/#dot11karma) alert.
+{{</configopt>}}
+
+
 {{<configopt dot11_fingerprint_devices true false>}}
 Kismet does advanced fingerprinting of 802.11 devices. 
 

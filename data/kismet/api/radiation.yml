@@ -98,3 +98,46 @@
       - [200, "Success"]
     failure:
       - [500, "Invalid UUID, or no radiation sensor with that UUID"]
+
+-
+  name: "Radiation sensor track"
+  uri: "/radiation/sensors/by-uuid/{UUID}/track"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  uriparameters:
+    -
+      name: "UUID"
+      type: "string"
+      required: true
+      description: Datasource UUID of the radiation sensor
+  parameters:
+    -
+      name: "since"
+      type: "number"
+      required: false
+      description: |
+        Leave out points last updated before this time, in seconds since the epoch.
+  docs: |
+    The readings of one radiation sensor at the GPS locations where they were taken, as the web UI's
+    *Radiation dose* map overlay draws them.  Readings within 10 meters and 60 seconds of the last point
+    are merged into it; each sensor keeps its last 4000 points.
+  return: |
+    JSON list of points, oldest first, each a list of numbers:
+
+    | Index | Content |
+    | ----- | ------- |
+    | 0 | Time of the first reading in the point |
+    | 1 | Time of the last reading in the point |
+    | 2 | Longitude |
+    | 3 | Latitude |
+    | 4 | Average count rate, counts per second |
+    | 5 | Average dose rate, uSv/h; `-1` for sensors which report no dose rate |
+    | 6 | Highest dose rate, uSv/h; `-1` for sensors which report no dose rate |
+    | 7 | Number of readings merged into the point |
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [500, "Invalid UUID or since, or no radiation sensor with that UUID"]

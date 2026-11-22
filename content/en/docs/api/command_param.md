@@ -62,6 +62,8 @@ Commands are encoded as dictionaries to allow flexibility across calling platfor
 
 Dictionary key values are case sensitive.
 
+After 2026-10-R1, a request body which isn't valid JSON, or whose JSON doesn't fit what the endpoint expects (such as a field of the wrong type), is answered with `400 Bad Request`; earlier versions answered `500`.  Neither the `400` nor a `500` for a JSON fault in the server includes the parser's error text; other errors inside an endpoint are still `500` with their message.  The server logs malformed requests at most once every 10 seconds, with a count of those left out, so a client can't flood the log.
+
 ## Timestamps
 
 Kismet allows both absolute and relative timestamps in almost all APIs which accept a timestamp value; those APIs which only work with an absolute timestamp will be denoted specially.

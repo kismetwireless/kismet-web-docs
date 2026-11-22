@@ -100,11 +100,43 @@
 
     Devices which have been active since the specified time will be returned.
 
-    For complete documentation, check the [device view api](/docs/api/device_views/) 
-  notes: | 
+    For complete documentation, check the [device view api](/docs/api/device_views/)
+  notes: |
     This endpoint uses the [device view](/docs/api/device_views/) API.
 
-- 
+-
+  name: "Suspected karma access points device view"
+  uri: "/devices/views/phydot11_karma/devices"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  docs: |
+    A [device view](/docs/api/device_views/) of the access points suspected of a karma or mana
+    attack, which raised the [DOT11KARMA](/docs/readme/alerts/alerts/#dot11karma) alert.  It is
+    kept when `dot11_view_karma` is on, the default.
+
+    Access points Kismet has seen answer for networks they don't beacon, or beacon a pool of
+    networks, carry `dot11.device.karma`:
+
+    | Field | Contents |
+    | ----- | -------- |
+    | `dot11.karma.suspect` | The BSSID answered for enough networks it doesn't advertise, or beaconed enough different networks, to suggest a karma or mana attack |
+    | `dot11.karma.reason` | Why it is suspect: `1` answers for networks it doesn't advertise, `2` a beaconed pool of networks, `3` both |
+    | `dot11.karma.unbeaconed_ssids` | SSIDs it answered probes for, or sent only unicast beacons for, without broadcast-beaconing them |
+    | `dot11.karma.probe_matched_ssids` | Unbeaconed SSIDs a client probed for near the time of the answer |
+    | `dot11.karma.directed_beacons` | Unbeaconed SSIDs seen in unicast beacons |
+    | `dot11.karma.pool_ssids` | Different SSIDs it broadcast-beaconed within `dot11_karma_window`, once it beaconed more than one; an estimate from a sample when `pool_estimated` is set |
+    | `dot11.karma.answered_pool_ssids` | SSIDs it answered probes for and also broadcast-beacons |
+    | `dot11.karma.pool_current` | It beacons a pool now, as of `counts_until` |
+    | `dot11.karma.pool_estimated` | `pool_ssids` is estimated from a sample of a pool too big for the SSID list |
+    | `dot11.karma.flood_ssids` | The most new broadcast SSIDs within 5 seconds while a beacon flood is within the window; `0` otherwise |
+    | `dot11.karma.counts_until` | Capture time the counts hold until; past it, the BSSID no longer has them |
+    | `dot11.karma.first_time`, `dot11.karma.last_time` | Capture times of the first and last unbeaconed SSID, or of the pool growing |
+  notes: |
+    This endpoint uses the [device view](/docs/api/device_views/) API.
+
+-
   name: "Wi-Fi related devices"
   uri: "/phy/phy80211/related-to/{DEVICEKEY}/devices"
   methods: ["GET", "POST"]

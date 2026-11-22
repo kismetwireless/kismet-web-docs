@@ -38,6 +38,11 @@ and pivot into a read-only mount namespace.
 After 2026-10-R1:
 
 * Setuid helpers keep only the `CAP_NET_ADMIN` and `CAP_NET_RAW` capabilities.
+* The [wired capture helper](/docs/readme/datasources/wired-linux/#permissions)
+  (`kismet_cap_wired`) is never setuid.  `make suidinstall` installs it mode
+  0750 in the suid group with the file capabilities
+  `cap_net_raw,cap_net_admin+ep`; `cap_net_raw+ep` alone works for interfaces
+  which are already up.  It refuses to capture as root.
 * The helpers which run an external tool (`kismet_cap_sdr_rtl433`, which runs
   `rtl_433`, and `kismet_cap_sdr_zigbee900`, which runs its decoder script)
   are no longer installed setuid by `make suidinstall`.  They run as the user

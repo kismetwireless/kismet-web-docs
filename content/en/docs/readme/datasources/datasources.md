@@ -198,6 +198,8 @@ Multiple datasources can use the same meta GPS, or have independent meta GPS dev
 
 Kismet will attempt to re-open any datasource which has gone into error state.
 
+After 2026-10-R1, a list, probe, or open which waits for the first reply of a capture tool fails after 15 seconds instead of hanging, and is retried like any other error.  A source which fails before it reports its UUID is listed under a provisional UUID until it does, so failed sources no longer collide in the list.
+
 
 ### Default options
 

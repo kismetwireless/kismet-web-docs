@@ -68,6 +68,8 @@ The AT source supports Quectel, Telit, and Fibocom modems through their engineer
 
 The source also recognizes Sierra Wireless (EM9190, EM9291), SIMCom (SIM8202G-M2), and Orbic (RC400L) modems.
 
+A modem with no vendor survey command is polled with the standard 3GPP reads (`AT+C5GREG?`, `AT+CEREG?`, `AT+CREG?`, `AT+COPS?`, `AT+CESQ`, and `AT+CSQ`).  After 2026-10-R1, the first poll tests each of these but `AT+COPS?` once, and leaves out of later polls the ones the modem answers with `ERROR`, naming them in one status message.  A timeout or empty reply keeps the command.
+
 Modems are identified by their manufacturer (`AT+CGMI`), and the commands each one supports are probed when the source opens, instead of assumed from the model.
 
 ### Tested configurations

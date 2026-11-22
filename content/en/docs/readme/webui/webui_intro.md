@@ -25,15 +25,17 @@ Plugins which add pages to the previous UI keep working in it from `/legacy/`; t
 
 ## What's in it
 
-* *Overview*, *Devices*, *SSIDs*, *Alerts*, *Map*, and *Insights* tabs.
-* Windows for data sources, channel coverage and the channel heat map, [device rules](/docs/readme/configuring/device_rules/#rules-in-the-web-ui), packet rates, [memory](#memory-window), [thermal](#thermal-window), [CPU](#cpu-window), and GPS, from the menu and the top bar.
+* *Overview*, *Devices*, *SSIDs*, *Alerts*, *Map*, and *Insights* tabs, and an *Ethernet flows* tab once the server has [Ethernet](#ethernet) devices.
+* Windows for data sources, channel coverage and the channel heat map, [device rules](/docs/readme/configuring/device_rules/#rules-in-the-web-ui), packet rates, [memory](#memory-window), [environment](#environment-window) (temperatures, fans, and batteries), [CPU](#cpu-window), GPS, and [Ethernet VLANs](#ethernet), from the menu and the top bar.
 * The *Messages* panel along the bottom.  Drag the bar above it to resize it, or minimize it to its tab bar with the `_` button at its right; it stays minimized in every tab and after a reload, until you click the button again, click one of its tabs, or drag the bar.
-* A top bar of stats, including the CPU load of the system and of Kismet (after 2026-10-R1), and the [temperatures](#thermal-window) of the system Kismet runs on.  Choose the stats it shows under *Settings*, *Ribbon*; stats Kismet can't read show `---`.
+* A top bar of stats, including the CPU load of the system and of Kismet (after 2026-10-R1), and the [temperatures](#environment-window) of the system Kismet runs on and its data sources.  Choose the stats it shows under *Settings*, *Ribbon*; stats Kismet can't read show `---`.
 * The device list's *Search or filter* box, which takes [device filters](/docs/readme/webui/webui_filters/) as well as plain searches.
 * A *Tags* column and row highlights from the server's [device rules](/docs/readme/configuring/device_rules/#rules-in-the-web-ui), set under *Settings*, *Device Highlights*.
 * Display units for speeds, lengths and temperatures, under *Settings*, *Units*.
 * Names too long for their column are shortened, in the middle (`too l...ame`) or at the end (`too long n...`), set under *Settings*, *Appearance*, *Shorten long names*; point at a name to see it in full (after 2026-10-R1).  Censor mode censors shortened names too.
 * Wi-Fi device details with a *Multiple BSSID* section: for a network an access point hosts in its multiple BSSID element (after 2026-10-R1), the access point that advertises it and its index; for that access point, the networks it hosts.  The *Insights* views show the hosted networks as part of their access point.
+* Suspected karma and mana access points (after 2026-10-R1), from the server's [DOT11KARMA](/docs/readme/alerts/alerts/#dot11karma) detection: a *Karma detection* section in the device details, with the networks it answered for without advertising them, those nearby clients probed for, the networks it beaconed and answered, and any beacon flood; a *Wi-Fi suspected karma APs* device view; and a *Suspected karma AP* finding in *Insights*.  Against an older server, the UI keeps a stricter guess of its own.
+* Alert severities named as the server names them: *Info*, *Low*, *Medium*, *High*, and *Critical*, each with its own highlight color (after 2026-10-R1).  Medium and up are highlighted by default.
 * Bluetooth and BTLE device details with service names, battery, distance, beacon, and connection sections, the [advertised data](/docs/readme/datasources/bluetooth-trackers/#advertised-data) decoded, and the address type, linked addresses, class of device, and controller version and features.
 * [Censor mode](/docs/readme/configuring/webserver/#runtime-censorship), for screenshots and demos.
 * The [receiver range](/docs/readme/configuring/receiver_range/) on the map.
@@ -151,28 +153,36 @@ The memory per device, and the cost of a new device, are estimates and can be we
 
 The window reads the [`/system/memory`](/docs/api/system/) endpoint.  Against an older Kismet server without it, only the memory and device graphs are shown.  The process and system memory figures are only available on Linux, and the heap figures with glibc 2.33 or newer.
 
-## Thermal window
+## Environment window
 
-After 2026-10-R1, Kismet reads the temperature sensors of the system it runs on every second: the lm-sensors sensors, when Kismet is built with lm-sensors, and the Linux thermal zones.  It keeps a history of each, for the last minute, hour, and day.
+After 2026-10-R1, Kismet reads the environmental sensors of the system it runs on every second: temperatures and fans (from lm-sensors, when Kismet is built with it, or hwmon, and the Linux thermal zones) and batteries.  Data sources which can report their own sensors too, such as a [Radiacode](/docs/readme/datasources/radiacode/)'s temperature and battery, or the temperature of a [Linux Wi-Fi](/docs/readme/datasources/wifi-linux/) radio which has a sensor.  Kismet keeps a history of each, for the last minute, hour, and day.
 
-The *Thermal* window, opened from the menu or by clicking the temperature in the top bar, shows:
+The *Environment* window (the *Thermal* window in earlier builds), opened from the menu or by clicking the *Sensors* or battery stat in the top bar, has *Thermal*, *Fans*, and *Battery* tabs.  Each shows:
 
-* The hottest sensor, the average of the sensors, and how many are read.
-* A graph of the sensors over the last minute, hour, or day.  Check sensors in the list to graph them; with none checked, the four hottest are graphed.  The CPU load of the system and of Kismet is graphed with them, against the right axis.
-* Every sensor's temperature now, and its lowest, highest, and average over the time shown.
+* A summary: the hottest sensor, the average, and how many are read; the fastest fan, and how many are stopped; or the lowest battery.
+* A graph over the last minute, hour, or day.  Check sensors in the list to graph them; with none checked, the four hottest temperatures, or the first fans or batteries, are graphed.  The CPU load of the system and of Kismet is graphed with them, against the right axis.
+* Every sensor's value now, and its lowest, highest, and average over the time shown, grouped by *This server* and by data source.  A data source's group is marked *Closed* or *Removed* when the source stops; its sensors are removed once they haven't reported for a while.
 
-{{< screenshot name="webui-thermal" alt="The Thermal window" >}}
+{{< screenshot name="webui-thermal" alt="The Environment window" >}}
 
-The *Thermal* stat in the top bar shows the hottest sensor, or the sensors checked under *Settings*, *Ribbon*, *Thermal*.  Temperatures are shown in Celsius or Fahrenheit, set under *Settings*, *Units*.
+The *Sensors* stat in the top bar (*Thermal* in earlier builds; a saved choice carries over) shows the hottest sensor, or the sensors checked under *Settings*, *Ribbon*, *Sensors*.  The battery stat shows the server's battery and those of data sources with one, and no longer always says it is charging.  Temperatures are shown in Celsius or Fahrenheit, set under *Settings*, *Units*.
 
-The window reads the [`/system/thermal`](/docs/api/system/) endpoint.  Against an older Kismet server without it, or a system with no sensors Kismet can read, the window says so and the top bar shows `---`.
+The window reads the [`/system/environment`](/docs/api/system/) endpoint.  Against an older Kismet server without it, or with no sensors Kismet can read, the window says so and the top bar shows `---`.
 
-{{<configopt system_thermal_history true false>}}
-Keep a history of each temperature sensor (after 2026-10-R1).  Defaults to `true`; set to `false` to keep only the current temperatures.
+{{<configopt environment_history true false>}}
+Keep a history of each sensor (after 2026-10-R1).  Defaults to `true`; set to `false` to keep only the current values.  The older name `system_thermal_history` is still read when this is unset.
 {{</configopt>}}
 
-{{<configopt system_thermal_max_sensors count>}}
-The most temperature sensors tracked (after 2026-10-R1); any past it are left out.  Defaults to `32`, and can be 1 to 1024.
+{{<configopt environment_max_sensors count>}}
+The most host sensors of each kind (temperature, fan, battery) tracked (after 2026-10-R1); any past it are left out.  Defaults to `32`, and can be 1 to 1024.  The older name `system_thermal_max_sensors` is still read when this is unset.
+{{</configopt>}}
+
+{{<configopt environment_source_max_sensors count>}}
+The most sensors kept from each data source, `0` to `32` (after 2026-10-R1); defaults to `8`.  `0` turns data source sensor reports off.
+{{</configopt>}}
+
+{{<configopt environment_source_report_sec seconds>}}
+Data sources report their sensors at most once per this many seconds, `1` to `3600` (after 2026-10-R1); defaults to `5`.  At most 256 data source sensors are kept in all.
 {{</configopt>}}
 
 ## CPU window
@@ -186,7 +196,7 @@ After 2026-10-R1, the *CPU* window, opened from the menu or by clicking the CPU 
 
 The window reads the [`/system/cpu`](/docs/api/system/) endpoint.  The CPU load is only read on Linux; elsewhere, and against an older Kismet server without it, the window says so.
 
-After 2026-10-R1, the *Overview* tab also has *CPU*, *Memory*, and *Temperatures* cards: each shows the reading now and a graph over the last minute, hour, or day, and opens its window when clicked.  The *Temperatures* card graphs the same sensors as the *Thermal* window; without temperature history it lists the hottest sensors now instead.  Against an older Kismet server without the CPU or thermal endpoints, the cards say so.
+After 2026-10-R1, the *Overview* tab also has *CPU*, *Memory*, and *Environment* (formerly *Temperatures*) cards: each shows the reading now and a graph over the last minute, hour, or day, and opens its window when clicked.  The *Environment* card graphs the same temperatures as the *Environment* window, and its settings can add lists of fans and batteries; without temperature history it lists the hottest sensors now instead.  Against an older Kismet server without the CPU or environment endpoints, the cards say so.
 
 {{< screenshot name="webui-overview-system" alt="The CPU, Memory, and Temperatures cards" >}}
 
@@ -197,14 +207,32 @@ After 2026-10-R1, the *Radiation* window, opened from the menu or by clicking a 
 * The count rate (counts per second) and dose rate, and for sensors which report them, the accumulated dose the sensor has counted, its temperature, and its battery.
 * *History*: the count rate, and the dose rate against the right axis, over the last minute, hour, or day.
 * *Spectrum*, for sensors which send one: the gamma energy spectrum since Kismet started (*Session*), over the past hour, or as the sensor has accumulated it (*Device*), on a log or linear scale.  *Gamma lines* marks the energies of common isotopes, and *Waterfall* adds the past hour minute by minute, newest at the top and brighter for more counts.  For a sensor without a spectrum, the section says so.
+* *Peaks* finds the peaks in the spectrum and names the common gamma lines near them ("Peaks hint at: ..."); point at the hint for each peak's energy and significance.  These are hints from the energies of the peaks, never an identification.
+* *CSV* saves the spectrum shown as channel, energy in keV, and counts; *N42* saves it as ANSI N42.42 XML, for spectrum tools such as InterSpec.
 
 Both sections fold away, and the window fits its height to what it shows until you resize it.
+
+The *Map* tab has a *Radiation dose* overlay while a sensor has readings at GPS locations: a track colored from green at background to red at 1 uSv/h and above (for a Radview, which reports no dose rate, by its count rate), with the range of readings when pointed at.  Readings within 10 meters and a minute of each other are merged, and a sensor's track keeps its last 4000 points.
+
+The server raises the [RADIATIONDOSE](/docs/readme/alerts/alerts/#radiationdose) alert when a sensor's dose rate passes `radiation_alert_dose`, and [RADIATIONRISE](/docs/readme/alerts/alerts/#radiationrise) when its count rate rises well above its own background.
 
 **Never** rely on radiation readings shown by Kismet for safety: they depend on the detector, its calibration, and how it is held.
 
 The top bar has *Radiation counts* and *Radiation dose rate* stats, shown once the server has a radiation sensor, and hidden or shown again under *Settings*, *Ribbon*.  The *Overview* tab offers a *Radiation* card (the dose and count rates, with the last minute of counts) and a *Radiation spectrum* card, with its own window, scale, and gamma line settings; neither is on a dashboard until added with *Edit layout*.
 
 The window reads the [radiation endpoints](/docs/api/radiation/).
+
+## Ethernet
+
+After 2026-10-R1, the UI shows the wired devices of the [Ethernet phy](/docs/readme/datasources/wired-linux/), from the wired data source or Ethernet pcap files:
+
+* Ethernet devices have their own icons, *VLAN*, *IP*, and *Hostname* columns in the device list, and details with their addresses, names, DHCP details, and flows.
+* The *Ethernet flows* tab, after *Map*, lists the IP flows: the two sides with their addresses, ports, and MACs, the protocol and VLAN, who started it, and the bytes and packets each way.  Opened from a device or a VLAN, it starts filtered to it.
+* The *Ethernet VLANs* window, from the menu, lists the VLANs seen, with their frames, bytes, and devices.
+
+The tab and the window are offered once the server has Ethernet devices.  Both say so when devices or flows weren't kept because of the server's [limits](/docs/readme/datasources/wired-linux/#ethernet-options).
+
+They read the [Ethernet endpoints](/docs/api/ethernet/).
 
 ## API keys window
 

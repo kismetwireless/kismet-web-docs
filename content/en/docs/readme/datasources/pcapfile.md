@@ -33,6 +33,14 @@ Kismet supports any format loadable by libpcap, primarily `pcap` and `pcap-ng` f
 
 When using a `pcap-ng` file, due to how the packets are processed and loaded by libpcap, Kismet will only support `pcap-ng` logs of a single phy type (ie only Wi-Fi, or only Zigbee, but not mixed).  Additionally, all packets will appear to come from a single data source (the pcapfile source), not the original interfaces.
 
+### Ethernet captures
+
+After 2026-10-R1, pcap files of Ethernet frames (`DLT_EN10MB`), and Linux cooked captures of the `any` interface, make wired [Ethernet devices](/docs/readme/datasources/wired-linux/), with their VLANs, addresses, names, DHCP details, and flows.  The device and flow limits in `kismet_wired.conf` follow the capture's timestamps, so a file read at full speed is limited as it was captured.
+
+```bash
+$ kismet -c /tmp/wired.pcap:type=pcapfile,name=wired
+```
+
 ### SDR receiver captures
 
 Some protocols have no capture hardware in Kismet, but an SDR receiver can demodulate them and write the packets as a pcap file or a FIFO, which the pcapfile source reads.  Since Kismet 2026-10-R1 two such formats are decoded:

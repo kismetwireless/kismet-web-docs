@@ -320,6 +320,43 @@
     Conflicting 802.11d elements can indicate an AP spoofing attack where the cloned AP is not configured for the same regional restrictions.
 
 -
+  name: "DOT11KARMA"
+  class: "Spoof"
+  phy: "dot11"
+  added: "after 2026-10-R1"
+  docs: |
+    An access point answered probe requests for several networks it never advertises in broadcast beacons, often the networks nearby clients probed for, or one BSSID broadcast-beaconed many different networks.  Karma and mana attacks (such as the Wi-Fi Pineapple) do this to lure clients into connecting to an impersonated network.  The alert is raised once per BSSID, at high severity.
+
+    Within `dot11_karma_window` seconds of capture time, a BSSID alerts when it:
+
+    * answered for `dot11_karma_min_matched` networks that clients probed for within `dot11_karma_probe_window` seconds of the answer, or for `dot11_karma_min_unbeaconed` networks of any kind, without broadcast-beaconing them (unicast beacons don't count as advertising a network);
+    * broadcast-beaconed `dot11_karma_min_pool` different networks, as a karma AP beaconing a pool of SSIDs (PineAP) does; a network counts once it was beaconed in two different seconds;
+    * sent a beacon flood, `4 x dot11_karma_min_pool` new networks a second.
+
+    One network is allowed for when the BSSID beacons a hidden SSID, and Wi-Fi Direct names, mesh networks, and networks a related BSSID beacons (multiple BSSID sets, matching BSS timestamps) don't count.  Matching probes needs `dot11_view_ssids`.  Suspected access points carry `dot11.device.karma` and are listed in the `phydot11_karma` [device view](/docs/api/wifi_dot11/).
+
+    ```
+    dot11_karma_detect=true
+    dot11_karma_min_matched=3
+    dot11_karma_min_unbeaconed=10
+    dot11_karma_min_pool=10
+    dot11_karma_window=600
+    dot11_karma_probe_window=60
+    dot11_karma_max_ssids=64
+    dot11_view_karma=true
+    ```
+
+    The thresholds are 1 to 1024 (`dot11_karma_min_pool` 2 to 1024).  `dot11_karma_max_ssids` networks are kept per BSSID, at least the largest threshold and at most 1024; a larger pool is counted from a sample of its networks, and its count is an estimate ("about N").
+
+    Access points which legitimately answer for networks they don't beacon, such as old access points serving several hidden SSIDs from one BSSID, can be left out with `dot11_karma_ignore_bssids`, a comma-separated list of MAC addresses or masks, on one or more lines; up to 256 are used:
+
+    ```
+    dot11_karma_ignore_bssids=02:00:00:00:00:01,02:00:00:00:01:00/FF:FF:FF:FF:FF:00
+    ```
+
+    Known limits: a network beaconed only once (as the SSID of a corrupted frame is) doesn't count toward a pool, so a pool which beacons each network fewer than twice per `dot11_karma_window`, and stays below the flood rate, isn't detected; networks a BSSID beaconing more than one both answers for and beacons are reported apart, and don't alert on their own; and frame times aren't corrected for clock differences between sensors and the server, so a source whose clock runs far ahead holds the window of the BSSIDs it hears.
+
+-
   name: "FORMATSTRING"
   class: "trend"
   phy: "dot11"
@@ -522,6 +559,34 @@
     This alert detects packets with what appear to be over-sized IE 127 elements, however as the use of this tag evolves the size of the data continues to grow, false positives become more common.
 
     This alert is disabled by default.
+
+-
+  name: "RADIATIONDOSE"
+  class: "System"
+  phy: "Radiation"
+  added: "after 2026-10-R1"
+  docs: |
+    A radiation sensor's dose rate, such as from a [Radiacode](/docs/readme/datasources/radiacode/), averaged over 10 seconds, reached `radiation_alert_dose` uSv/h.  The default is `1.0`; natural background is usually 0.05 to 0.3 uSv/h.  `0` turns the alert off.  It is raised again only after the reading falls back well below the level.
+
+    ```
+    radiation_alert_dose=1.0
+    ```
+
+    **Never** rely on Kismet to decide whether an area is safe: readings depend on the detector, its calibration, and how it is held.
+
+-
+  name: "RADIATIONRISE"
+  class: "System"
+  phy: "Radiation"
+  added: "after 2026-10-R1"
+  docs: |
+    A radiation sensor's count rate over 10 seconds rose `radiation_alert_rise_sigma` standard deviations, and 1.5 times, above the sensor's own average over the past hour.  The default is `6`; `0` turns the alert off.  It needs 10 minutes of readings first, and is raised again only after the reading falls back well below the level.
+
+    ```
+    radiation_alert_rise_sigma=6
+    ```
+
+    A rise may be a source nearby, or a change in the natural background, such as rain washing radon daughters down.
 
 -
   name: "RSNLOOP"

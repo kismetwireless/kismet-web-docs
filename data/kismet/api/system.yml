@@ -99,37 +99,100 @@
       - [-1, "On error (typically for malformed simplification)"]
 
 -
+  name: "Environmental sensors"
+  uri: "/system/environment"
+  methods: ["GET", "POST"]
+  types: ["anyjson"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  docs: |
+    The environment endpoint returns what the [environment window](/docs/readme/webui/webui_intro/#environment-window)
+    of the web UI shows: the temperatures, fans, and batteries of the system Kismet runs on, and the
+    sensors data sources report (such as a Radiacode's temperature and battery, or the temperature of a
+    Linux Wi-Fi radio), with their history.
+
+    | Field | Contents |
+    | ----- | -------- |
+    | `kismet.system.environment.history` | 1 when history is kept (`environment_history`) |
+    | `kismet.system.environment.sensors` | The sensors, by sensor id |
+    | `kismet.system.environment.source_report_sec` | Seconds between data source reports, 0 when data source reports are off |
+    | `kismet.system.environment.source_stale_sec` | Data source sensors not updated for this many seconds are removed |
+    | `kismet.system.environment.dropped_reports` | Data source reports dropped: malformed, or sent too often |
+    | `kismet.system.environment.dropped_sensors` | Data source sensors left out by the sensor limits |
+
+    Each sensor has:
+
+    | Field | Contents |
+    | ----- | -------- |
+    | `kismet.system.environment.sensor.id` | The sensor id, the key of the sensor map, such as `system-thermal-0` or `system-battery-BAT0` |
+    | `kismet.system.environment.sensor.label` | What the sensor measures |
+    | `kismet.system.environment.sensor.kind` | `thermal`, `fan`, or `battery` |
+    | `kismet.system.environment.sensor.units` | Units of the value: `C`, `RPM`, or `%` |
+    | `kismet.system.environment.sensor.value` | The last value |
+    | `kismet.system.environment.sensor.last_time` | Time of the last value |
+    | `kismet.system.environment.sensor.origin` | `host` or `datasource` |
+    | `kismet.system.environment.sensor.source_uuid` | The data source reporting the sensor, 0 for the host |
+    | `kismet.system.environment.sensor.source_name` | Name of the data source reporting the sensor |
+    | `kismet.system.environment.sensor.rrd` | History of the value when history is kept.  Seconds, minutes, and hours with no reading hold the RRD's `kismet.common.rrd.blank_val` |
+    | `kismet.system.environment.sensor.battery` | For batteries: `kismet.system.environment.battery.state` (`charging`, `discharging`, `full`, `not_charging`, or `unknown`), `.external_power` (1 yes, 0 no, -1 unknown), `.voltage`, and `.remaining` (seconds at the present rate); 0 when unknown |
+
+    The current values are also sent every second as the `ENVIRONMENT` [eventbus](/docs/api/eventbus/)
+    topic, in `kismet.system.environment.sensors`, and logged to the kismetdb log as `ENVIRONMENT`
+    snapshots with each `SYSTEM` snapshot.
+
+    Batteries which are full, or not charging on AC power, are no longer reported as discharging.
+  jsonparameters:
+    -
+      auto: "fields"
+  return: |
+    JSON object of the environmental sensors.
+  responses:
+    success:
+      - [200, "Basic success and JSON object"]
+    failure:
+      - [-1, "On error (typically for malformed simplification)"]
+
+-
+  name: "Current environmental sensors"
+  uri: "/system/environment_current"
+  methods: ["GET", "POST"]
+  types: ["anyjson"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  docs: |
+    The same as [`/system/environment`](#environmental-sensors), without the history of each sensor.
+  jsonparameters:
+    -
+      auto: "fields"
+  return: |
+    JSON object of the environmental sensors.
+  responses:
+    success:
+      - [200, "Basic success and JSON object"]
+    failure:
+      - [-1, "On error (typically for malformed simplification)"]
+
+-
   name: "Temperatures"
   uri: "/system/thermal"
   methods: ["GET", "POST"]
   types: ["anyjson"]
   roles: ["readonly"]
   added: "after 2026-10-R1"
+  modified: "after 2026-10-R1, environment records"
   docs: |
-    The thermal endpoint returns what the [thermal window](/docs/readme/webui/webui_intro/#thermal-window)
-    of the web UI shows: every temperature sensor Kismet has read since it started, and its history.
+    The same records as [`/system/environment`](#environmental-sensors), with only the temperature
+    sensors (`thermal`), of the host and of data sources.
 
-    | Field | Contents |
-    | ----- | -------- |
-    | `kismet.system.thermal.history` | 1 when history is kept (`system_thermal_history`) |
-    | `kismet.system.thermal.sensors` | The sensors, by name |
+    During development this endpoint returned `kismet.system.thermal.*` records; those are replaced by
+    the `kismet.system.environment.*` records above.
 
-    Each sensor has:
-
-    | Field | Contents |
-    | ----- | -------- |
-    | `kismet.system.thermal.sensor.name` | The sensor's name, as in `kismet.system.sensors.temp` of `/system/status` |
-    | `kismet.system.thermal.sensor.label` | What the sensor measures, such as the lm-sensors label and chip, or the thermal zone type |
-    | `kismet.system.thermal.sensor.temp` | The last temperature, in degrees C |
-    | `kismet.system.thermal.sensor.last_time` | When the sensor was last read; a sensor no longer read keeps its last values |
-    | `kismet.system.thermal.sensor.rrd` | History of the temperature, in degrees C, when history is kept.  Seconds, minutes, and hours with no reading hold the RRD's `kismet.common.rrd.blank_val` |
-
-    The current temperatures are also sent every second as the `THERMAL` [eventbus](/docs/api/eventbus/)
-    topic, with the field `kismet.system.sensors.temp`.
-  jsonparameters: 
+    The host's current temperatures are also sent every second as the `THERMAL`
+    [eventbus](/docs/api/eventbus/) topic, with the field `kismet.system.sensors.temp`.
+  jsonparameters:
     -
       auto: "fields"
-  return: | 
+  return: |
     JSON object of the temperature sensors.
   responses:
     success:
