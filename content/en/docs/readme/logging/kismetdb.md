@@ -53,7 +53,7 @@ kis_log_journal_mode=wal
 
 `wal`, the default, keeps saving while other programs (the `kismetdb_*` tools, `sqlite3`, scripts) read the log as it is written.  While Kismet runs, a log is the `.kismet` file plus a `.kismet-wal` and a `.kismet-shm` file next to it; a copy of a running log needs all three, or use the `sqlite3` `.backup` command for a single file.  When the log is finished, at exit or when the [log rotates](#rotating-kismetdb-logs), it is a single `.kismet` file again.  If another program still has it open then, Kismet says so, the `LOG_FINISHED` event has `kismet.logfile.wal_left` set, and the `.kismet-wal` holds part of the log and has to be kept with it.  A long read by another program makes the `.kismet-wal` grow until the read ends.
 
-After a crash or power loss, a WAL log is left as the `.kismet`, `.kismet-wal` and `.kismet-shm` files.  Keep all three together until `kismetdb_clean` makes it a single file again; it needs to be able to write to the log and its directory.
+After a crash or power loss, a WAL log is left as the `.kismet`, `.kismet-wal` and `.kismet-shm` files.  Keep all three together until `kismetdb_clean` makes it a single file again; it needs to be able to write to the log and its directory.  It also removes a `-shm` file, or an empty `-wal` file, left next to a finished log.
 
 `persist` is the older mode.  While another program reads a persist log, Kismet can't save to it, and the data waits in memory.  Kismet keeps it for at most 2 minutes or 64 MB; past that it drops it, says so, and logs the devices again once saving works, and a rotation that's due goes ahead.  Reads by other programs can also be refused (`database is locked`) until Kismet's next save.  Ephemeral logs always use persist.
 

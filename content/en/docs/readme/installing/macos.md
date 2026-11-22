@@ -51,8 +51,10 @@ You will need to install the `brew` tool from [brew.sh](https://brew.sh).  There
 ```bash
 brew install pkg-config python3 libpcap protobuf protobuf-c pcre \
 librtlsdr libbtbb ubertooth libusb openssl libwebsockets rtl_433 \
-mosquitto
+mosquitto sqlite
 ```
+
+After 2026-10-R1, Kismet needs Homebrew's `sqlite`.  The sqlite built into macOS can lose log rows while another program reads a running log.  Homebrew installs `sqlite` keg-only, and configure finds it on its own; when it ends up with the system sqlite instead, configure prints a warning.
 
 When compiling git/nightly versions, additional packages may be required.
 
