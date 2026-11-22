@@ -354,7 +354,7 @@
     dot11_karma_ignore_bssids=02:00:00:00:00:01,02:00:00:00:01:00/FF:FF:FF:FF:FF:00
     ```
 
-    Known limits: a network beaconed only once (as the SSID of a corrupted frame is) doesn't count toward a pool, so a pool which beacons each network fewer than twice per `dot11_karma_window`, and stays below the flood rate, isn't detected; networks a BSSID beaconing more than one both answers for and beacons are reported apart, and don't alert on their own; and frame times aren't corrected for clock differences between sensors and the server, so a source whose clock runs far ahead holds the window of the BSSIDs it hears.
+    Known limits: a network beaconed only once (as the SSID of a corrupted frame is) doesn't count toward a pool, so a pool which beacons each network fewer than twice per `dot11_karma_window`, and stays below the flood rate, isn't detected; a pool smaller than `dot11_karma_max_ssids` mixed with a stream of random one-off networks can stay under `dot11_karma_min_pool` (its answers for networks clients probe for still alert); once a BSSID's pool is sampled the flood count is an estimate, so one-off networks somewhat below the flood rate can raise the flood alert, and a long run of one-off networks below the flood rate can hide a later flood; heavy SSID corruption from a source without FCS checks can look like a flood and raise the flood alert for a normal AP; networks a BSSID beaconing more than one both answers for and beacons are reported apart, and don't alert on their own; and frame times aren't corrected for clock differences between sensors and the server, so a source whose clock runs far ahead holds the window of the BSSIDs it hears.
 
 -
   name: "FORMATSTRING"
