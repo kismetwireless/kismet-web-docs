@@ -43,6 +43,26 @@ $ kismetdb_clean foo.kismet
 
 If you have a journal file, it is important that you combine it with the log before transferring the `kismet` file.
 
+### WAL and persist journals
+
+After 2026-10-R1, Kismet saves the log every 10 seconds in one of two ways, set by:
+
+```
+kis_log_journal_mode=wal
+```
+
+`wal`, the default, keeps saving while other programs (the `kismetdb_*` tools, `sqlite3`, scripts) read the log as it is written.  While Kismet runs, a log is the `.kismet` file plus a `.kismet-wal` and a `.kismet-shm` file next to it; a copy of a running log needs all three, or use the `sqlite3` `.backup` command for a single file.  When the log is finished, at exit or when the [log rotates](#rotating-kismetdb-logs), it is a single `.kismet` file again.  If another program still has it open then, Kismet says so, the `LOG_FINISHED` event has `kismet.logfile.wal_left` set, and the `.kismet-wal` holds part of the log and has to be kept with it.  A long read by another program makes the `.kismet-wal` grow until the read ends.
+
+After a crash or power loss, a WAL log is left as the `.kismet`, `.kismet-wal` and `.kismet-shm` files.  Keep all three together until `kismetdb_clean` makes it a single file again; it needs to be able to write to the log and its directory.
+
+`persist` is the older mode.  While another program reads a persist log, Kismet can't save to it, and the data waits in memory.  Kismet keeps it for at most 2 minutes or 64 MB; past that it drops it, says so, and logs the devices again once saving works, and a rotation that's due goes ahead.  Reads by other programs can also be refused (`database is locked`) until Kismet's next save.  Ephemeral logs always use persist.
+
+In both modes, other programs may read a running log but not write to it: a write that holds the log locked makes Kismet's next insert fail, and Kismet stops logging to the file.
+
+WAL needs a filesystem that can hold its shared memory index.  Each log file tries WAL when it opens; where sqlite can't use it, the file uses persist and Kismet says why.  Set `persist` when programs on *other computers* read the log while Kismet runs, such as a log on an NFS, SMB or sshfs share: the WAL index lives in memory on the machine running Kismet, so other machines can read a damaged log, or none at all.
+
+The `kismetdb_*` tools no longer clean (`VACUUM`) a log that Kismet is still writing; they print `Not cleaning` with the reason and read it as it is.
+
 ## Kismetdb ephemeral and timed logs
 
 The `kismet` log format can be used as an ephemeral (non-permanent) log file, and can automatically time-limit the data.  This is extremely useful if you are using Kismet as a stand-alone sensor, where the data is being collected over the REST interface.

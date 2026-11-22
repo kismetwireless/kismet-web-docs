@@ -77,6 +77,8 @@ After 2026-10-R1, the flow graph stays readable in a busy area.  Each column sho
 
 After 2026-10-R1, the Insights views also group 802.11s mesh networks and multiple BSSID sets.  Each mesh ID is listed with the networks, outlined in the mesh color, and linked to every mesh point heard; mesh points are no longer shown as hidden networks.  An access point which sends further networks in its multiple BSSID element is named for the address sending them and tagged *MBSSID*, with the number of networks in the set; its card in the *Access points* view lists the networks in the set.
 
+After 2026-10-R1, the Insights time menu offers the last 5 minutes, 15 minutes, hour, or 24 hours.
+
 Clicking a device opens its details, in sections for each kind of device; this is a Bluetooth LE tag reporting its battery:
 
 {{< screenshot name="webui-btle-device" alt="Bluetooth LE device details" >}}
