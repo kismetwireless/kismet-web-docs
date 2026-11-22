@@ -21,8 +21,8 @@ From the DIAG stream, Kismet gets:
 
 * Every LTE and NR serving and neighbor cell measurement the modem makes (LTE ML1 serving, idle and connected neighbor, and per-cell measurements; NR ML1).  After 2026-10-R1 the LTE serving cell measurement also gives the cell's wideband RSSI, on modems up to the SDX50 generation; SDX55 and newer modems don't report it there.
 * The LTE RRC messages the modem receives, including each cell's SIB1.  The identity in a SIB1 (MCC, MNC, TAC, and cell ID) is added to later measurements of that cell, so cells the AT commands only report by PCI and channel get their full identity.
-* NR RRC, and the serving cell bandwidth and number of antennas.
-* The modem's GNSS position reports.  After 2026-10-R1 this includes the version 30 reports of SDX72 modems, such as the Inseego FX4200, whose positions were dropped before.
+* NR RRC, and the serving cell bandwidth and number of antennas.  After 2026-10-R1 an NR SIB1 makes an identity-only cell of its own (PCI, NR-ARFCN, MCC, MNC, TAC, and cell ID), as an LTE SIB1 does, so NR cells are listed from a capture which has no NR measurement records.
+* The modem's GNSS position reports.  After 2026-10-R1 this includes the version 30 reports of SDX72 modems, such as the Inseego FX4200, whose positions were dropped before.  A receiver with GPS time but no current fix can re-serve its last position on a frozen GNSS clock; after 2026-10-R1 those copies are declined (counted as `frozen=` in the decoder status line), so they no longer geo-tag the cells logged after them.
 * The security signalling, which raises the [cell security alerts](#alerts).
 
 For how this compares to the AT source, and running both on one modem, see [AT and DIAG](/docs/readme/datasources/cell-at/#at-and-diag).
@@ -90,7 +90,7 @@ The RM500Q, RM520N-GL, and LM960 don't need it.  The code is never written to th
 
 ### Masks
 
-The `mask=wardrive` default subscribes to the cell log records Kismet decodes, at low volume: LTE ML1 serving cell, neighbor, and per-cell measurement records (`0xB193`, `0xB192`, `0xB195`, `0xB17F`), LTE serving cell configuration (`0xB197`), LTE RRC (`0xB0C0`), NR RRC (`0xB821`), NR ML1 (`0xB97F`), and GNSS (`0x1476`, `0x14D8`).  Only the records the modem advertises are requested.
+The `mask=wardrive` default subscribes to the cell log records Kismet decodes, at low volume: LTE ML1 serving cell, neighbor, and per-cell measurement records (`0xB193`, `0xB192`, `0xB195`, `0xB17F`), LTE serving cell configuration (`0xB197`), LTE RRC (`0xB0C0`), NR RRC (`0xB821`), NR ML1 (`0xB97F`), and GNSS (`0x1476`).  Only the records the modem advertises are requested.  After 2026-10-R1 the thermal monitor log (`0x14D8`), which earlier builds requested as a GNSS sign of life, is left out; it is the loudest record on SDX62 and SDX72 modems, and `mask=full` still requests it.
 
 `mask=full` subscribes to every log record the modem advertises.  This is a very high volume and is intended for diagnosing a modem, not for normal capture.
 
@@ -220,6 +220,10 @@ With `enabled=false`, the source is defined but idle: the DIAG port isn't opened
 
 {{<configopt replay "/path/to/capture.hdlc">}}
 Decode a saved raw DIAG capture, such as one extracted with `kismetdb_to_hdlc`, instead of a live modem; use the full path to the file.  No modem is opened and no mask is sent.
+
+After 2026-10-R1, a replay which has read its file to the end stays open and idle until it is closed, and the data sources window shows *Replay finished* instead of a stopped decoder (or that the replay was incomplete, when observations or raw records were dropped).  It is not opened again, even if the capture tool is lost while it waits, so the file isn't replayed into the kismetdb log a second time; opening the source again reads it again.  A replay whose file isn't there yet, or which fails while reading, is retried like any source.  The state is in the source's `kismet.datasource.celldiag.replay_state`: `reading`, `complete`, or `incomplete`.
+
+A FIFO is never finished: when its writer closes, a frame it left partial is ended there, and the source waits for the next writer and keeps reading.  `celldiag_replay_ndjson`, which prints what a replay decodes, needs a regular file and refuses a FIFO.
 {{</configopt>}}
 
 {{<configopt stats_interval seconds>}}

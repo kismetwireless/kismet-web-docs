@@ -19,6 +19,8 @@ Modern GPSD is a solid option for controlling most GPS receivers.
 
 Extremely old distributions or versions of GPSD (prior to 2015 or so) may have various issues.  Kismet still supports the now-ancient GPSD text protocol, but will default to the modern JSON protocol.
 
+After 2026-10-R1, Kismet checks each field gpsd sends: a field out of range or of the wrong type is dropped instead of used, a report with an invalid fix mode is dropped whole, and a 3D fix without a usable altitude counts as 2D.  The altitude is the height above mean sea level: `altMSL` when gpsd sends it (gpsd 3.20 and newer), then the older `alt`, then `altHAE` corrected by `geoidSep`.
+
 ## Configuration 
 
 ```

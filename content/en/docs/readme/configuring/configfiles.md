@@ -34,6 +34,7 @@ The config files are broken into several smaller files for readability:
 | kismet_baseline_rules.conf | [Device baseline](/docs/readme/configuring/baseline/) options: the baseline filters, which are off by default (after 2026-10-R1) |
 | kismet_uav.conf | Parsing rules for detecting UAV / Drones or similar devices; compiled from the `kismet_uav.yaml` file |
 | kismet_80211.conf | Configuration settings for Wi-Fi (IEEE80211) specific options |
+| kismet_wired.conf | [Wired Ethernet](/docs/readme/datasources/wired-linux/) options: the `wired` source, and the device, rate, and flow limits (after 2026-10-R1) |
 | kismet_site.conf | Optional configuration override; Kismet will load any options in the `kismet_site.conf` file last and they will take precedence over all other configs. |
 
 ### Configuration Format

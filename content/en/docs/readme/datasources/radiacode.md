@@ -69,7 +69,9 @@ After 2026-10-R1, the newer data format of Radiacode firmware 4.15 is supported,
 
 ## Viewing
 
-In the new web UI, after 2026-10-R1, the [Radiation window](/docs/readme/webui/webui_intro/#radiation-window) shows the readings, their history, and the spectrum; the top bar has count and dose rate stats, and the *Overview* tab has *Radiation* and *Radiation spectrum* cards.
+In the new web UI, after 2026-10-R1, the [Radiation window](/docs/readme/webui/webui_intro/#radiation-window) shows the readings, their history, and the spectrum; the top bar has count and dose rate stats, and the *Overview* tab has *Radiation* and *Radiation spectrum* cards.  The window also hints at the isotopes behind peaks in the spectrum and saves the spectrum as CSV or N42, and with a GPS the *Map* tab draws the dose rate along your track.
+
+Kismet raises the [RADIATIONDOSE](/docs/readme/alerts/alerts/#radiationdose) alert when the dose rate passes `radiation_alert_dose` (1.0 uSv/h by default), and [RADIATIONRISE](/docs/readme/alerts/alerts/#radiationrise) when the count rate rises well above the sensor's own background.  A Radiacode's temperature and battery are also shown in the [Environment window](/docs/readme/webui/webui_intro/#environment-window).
 
 In the older web UI, realtime radiation data can be viewed in the `Radiation` panel, or enabled in the top status bar via the `Settings` panel.
 

@@ -1,0 +1,156 @@
+-
+  name: "Ethernet flows"
+  uri: "/phy/ethernet/flows/flows"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  jsonparameters:
+    - {auto: "fields"}
+  parameters:
+    -
+      name: "mac"
+      type: "string"
+      required: false
+      description: |
+        Only flows to or from this MAC address.
+    -
+      name: "ip"
+      type: "string"
+      required: false
+      description: |
+        Only flows to or from this IPv4 or IPv6 address.
+    -
+      name: "vlan"
+      type: "number"
+      required: false
+      description: |
+        Only flows on this VLAN ID, `0` to `4095`.
+    -
+      name: "start"
+      type: "number"
+      required: false
+      description: |
+        Index of the first flow to return; default `0`.
+    -
+      name: "length"
+      type: "number"
+      required: false
+      description: |
+        Number of flows to return, `1` to `1000`; default `100`.
+  docs: |
+    The IP flows Kismet keeps in memory (see `wired_max_flows` on the
+    [wired source page](/docs/readme/datasources/wired-linux/#ethernet-options)), newest packet
+    first.  Parameters may be sent as GET variables or in a POST JSON body; a malformed parameter is
+    an error rather than a default.  Flows are never written to a log.
+  return: |
+    JSON object with the matching flows in `ethernet.flows.flows`, the number of flows matching in
+    `ethernet.flows.total`, and the index of the first one returned in `ethernet.flows.start`.
+    Each flow has:
+
+    | Field | Contents |
+    | ----- | -------- |
+    | `ethernet.flow.family` | Address family, `4` or `6` |
+    | `ethernet.flow.proto` | IP protocol |
+    | `ethernet.flow.addr_a`, `ethernet.flow.port_a` | Address and port of side a |
+    | `ethernet.flow.addr_b`, `ethernet.flow.port_b` | Address and port of side b |
+    | `ethernet.flow.mac_a`, `ethernet.flow.mac_b` | MAC address of each side |
+    | `ethernet.flow.vlan_tags` | VLAN tags, `0` untagged |
+    | `ethernet.flow.vid`, `ethernet.flow.inner_vid` | Outer and second VLAN ID |
+    | `ethernet.flow.initiator` | Side which sent the first packet seen, `a` or `b` |
+    | `ethernet.flow.bytes_ab`, `ethernet.flow.bytes_ba` | Bytes each way |
+    | `ethernet.flow.packets_ab`, `ethernet.flow.packets_ba` | Packets each way |
+    | `ethernet.flow.first_time`, `ethernet.flow.last_time` | Times of the first and last packet |
+    | `ethernet.flow.tcp_flags_ab`, `ethernet.flow.tcp_flags_ba` | TCP flags seen from each side, ORed |
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [500, "Invalid parameter"]
+
+-
+  name: "Ethernet VLANs"
+  uri: "/phy/ethernet/vlans/vlans"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    The VLANs seen in Ethernet frames, untagged frames included.
+  return: |
+    JSON list of VLANs:
+
+    | Field | Contents |
+    | ----- | -------- |
+    | `ethernet.vlan.tags` | VLAN tags, `0` untagged |
+    | `ethernet.vlan.vid` | Outer VLAN ID |
+    | `ethernet.vlan.inner_vid` | Second VLAN ID |
+    | `ethernet.vlan.first_time`, `ethernet.vlan.last_time` | Times of the first and last frame |
+    | `ethernet.vlan.packets` | Frames |
+    | `ethernet.vlan.bytes` | Bytes, as on the wire |
+    | `ethernet.vlan.devices` | Devices which sent on the VLAN |
+  responses:
+    success:
+      - [200, "Success"]
+
+-
+  name: "Ethernet devices by IP"
+  uri: "/phy/ethernet/by-ip/{IP}/devices"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  uriparameters:
+    -
+      name: "IP"
+      type: "string"
+      required: true
+      description: IPv4 or IPv6 address; an IPv6 address is URL encoded, as `2001%3Adb8%3A%3A1`
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    The Ethernet devices which have used an IP address.
+  return: |
+    JSON list of device records.
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [500, "Invalid IP address"]
+
+-
+  name: "Ethernet status"
+  uri: "/phy/ethernet/status/status"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    Counters of the Ethernet phy, and how often its limits were reached.
+  return: |
+    | Field | Contents |
+    | ----- | -------- |
+    | `ethernet.status.frames` | Ethernet frames processed |
+    | `ethernet.status.malformed` | Malformed frames |
+    | `ethernet.status.devices` | Ethernet devices tracked |
+    | `ethernet.status.max_devices` | `wired_max_devices`, `0` for no limit |
+    | `ethernet.status.devices_capped` | New source MACs not tracked because `wired_max_devices` was reached |
+    | `ethernet.status.new_device_rate` | `wired_new_device_rate`, `0` for no limit |
+    | `ethernet.status.devices_rate_limited` | New source MACs not tracked because of `wired_new_device_rate` |
+    | `ethernet.status.devices_evicted` | Devices which sent only a frame or two, forgotten at `wired_max_devices` to make room |
+    | `ethernet.status.flows` | Flows tracked |
+    | `ethernet.status.max_flows` | `wired_max_flows`, `0` when flows are off |
+    | `ethernet.status.flows_created`, `ethernet.status.flows_expired` | Flows created and expired |
+    | `ethernet.status.flows_dropped` | New flows dropped with the table full |
+    | `ethernet.status.flows_deferred` | New flows held for a second packet with the table nearly full |
+    | `ethernet.status.ip_bindings` | IP to MAC bindings |
+    | `ethernet.status.ip_bindings_dropped` | Bindings dropped with the table full |
+    | `ethernet.status.vlans_dropped` | VLANs not added to the inventory because it was full |
+    | `ethernet.status.future_timestamps` | Frames dated more than a minute past the server clock |
+  responses:
+    success:
+      - [200, "Success"]

@@ -120,6 +120,10 @@
     Kismet supports GPS data from a web event.  Typically this data would be provided by the 
     browser via the location API, but could also be submitted to Kismet from other GPS devices.
 
+    After 2026-10-R1, a position out of range (latitude past 90, longitude past 180, altitude
+    outside -100 km to 1000 km, or a negative speed) is refused with `400 Invalid position`, as the
+    websocket endpoint already refused it.
+
 - 
   name: "Web GPS (websocket)"
   uri: "/gps/web/update"
@@ -175,6 +179,10 @@
 
     This endpoint allows a GPS tool running alongside remote cap to update the GPS location for 
     packets from the associated remote.
+
+    After 2026-10-R1, a position out of range (latitude past 90, longitude past 180, altitude
+    outside -100 km to 1000 km, or a negative speed) is refused with `400 Invalid position`, as the
+    websocket endpoint already refused it.
 
 - 
   name: "Meta GPS (websocket)"
