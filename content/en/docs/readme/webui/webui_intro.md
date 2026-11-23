@@ -236,6 +236,16 @@ The tab and the window are offered once the server has Ethernet devices.  Both s
 
 They read the [Ethernet endpoints](/docs/api/ethernet/).
 
+### Linked wired and Wi-Fi devices
+
+When the server [links](/docs/readme/datasources/wired-linux/#linking-wired-and-wi-fi-devices) a Wi-Fi device and an Ethernet device with the same MAC, their details show it:
+
+* *Linked devices*, on either record: the entity, and for each link the other record (click it to open that device), *Linked* or *Possible link* when the confidence is below the server's threshold, a *Conflicted* badge, the confidence, the relationship, what the device is on Wi-Fi, the evidence in plain words, the access points it was heard behind, and when the link was made and last confirmed.  A record the server has since forgotten shows as *No longer tracked*.
+* *On the wire*, on the Wi-Fi record: what the wired tap saw the device do, from its Ethernet record: roles, protocols, names, addresses, VLANs, traffic, DHCP details, the sensors which saw it, and its flows, with *Open in Ethernet flows*.
+* *Wireless*, on the Ethernet record: the linked Wi-Fi record's type, last BSSID, the network it joined, the SSIDs it beaconed or probed for, its signal, and its client behavior.
+
+The *Ethernet VLANs* window also shows how many records are linked, and warns when links or MACs were refused at one of the server's [linking limits](/docs/readme/datasources/wired-linux/#linking-wired-and-wi-fi-devices).  The sections read the [linked devices endpoints](/docs/api/entities/), and censor mode masks their addresses, names and SSIDs.
+
 ## API keys window
 
 After 2026-10-R1, the *API keys* window, opened from the menu just above *Settings*, manages the API keys of the server in use.  Programs and [remote capture](/docs/readme/remotecap/remotecap/) use a key in place of a login.  Managing keys needs an admin login.

@@ -143,6 +143,39 @@ Icon markup is trusted, fixed text: never build it from server data.
 
 `kismet.widgets` has the building blocks the rest of the UI is made of, for modules which draw their own UI: `dialog`, `sparkline`, `historyGraph`, `charts`, `listTable`, `datatable`, `devicetable`, `map`, `loading`, and others.  The built-in modules are the best examples of using them.
 
+Links to other devices, which open that device's details, come from `kismet.ui` (after 2026-10-R1; `http_data/js/widgets/devicelink.js`):
+
+| Function | Returns |
+| -------- | ------- |
+| `deviceLink(key, text, { title })` | A link to the device with this key |
+| `macLink(mac, { phy })` | A link to the device with this MAC address, found when clicked; a record of `phy` first, when there is one |
+| `recordLink({ title })` | A [detail field](/docs/dev/plugins/uiplugins_details/#field-entries) `draw()` for a row whose value is a device key: a link showing that record's MAC address |
+| `macDevices(mac)` | The devices with this MAC address, as `[{ phy, key }]`, or `undefined` until asked |
+| `findMac(mac, { again })` | Asks the server for them: a promise of the same list.  The answer is kept for the page; `again` asks once more when none were found |
+
+Only well-formed MAC addresses are looked up.
+
+## Linked wired and Wi-Fi records
+
+After 2026-10-R1, `kismet.entities` reads the server's [links between Wi-Fi and Ethernet records](/docs/api/entities/) of one device:
+
+| Function | Returns |
+| -------- | ------- |
+| `linked(device)` | The `linked.json` reply for the record, with `kismet.entity.entity_id` and `kismet.entity.edges`; `undefined` until it's been read, `null` when the server doesn't link records |
+| `peer(device, phyname)` | The first linked record of that phy and its link, `{ record, edge }`, or `null` |
+| `status()` | The last `/entities/status.json`, read again when it's old; `null` when the server has none |
+| `refreshStatus()` | Reads the status now: a promise of the reply, or `null` |
+| `supported()` | `false` once the server answered that it has no linking endpoints |
+
+They're made to be called from a device details section's `match()` and `render()`: a read starts when the kept reply is too old, and the next redraw shows it.  They're meant for open device details and windows, not for every row of a list: only the last 64 records are kept, and each asks the server on its own.  Replies are shared by every caller, so treat them as read-only, and copy before sorting or changing them.
+
+```javascript
+// In a device details section: the wired record linked to this Wi-Fi device
+const p = kismet.entities.peer(device, 'IEEE802.3');
+if (p)
+    show(p.record['ethernet.device'], p.edge['kismet.entity.edge.confidence']);
+```
+
 ## Censor mode
 
 Censor mode hides MAC addresses, names, and locations on the page, for screenshots and streams.  Data read from the server is censored on the page without anything more from a module, since the page's text is rewritten as it's drawn.  Two things need a module's help:
