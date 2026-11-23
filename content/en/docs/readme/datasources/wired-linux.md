@@ -204,3 +204,38 @@ The most IP flows (addresses, ports, protocol, and VLAN) kept in memory; default
 {{<configopt wired_flow_tcp_timeout seconds>}}
 Seconds a TCP flow can be idle before it's forgotten; default `300`.  `wired_flow_tcp_closed_timeout` (default `10`) is used after a FIN or RST, and `wired_flow_udp_timeout` (default `60`) for UDP and other protocols.  Idle time is measured on the server clock, so replaying an old capture doesn't expire its flows at once.
 {{</configopt>}}
+
+## Linking wired and Wi-Fi devices
+
+After 2026-10-R1, a Wi-Fi device and an Ethernet device with the same MAC are linked, so what a tap on the wire saw a wireless device do (its addresses, names, DHCP fingerprint, VLANs, sensors, traffic and flows) can be found from its Wi-Fi record.  The two records stay separate: a linked pair shares `kismet.device.base.entity_id`, each lists the other in its related devices, and the [linked devices API](/docs/api/entities/) shows the evidence and the other record.
+
+Links are made two ways:
+
+* `wired_same_mac`: the Wi-Fi record is a client (confidence 80, or 75 for a locally administered MAC), or an AP or WDS radio (70), which also sends on the wire.
+* `wired_bridged`: the Wi-Fi record is a host bridged onto Wi-Fi, the source of from-DS frames behind an AP or of 4-address frames from a WDS radio (70).  A wired host behind a wireless bridge shows up this way.
+
+The same IPv4 address on both records adds 10, unless the Ethernet device filled its IPv4 list or is a gateway.  A Wi-Fi client heard only in probes and other management frames scores 45, and a Wi-Fi record which was only ever a destination 40; with the IPv4 bonus they stay under the default threshold, as possible links.  Group MACs and VRRP and HSRP virtual router MACs are never linked.
+
+Anyone can send frames with any MAC, so a link is evidence that two records are the same device, not proof.
+
+Linking runs once a second, on new and forgotten devices, and costs nothing without Ethernet devices.  It works with `track_device_phy_views=false`.  Links last one server run; the entity id isn't kept between runs.
+
+{{<configopt entity_linking true false>}}
+Link wired and Wi-Fi records; default `true`.
+{{</configopt>}}
+
+{{<configopt entity_link_min_confidence number>}}
+Links at or above this confidence, `1` to `90`, are linked; lower ones are kept as possible links.  Default `60`.
+{{</configopt>}}
+
+{{<configopt entity_max_edges count>}}
+The most links kept, linked and possible; default `65536`, `0` turns linking off.  A link takes about 540 bytes in the link graph, and 1.3 to 1.6KB in all with the entity id and related device entries on both records.  Links refused at this limit are made once older ones go.
+
+Linking also keeps an index of Ethernet MACs which holds twice `wired_max_devices`, or twice `tracker_max_devices` when that's lower or `wired_max_devices` is `0`; with both at `0` it holds 65536.  Ethernet devices past that stay unlinked until older ones are forgotten.
+{{</configopt>}}
+
+{{<configopt entity_max_evidence_per_tick count>}}
+Changed MACs read each second; default `2048`.  `entity_sweep_per_tick` (default `1024`) is how many links are re-read each second, so a change such as a bridged host turning out to be a client, or a new address, is picked up.
+{{</configopt>}}
+
+`entity_max_edges_per_device` and `entity_max_component` don't apply yet: links are only between records with the same MAC, so a record has one link and an entity two records.
