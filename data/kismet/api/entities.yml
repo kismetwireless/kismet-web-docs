@@ -1,0 +1,131 @@
+-
+  name: "Linked records of a device"
+  uri: "/entities/by-device/{KEY}/linked"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  uriparameters:
+    -
+      name: "KEY"
+      type: "string"
+      required: true
+      description: Device key of a Wi-Fi or Ethernet record
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    The links of one device record: for a Wi-Fi client, AP or bridged host, its Ethernet record
+    with the same MAC, and the other way round.  Each link carries the record it links to, so
+    what the wire saw a wireless device do can be read from its Wi-Fi key.  A record with no
+    links returns an empty list.
+  return: |
+    JSON object with the record asked about in `kismet.entity.device_key`, its entity id in
+    `kismet.entity.entity_id` (`0` when not linked), and its links in `kismet.entity.edges`.
+    Each link has the fields listed under [link records](#link-records), plus
+    `kismet.entity.edge.peer_key`, the other record's key, and `kismet.entity.edge.peer`, a list
+    holding the other record when it still exists.
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [400, "Invalid device key"]
+
+-
+  name: "Links"
+  uri: "/entities/edges"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  jsonparameters:
+    - {auto: "fields"}
+  parameters:
+    -
+      name: "mac"
+      type: "string"
+      required: false
+      description: |
+        Only links of records with this MAC address.
+    -
+      name: "min_confidence"
+      type: "number"
+      required: false
+      description: |
+        Only links with at least this confidence, `0` to `100`; default `0`, which includes
+        possible links.
+    -
+      name: "start"
+      type: "number"
+      required: false
+      description: |
+        Index of the first link to return; default `0`.
+    -
+      name: "length"
+      type: "number"
+      required: false
+      description: |
+        Number of links to return, `1` to `1000`; default `100`.
+  docs: |
+    Every link Kismet keeps, linked and possible.  Parameters may be sent as GET variables or in
+    a POST JSON body; a malformed parameter is an error rather than a default.  Links last one
+    server run and aren't written to a log.
+  return: |
+    JSON object with the matching links in `kismet.entity.edges`, the number matching in
+    `kismet.entity.total`, and the index of the first one returned in `kismet.entity.start`.
+
+    #### Link records
+
+    | Field | Contents |
+    | ----- | -------- |
+    | `kismet.entity.edge.a_key`, `kismet.entity.edge.b_key` | Keys of the two records |
+    | `kismet.entity.edge.macaddr` | MAC the records share |
+    | `kismet.entity.edge.relationship` | `wired_same_mac` (a Wi-Fi client, AP or WDS radio) or `wired_bridged` (a host bridged onto Wi-Fi behind an AP or WDS radio) |
+    | `kismet.entity.edge.wifi_kind` | What the Wi-Fi record is: `client`, `client_mgmt` (heard only in management frames), `bridged`, `ap`, or `inferred` (only ever a destination) |
+    | `kismet.entity.edge.confidence` | Confidence `0` to `100`, from the evidence |
+    | `kismet.entity.edge.linked` | `1` at or above `entity_link_min_confidence`, `0` for a possible link |
+    | `kismet.entity.edge.conflicted` | `1` when the wire contradicts the link |
+    | `kismet.entity.edge.evidence` | Evidence bitfield: 1 Wi-Fi client, 2 associated, 4 AP, 8 WDS radio, 16 source of from-DS frames an AP relayed, 32 source of 4-address frames from a WDS radio, 64 locally administered MAC, 128 a Wi-Fi client IPv4 address is on the Ethernet record |
+    | `kismet.entity.edge.evidence_names` | The evidence, by name: `radio_client`, `associated`, `radio_ap`, `wds_radio`, `bridged_from_ds`, `bridged_4addr`, `local_mac`, `ip_match` |
+    | `kismet.entity.edge.via` | BSSIDs or WDS radios the Wi-Fi record was heard behind, newest first |
+    | `kismet.entity.edge.first_time`, `kismet.entity.edge.last_time` | When the link was made and last confirmed (server time) |
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [400, "Invalid parameter"]
+
+-
+  name: "Linking status"
+  uri: "/entities/status"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    Settings and counters of wired and Wi-Fi linking, and how often its limits were reached.
+  return: |
+    | Field | Contents |
+    | ----- | -------- |
+    | `kismet.entity.status.enabled` | `1` when linking is on (`entity_linking`, and both phys present) |
+    | `kismet.entity.status.min_confidence` | `entity_link_min_confidence` |
+    | `kismet.entity.status.max_edges`, `.max_edges_per_device`, `.max_component` | `entity_max_edges`, `entity_max_edges_per_device`, `entity_max_component` |
+    | `kismet.entity.status.evidence_per_tick`, `.sweep_per_tick` | `entity_max_evidence_per_tick`, `entity_sweep_per_tick` |
+    | `kismet.entity.status.edges` | Links kept, linked or possible |
+    | `kismet.entity.status.linked` | Links at or above the threshold |
+    | `kismet.entity.status.entities` | Groups of linked records |
+    | `kismet.entity.status.records` | Records with a link |
+    | `kismet.entity.status.index_capacity`, `.index_size` | Ethernet MACs the index can hold, and holds |
+    | `kismet.entity.status.index_queued` | MACs waiting to be read |
+    | `kismet.entity.status.index_refused` | Ethernet MACs not indexed because the index was full; found again once it has room |
+    | `kismet.entity.status.index_deferred` | MACs whose link waits for room under `entity_max_edges` or `entity_max_edges_per_device` |
+    | `kismet.entity.status.refused_cap` | Links not kept because `entity_max_edges` was reached |
+    | `kismet.entity.status.refused_per_device` | Links not kept because a record had `entity_max_edges_per_device` |
+    | `kismet.entity.status.component_capped` | Links kept unlinked because the group would pass `entity_max_component` |
+    | `kismet.entity.status.ticks`, `.reconciled`, `.writes` | Linking passes, MACs read, and records written |
+    | `kismet.entity.status.last_tick_us`, `.max_tick_us` | Length of the last and longest linking pass, microseconds |
+    | `kismet.entity.status.rescans`, `.max_rescan_us` | Finished walks of the Ethernet records for MACs the full index refused, and the longest walk step, microseconds |
+  responses:
+    success:
+      - [200, "Success"]
