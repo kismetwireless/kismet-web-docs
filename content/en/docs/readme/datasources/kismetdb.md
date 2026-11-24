@@ -26,7 +26,7 @@ $ kismet -c /path/to/file.kismet
 ```
 ### Warnings
 
-Not all data in a kismetdb log is currently replayed: Non-packet data such as JSON records is not loaded.
+Not all data in a kismetdb log is replayed: packets and the non-packet records of the data table are, but devices, alerts, and messages are not.  After 2026-10-R1, rtl_433 records in the data table create their [sensor and meter devices](/docs/readme/datasources/sensor-sdrrtl433/) again.
 
 When replaying a kismetdb log, all packets will appear to originate from a single datasource (the kismetdb source), not the original interfaces.
 

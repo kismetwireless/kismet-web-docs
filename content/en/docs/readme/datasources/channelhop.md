@@ -88,6 +88,14 @@ Capture tools which support synchronized hopping also report how long changing c
 
 Packets received while a source is changing channel may be reported on the wrong channel; Kismet marks them, and counts them per source as `kismet.datasource.num_chanswitch_packets`.
 
+## Refused channels
+
+After 2026-10-R1, a source which can't use a requested channel, hop list entry or hop rate keeps running.  A warning in the messages names the source and what it couldn't use:
+
+* A channel it can't use, such as one set from the web UI or the API, is refused, and the source keeps its current channel and hopping.
+* A hop list with some channels it can't use is accepted without them: the source skips the refused channels while hopping, and the warning says how many were skipped.  When it can't use any channel in the list, or the hop rate is not a usable number, the source keeps its current channel configuration.
+* A source in synchronized hopping keeps the shared schedule: it sits out the slots of its refused channels instead of moving the rest of its channels earlier, so it stays in step with the other sources.
+
 ## Configuration 
 
 The global channel hopping controls affect all datasources, unless a source specifically changes the values.  

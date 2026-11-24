@@ -96,6 +96,8 @@ Full mode sends frame contents, up to `snaplen`, to the server, and they are log
 
 In the new web UI, Ethernet devices have their own icons, *VLAN*, *IP*, and *Hostname* columns, and details with their addresses, names, DHCP details, and flows.  Once the server has Ethernet devices, the *Ethernet flows* tab, after *Map*, lists the IP flows, filtered by device or VLAN when opened from one, and the *Ethernet VLANs* window, from the menu, lists the VLANs seen.  Both say so when devices or flows weren't kept because of the limits below.
 
+Clicking a flow in the list opens its details window, with each side's addresses, MAC and linked devices, and graphs of the flow's traffic each way over the past minute, hour or day once it has a history.  A flow which has gone keeps its last numbers, with a button to check again.  The *Flow table* section of the *Ethernet flows* tab graphs the whole table: flows in the table, new and deferred or dropped flows, and bytes and packets per second.
+
 The data is also available from the [Ethernet API](/docs/api/ethernet/).
 
 ## Wired source parameters
@@ -198,12 +200,36 @@ List every address a device sends IP traffic from; default `false`.  By default 
 {{</configopt>}}
 
 {{<configopt wired_max_flows count>}}
-The most IP flows (addresses, ports, protocol, and VLAN) kept in memory; default `16384`, `0` turns flow tracking off.  About 140 bytes each.  Past 90% full, a new flow is only kept once a second packet of it is seen, so a scan of single packets can't fill the table.
+The most IP flows (addresses, ports, protocol, and VLAN) kept in memory; default `16384`, `0` turns flow tracking off.  About 156 bytes each.  Past 90% full, a new flow is only kept once a second packet of it is seen, so a scan of single packets can't fill the table.
+
+The flow table hash is seeded at random each time the server starts, as are the IP table and VLAN inventory, so traffic can't be crafted to fall in one part of the table.
+{{</configopt>}}
+
+{{<configopt wired_flow_full evict drop>}}
+What happens to a new flow when the flow table is full; default `evict`.
+
+With `evict`, the new flow replaces an idle one, once a second packet of it is seen, so single packets can't replace anything.  Up to 8 flows in the part of the table the new flow belongs to are looked at: a TCP flow which has closed (FIN or RST seen) goes first, then one without a traffic history, then the one idle longest.  A flow with a packet in the last 10 seconds (1 second for a closed TCP flow) is never replaced; when every flow looked at is that recent, the new flow is dropped.  Replaced flows are counted in `ethernet.status.flows_evicted`.
+
+With `drop`, every new flow is dropped until flows time out.
 {{</configopt>}}
 
 {{<configopt wired_flow_tcp_timeout seconds>}}
 Seconds a TCP flow can be idle before it's forgotten; default `300`.  `wired_flow_tcp_closed_timeout` (default `10`) is used after a FIN or RST, and `wired_flow_udp_timeout` (default `60`) for UDP and other protocols.  Idle time is measured on the server clock, so replaying an old capture doesn't expire its flows at once.
 {{</configopt>}}
+
+{{<configopt wired_flow_history_max count>}}
+The most flows which keep a traffic history; default `4096`, `0` turns history off.  A history holds bytes and packets each way, per second over the last minute, per minute over the last hour, and per hour over the last day, by the server clock.  About 3.2KB each (13MB at `4096`).  It is never more than `wired_max_flows`, and at most `65536`.  History is kept in memory only.
+{{</configopt>}}
+
+{{<configopt wired_flow_history_min_packets count>}}
+Packets of a flow, both ways, seen before it gets a traffic history; default `8`, `1` to `1000000`.  Lookups and scans don't take histories this way; a flow's first packets aren't in its history.
+{{</configopt>}}
+
+{{<configopt wired_flow_history_idle seconds>}}
+Once 90% of the histories are in use, flows idle this many seconds give theirs back; default `60`, `10` to `86400`.
+{{</configopt>}}
+
+A flow and its history are served by the [flow by key endpoint](/docs/api/ethernet/#ethernet-flow-by-key), with the key from the flow's `ethernet.flow.key` in the flow list; a flow which has expired is not found.  The history of the whole flow table (flows in the table, new and refused flows, bytes and packets per second) is served by the [flow table history endpoint](/docs/api/ethernet/#ethernet-flow-table-history), and is kept whether or not flows keep histories.
 
 ## Linking wired and Wi-Fi devices
 

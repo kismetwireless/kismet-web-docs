@@ -64,4 +64,8 @@ You *must* provide the path to the serial device associated with the nRF 51822 s
 
 {{<configopt baudrate "serial baudrate">}}
 The Adafruit nrf51822 defaults to 460800; other devices may use different baudrates.  Use the `baudrate` option to set the serial port speed.
+
+The rate must be one of 9600, 19200, 38400, 57600, 115200, 230400, 460800, 500000, 576000, 921600, 1000000, 1152000, 1500000, 2000000, 2500000, 3000000, 3500000, or 4000000.  After 2026-10-R1, any other value is refused when the source opens; spaces around the value are allowed.
+
+Kismet 2026-10-R1 always ran the port at 115200, whatever `baudrate` was set to, so sniffers at 460800 such as the Adafruit Bluefruit LE Sniffer delivered no packets.  This is fixed after 2026-10-R1.
 {{</configopt>}}
