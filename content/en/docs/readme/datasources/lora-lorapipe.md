@@ -106,6 +106,8 @@ The serial device of the LoraPipe radio.  This option is required.
 
 {{<configopt baud "baudrate">}}
 The serial baud rate; by default `115200`.  This should only be changed if the LoraPipe firmware was built for a different rate.
+
+The rate must be one of 9600, 19200, 38400, 57600, 115200, 230400, 460800, 500000, 576000, 921600, 1000000, 1152000, 1500000, 2000000, 2500000, 3000000, 3500000, or 4000000.  After 2026-10-R1, any other value is refused when the source opens; spaces around the value are allowed.
 {{</configopt>}}
 
 ### Channel options

@@ -260,6 +260,8 @@ Example:
 source=catsniffer_zigbee:device=/dev/ttyUSB0,name=Foo,channels="12,13,14,15"
 ```
 
+After 2026-10-R1, spaces around each channel are allowed (`channels="12, 13, 14"`).  A channel which isn't a plain number, or is outside the band, is refused with a warning and skipped while hopping; see [refused channels](/docs/readme/datasources/channelhop/#refused-channels).
+
 If defining datasources on the command line when launching Kismet, be aware that most shells will elide the quotes, leading to a setup error.  You can avoid this by surrounding the source definition in single quotes:
 
 ```bash

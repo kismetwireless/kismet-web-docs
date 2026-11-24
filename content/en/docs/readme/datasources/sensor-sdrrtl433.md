@@ -83,6 +83,10 @@ A SDR RTL_433 source in Kismet can be configured to other frequencies with the `
 source=rtl433-4:name=foo,channel=915MHz
 ```
 
+### Replaying a kismetdb
+
+The rtl_433 data is logged to the kismetdb log.  After 2026-10-R1, replaying that log with the [kismetdb source](/docs/readme/datasources/kismetdb/) creates the sensor and meter devices again, as live rtl_433 data does.
+
 ## SDR RTL_433 source parameters
 
 ### Naming and description options

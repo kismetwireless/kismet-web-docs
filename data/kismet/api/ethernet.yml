@@ -62,11 +62,72 @@
     | `ethernet.flow.packets_ab`, `ethernet.flow.packets_ba` | Packets each way |
     | `ethernet.flow.first_time`, `ethernet.flow.last_time` | Times of the first and last packet |
     | `ethernet.flow.tcp_flags_ab`, `ethernet.flow.tcp_flags_ba` | TCP flags seen from each side, ORed |
+    | `ethernet.flow.key` | Key of the flow, for the [flow by key](#ethernet-flow-by-key) endpoint |
+    | `ethernet.flow.id` | Serial number of the flow, never reused while the server runs |
+    | `ethernet.flow.history_time` | Server time the flow's traffic history began, `0` for none |
   responses:
     success:
       - [200, "Success"]
     failure:
       - [500, "Invalid parameter"]
+
+-
+  name: "Ethernet flow by key"
+  uri: "/phy/ethernet/flows/by-key/{KEY}/flow"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  uriparameters:
+    -
+      name: "KEY"
+      type: "string"
+      required: true
+      description: The flow's `ethernet.flow.key` from the flow list
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    One flow, with its traffic history when it has one (see `wired_flow_history_max` on the
+    [wired source page](/docs/readme/datasources/wired-linux/#ethernet-options)).  The key names one
+    flow: when the flow has expired, or the same addresses and ports are now a later flow, the
+    flow is not found.
+  return: |
+    JSON object with the fields of a row of the flow list.  A flow with a history
+    (`ethernet.flow.history_time` not `0`) also has `ethernet.flow.bytes_ab.rrd`,
+    `ethernet.flow.bytes_ba.rrd`, `ethernet.flow.packets_ab.rrd` and `ethernet.flow.packets_ba.rrd`,
+    each with the `kismet.common.rrd.*` minute, hour and day vectors of other RRD records.
+  responses:
+    success:
+      - [200, "Success"]
+    failure:
+      - [400, "Malformed key"]
+      - [404, "No such flow"]
+
+-
+  name: "Ethernet flow table history"
+  uri: "/phy/ethernet/flows/history"
+  types: ["anyjson"]
+  methods: ["GET", "POST"]
+  roles: ["readonly"]
+  added: "after 2026-10-R1"
+  jsonparameters:
+    - {auto: "fields"}
+  docs: |
+    History of the whole flow table over the past minute, hour and day, sampled every second by
+    the server clock.  It starts over when the server clock steps back.
+  return: |
+    JSON object of RRD records:
+
+    | Field | Contents |
+    | ----- | -------- |
+    | `ethernet.flows.bytes.rrd` | Bytes in flows per second |
+    | `ethernet.flows.packets.rrd` | Packets in flows per second |
+    | `ethernet.flows.created.rrd` | Flows created per second |
+    | `ethernet.flows.refused.rrd` | New flows dropped or deferred per second |
+    | `ethernet.flows.active.rrd` | Flows in the table |
+  responses:
+    success:
+      - [200, "Success"]
 
 -
   name: "Ethernet VLANs"
@@ -145,8 +206,14 @@
     | `ethernet.status.flows` | Flows tracked |
     | `ethernet.status.max_flows` | `wired_max_flows`, `0` when flows are off |
     | `ethernet.status.flows_created`, `ethernet.status.flows_expired` | Flows created and expired |
-    | `ethernet.status.flows_dropped` | New flows dropped with the table full |
+    | `ethernet.status.flows_dropped` | New flows dropped with the table full and no idle flow to replace |
     | `ethernet.status.flows_deferred` | New flows held for a second packet with the table nearly full |
+    | `ethernet.status.flows_evicted` | Idle flows forgotten with the table full to make room for a new flow |
+    | `ethernet.status.flow_histories` | Flows keeping a traffic history |
+    | `ethernet.status.max_flow_histories` | `wired_flow_history_max`, `0` when flow history is off |
+    | `ethernet.status.flow_history_min_packets` | `wired_flow_history_min_packets` |
+    | `ethernet.status.flow_histories_denied` | Flows which qualified for a history while all were in use |
+    | `ethernet.status.flow_histories_released` | Histories taken back from idle flows with nearly all in use |
     | `ethernet.status.ip_bindings` | IP to MAC bindings |
     | `ethernet.status.ip_bindings_dropped` | Bindings dropped with the table full |
     | `ethernet.status.vlans_dropped` | VLANs not added to the inventory because it was full |

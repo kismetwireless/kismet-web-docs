@@ -71,6 +71,20 @@ For about a week in November 2026, development builds put the phy's type in `kis
 
 **Cell DIAG replays.**  A cell DIAG `replay=` source which has read its file stays open and idle instead of being re-opened and replaying the file again; `kismet.datasource.celldiag.replay_state` says `reading`, `complete`, or `incomplete`.
 
+**Wired flows.**  Flow list rows carry `ethernet.flow.key`, `ethernet.flow.id`, and `ethernet.flow.history_time`.  [`/phy/ethernet/flows/by-key/{KEY}/flow`](/docs/api/ethernet/#ethernet-flow-by-key) returns one flow and its traffic history, and [`/phy/ethernet/flows/history`](/docs/api/ethernet/#ethernet-flow-table-history) the history of the whole flow table.  With the table full, a new flow replaces an idle one by default (`wired_flow_full`); the new `ethernet.status.flows_evicted` counts them, and `ethernet.status.flows_dropped` now counts only the new flows with nothing to replace.  `wired_flow_history_max`, `wired_flow_history_min_packets`, and `wired_flow_history_idle` set which flows keep a history.  The flow, IP, and VLAN tables are hashed with a seed picked at random each time the server starts.  See the [wired data source](/docs/readme/datasources/wired-linux/#ethernet-options).
+
+**Serial baud and channel checks.**  The Sniffle, Radview, LoraPipe, nRF51822, CatSniffer, and Freaklabs sources refuse a baud rate or channel they don't support when the source opens, instead of wrapping or ignoring it; spaces around values, as in `channels="11, 15, 20"`, are allowed.  The nRF51822 source uses its `baudrate` again (default 460800), where 2026-10-R1 always used 115200.
+
+**Refused channels.**  A source which can't use a requested channel, hop list entry, or hop rate keeps running, and a warning in the messages names the source.  Its current channel configuration is kept, refused hop entries are skipped, and synchronized sources keep the shared schedule, sitting out the refused slots.  See [refused channels](/docs/readme/datasources/channelhop/#refused-channels).
+
+**Linux Wi-Fi channels.**  HT40, VHT80, and VHT160 channels are only listed when every 20MHz channel they cover is enabled and the adapter supports the width.  Channel 140 pairs with 144 as `140HT40+`, and 165 is 20MHz only, so `165HT40-` is no longer offered.  See [Linux Wi-Fi channels](/docs/readme/datasources/wifi-linux/#linux-wi-fi-channels).
+
+**rtl_433 replays.**  rtl_433 data replayed from a kismetdb log with the [kismetdb source](/docs/readme/datasources/kismetdb/) creates sensor and meter devices, as live data does.
+
+**Cross builds.**  `configure` reads every library's flags with `$PKG_CONFIG`, so a cross build with `PKG_CONFIG=aarch64-linux-gnu-pkg-config` (for example) gets the target's flags instead of the build host's (#765).
+
+**Window height.**  Web UI windows which were saved as tall as the browser open, and stay, at the current browser height, instead of the height from an earlier screen size.
+
 #### 2026-10-R1
 
 **Major change to device location data.**  Devices that report their own position (ADS-B aircraft, AIS vessels, Remote ID drones, MeshCore and Meshtastic nodes) previously had that position written into the device location.  The device location now always means where Kismet was when it heard the device, and the position the device reports is kept separately:

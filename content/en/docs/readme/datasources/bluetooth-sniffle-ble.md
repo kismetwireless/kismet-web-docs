@@ -105,8 +105,8 @@ All data sources accept the [common naming and description](/docs/readme/datasou
 
 ### Channel control
 
-{{<configopt channel "0-39">}}
-Channel to listen on.  Defaults to 37 if not specified.  37, 38 and 39 are the primary advertising channels; 0 through 36 are the secondary channels, used by BLE 5 extended advertising and connections.
+{{<configopt channel "37-39">}}
+Primary advertising channel to listen on, `37`, `38` or `39`; defaults to `37`.  Secondary channels (0 through 36, used by BLE 5 extended advertising) are followed with `auxadv=true`, not set here.  After 2026-10-R1, any other value is refused when the source opens; spaces around the value are allowed.
 {{</configopt>}}
 
 {{<configopt auxadv "true|false">}}
@@ -121,4 +121,6 @@ Radio PHY to receive on.  `1m` is the standard BLE PHY.  `coded` receives the BL
 
 {{<configopt baud "921600">}}
 Override the serial baud rate. Only needed for the plain-CP2102 chip revision flashed with the `_1M` firmware variant described above; CP2102N units (standard) should omit this and use the default.
+
+The rate must be one of 9600, 19200, 38400, 57600, 115200, 230400, 460800, 500000, 576000, 921600, 1000000, 1152000, 1500000, 2000000, 2500000, 3000000, 3500000, or 4000000.  After 2026-10-R1, any other value is refused when the source opens; spaces around the value are allowed.
 {{</configopt>}}

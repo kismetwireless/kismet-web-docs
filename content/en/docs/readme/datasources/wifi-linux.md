@@ -44,6 +44,8 @@ Wi-Fi channels in Kismet define both the basic channel number, and extra channel
 
 Kismet will auto-detect the supported channels on most Wi-Fi cards.  Monitoring on HT40, VHT80, and VHT160 requires support from the hardware, firmware, and drivers.
 
+After 2026-10-R1, an HT40, VHT80, or VHT160 channel is only listed when every 20MHz channel it covers is enabled on the adapter, and the adapter and kernel allow that width (and, for HT40, that direction) there.  The widths come from the HT and VHT capabilities the adapter reports for each band.  Channel 140 pairs with 144 as `140HT40+`, and channel 165 is 20MHz only: `165HT40-` is no longer offered.
+
 Channels can be defined by number or by frequency.
 
 | Definition | Interpretation                                               |
@@ -219,7 +221,7 @@ kismet -c 'wlan0:name=Foo,add_channels="1W5,2W5,6W10"'
 {{<configopt block_channels "channel1,channel2,...,channelN">}}
 *Remove* channels from the detected list of channels, so Kismet never tunes to them.
 
-Use this to skip channels a driver reports but handles badly; for example, some RTL8812AU drivers log kernel warnings on `165HT40-`.
+Use this to skip channels a driver reports but handles badly; for example, some RTL8812AU drivers log kernel warnings on `165HT40-`, which Kismet itself no longer offers after 2026-10-R1.
 
 Channels are matched by their full name, ignoring case: blocking `165` doesn't block `165HT40-`.  `block_channels` doesn't apply when `channels=` sets a fixed list, and a channel in `add_channels` is added even if it's blocked.
 
