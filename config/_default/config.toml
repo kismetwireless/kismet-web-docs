@@ -72,6 +72,11 @@ rel  = "sitemap"
 [minify.tdewolff.html]
   keepWhitespace = false
 
+# postcss runs as a uid that may have no passwd entry, so node needs HOME, and npm needs
+# the NPM_CONFIG_* settings build-site.sh makes
+[security.exec]
+  osEnv = ["(?i)^(PATH|PATHEXT|APPDATA|TMP|TEMP|TERM|HOME|NPM_CONFIG_.*)$"]
+
 [related]
   threshold = 80
   includeNewer = true
