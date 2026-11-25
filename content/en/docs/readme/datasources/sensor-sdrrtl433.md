@@ -83,6 +83,10 @@ A SDR RTL_433 source in Kismet can be configured to other frequencies with the `
 source=rtl433-4:name=foo,channel=915MHz
 ```
 
+### Signal levels
+
+When `rtl_433` reports signal levels (`-M level`), Kismet uses the `rssi` and `noise` values as the device signal.  These are levels in dB relative to the full scale of the radio (dBFS), not dBm, and Kismet shows them as an RSSI-type signal.  Without `-M level` the devices have no signal.
+
 ### Replaying a kismetdb
 
 The rtl_433 data is logged to the kismetdb log.  After 2026-10-R1, replaying that log with the [kismetdb source](/docs/readme/datasources/kismetdb/) creates the sensor and meter devices again, as live rtl_433 data does.
