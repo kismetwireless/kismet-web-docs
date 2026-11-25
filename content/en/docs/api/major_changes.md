@@ -81,6 +81,8 @@ For about a week in November 2026, development builds put the phy's type in `kis
 
 **rtl_433 replays.**  rtl_433 data replayed from a kismetdb log with the [kismetdb source](/docs/readme/datasources/kismetdb/) creates sensor and meter devices, as live data does.
 
+**rtl_433 signal levels.**  With `rtl_433 -M level`, sensor and meter devices take the reported `rssi` and `noise` as an RSSI-type signal in dBFS, and keep the fractional rssi, snr, and noise values.  See [Signal levels](/docs/readme/datasources/sensor-sdrrtl433/#signal-levels).
+
 **Cross builds.**  `configure` reads every library's flags with `$PKG_CONFIG`, so a cross build with `PKG_CONFIG=aarch64-linux-gnu-pkg-config` (for example) gets the target's flags instead of the build host's (#765).
 
 **Window height.**  Web UI windows which were saved as tall as the browser open, and stay, at the current browser height, instead of the height from an earlier screen size.
