@@ -88,6 +88,12 @@ After 2026-10-R1.  The most websockets open at once from one client address, by 
 After 2026-10-R1.  A websocket whose client can't keep up is closed once this much data is waiting to be sent to it, by default `64`.  `0` turns the limit off.
 {{</configopt>}}
 
+{{<configopt httpd_max_large_lists count>}}
+After 2026-10-R1.  The most lists of more than 1000 devices (such as a whole device view without paging) built at once, by default `4`.  A large list holds memory about the size of its response until it is sent; requests over the limit get a `503` with a `Retry-After` header and can try again in a moment.  Paged requests of 1000 or fewer devices are never limited.  `0` turns the limit off.
+
+A request whose client disconnects before the list is sent stops being built, so a client that gives up and retries doesn't leave the server building lists nobody will read.  Scripts that fetch whole device lists should either page them or wait and retry on a `503`.
+{{</configopt>}}
+
 After 2026-10-R1, an open websocket closes when its login expires, or as soon as its API key is revoked.  A login with a username and password lasts 24 hours, so a script that keeps a websocket open with one needs to reconnect at least once a day; an API key lasts until its own expiration.
 
 {{<configopt httpd_session_db "/path/to/session/db">}}
