@@ -2,8 +2,8 @@
 title: "Cell: QMI and MBIM"
 description: ""
 lead: ""
-date: 2026-11-27T18:00:00-05:00
-lastmod: 2026-11-27T18:00:00-05:00
+date: 2026-11-27T12:00:00-05:00
+lastmod: 2026-11-27T12:00:00-05:00
 images: []
 menu:
   docs:
